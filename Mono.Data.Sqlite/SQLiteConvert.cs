@@ -69,76 +69,6 @@ namespace Mono.Data.Sqlite
             _datetimeFormat = fmt;
         }
 
-        #region UTF-8 Conversion Functions
-        /// <summary>
-        /// Converts a string to a UTF-8 encoded byte array sized to include a null-terminating character.
-        /// </summary>
-        /// <param name="sourceText">The string to convert to UTF-8</param>
-        /// <returns>A byte array containing the converted string plus an extra 0 terminating byte at the end of the array.</returns>
-        public static byte[] ToUTF8(string sourceText)
-        {
-            Byte[] byteArray;
-            int nlen = _utf8.GetByteCount(sourceText) + 1;
-
-            byteArray = new byte[nlen];
-            nlen = _utf8.GetBytes(sourceText, 0, sourceText.Length, byteArray, 0);
-            byteArray[nlen] = 0;
-
-            return byteArray;
-        }
-
-        /// <summary>
-        /// Convert a DateTime to a UTF-8 encoded, zero-terminated byte array.
-        /// </summary>
-        /// <remarks>
-        /// This function is a convenience function, which first calls ToString() on the DateTime, and then calls ToUTF8() with the
-        /// string result.
-        /// </remarks>
-        /// <param name="dateTimeValue">The DateTime to convert.</param>
-        /// <returns>The UTF-8 encoded string, including a 0 terminating byte at the end of the array.</returns>
-        public byte[] ToUTF8(DateTime dateTimeValue)
-        {
-            return ToUTF8(ToString(dateTimeValue));
-        }
-
-        /// <summary>
-        /// Converts a UTF-8 encoded IntPtr of the specified length into a .NET string
-        /// </summary>
-        /// <param name="nativestring">The pointer to the memory where the UTF-8 string is encoded</param>
-        /// <param name="nativestringlen">The number of bytes to decode</param>
-        /// <returns>A string containing the translated character(s)</returns>
-        public virtual string ToString(IntPtr nativestring, int nativestringlen)
-        {
-            return UTF8ToString(nativestring, nativestringlen);
-        }
-
-        /// <summary>
-        /// Converts a UTF-8 encoded IntPtr of the specified length into a .NET string
-        /// </summary>
-        /// <param name="nativestring">The pointer to the memory where the UTF-8 string is encoded</param>
-        /// <param name="nativestringlen">The number of bytes to decode</param>
-        /// <returns>A string containing the translated character(s)</returns>
-        public static string UTF8ToString(IntPtr nativestring, int nativestringlen)
-        {
-            if (nativestringlen == 0 || nativestring == IntPtr.Zero) return "";
-            if (nativestringlen == -1)
-            {
-                do
-                {
-                    nativestringlen++;
-                } while (Marshal.ReadByte(nativestring, nativestringlen) != 0);
-            }
-
-            byte[] byteArray = new byte[nativestringlen];
-
-            Marshal.Copy(nativestring, byteArray, 0, nativestringlen);
-
-            return _utf8.GetString(byteArray, 0, nativestringlen);
-        }
-
-
-        #endregion
-
         #region DateTime Conversion Functions
         /// <summary>
         /// Converts a string into a DateTime, using the current DateTimeFormat specified for the connection when it was opened.
@@ -209,21 +139,6 @@ namespace Mono.Data.Sqlite
                 default:
                     return dateValue.ToString(_datetimeFormats[7], CultureInfo.InvariantCulture);
             }
-        }
-
-        /// <summary>
-        /// Internal function to convert a UTF-8 encoded IntPtr of the specified length to a DateTime.
-        /// </summary>
-        /// <remarks>
-        /// This is a convenience function, which first calls ToString() on the IntPtr to convert it to a string, then calls
-        /// ToDateTime() on the string to return a DateTime.
-        /// </remarks>
-        /// <param name="ptr">A pointer to the UTF-8 encoded string</param>
-        /// <param name="len">The length in bytes of the string</param>
-        /// <returns>The parsed DateTime value</returns>
-        internal DateTime ToDateTime(IntPtr ptr, int len)
-        {
-            return ToDateTime(ToString(ptr, len));
         }
 
         #endregion

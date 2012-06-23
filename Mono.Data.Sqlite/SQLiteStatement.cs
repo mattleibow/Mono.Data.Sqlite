@@ -12,6 +12,8 @@ namespace Mono.Data.Sqlite
     using System.Collections.Generic;
     using System.Globalization;
 
+    using Community.CsharpSqlite;
+
     /// <summary>
     /// Represents a single SQL statement in SQLite.
     /// </summary>
@@ -28,7 +30,7 @@ namespace Mono.Data.Sqlite
         /// <summary>
         /// The actual statement pointer
         /// </summary>
-        internal SqliteStatementHandle _sqlite_stmt;
+        internal Sqlite3.Vdbe _sqlite_stmt;
         /// <summary>
         /// An index from which unnamed parameters begin
         /// </summary>
@@ -55,7 +57,7 @@ namespace Mono.Data.Sqlite
         /// <param name="stmt">The statement</param>
         /// <param name="strCommand">The command text for this statement</param>
         /// <param name="previous">The previous command in a multi-statement command</param>
-        internal SqliteStatement(SQLiteBase sqlbase, SqliteStatementHandle stmt, string strCommand, SqliteStatement previous)
+        internal SqliteStatement(SQLiteBase sqlbase, Sqlite3.Vdbe stmt, string strCommand, SqliteStatement previous)
         {
             _sql = sqlbase;
             _sqlite_stmt = stmt;

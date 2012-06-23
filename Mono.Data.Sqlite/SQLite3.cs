@@ -13,6 +13,8 @@ namespace Mono.Data.Sqlite
     using System.Collections.Generic;
     using System.Globalization;
 
+    using Community.CsharpSqlite;
+
     /// <summary>
     /// This class implements SQLiteBase completely, and is the guts of the code that interop's SQLite with .NET
     /// </summary>
@@ -21,7 +23,7 @@ namespace Mono.Data.Sqlite
         /// <summary>
         /// The opaque pointer returned to us by the sqlite provider
         /// </summary>
-        protected SqliteConnectionHandle _sql;
+        protected Sqlite3.sqlite3 _sql;
         protected string _fileName;
         protected bool _usePool;
         protected int _poolVersion = 0;
@@ -77,7 +79,7 @@ namespace Mono.Data.Sqlite
 
         internal override void Cancel()
         {
-            UnsafeNativeMethods.sqlite3_interrupt(_sql);
+            Sqlite3.sqlite3_interrupt(_sql);
         }
 
         internal override string Version
@@ -92,7 +94,7 @@ namespace Mono.Data.Sqlite
         {
             get
             {
-                return UTF8ToString(UnsafeNativeMethods.sqlite3_libversion(), -1);
+                return Sqlite3.sqlite3_libversion();
             }
         }
 
@@ -100,7 +102,7 @@ namespace Mono.Data.Sqlite
         {
             get
             {
-                return UnsafeNativeMethods.sqlite3_changes(_sql);
+                return Sqlite3.sqlite3_changes(_sql);
             }
         }
 
@@ -117,19 +119,19 @@ namespace Mono.Data.Sqlite
 
             if (_sql == null)
             {
-                IntPtr db;
+                Sqlite3.sqlite3 db;
 
 #if !SQLITE_STANDARD
-                int n = UnsafeNativeMethods.sqlite3_open_interop(ToUTF8(strFilename), (int)flags, out db);
+                int n = Sqlite3.sqlite3_open_interop(ToUTF8(strFilename), (int)flags, out db);
 #else
 	// Compatibility with versions < 3.5.0
         int n;
 
 	try {
-		n = UnsafeNativeMethods.sqlite3_open_v2(ToUTF8(strFilename), out db, (int)flags, IntPtr.Zero);
+		n = Sqlite3.sqlite3_open_v2(strFilename, out db, (int)flags, null);
 	} catch (EntryPointNotFoundException) {
 		Console.WriteLine ("Your sqlite3 version is old - please upgrade to at least v3.5.0!");
-		n = UnsafeNativeMethods.sqlite3_open (ToUTF8 (strFilename), out db);
+		n = Sqlite3.sqlite3_open (strFilename, out db);
 	}
 	
 #endif
@@ -150,7 +152,7 @@ namespace Mono.Data.Sqlite
 
         internal override void SetTimeout(int nTimeoutMS)
         {
-            int n = UnsafeNativeMethods.sqlite3_busy_timeout(_sql, nTimeoutMS);
+            int n = Sqlite3.sqlite3_busy_timeout(_sql, nTimeoutMS);
             if (n > 0) throw new SqliteException(n, SQLiteLastError());
         }
 
@@ -163,7 +165,7 @@ namespace Mono.Data.Sqlite
 
             while (true)
             {
-                n = UnsafeNativeMethods.sqlite3_step(stmt._sqlite_stmt);
+                n = Sqlite3.sqlite3_step(stmt._sqlite_stmt);
 
                 if (n == 100) return true;
                 if (n == 101) return false;
@@ -206,9 +208,9 @@ namespace Mono.Data.Sqlite
             int n;
 
 #if !SQLITE_STANDARD
-            n = UnsafeNativeMethods.sqlite3_reset_interop(stmt._sqlite_stmt);
+            n = Sqlite3.sqlite3_reset_interop(stmt._sqlite_stmt);
 #else
-      n = UnsafeNativeMethods.sqlite3_reset(stmt._sqlite_stmt);
+      n = Sqlite3.sqlite3_reset(stmt._sqlite_stmt);
 #endif
 
             // If the schema changed, try and re-prepare it
@@ -245,27 +247,22 @@ namespace Mono.Data.Sqlite
 
         internal override SqliteStatement Prepare(SqliteConnection cnn, string strSql, SqliteStatement previous, uint timeoutMS, out string strRemain)
         {
-            IntPtr stmt = IntPtr.Zero;
-            IntPtr ptr = IntPtr.Zero;
+            Sqlite3.Vdbe stmt = null;
+            string ptr = null;
             int len = 0;
             int n = 17;
             int retries = 0;
-            byte[] b = ToUTF8(strSql);
             string typedefs = null;
             SqliteStatement cmd = null;
             Random rnd = null;
             uint starttick = (uint)Environment.TickCount;
 
-            GCHandle handle = GCHandle.Alloc(b, GCHandleType.Pinned);
-            IntPtr psql = handle.AddrOfPinnedObject();
-            try
-            {
                 while ((n == 17 || n == 6 || n == 5) && retries < 3)
                 {
 #if !SQLITE_STANDARD
-                    n = UnsafeNativeMethods.sqlite3_prepare_interop(_sql, psql, b.Length - 1, out stmt, out ptr, out len);
+                    n = Sqlite3.sqlite3_prepare_interop(_sql, psql, b.Length - 1, out stmt, out ptr, out len);
 #else
-          n = UnsafeNativeMethods.sqlite3_prepare(_sql, psql, b.Length - 1, out stmt, out ptr);
+          n = Sqlite3.sqlite3_prepare(_sql, strSql, strSql.Length, ref stmt, ref ptr);
           len = -1;
 #endif
 
@@ -342,122 +339,116 @@ namespace Mono.Data.Sqlite
 
                 if (n > 0) throw new SqliteException(n, SQLiteLastError());
 
-                strRemain = UTF8ToString(ptr, len);
+                strRemain = ptr;
 
-                if (stmt != IntPtr.Zero) cmd = new SqliteStatement(this, stmt, strSql.Substring(0, strSql.Length - strRemain.Length), previous);
+                if (stmt != null) cmd = new SqliteStatement(this, stmt, strSql.Substring(0, strSql.Length - strRemain.Length), previous);
 
                 return cmd;
-            }
-            finally
-            {
-                handle.Free();
-            }
         }
 
         internal override void Bind_Double(SqliteStatement stmt, int index, double value)
         {
 #if !PLATFORM_COMPACTFRAMEWORK
-            int n = UnsafeNativeMethods.sqlite3_bind_double(stmt._sqlite_stmt, index, value);
+            int n = Sqlite3.sqlite3_bind_double(stmt._sqlite_stmt, index, value);
 #else
-      int n = UnsafeNativeMethods.sqlite3_bind_double_interop(stmt._sqlite_stmt, index, ref value);
+      int n = Sqlite3.sqlite3_bind_double_interop(stmt._sqlite_stmt, index, ref value);
 #endif
             if (n > 0) throw new SqliteException(n, SQLiteLastError());
         }
 
         internal override void Bind_Int32(SqliteStatement stmt, int index, int value)
         {
-            int n = UnsafeNativeMethods.sqlite3_bind_int(stmt._sqlite_stmt, index, value);
+            int n = Sqlite3.sqlite3_bind_int(stmt._sqlite_stmt, index, value);
             if (n > 0) throw new SqliteException(n, SQLiteLastError());
         }
 
         internal override void Bind_Int64(SqliteStatement stmt, int index, long value)
         {
 #if !PLATFORM_COMPACTFRAMEWORK
-            int n = UnsafeNativeMethods.sqlite3_bind_int64(stmt._sqlite_stmt, index, value);
+            int n = Sqlite3.sqlite3_bind_int64(stmt._sqlite_stmt, index, value);
 #else
-      int n = UnsafeNativeMethods.sqlite3_bind_int64_interop(stmt._sqlite_stmt, index, ref value);
+      int n = Sqlite3.sqlite3_bind_int64_interop(stmt._sqlite_stmt, index, ref value);
 #endif
             if (n > 0) throw new SqliteException(n, SQLiteLastError());
         }
 
         internal override void Bind_Text(SqliteStatement stmt, int index, string value)
         {
-            byte[] b = ToUTF8(value);
-            int n = UnsafeNativeMethods.sqlite3_bind_text(stmt._sqlite_stmt, index, b, b.Length - 1, (IntPtr)(-1));
+            int n = Sqlite3.sqlite3_bind_text(stmt._sqlite_stmt, index, value, value.Length - 1, null);
             if (n > 0) throw new SqliteException(n, SQLiteLastError());
         }
 
         internal override void Bind_DateTime(SqliteStatement stmt, int index, DateTime dt)
         {
-            byte[] b = ToUTF8(dt);
-            int n = UnsafeNativeMethods.sqlite3_bind_text(stmt._sqlite_stmt, index, b, b.Length - 1, (IntPtr)(-1));
+            string b = ToString(dt);
+            int n = Sqlite3.sqlite3_bind_text(stmt._sqlite_stmt, index, b, b.Length, null);
             if (n > 0) throw new SqliteException(n, SQLiteLastError());
         }
 
         internal override void Bind_Blob(SqliteStatement stmt, int index, byte[] blobData)
         {
-            int n = UnsafeNativeMethods.sqlite3_bind_blob(stmt._sqlite_stmt, index, blobData, blobData.Length, (IntPtr)(-1));
+            int n = Sqlite3.sqlite3_bind_blob(stmt._sqlite_stmt, index, blobData, blobData.Length, null);
             if (n > 0) throw new SqliteException(n, SQLiteLastError());
         }
 
         internal override void Bind_Null(SqliteStatement stmt, int index)
         {
-            int n = UnsafeNativeMethods.sqlite3_bind_null(stmt._sqlite_stmt, index);
+            int n = Sqlite3.sqlite3_bind_null(stmt._sqlite_stmt, index);
             if (n > 0) throw new SqliteException(n, SQLiteLastError());
         }
 
         internal override int Bind_ParamCount(SqliteStatement stmt)
         {
-            return UnsafeNativeMethods.sqlite3_bind_parameter_count(stmt._sqlite_stmt);
+            return Sqlite3.sqlite3_bind_parameter_count(stmt._sqlite_stmt);
         }
 
         internal override string Bind_ParamName(SqliteStatement stmt, int index)
         {
 #if !SQLITE_STANDARD
             int len;
-            return UTF8ToString(UnsafeNativeMethods.sqlite3_bind_parameter_name_interop(stmt._sqlite_stmt, index, out len), len);
+            return UTF8ToString(Sqlite3.sqlite3_bind_parameter_name_interop(stmt._sqlite_stmt, index, out len), len);
 #else
-      return UTF8ToString(UnsafeNativeMethods.sqlite3_bind_parameter_name(stmt._sqlite_stmt, index), -1);
+      return Sqlite3.sqlite3_bind_parameter_name(stmt._sqlite_stmt, index);
 #endif
         }
 
         internal override int Bind_ParamIndex(SqliteStatement stmt, string paramName)
         {
-            return UnsafeNativeMethods.sqlite3_bind_parameter_index(stmt._sqlite_stmt, ToUTF8(paramName));
+            return Sqlite3.sqlite3_bind_parameter_index(stmt._sqlite_stmt, paramName);
         }
 
         internal override int ColumnCount(SqliteStatement stmt)
         {
-            return UnsafeNativeMethods.sqlite3_column_count(stmt._sqlite_stmt);
+            return Sqlite3.sqlite3_column_count(stmt._sqlite_stmt);
         }
 
         internal override string ColumnName(SqliteStatement stmt, int index)
         {
 #if !SQLITE_STANDARD
             int len;
-            return UTF8ToString(UnsafeNativeMethods.sqlite3_column_name_interop(stmt._sqlite_stmt, index, out len), len);
+            return UTF8ToString(Sqlite3.sqlite3_column_name_interop(stmt._sqlite_stmt, index, out len), len);
 #else
-      return UTF8ToString(UnsafeNativeMethods.sqlite3_column_name(stmt._sqlite_stmt, index), -1);
+      return Sqlite3.sqlite3_column_name(stmt._sqlite_stmt, index);
 #endif
         }
 
         internal override TypeAffinity ColumnAffinity(SqliteStatement stmt, int index)
         {
-            return UnsafeNativeMethods.sqlite3_column_type(stmt._sqlite_stmt, index);
+            return (TypeAffinity)Sqlite3.sqlite3_column_type(stmt._sqlite_stmt, index);
         }
 
         internal override string ColumnType(SqliteStatement stmt, int index, out TypeAffinity nAffinity)
         {
             int len;
 #if !SQLITE_STANDARD
-            IntPtr p = UnsafeNativeMethods.sqlite3_column_decltype_interop(stmt._sqlite_stmt, index, out len);
+            IntPtr p = Sqlite3.sqlite3_column_decltype_interop(stmt._sqlite_stmt, index, out len);
 #else
       len = -1;
-      IntPtr p = UnsafeNativeMethods.sqlite3_column_decltype(stmt._sqlite_stmt, index);
+      string p = Sqlite3.sqlite3_column_decltype(stmt._sqlite_stmt, index);
 #endif
             nAffinity = ColumnAffinity(stmt, index);
 
-            if (p != IntPtr.Zero) return UTF8ToString(p, len);
+            if (p != null) return p;
             else
             {
                 string[] ar = stmt.TypeDefinitions;
@@ -498,9 +489,10 @@ namespace Mono.Data.Sqlite
         {
 #if !SQLITE_STANDARD
             int len;
-            return UTF8ToString(UnsafeNativeMethods.sqlite3_column_origin_name_interop(stmt._sqlite_stmt, index, out len), len);
+            return UTF8ToString(Sqlite3.sqlite3_column_origin_name_interop(stmt._sqlite_stmt, index, out len), len);
 #else
-      return UTF8ToString(UnsafeNativeMethods.sqlite3_column_origin_name(stmt._sqlite_stmt, index), -1);
+      //todo:return Sqlite3.sqlite3_column_origin_name(stmt._sqlite_stmt, index);
+      return Sqlite3.sqlite3_column_name(stmt._sqlite_stmt, index);
 #endif
         }
 
@@ -508,9 +500,10 @@ namespace Mono.Data.Sqlite
         {
 #if !SQLITE_STANDARD
             int len;
-            return UTF8ToString(UnsafeNativeMethods.sqlite3_column_database_name_interop(stmt._sqlite_stmt, index, out len), len);
+            return UTF8ToString(Sqlite3.sqlite3_column_database_name_interop(stmt._sqlite_stmt, index, out len), len);
 #else
-      return UTF8ToString(UnsafeNativeMethods.sqlite3_column_database_name(stmt._sqlite_stmt, index), -1);
+      //todo:return Sqlite3.sqlite3_column_database_name(stmt._sqlite_stmt, index);
+      return Sqlite3.sqlite3_column_name(stmt._sqlite_stmt, index);
 #endif
         }
 
@@ -518,34 +511,35 @@ namespace Mono.Data.Sqlite
         {
 #if !SQLITE_STANDARD
             int len;
-            return UTF8ToString(UnsafeNativeMethods.sqlite3_column_table_name_interop(stmt._sqlite_stmt, index, out len), len);
+            return UTF8ToString(Sqlite3.sqlite3_column_table_name_interop(stmt._sqlite_stmt, index, out len), len);
 #else
-      return UTF8ToString(UnsafeNativeMethods.sqlite3_column_table_name(stmt._sqlite_stmt, index), -1);
+      //todo:return Sqlite3.sqlite3_column_table_name(stmt._sqlite_stmt, index);
+      return Sqlite3.sqlite3_column_name(stmt._sqlite_stmt, index);
 #endif
         }
 
         internal override void ColumnMetaData(string dataBase, string table, string column, out string dataType, out string collateSequence, out bool notNull, out bool primaryKey, out bool autoIncrement)
         {
-            IntPtr dataTypePtr;
-            IntPtr collSeqPtr;
-            int nnotNull;
-            int nprimaryKey;
-            int nautoInc;
+            string dataTypePtr = null;
+            string collSeqPtr = null;
+            int nnotNull = 0;
+            int nprimaryKey = 0;
+            int nautoInc = 0;
             int n;
             int dtLen;
             int csLen;
 
 #if !SQLITE_STANDARD
-            n = UnsafeNativeMethods.sqlite3_table_column_metadata_interop(_sql, ToUTF8(dataBase), ToUTF8(table), ToUTF8(column), out dataTypePtr, out collSeqPtr, out nnotNull, out nprimaryKey, out nautoInc, out dtLen, out csLen);
+            n = Sqlite3.sqlite3_table_column_metadata_interop(_sql, ToUTF8(dataBase), ToUTF8(table), ToUTF8(column), out dataTypePtr, out collSeqPtr, out nnotNull, out nprimaryKey, out nautoInc, out dtLen, out csLen);
 #else
       dtLen = -1;
       csLen = -1;
-      n = UnsafeNativeMethods.sqlite3_table_column_metadata(_sql, ToUTF8(dataBase), ToUTF8(table), ToUTF8(column), out dataTypePtr, out collSeqPtr, out nnotNull, out nprimaryKey, out nautoInc);
+      n = Sqlite3.sqlite3_table_column_metadata(_sql, dataBase, table, column, ref dataTypePtr, ref collSeqPtr, ref nnotNull, ref nprimaryKey, ref nautoInc);
 #endif
             if (n > 0) throw new SqliteException(n, SQLiteLastError());
 
-            dataType = UTF8ToString(dataTypePtr, dtLen);
-            collateSequence = UTF8ToString(collSeqPtr, csLen);
+            dataType = dataTypePtr;
+            collateSequence = collSeqPtr;
 
             notNull = (nnotNull == 1);
             primaryKey = (nprimaryKey == 1);
@@ -556,25 +550,25 @@ namespace Mono.Data.Sqlite
         {
             double value;
 #if !PLATFORM_COMPACTFRAMEWORK
-            value = UnsafeNativeMethods.sqlite3_column_double(stmt._sqlite_stmt, index);
+            value = Sqlite3.sqlite3_column_double(stmt._sqlite_stmt, index);
 #else
-      UnsafeNativeMethods.sqlite3_column_double_interop(stmt._sqlite_stmt, index, out value);
+      Sqlite3.sqlite3_column_double_interop(stmt._sqlite_stmt, index, out value);
 #endif
             return value;
         }
 
         internal override int GetInt32(SqliteStatement stmt, int index)
         {
-            return UnsafeNativeMethods.sqlite3_column_int(stmt._sqlite_stmt, index);
+            return Sqlite3.sqlite3_column_int(stmt._sqlite_stmt, index);
         }
 
         internal override long GetInt64(SqliteStatement stmt, int index)
         {
             long value;
 #if !PLATFORM_COMPACTFRAMEWORK
-            value = UnsafeNativeMethods.sqlite3_column_int64(stmt._sqlite_stmt, index);
+            value = Sqlite3.sqlite3_column_int64(stmt._sqlite_stmt, index);
 #else
-      UnsafeNativeMethods.sqlite3_column_int64_interop(stmt._sqlite_stmt, index, out value);
+      Sqlite3.sqlite3_column_int64_interop(stmt._sqlite_stmt, index, out value);
 #endif
             return value;
         }
@@ -583,9 +577,9 @@ namespace Mono.Data.Sqlite
         {
 #if !SQLITE_STANDARD
             int len;
-            return UTF8ToString(UnsafeNativeMethods.sqlite3_column_text_interop(stmt._sqlite_stmt, index, out len), len);
+            return UTF8ToString(Sqlite3.sqlite3_column_text_interop(stmt._sqlite_stmt, index, out len), len);
 #else
-      return UTF8ToString(UnsafeNativeMethods.sqlite3_column_text(stmt._sqlite_stmt, index), -1);
+      return Sqlite3.sqlite3_column_text(stmt._sqlite_stmt, index);
 #endif
         }
 
@@ -593,30 +587,29 @@ namespace Mono.Data.Sqlite
         {
 #if !SQLITE_STANDARD
             int len;
-            return ToDateTime(UnsafeNativeMethods.sqlite3_column_text_interop(stmt._sqlite_stmt, index, out len), len);
+            return ToDateTime(Sqlite3.sqlite3_column_text_interop(stmt._sqlite_stmt, index, out len), len);
 #else
-      return ToDateTime(UnsafeNativeMethods.sqlite3_column_text(stmt._sqlite_stmt, index), -1);
+      return ToDateTime(Sqlite3.sqlite3_column_text(stmt._sqlite_stmt, index));
 #endif
         }
 
         internal override long GetBytes(SqliteStatement stmt, int index, int nDataOffset, byte[] bDest, int nStart, int nLength)
         {
-            IntPtr ptr;
+            byte[] ptr;
             int nlen;
             int nCopied = nLength;
 
-            nlen = UnsafeNativeMethods.sqlite3_column_bytes(stmt._sqlite_stmt, index);
-            ptr = UnsafeNativeMethods.sqlite3_column_blob(stmt._sqlite_stmt, index);
+            nlen = Sqlite3.sqlite3_column_bytes(stmt._sqlite_stmt, index);
+            ptr = Sqlite3.sqlite3_column_blob(stmt._sqlite_stmt, index);
 
             if (bDest == null) return nlen;
 
             if (nCopied + nStart > bDest.Length) nCopied = bDest.Length - nStart;
             if (nCopied + nDataOffset > nlen) nCopied = nlen - nDataOffset;
 
-            unsafe
             {
                 if (nCopied > 0)
-                    Marshal.Copy((IntPtr)((byte*)ptr + nDataOffset), bDest, nStart, nCopied);
+                    Array.Copy(ptr, bDest, nCopied);
                 else nCopied = 0;
             }
 
@@ -648,33 +641,34 @@ namespace Mono.Data.Sqlite
             return (ColumnAffinity(stmt, index) == TypeAffinity.Null);
         }
 
-        internal override int AggregateCount(IntPtr context)
-        {
-            return UnsafeNativeMethods.sqlite3_aggregate_count(context);
-        }
-
-        internal override void CreateFunction(string strFunction, int nArgs, bool needCollSeq, SQLiteCallback func, SQLiteCallback funcstep, SQLiteFinalCallback funcfinal)
+        // todo deprecated
+        //internal override int AggregateCount(Sqlite3.sqlite3_context context)
+        //{
+        //    return Sqlite3.sqlite3_aggregate_count(context);
+        //}
+        
+        internal override void CreateFunction(string strFunction, int nArgs, bool needCollSeq, Sqlite3.dxFunc func, Sqlite3.dxStep funcstep, Sqlite3.dxFinal funcfinal)
         {
             int n;
 
 #if !SQLITE_STANDARD
-            n = UnsafeNativeMethods.sqlite3_create_function_interop(_sql, ToUTF8(strFunction), nArgs, 4, IntPtr.Zero, func, funcstep, funcfinal, (needCollSeq == true) ? 1 : 0);
-            if (n == 0) n = UnsafeNativeMethods.sqlite3_create_function_interop(_sql, ToUTF8(strFunction), nArgs, 1, IntPtr.Zero, func, funcstep, funcfinal, (needCollSeq == true) ? 1 : 0);
+            n = Sqlite3.sqlite3_create_function_interop(_sql, ToUTF8(strFunction), nArgs, 4, IntPtr.Zero, func, funcstep, funcfinal, (needCollSeq == true) ? 1 : 0);
+            if (n == 0) n = Sqlite3.sqlite3_create_function_interop(_sql, ToUTF8(strFunction), nArgs, 1, IntPtr.Zero, func, funcstep, funcfinal, (needCollSeq == true) ? 1 : 0);
 #else
-      n = UnsafeNativeMethods.sqlite3_create_function(_sql, ToUTF8(strFunction), nArgs, 4, IntPtr.Zero, func, funcstep, funcfinal);
-      if (n == 0) n = UnsafeNativeMethods.sqlite3_create_function(_sql, ToUTF8(strFunction), nArgs, 1, IntPtr.Zero, func, funcstep, funcfinal);
+      n = Sqlite3.sqlite3_create_function(_sql, strFunction, nArgs, 4, IntPtr.Zero, func, funcstep, funcfinal);
+      if (n == 0) n = Sqlite3.sqlite3_create_function(_sql, strFunction, nArgs, 1, IntPtr.Zero, func, funcstep, funcfinal);
 #endif
             if (n > 0) throw new SqliteException(n, SQLiteLastError());
         }
 
-        internal override void CreateCollation(string strCollation, SQLiteCollation func, SQLiteCollation func16)
+        internal override void CreateCollation(string strCollation, Sqlite3.dxCompare func, Sqlite3.dxCompare func16)
         {
-            int n = UnsafeNativeMethods.sqlite3_create_collation(_sql, ToUTF8(strCollation), 2, IntPtr.Zero, func16);
-            if (n == 0) UnsafeNativeMethods.sqlite3_create_collation(_sql, ToUTF8(strCollation), 1, IntPtr.Zero, func);
+            int n = Sqlite3.sqlite3_create_collation(_sql, strCollation, 2, IntPtr.Zero, func16);
+            if (n == 0) Sqlite3.sqlite3_create_collation(_sql, strCollation, 1, IntPtr.Zero, func);
             if (n > 0) throw new SqliteException(n, SQLiteLastError());
         }
 
-        internal override int ContextCollateCompare(CollationEncodingEnum enc, IntPtr context, string s1, string s2)
+        internal override int ContextCollateCompare(CollationEncodingEnum enc, Sqlite3.sqlite3_context context, string s1, string s2)
         {
 #if !SQLITE_STANDARD
             byte[] b1;
@@ -697,13 +691,13 @@ namespace Mono.Data.Sqlite
             b1 = converter.GetBytes(s1);
             b2 = converter.GetBytes(s2);
 
-            return UnsafeNativeMethods.sqlite3_context_collcompare(context, b1, b1.Length, b2, b2.Length);
+            return Sqlite3.sqlite3_context_collcompare(context, b1, b1.Length, b2, b2.Length);
 #else
       throw new NotImplementedException();
 #endif
         }
 
-        internal override int ContextCollateCompare(CollationEncodingEnum enc, IntPtr context, char[] c1, char[] c2)
+        internal override int ContextCollateCompare(CollationEncodingEnum enc, Sqlite3.sqlite3_context context, char[] c1, char[] c2)
         {
 #if !SQLITE_STANDARD
             byte[] b1;
@@ -726,20 +720,20 @@ namespace Mono.Data.Sqlite
             b1 = converter.GetBytes(c1);
             b2 = converter.GetBytes(c2);
 
-            return UnsafeNativeMethods.sqlite3_context_collcompare(context, b1, b1.Length, b2, b2.Length);
+            return Sqlite3.sqlite3_context_collcompare(context, b1, b1.Length, b2, b2.Length);
 #else
       throw new NotImplementedException();
 #endif
         }
 
-        internal override CollationSequence GetCollationSequence(SqliteFunction func, IntPtr context)
+        internal override CollationSequence GetCollationSequence(SqliteFunction func, Sqlite3.sqlite3_context context)
         {
 #if !SQLITE_STANDARD
             CollationSequence seq = new CollationSequence();
             int len;
             int type;
             int enc;
-            IntPtr p = UnsafeNativeMethods.sqlite3_context_collseq(context, out type, out enc, out len);
+            IntPtr p = Sqlite3.sqlite3_context_collseq(context, out type, out enc, out len);
 
             if (p != null) seq.Name = UTF8ToString(p, len);
             seq.Type = (CollationTypeEnum)type;
@@ -752,130 +746,130 @@ namespace Mono.Data.Sqlite
 #endif
         }
 
-        internal override long GetParamValueBytes(IntPtr p, int nDataOffset, byte[] bDest, int nStart, int nLength)
+        internal override long GetParamValueBytes(Sqlite3.Mem p, int nDataOffset, byte[] bDest, int nStart, int nLength)
         {
-            IntPtr ptr;
+            byte[] ptr;
             int nlen;
             int nCopied = nLength;
 
-            nlen = UnsafeNativeMethods.sqlite3_value_bytes(p);
-            ptr = UnsafeNativeMethods.sqlite3_value_blob(p);
+            nlen = Sqlite3.sqlite3_value_bytes(p);
+            ptr = Sqlite3.sqlite3_value_blob(p);
 
             if (bDest == null) return nlen;
 
             if (nCopied + nStart > bDest.Length) nCopied = bDest.Length - nStart;
             if (nCopied + nDataOffset > nlen) nCopied = nlen - nDataOffset;
 
-            unsafe
             {
                 if (nCopied > 0)
-                    Marshal.Copy((IntPtr)((byte*)ptr + nDataOffset), bDest, nStart, nCopied);
+                    Array.Copy(ptr, bDest, nCopied);
                 else nCopied = 0;
             }
 
             return nCopied;
         }
 
-        internal override double GetParamValueDouble(IntPtr ptr)
+        internal override double GetParamValueDouble(Sqlite3.Mem ptr)
         {
             double value;
 #if !PLATFORM_COMPACTFRAMEWORK
-            value = UnsafeNativeMethods.sqlite3_value_double(ptr);
+            value = Sqlite3.sqlite3_value_double(ptr);
 #else
-      UnsafeNativeMethods.sqlite3_value_double_interop(ptr, out value);
+      Sqlite3.sqlite3_value_double_interop(ptr, out value);
 #endif
             return value;
         }
 
-        internal override int GetParamValueInt32(IntPtr ptr)
+        internal override int GetParamValueInt32(Sqlite3.Mem ptr)
         {
-            return UnsafeNativeMethods.sqlite3_value_int(ptr);
+            return Sqlite3.sqlite3_value_int(ptr);
         }
 
-        internal override long GetParamValueInt64(IntPtr ptr)
+        internal override long GetParamValueInt64(Sqlite3.Mem ptr)
         {
             Int64 value;
 #if !PLATFORM_COMPACTFRAMEWORK
-            value = UnsafeNativeMethods.sqlite3_value_int64(ptr);
+            value = Sqlite3.sqlite3_value_int64(ptr);
 #else
-      UnsafeNativeMethods.sqlite3_value_int64_interop(ptr, out value);
+      Sqlite3.sqlite3_value_int64_interop(ptr, out value);
 #endif
             return value;
         }
 
-        internal override string GetParamValueText(IntPtr ptr)
+        internal override string GetParamValueText(Sqlite3.Mem ptr)
         {
 #if !SQLITE_STANDARD
             int len;
-            return UTF8ToString(UnsafeNativeMethods.sqlite3_value_text_interop(ptr, out len), len);
+            return UTF8ToString(Sqlite3.sqlite3_value_text_interop(ptr, out len), len);
 #else
-      return UTF8ToString(UnsafeNativeMethods.sqlite3_value_text(ptr), -1);
+      return Sqlite3.sqlite3_value_text(ptr);
 #endif
         }
 
-        internal override TypeAffinity GetParamValueType(IntPtr ptr)
+        internal override TypeAffinity GetParamValueType(Sqlite3.Mem ptr)
         {
-            return UnsafeNativeMethods.sqlite3_value_type(ptr);
+            return (TypeAffinity)Sqlite3.sqlite3_value_type(ptr);
         }
 
-        internal override void ReturnBlob(IntPtr context, byte[] value)
+        internal override void ReturnBlob(Sqlite3.sqlite3_context context, byte[] value)
         {
-            UnsafeNativeMethods.sqlite3_result_blob(context, value, value.Length, (IntPtr)(-1));
+            // todo : strings <-> byte[]
+            var str = new System.Text.UnicodeEncoding().GetString(value);
+            Sqlite3.sqlite3_result_blob(context, str, str.Length, null);
         }
 
-        internal override void ReturnDouble(IntPtr context, double value)
+        internal override void ReturnDouble(Sqlite3.sqlite3_context context, double value)
         {
 #if !PLATFORM_COMPACTFRAMEWORK
-            UnsafeNativeMethods.sqlite3_result_double(context, value);
+            Sqlite3.sqlite3_result_double(context, value);
 #else
-      UnsafeNativeMethods.sqlite3_result_double_interop(context, ref value);
+      Sqlite3.sqlite3_result_double_interop(context, ref value);
 #endif
         }
 
-        internal override void ReturnError(IntPtr context, string value)
+        internal override void ReturnError(Sqlite3.sqlite3_context context, string value)
         {
-            UnsafeNativeMethods.sqlite3_result_error(context, ToUTF8(value), value.Length);
+            Sqlite3.sqlite3_result_error(context, value, value.Length);
         }
 
-        internal override void ReturnInt32(IntPtr context, int value)
+        internal override void ReturnInt32(Sqlite3.sqlite3_context context, int value)
         {
-            UnsafeNativeMethods.sqlite3_result_int(context, value);
+            Sqlite3.sqlite3_result_int(context, value);
         }
 
-        internal override void ReturnInt64(IntPtr context, long value)
+        internal override void ReturnInt64(Sqlite3.sqlite3_context context, long value)
         {
 #if !PLATFORM_COMPACTFRAMEWORK
-            UnsafeNativeMethods.sqlite3_result_int64(context, value);
+            Sqlite3.sqlite3_result_int64(context, value);
 #else
-      UnsafeNativeMethods.sqlite3_result_int64_interop(context, ref value);
+      Sqlite3.sqlite3_result_int64_interop(context, ref value);
 #endif
         }
 
-        internal override void ReturnNull(IntPtr context)
+        internal override void ReturnNull(Sqlite3.sqlite3_context context)
         {
-            UnsafeNativeMethods.sqlite3_result_null(context);
+            Sqlite3.sqlite3_result_null(context);
         }
 
-        internal override void ReturnText(IntPtr context, string value)
+        internal override void ReturnText(Sqlite3.sqlite3_context context, string value)
         {
-            byte[] b = ToUTF8(value);
-            UnsafeNativeMethods.sqlite3_result_text(context, ToUTF8(value), b.Length - 1, (IntPtr)(-1));
+            Sqlite3.sqlite3_result_text(context, value, value.Length, null);
         }
 
-        internal override IntPtr AggregateContext(IntPtr context)
+        internal override Sqlite3.Mem AggregateContext(Sqlite3.sqlite3_context context)
         {
-            return UnsafeNativeMethods.sqlite3_aggregate_context(context, 1);
+            return Sqlite3.sqlite3_aggregate_context(context, 1);
         }
 
-        internal override void SetPassword(byte[] passwordBytes)
+        internal override void SetPassword(string passwordBytes)
         {
-            int n = UnsafeNativeMethods.sqlite3_key(_sql, passwordBytes, passwordBytes.Length);
+            int n = Sqlite3.sqlite3_key(_sql, passwordBytes, passwordBytes.Length);
             if (n > 0) throw new SqliteException(n, SQLiteLastError());
         }
 
-        internal override void ChangePassword(byte[] newPasswordBytes)
+        internal override void ChangePassword(string newPasswordBytes)
         {
-            int n = UnsafeNativeMethods.sqlite3_rekey(_sql, newPasswordBytes, (newPasswordBytes == null) ? 0 : newPasswordBytes.Length);
+            int n = Sqlite3.sqlite3_rekey(_sql, newPasswordBytes, (newPasswordBytes == null) ? 0 : newPasswordBytes.Length);
             if (n > 0) throw new SqliteException(n, SQLiteLastError());
         }
 
@@ -895,9 +889,9 @@ namespace Mono.Data.Sqlite
     {
       update_callback = func;
       if (func == null)
-        UnsafeNativeMethods.sqlite3_update_hook (_sql, null, IntPtr.Zero);
+        Sqlite3.sqlite3_update_hook (_sql, null, IntPtr.Zero);
       else
-        UnsafeNativeMethods.sqlite3_update_hook (_sql, update, GCHandle.ToIntPtr (gch));
+        Sqlite3.sqlite3_update_hook (_sql, update, GCHandle.ToIntPtr (gch));
     }
 
     [MonoTouch.MonoPInvokeCallback (typeof (SQLiteCommitCallback))]
@@ -911,9 +905,9 @@ namespace Mono.Data.Sqlite
     {
       commit_callback = func;
       if (func == null)
-        UnsafeNativeMethods.sqlite3_commit_hook (_sql, null, IntPtr.Zero);
+        Sqlite3.sqlite3_commit_hook (_sql, null, IntPtr.Zero);
       else
-        UnsafeNativeMethods.sqlite3_commit_hook (_sql, commit, GCHandle.ToIntPtr (gch));
+        Sqlite3.sqlite3_commit_hook (_sql, commit, GCHandle.ToIntPtr (gch));
     }
 
     [MonoTouch.MonoPInvokeCallback (typeof (SQLiteRollbackCallback))]
@@ -927,24 +921,24 @@ namespace Mono.Data.Sqlite
     {
       rollback_callback = func;
       if (func == null)
-        UnsafeNativeMethods.sqlite3_rollback_hook (_sql, null, IntPtr.Zero);
+        Sqlite3.sqlite3_rollback_hook (_sql, null, IntPtr.Zero);
       else
-        UnsafeNativeMethods.sqlite3_rollback_hook (_sql, rollback, GCHandle.ToIntPtr (gch));
+        Sqlite3.sqlite3_rollback_hook (_sql, rollback, GCHandle.ToIntPtr (gch));
     }
 #else
-        internal override void SetUpdateHook(SQLiteUpdateCallback func)
+        internal override void SetUpdateHook(Sqlite3.dxUpdateCallback func)
         {
-            UnsafeNativeMethods.sqlite3_update_hook(_sql, func, IntPtr.Zero);
+            Sqlite3.sqlite3_update_hook(_sql, func, IntPtr.Zero);
         }
 
-        internal override void SetCommitHook(SQLiteCommitCallback func)
+        internal override void SetCommitHook(Sqlite3.dxCommitCallback func)
         {
-            UnsafeNativeMethods.sqlite3_commit_hook(_sql, func, IntPtr.Zero);
+            Sqlite3.sqlite3_commit_hook(_sql, func, IntPtr.Zero);
         }
 
-        internal override void SetRollbackHook(SQLiteRollbackCallback func)
+        internal override void SetRollbackHook(Sqlite3.dxRollbackCallback func)
         {
-            UnsafeNativeMethods.sqlite3_rollback_hook(_sql, func, IntPtr.Zero);
+            Sqlite3.sqlite3_rollback_hook(_sql, func, IntPtr.Zero);
         }
 #endif
         /// <summary>
@@ -998,7 +992,7 @@ namespace Mono.Data.Sqlite
         internal override int GetCursorForTable(SqliteStatement stmt, int db, int rootPage)
         {
 #if !SQLITE_STANDARD
-            return UnsafeNativeMethods.sqlite3_table_cursor(stmt._sqlite_stmt, db, rootPage);
+            return Sqlite3.sqlite3_table_cursor(stmt._sqlite_stmt, db, rootPage);
 #else
       return -1;
 #endif
@@ -1008,7 +1002,7 @@ namespace Mono.Data.Sqlite
         {
 #if !SQLITE_STANDARD
             long rowid;
-            int rc = UnsafeNativeMethods.sqlite3_cursor_rowid(stmt._sqlite_stmt, cursor, out rowid);
+            int rc = Sqlite3.sqlite3_cursor_rowid(stmt._sqlite_stmt, cursor, out rowid);
             if (rc == 0) return rowid;
 
             return 0;
@@ -1024,7 +1018,7 @@ namespace Mono.Data.Sqlite
             int colllen;
             int rc;
 
-            rc = UnsafeNativeMethods.sqlite3_index_column_info_interop(_sql, ToUTF8(database), ToUTF8(index), ToUTF8(column), out sortMode, out onError, out coll, out colllen);
+            rc = Sqlite3.sqlite3_index_column_info_interop(_sql, ToUTF8(database), ToUTF8(index), ToUTF8(column), out sortMode, out onError, out coll, out colllen);
             if (rc != 0) throw new SqliteException(rc, "");
 
             collationSequence = UTF8ToString(coll, colllen);
