@@ -378,7 +378,7 @@ namespace Mono.Data.Sqlite
 
         internal override void Bind_Text(SqliteStatement stmt, int index, string value)
         {
-            int n = Sqlite3.sqlite3_bind_text(stmt._sqlite_stmt, index, value, value.Length - 1, null);
+            int n = Sqlite3.sqlite3_bind_text(stmt._sqlite_stmt, index, value, value.Length, null);
             if (n > 0) throw new SqliteException(n, SQLiteLastError());
         }
 
