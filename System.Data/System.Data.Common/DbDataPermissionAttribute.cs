@@ -34,79 +34,89 @@ using System.ComponentModel;
 using System.Security.Permissions;
 using System.Globalization;
 
-namespace System.Data.Common {
+namespace System.Data.Common
+{
+    [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Class |
+                    AttributeTargets.Struct | AttributeTargets.Constructor |
+                    AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
+    public abstract class DBDataPermissionAttribute : CodeAccessSecurityAttribute
+    {
+        #region Fields
 
-	[AttributeUsage (AttributeTargets.Assembly | AttributeTargets.Class | 
-			 AttributeTargets.Struct | AttributeTargets.Constructor | 
-			 AttributeTargets.Method, AllowMultiple=true, Inherited=false)]
-	public abstract class DBDataPermissionAttribute : CodeAccessSecurityAttribute {
-		#region Fields
+        private bool allowBlankPassword;
+        private string keyRestrictions;
+        private KeyRestrictionBehavior keyRestrictionBehavior;
+        private string connectionString;
 
-		bool allowBlankPassword;
-		string keyRestrictions;
-		KeyRestrictionBehavior keyRestrictionBehavior;
-		string connectionString;
+        #endregion // Fields
 
-		#endregion // Fields
+        #region Constructors
 
-		#region Constructors
+        protected DBDataPermissionAttribute(SecurityAction action)
+            : base(action)
+        {
+        }
 
-		protected DBDataPermissionAttribute (SecurityAction action) 
-			: base (action) 
-		{
-		}
+        #endregion // Constructors
 
-		#endregion // Constructors
+        #region Properties
 
-		#region Properties
+        public bool AllowBlankPassword
+        {
+            get { return allowBlankPassword; }
+            set { allowBlankPassword = value; }
+        }
 
-		public bool AllowBlankPassword {
-			get { return allowBlankPassword; }
-			set { allowBlankPassword = value; }
-		}
+        public string KeyRestrictions
+        {
+            get
+            {
+                if (keyRestrictions == null)
+                    return String.Empty;
+                return keyRestrictions;
+            }
+            set { keyRestrictions = value; }
+        }
 
-		public string KeyRestrictions {
-			get {
-				if (keyRestrictions == null)
-					return String.Empty;
-				return keyRestrictions;
-			}
-			set { keyRestrictions = value; }
-		}
+        public string ConnectionString
+        {
+            get
+            {
+                if (connectionString == null)
+                    return String.Empty;
+                return connectionString;
+            }
+            set { connectionString = value; }
+        }
 
-		public string ConnectionString {
-			get {
-				if (connectionString == null)
-					return String.Empty;
-				return connectionString;
-			}
-			set { connectionString = value; }
-		}
+        public KeyRestrictionBehavior KeyRestrictionBehavior
+        {
+            get { return keyRestrictionBehavior; }
+            set
+            {
+                ExceptionHelper.CheckEnumValue(typeof (KeyRestrictionBehavior), value);
+                keyRestrictionBehavior = value;
+            }
+        }
 
-		public KeyRestrictionBehavior KeyRestrictionBehavior {
-			get { return keyRestrictionBehavior; }
-			set {
-				ExceptionHelper.CheckEnumValue (typeof (KeyRestrictionBehavior), value);
-				keyRestrictionBehavior = value;
-			}
-		}
+        #endregion // Properties
 
-		#endregion // Properties
+        #region // Methods
 
-		#region // Methods
-		[EditorBrowsableAttribute (EditorBrowsableState.Never)]
-		public bool ShouldSerializeConnectionString ()
-		{
-			// FIXME: configurable ? why is this in the attribute class ?
-			return false;
-		}
+        [EditorBrowsableAttribute(EditorBrowsableState.Never)]
+        public bool ShouldSerializeConnectionString()
+        {
+            // FIXME: configurable ? why is this in the attribute class ?
+            return false;
+        }
 
-		[EditorBrowsableAttribute (EditorBrowsableState.Never)]
-		public bool ShouldSerializeKeyRestrictions ()
-		{
-			// FIXME: configurable ? why is this in the attribute class ?
-			return false;
-		}
-		#endregion // Methods
-	}
+        [EditorBrowsableAttribute(EditorBrowsableState.Never)]
+        public bool ShouldSerializeKeyRestrictions()
+        {
+            // FIXME: configurable ? why is this in the attribute class ?
+            return false;
+        }
+
+        #endregion // Methods
+    }
 }

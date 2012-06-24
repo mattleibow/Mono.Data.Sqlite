@@ -32,24 +32,23 @@ using System;
 
 namespace System.Data
 {
-	public class DeletedRowInaccessibleException : DataException
-	{
-		public DeletedRowInaccessibleException ()
-			: base (Locale.GetText ("This DataRow has been deleted"))
-		{
-		}
+    public class DeletedRowInaccessibleException : DataException
+    {
+        public DeletedRowInaccessibleException()
+            : base(Locale.GetText("This DataRow has been deleted"))
+        {
+        }
 
-		public DeletedRowInaccessibleException (string s)
-			: base (s)
-		{
-		}
+        public DeletedRowInaccessibleException(string s)
+            : base(s)
+        {
+        }
 
 #if NET_2_0
-		public DeletedRowInaccessibleException (string message, Exception innerException)
-			: base (message, innerException)
-		{
-		}
+        public DeletedRowInaccessibleException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
 #endif
-
-	}
+    }
 }

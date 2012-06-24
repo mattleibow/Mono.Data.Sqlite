@@ -1,4 +1,4 @@
-﻿﻿/********************************************************
+﻿/********************************************************
  * ADO.NET 2.0 Data Provider for SQLite Version 3.X
  * Written by Robert Simpson (robert@blackcastlesoft.com)
  * 
@@ -16,7 +16,6 @@ namespace Mono.Data.Sqlite
     using System.Text;
     using System.Runtime.InteropServices;
     using System.IO;
-
     using Community.CsharpSqlite;
 
     /// <summary>
@@ -157,10 +156,12 @@ namespace Mono.Data.Sqlite
         /// State of the current connection
         /// </summary>
         private ConnectionState _connectionState;
+
         /// <summary>
         /// The connection string
         /// </summary>
         private string _connectionString;
+
         /// <summary>
         /// Nesting level of the transactions open on the connection
         /// </summary>
@@ -177,14 +178,17 @@ namespace Mono.Data.Sqlite
         /// </summary>
         internal SQLiteEnlistment _enlistment;
 #endif
+
         /// <summary>
         /// The base SQLite object to interop with
         /// </summary>
         internal SQLiteBase _sql;
+
         /// <summary>
         /// The database filename minus path and extension
         /// </summary>
         private string _dataSource;
+
         /// <summary>
         /// Temporary password storage, emptied after the database has been opened
         /// </summary>
@@ -295,18 +299,18 @@ namespace Mono.Data.Sqlite
         /// will turn into a database when the file is opened properly.
         /// </summary>
         /// <param name="databaseFileName">The file to create</param>
-        static public void CreateFile(string databaseFileName)
+        public static void CreateFile(string databaseFileName)
         {
             FileStream fs = File.Create(databaseFileName);
             fs.Close();
         }
 
 #if !SQLITE_STANDARD
-        /// <summary>
-        /// On NTFS volumes, this function turns on the compression attribute for the given file.
-        /// It must not be open or referenced at the time of the function call.
-        /// </summary>
-        /// <param name="databaseFileName">The file to compress</param>
+    /// <summary>
+    /// On NTFS volumes, this function turns on the compression attribute for the given file.
+    /// It must not be open or referenced at the time of the function call.
+    /// </summary>
+    /// <param name="databaseFileName">The file to compress</param>
         [Obsolete("This functionality is being removed from a future version of the SQLite provider")]
         static public void CompressFile(string databaseFileName)
         {
@@ -315,11 +319,11 @@ namespace Mono.Data.Sqlite
 #endif
 
 #if !SQLITE_STANDARD
-        /// <summary>
-        /// On NTFS volumes, this function removes the compression attribute for the given file.
-        /// It must not be open or referenced at the time of the function call.
-        /// </summary>
-        /// <param name="databaseFileName">The file to decompress</param>
+    /// <summary>
+    /// On NTFS volumes, this function removes the compression attribute for the given file.
+    /// It must not be open or referenced at the time of the function call.
+    /// </summary>
+    /// <param name="databaseFileName">The file to decompress</param>
         [Obsolete("This functionality is being removed from a future version of the SQLite provider")]
         static public void DecompressFile(string databaseFileName)
         {
@@ -354,7 +358,9 @@ namespace Mono.Data.Sqlite
         [Obsolete("Use one of the standard BeginTransaction methods, this one will be removed soon")]
         public SqliteTransaction BeginTransaction(IsolationLevel isolationLevel, bool deferredLock)
         {
-            return (SqliteTransaction)BeginDbTransaction(deferredLock == false ? IsolationLevel.Serializable : IsolationLevel.ReadCommitted);
+            return
+                (SqliteTransaction)
+                BeginDbTransaction(deferredLock == false ? IsolationLevel.Serializable : IsolationLevel.ReadCommitted);
         }
 
         /// <summary>
@@ -367,7 +373,9 @@ namespace Mono.Data.Sqlite
         [Obsolete("Use one of the standard BeginTransaction methods, this one will be removed soon")]
         public SqliteTransaction BeginTransaction(bool deferredLock)
         {
-            return (SqliteTransaction)BeginDbTransaction(deferredLock == false ? IsolationLevel.Serializable : IsolationLevel.ReadCommitted);
+            return
+                (SqliteTransaction)
+                BeginDbTransaction(deferredLock == false ? IsolationLevel.Serializable : IsolationLevel.ReadCommitted);
         }
 
         /// <summary>
@@ -386,7 +394,7 @@ namespace Mono.Data.Sqlite
         /// <returns>Returns a SqliteTransaction object.</returns>
         public new SqliteTransaction BeginTransaction(IsolationLevel isolationLevel)
         {
-            return (SqliteTransaction)BeginDbTransaction(isolationLevel);
+            return (SqliteTransaction) BeginDbTransaction(isolationLevel);
         }
 
         /// <summary>
@@ -395,7 +403,7 @@ namespace Mono.Data.Sqlite
         /// <returns>Returns a SqliteTransaction object.</returns>
         public new SqliteTransaction BeginTransaction()
         {
-            return (SqliteTransaction)BeginDbTransaction(_defaultIsolation);
+            return (SqliteTransaction) BeginDbTransaction(_defaultIsolation);
         }
 
         /// <summary>
@@ -609,14 +617,15 @@ namespace Mono.Data.Sqlite
         /// </remarks>
 #if !PLATFORM_COMPACTFRAMEWORK
         [RefreshProperties(RefreshProperties.All), DefaultValue("")]
-        [Editor("SQLite.Designer.SqliteConnectionStringEditor, SQLite.Designer, Version=1.0.36.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139", "System.Drawing.Design.UITypeEditor, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a")]
+        [Editor(
+            "SQLite.Designer.SqliteConnectionStringEditor, SQLite.Designer, Version=1.0.36.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139"
+            ,
+            "System.Drawing.Design.UITypeEditor, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+            )]
 #endif
-        public override string ConnectionString
+            public override string ConnectionString
         {
-            get
-            {
-                return _connectionString;
-            }
+            get { return _connectionString; }
             set
             {
                 if (value == null)
@@ -653,12 +662,9 @@ namespace Mono.Data.Sqlite
 #if !PLATFORM_COMPACTFRAMEWORK
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 #endif
-        public override string DataSource
+            public override string DataSource
         {
-            get
-            {
-                return _dataSource;
-            }
+            get { return _dataSource; }
         }
 
         /// <summary>
@@ -667,12 +673,9 @@ namespace Mono.Data.Sqlite
 #if !PLATFORM_COMPACTFRAMEWORK
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 #endif
-        public override string Database
+            public override string Database
         {
-            get
-            {
-                return "main";
-            }
+            get { return "main"; }
         }
 
         /// <summary>
@@ -756,7 +759,10 @@ namespace Mono.Data.Sqlite
                 {
                     MapMonoKeyword(arPiece, ls);
                 }
-                else throw new ArgumentException(String.Format(CultureInfo.CurrentCulture, "Invalid ConnectionString format for parameter \"{0}\"", (arPiece.Length > 0) ? arPiece[0] : "null"));
+                else
+                    throw new ArgumentException(String.Format(CultureInfo.CurrentCulture,
+                                                              "Invalid ConnectionString format for parameter \"{0}\"",
+                                                              (arPiece.Length > 0) ? arPiece[0] : "null"));
             }
             return ls;
         }
@@ -785,7 +791,7 @@ namespace Mono.Data.Sqlite
         /// <param name="key">The key to find</param>
         /// <param name="defValue">The default value to return if the key is not found</param>
         /// <returns>The value corresponding to the specified key, or the default value if not found.</returns>
-        static internal string FindKey(SortedList<string, string> items, string key, string defValue)
+        internal static string FindKey(SortedList<string, string> items, string key, string defValue)
         {
             string ret;
 
@@ -816,7 +822,8 @@ namespace Mono.Data.Sqlite
             {
                 fileName = FindKey(opts, "Uri", "");
                 if (String.IsNullOrEmpty(fileName))
-                    throw new ArgumentException("Data Source cannot be empty.  Use :memory: to open an in-memory database");
+                    throw new ArgumentException(
+                        "Data Source cannot be empty.  Use :memory: to open an in-memory database");
                 else
                     fileName = MapUriPath(fileName);
             }
@@ -839,16 +846,22 @@ namespace Mono.Data.Sqlite
 
                 _defaultTimeout = Convert.ToInt32(FindKey(opts, "Default Timeout", "30"), CultureInfo.CurrentCulture);
 
-                _defaultIsolation = (IsolationLevel)Enum.Parse(typeof(IsolationLevel), FindKey(opts, "Default IsolationLevel", "Serializable"), true);
-                if (_defaultIsolation != IsolationLevel.Serializable && _defaultIsolation != IsolationLevel.ReadCommitted)
+                _defaultIsolation =
+                    (IsolationLevel)
+                    Enum.Parse(typeof (IsolationLevel), FindKey(opts, "Default IsolationLevel", "Serializable"), true);
+                if (_defaultIsolation != IsolationLevel.Serializable &&
+                    _defaultIsolation != IsolationLevel.ReadCommitted)
                     throw new NotSupportedException("Invalid Default IsolationLevel specified");
 
-                SQLiteDateFormats dateFormat = (SQLiteDateFormats)Enum.Parse(typeof(SQLiteDateFormats), FindKey(opts, "DateTimeFormat", "ISO8601"), true);
+                SQLiteDateFormats dateFormat =
+                    (SQLiteDateFormats)
+                    Enum.Parse(typeof (SQLiteDateFormats), FindKey(opts, "DateTimeFormat", "ISO8601"), true);
                 //string temp = FindKey(opts, "DateTimeFormat", "ISO8601");
                 //if (String.Compare(temp, "ticks", true, CultureInfo.InvariantCulture) == 0) dateFormat = SQLiteDateFormats.Ticks;
                 //else if (String.Compare(temp, "julianday", true, CultureInfo.InvariantCulture) == 0) dateFormat = SQLiteDateFormats.JulianDay;
 
-                if (bUTF16) // SQLite automatically sets the encoding of the database to UTF16 if called from sqlite3_open16()
+                if (bUTF16)
+                    // SQLite automatically sets the encoding of the database to UTF16 if called from sqlite3_open16()
                     _sql = new SQLite3_UTF16(dateFormat);
                 else
                     _sql = new SQLite3(dateFormat);
@@ -867,7 +880,9 @@ namespace Mono.Data.Sqlite
                     flags |= SQLiteOpenFlagsEnum.FileProtectionComplete;
                 if (SqliteConvert.ToBoolean(FindKey(opts, "FileProtectionCompleteUnlessOpen", Boolean.FalseString)))
                     flags |= SQLiteOpenFlagsEnum.FileProtectionCompleteUnlessOpen;
-                if (SqliteConvert.ToBoolean(FindKey(opts, "FileProtectionCompleteUntilFirstUserAuthentication", Boolean.FalseString)))
+                if (
+                    SqliteConvert.ToBoolean(FindKey(opts, "FileProtectionCompleteUntilFirstUserAuthentication",
+                                                    Boolean.FalseString)))
                     flags |= SQLiteOpenFlagsEnum.FileProtectionCompleteUntilFirstUserAuthentication;
                 if (SqliteConvert.ToBoolean(FindKey(opts, "FileProtectionNone", Boolean.FalseString)))
                     flags |= SQLiteOpenFlagsEnum.FileProtectionNone;
@@ -899,7 +914,8 @@ namespace Mono.Data.Sqlite
                         defValue = FindKey(opts, "Page Size", "1024");
                         if (Convert.ToInt32(defValue, CultureInfo.InvariantCulture) != 1024)
                         {
-                            cmd.CommandText = String.Format(CultureInfo.InvariantCulture, "PRAGMA page_size={0}", defValue);
+                            cmd.CommandText = String.Format(CultureInfo.InvariantCulture, "PRAGMA page_size={0}",
+                                                            defValue);
                             cmd.ExecuteNonQuery();
                         }
                     }
@@ -907,12 +923,14 @@ namespace Mono.Data.Sqlite
                     defValue = FindKey(opts, "Max Page Count", "0");
                     if (Convert.ToInt32(defValue, CultureInfo.InvariantCulture) != 0)
                     {
-                        cmd.CommandText = String.Format(CultureInfo.InvariantCulture, "PRAGMA max_page_count={0}", defValue);
+                        cmd.CommandText = String.Format(CultureInfo.InvariantCulture, "PRAGMA max_page_count={0}",
+                                                        defValue);
                         cmd.ExecuteNonQuery();
                     }
 
                     defValue = FindKey(opts, "Legacy Format", Boolean.FalseString);
-                    cmd.CommandText = String.Format(CultureInfo.InvariantCulture, "PRAGMA legacy_file_format={0}", SqliteConvert.ToBoolean(defValue) == true ? "ON" : "OFF");
+                    cmd.CommandText = String.Format(CultureInfo.InvariantCulture, "PRAGMA legacy_file_format={0}",
+                                                    SqliteConvert.ToBoolean(defValue) == true ? "ON" : "OFF");
                     cmd.ExecuteNonQuery();
 
                     defValue = FindKey(opts, "Synchronous", "Normal");
@@ -932,7 +950,8 @@ namespace Mono.Data.Sqlite
                     defValue = FindKey(opts, "Journal Mode", "Delete");
                     if (String.Compare(defValue, "Default", StringComparison.OrdinalIgnoreCase) != 0)
                     {
-                        cmd.CommandText = String.Format(CultureInfo.InvariantCulture, "PRAGMA journal_mode={0}", defValue);
+                        cmd.CommandText = String.Format(CultureInfo.InvariantCulture, "PRAGMA journal_mode={0}",
+                                                        defValue);
                         cmd.ExecuteNonQuery();
                     }
                 }
@@ -947,7 +966,8 @@ namespace Mono.Data.Sqlite
                     _sql.SetRollbackHook(_rollbackCallback);
 
 #if !PLATFORM_COMPACTFRAMEWORK
-                if (global::System.Transactions.Transaction.Current != null && SqliteConvert.ToBoolean(FindKey(opts, "Enlist", Boolean.TrueString)) == true)
+                if (global::System.Transactions.Transaction.Current != null &&
+                    SqliteConvert.ToBoolean(FindKey(opts, "Enlist", Boolean.TrueString)) == true)
                     EnlistTransaction(global::System.Transactions.Transaction.Current);
 #endif
             }
@@ -975,7 +995,7 @@ namespace Mono.Data.Sqlite
 #if !PLATFORM_COMPACTFRAMEWORK
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 #endif
-        public override string ServerVersion
+            public override string ServerVersion
         {
             get
             {
@@ -1000,12 +1020,9 @@ namespace Mono.Data.Sqlite
 #if !PLATFORM_COMPACTFRAMEWORK
         [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
 #endif
-        public override ConnectionState State
+            public override ConnectionState State
         {
-            get
-            {
-                return _connectionState;
-            }
+            get { return _connectionState; }
         }
 
         /// <summary>
@@ -1106,10 +1123,10 @@ namespace Mono.Data.Sqlite
         private void UpdateCallback(object puser, int type, string database, string table, Int64 rowid)
         {
             _updateHandler(this, new UpdateEventArgs(
-              database,
-              table,
-              (UpdateEventType)type,
-              rowid));
+                                     database,
+                                     table,
+                                     (UpdateEventType) type,
+                                     rowid));
         }
 
         /// <summary>
@@ -1180,7 +1197,7 @@ namespace Mono.Data.Sqlite
         // http://www.sqlite.org/c3ref/config.html
         public static void SetConfig(SQLiteConfig config)
         {
-            int n = Sqlite3.sqlite3_config((int)config);
+            int n = Sqlite3.sqlite3_config((int) config);
             if (n > 0) throw new SqliteException(n, null);
         }
     }
@@ -1194,10 +1211,12 @@ namespace Mono.Data.Sqlite
         /// Normal file flushing at critical sections of the code
         /// </summary>
         Normal = 0,
+
         /// <summary>
         /// Full file flushing after every write operation
         /// </summary>
         Full = 1,
+
         /// <summary>
         /// Use the default operating system's file flushing, SQLite does not explicitly flush the file buffers after writing
         /// </summary>
@@ -1229,10 +1248,12 @@ namespace Mono.Data.Sqlite
         /// A row is being deleted from the given database and table
         /// </summary>
         Delete = 9,
+
         /// <summary>
         /// A row is being inserted into the table.
         /// </summary>
         Insert = 18,
+
         /// <summary>
         /// A row is being updated in the table.
         /// </summary>
@@ -1288,5 +1309,4 @@ namespace Mono.Data.Sqlite
         /// </summary>
         public bool AbortTransaction;
     }
-
 }

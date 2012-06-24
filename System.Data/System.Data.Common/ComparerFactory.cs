@@ -1,4 +1,3 @@
-
 //
 // Copyright (C) 2004 Novell, Inc (http://www.novell.com)
 //
@@ -21,149 +20,161 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
+
 using System;
 using System.Collections;
 
 namespace System.Data.Common
 {
-	/// <summary>
-	/// Summary description for ComparerFactory.
-	/// </summary>
-	internal class DBComparerFactory
-	{
-		private static IComparer comparableComparer = new ComparebleComparer();
-		private static IComparer ignoreCaseComparer = new IgnoreCaseComparer();
-		private static IComparer caseComparer = new CaseComparer();
-		private static IComparer byteArrayComparer = new ByteArrayComparer();
-		private static Type icomparerType = typeof (IComparable);
+    /// <summary>
+    /// Summary description for ComparerFactory.
+    /// </summary>
+    internal class DBComparerFactory
+    {
+        private static IComparer comparableComparer = new ComparebleComparer();
+        private static IComparer ignoreCaseComparer = new IgnoreCaseComparer();
+        private static IComparer caseComparer = new CaseComparer();
+        private static IComparer byteArrayComparer = new ByteArrayComparer();
+        private static Type icomparerType = typeof (IComparable);
 
-		public static IComparer GetComparer (Type type, bool ignoreCase)
-		{
-			if (type == typeof (string)) {
-				if (ignoreCase)
-					return ignoreCaseComparer;
-				return caseComparer;
-			}
-			if (icomparerType.IsAssignableFrom(type))
-				return comparableComparer;
-			if (type == typeof (byte[]))
-				return byteArrayComparer;
-			return null;
-		}
+        public static IComparer GetComparer(Type type, bool ignoreCase)
+        {
+            if (type == typeof (string))
+            {
+                if (ignoreCase)
+                    return ignoreCaseComparer;
+                return caseComparer;
+            }
+            if (icomparerType.IsAssignableFrom(type))
+                return comparableComparer;
+            if (type == typeof (byte[]))
+                return byteArrayComparer;
+            return null;
+        }
 
-		class ComparebleComparer :IComparer
-		{
-			#region IComparer Members
+        private class ComparebleComparer : IComparer
+        {
+            #region IComparer Members
 
-			public int Compare(object x, object y)
-			{
-				if (x == DBNull.Value) {
-					if (y == DBNull.Value) 
-						return 0;
+            public int Compare(object x, object y)
+            {
+                if (x == DBNull.Value)
+                {
+                    if (y == DBNull.Value)
+                        return 0;
 
-					return -1;
-				}
+                    return -1;
+                }
 
-				if (y == DBNull.Value) 
-					return 1;
-				
-				return ((IComparable)x).CompareTo (y);
-			}
+                if (y == DBNull.Value)
+                    return 1;
 
-			#endregion
-		}
+                return ((IComparable) x).CompareTo(y);
+            }
 
-		class CaseComparer : IComparer
-		{
-			#region IComparer Members
+            #endregion
+        }
 
-			public int Compare(object x, object y)
-			{
-				if (x == DBNull.Value) {
-					if (y == DBNull.Value) 
-						return 0;
+        private class CaseComparer : IComparer
+        {
+            #region IComparer Members
 
-					return -1;
-				}
+            public int Compare(object x, object y)
+            {
+                if (x == DBNull.Value)
+                {
+                    if (y == DBNull.Value)
+                        return 0;
 
-				if (y == DBNull.Value) 
-					return 1;
-				
-				return String.Compare ((string)x, (string)y, false);
-			}
+                    return -1;
+                }
 
-			#endregion
-		}
+                if (y == DBNull.Value)
+                    return 1;
 
-		class IgnoreCaseComparer : IComparer
-		{
-			#region IComparer Members
+                return String.Compare((string) x, (string) y, false);
+            }
 
-			public int Compare(object x, object y)
-			{
-				if (x == DBNull.Value) {
-					if (y == DBNull.Value) 
-						return 0;
+            #endregion
+        }
 
-					return -1;
-				}
+        private class IgnoreCaseComparer : IComparer
+        {
+            #region IComparer Members
 
-				if (y == DBNull.Value) 
-					return 1;
-				
-				return String.Compare ((string)x, (string)y, true);
-			}
+            public int Compare(object x, object y)
+            {
+                if (x == DBNull.Value)
+                {
+                    if (y == DBNull.Value)
+                        return 0;
 
-			#endregion
-		}
+                    return -1;
+                }
 
-		class ByteArrayComparer : IComparer
-		{
-			#region IComparer Members
+                if (y == DBNull.Value)
+                    return 1;
 
-			public int Compare(object x, object y)
-			{
-				if (x == DBNull.Value) {
-					if (y == DBNull.Value) 
-						return 0;
+                return String.Compare((string) x, (string) y, true);
+            }
 
-					return -1;
-				}
+            #endregion
+        }
 
-				if (y == DBNull.Value) 
-					return 1;
-				
-				byte[] o1 = (byte[])x;
-				byte[] o2 = (byte[])y;
-				int len  = o1.Length;
-				int lenb = o2.Length;
+        private class ByteArrayComparer : IComparer
+        {
+            #region IComparer Members
 
-				for (int i = 0; ; i++) {
-					int a = 0;
-					int b = 0;
+            public int Compare(object x, object y)
+            {
+                if (x == DBNull.Value)
+                {
+                    if (y == DBNull.Value)
+                        return 0;
 
-					if (i < len) {
-						a = o1[i];
-					} 
-					else if (i >= lenb) {
-						return 0;
-					}
+                    return -1;
+                }
 
-					if (i < lenb) {
-						b = o2[i];
-					}
+                if (y == DBNull.Value)
+                    return 1;
 
-					if (a > b) {
-						return 1;
-					}
+                byte[] o1 = (byte[]) x;
+                byte[] o2 = (byte[]) y;
+                int len = o1.Length;
+                int lenb = o2.Length;
 
-					if (b > a) {
-						return -1;
-					}
-				}
-			}
+                for (int i = 0;; i++)
+                {
+                    int a = 0;
+                    int b = 0;
 
-			#endregion
-		}
-	}
+                    if (i < len)
+                    {
+                        a = o1[i];
+                    }
+                    else if (i >= lenb)
+                    {
+                        return 0;
+                    }
+
+                    if (i < lenb)
+                    {
+                        b = o2[i];
+                    }
+
+                    if (a > b)
+                    {
+                        return 1;
+                    }
+
+                    if (b > a)
+                    {
+                        return -1;
+                    }
+                }
+            }
+
+            #endregion
+        }
+    }
 }

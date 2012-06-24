@@ -34,15 +34,15 @@ using System;
 
 namespace System.Data
 {
-	/// <summary>
-	/// Specifies how to handle existing schema mappings when performing a FillSchema operation.
-	/// </summary>
+    /// <summary>
+    /// Specifies how to handle existing schema mappings when performing a FillSchema operation.
+    /// </summary>
 #if !NET_2_0
 	[Serializable]
 #endif
-	public enum SchemaType
-	{
-		Source = 1,
-		Mapped = 2
-	}
+    public enum SchemaType
+    {
+        Source = 1,
+        Mapped = 2
+    }
 }

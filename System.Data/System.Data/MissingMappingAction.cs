@@ -34,16 +34,16 @@ using System;
 
 namespace System.Data
 {
-	/// <summary>
-	/// Determines the action that occurs when a mapping is missing from a source table or a source column.
-	/// </summary>
+    /// <summary>
+    /// Determines the action that occurs when a mapping is missing from a source table or a source column.
+    /// </summary>
 #if !NET_2_0
 	[Serializable]
 #endif
-	public enum MissingMappingAction
-	{
-		Passthrough = 1,
-		Ignore = 2,
-		Error = 3
-	}
+    public enum MissingMappingAction
+    {
+        Passthrough = 1,
+        Ignore = 2,
+        Error = 3
+    }
 }

@@ -33,22 +33,22 @@ using System.Globalization;
 
 namespace System.Data
 {
-	public class ConstraintException : DataException
-	{
-		public ConstraintException ()
-			: base (Locale.GetText ("This operation violates a constraint"))
-		{
-		}
+    public class ConstraintException : DataException
+    {
+        public ConstraintException()
+            : base(Locale.GetText("This operation violates a constraint"))
+        {
+        }
 
-		public ConstraintException (string s) : base (s)
-		{
-		}
+        public ConstraintException(string s) : base(s)
+        {
+        }
 
 #if NET_2_0
-		public ConstraintException (string message, Exception innerException)
-			: base (message, innerException)
-		{
-		}
+        public ConstraintException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
 #endif
-	}
+    }
 }

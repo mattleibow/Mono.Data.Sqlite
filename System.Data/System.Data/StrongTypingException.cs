@@ -33,22 +33,22 @@ using System.Globalization;
 
 namespace System.Data
 {
-	public class StrongTypingException : DataException
-	{
-		public StrongTypingException ()
-			: base (Locale.GetText ("Trying to access a DBNull value in a strongly-typed DataSet"))
-		{
-		}
+    public class StrongTypingException : DataException
+    {
+        public StrongTypingException()
+            : base(Locale.GetText("Trying to access a DBNull value in a strongly-typed DataSet"))
+        {
+        }
 
 #if NET_2_0
-		public StrongTypingException (string message) : base (message)
-		{
-		}
+        public StrongTypingException(string message) : base(message)
+        {
+        }
 #endif
 
-		public StrongTypingException (string s, Exception innerException)
-			: base (s, innerException)
-		{
-		}
-	}
+        public StrongTypingException(string s, Exception innerException)
+            : base(s, innerException)
+        {
+        }
+    }
 }

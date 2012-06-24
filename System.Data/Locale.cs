@@ -33,19 +33,19 @@
 
 using System;
 
-internal sealed class Locale {
+internal sealed class Locale
+{
+    private Locale()
+    {
+    }
 
-	private Locale ()
-	{
-	}
+    public static string GetText(string msg)
+    {
+        return msg;
+    }
 
-	public static string GetText (string msg)
-	{
-		return msg;
-	}
-
-	public static string GetText (string fmt, params object [] args)
-	{
-		return String.Format (fmt, args);
-	}
+    public static string GetText(string fmt, params object[] args)
+    {
+        return String.Format(fmt, args);
+    }
 }

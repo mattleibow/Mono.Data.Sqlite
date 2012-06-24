@@ -33,23 +33,23 @@ using System.Globalization;
 
 namespace System.Data
 {
-	public class SyntaxErrorException : InvalidExpressionException
-	{
-		public SyntaxErrorException ()
-			: base (Locale.GetText ("There is a syntax error in this Expression"))
-		{
-		}
+    public class SyntaxErrorException : InvalidExpressionException
+    {
+        public SyntaxErrorException()
+            : base(Locale.GetText("There is a syntax error in this Expression"))
+        {
+        }
 
-		public SyntaxErrorException (string s)
-			: base (s)
-		{
-		}
+        public SyntaxErrorException(string s)
+            : base(s)
+        {
+        }
 
 #if NET_2_0
-		public SyntaxErrorException (string message, Exception innerException)
-			: base (message, innerException)
-		{
-		}
+        public SyntaxErrorException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
 #endif
-	}
+    }
 }

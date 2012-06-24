@@ -30,34 +30,38 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+
 #if NET_2_0
 
-namespace System.Data {
-	public sealed class StatementCompletedEventArgs : EventArgs
-	{
-		#region Fields
+namespace System.Data
+{
+    public sealed class StatementCompletedEventArgs : EventArgs
+    {
+        #region Fields
 
-		int recordCount;
+        private int recordCount;
 
-		#endregion // Fields
+        #endregion // Fields
 
-		#region Constructors
+        #region Constructors
 
-		public StatementCompletedEventArgs (int recordCount)
-		{
-			this.recordCount = recordCount;
-		}
+        public StatementCompletedEventArgs(int recordCount)
+        {
+            this.recordCount = recordCount;
+        }
 
-		#endregion // Constructors
+        #endregion // Constructors
 
-		#region Properties
+        #region Properties
 
-		public int RecordCount {
-			get { return recordCount; }
-		}
+        public int RecordCount
+        {
+            get { return recordCount; }
+        }
 
-		#endregion // Properties
-	}
+        #endregion // Properties
+    }
 }
 
-#endif // NET_2_0
+#endif
+// NET_2_0

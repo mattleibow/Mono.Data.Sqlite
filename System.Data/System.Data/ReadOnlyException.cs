@@ -33,25 +33,23 @@ using System.Globalization;
 
 namespace System.Data
 {
-	public class ReadOnlyException : DataException
-	{
-		public ReadOnlyException ()
-			: base (Locale.GetText ("Cannot change a value in a read-only column"))
-		{
-		}
+    public class ReadOnlyException : DataException
+    {
+        public ReadOnlyException()
+            : base(Locale.GetText("Cannot change a value in a read-only column"))
+        {
+        }
 
-		public ReadOnlyException (string s)
-			: base (s)
-		{
-		}
+        public ReadOnlyException(string s)
+            : base(s)
+        {
+        }
 
 #if NET_2_0
-		public ReadOnlyException (string message, Exception innerException)
-			: base (message, innerException)
-		{
-		}
+        public ReadOnlyException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
 #endif
-
-		
-	}
+    }
 }

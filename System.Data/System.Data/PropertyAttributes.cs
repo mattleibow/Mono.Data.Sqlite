@@ -34,23 +34,23 @@ using System;
 
 namespace System.Data
 {
-	/// <summary>
-	/// Specifies the attributes of a property.
-	/// This enumeration has a FlagsAttribute that allows a bitwise combination of its member values
-	/// </summary>
-	[Flags]
+    /// <summary>
+    /// Specifies the attributes of a property.
+    /// This enumeration has a FlagsAttribute that allows a bitwise combination of its member values
+    /// </summary>
+    [Flags]
 #if NET_2_0
-	[Obsolete]
-	[ComponentModel.EditorBrowsable (ComponentModel.EditorBrowsableState.Never)]
+    [Obsolete]
+    [ComponentModel.EditorBrowsable(ComponentModel.EditorBrowsableState.Never)]
 #else
 	[Serializable]
 #endif
-	public enum PropertyAttributes
-	{
-		NotSupported = 0,
-		Required = 1,
-		Optional = 2,
-		Read = 512,
-		Write = 1024
-	}
+    public enum PropertyAttributes
+    {
+        NotSupported = 0,
+        Required = 1,
+        Optional = 2,
+        Read = 512,
+        Write = 1024
+    }
 }

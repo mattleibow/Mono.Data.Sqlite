@@ -36,29 +36,30 @@ using System.ComponentModel;
 
 namespace System.Data
 {
-	/// <summary>
-	/// a collection of properties that can be added to 
-	/// DataColumn, DataSet, or DataTable.
-	/// The ExtendedProperties property of a 
-	/// DataColumn, DataSet, or DataTable class can
-	/// retrieve a PropertyCollection.
-	/// </summary>
+    /// <summary>
+    /// a collection of properties that can be added to 
+    /// DataColumn, DataSet, or DataTable.
+    /// The ExtendedProperties property of a 
+    /// DataColumn, DataSet, or DataTable class can
+    /// retrieve a PropertyCollection.
+    /// </summary>
 #if NET_2_0
 #endif
-	public class PropertyCollection : Hashtable {
-		public PropertyCollection() 
-		{
-		}
+    public class PropertyCollection : Hashtable
+    {
+        public PropertyCollection()
+        {
+        }
 
 #if NET_2_0
-		protected PropertyCollection(System.Runtime.Serialization.SerializationInfo info,
-					     System.Runtime.Serialization.StreamingContext context)
-			: base (info, context)
-		{
-		}
+        protected PropertyCollection(System.Runtime.Serialization.SerializationInfo info,
+                                     System.Runtime.Serialization.StreamingContext context)
+            : base(info, context)
+        {
+        }
 #endif
 
-		// the only public methods and properties 
-		// are all inherited from Hashtable
-	}
+        // the only public methods and properties 
+        // are all inherited from Hashtable
+    }
 }

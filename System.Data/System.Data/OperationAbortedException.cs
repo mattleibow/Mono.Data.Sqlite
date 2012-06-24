@@ -34,28 +34,30 @@
 
 using System.Globalization;
 
-namespace System.Data {
-	public sealed class OperationAbortedException : SystemException
-	{
-		#region Constructors
+namespace System.Data
+{
+    public sealed class OperationAbortedException : SystemException
+    {
+        #region Constructors
 
-		internal OperationAbortedException ()
-			: base (Locale.GetText ("An OperationAbortedException has occurred."))
-		{
-		}
+        internal OperationAbortedException()
+            : base(Locale.GetText("An OperationAbortedException has occurred."))
+        {
+        }
 
-		internal OperationAbortedException (string s)
-			: base (s)
-		{
-		}
+        internal OperationAbortedException(string s)
+            : base(s)
+        {
+        }
 
-		internal OperationAbortedException (string s, Exception innerException)
-			: base (s, innerException)
-		{
-		}
+        internal OperationAbortedException(string s, Exception innerException)
+            : base(s, innerException)
+        {
+        }
 
-		#endregion // Constructors
-	}
+        #endregion // Constructors
+    }
 }
 
-#endif // NET_2_0
+#endif
+// NET_2_0

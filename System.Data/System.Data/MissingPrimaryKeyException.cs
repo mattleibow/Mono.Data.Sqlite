@@ -33,23 +33,23 @@ using System.Globalization;
 
 namespace System.Data
 {
-	public class MissingPrimaryKeyException : DataException
-	{
-		public MissingPrimaryKeyException ()
-			: base (Locale.GetText ("This table has no primary key"))
-		{
-		}
+    public class MissingPrimaryKeyException : DataException
+    {
+        public MissingPrimaryKeyException()
+            : base(Locale.GetText("This table has no primary key"))
+        {
+        }
 
-		public MissingPrimaryKeyException (string s)
-			: base (s)
-		{
-		}
+        public MissingPrimaryKeyException(string s)
+            : base(s)
+        {
+        }
 
 #if NET_2_0
-		public MissingPrimaryKeyException (string message, Exception innerException)
-			: base (message, innerException)
-		{
-		}
+        public MissingPrimaryKeyException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
 #endif
-	}
+    }
 }

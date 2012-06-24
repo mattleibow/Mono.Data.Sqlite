@@ -1,4 +1,3 @@
-
 // System.Data.Common.DbTransaction.cs
 //
 // Author:
@@ -28,57 +27,56 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+
 #if NET_2_0 || TARGET_JVM
 
 namespace System.Data.Common
 {
-	public abstract class DbTransaction : MarshalByRefObject, IDbTransaction, IDisposable
-	{
-		#region Constructors
+    public abstract class DbTransaction : MarshalByRefObject, IDbTransaction, IDisposable
+    {
+        #region Constructors
 
-		protected DbTransaction ()
-		{
-		}
+        protected DbTransaction()
+        {
+        }
 
-		#endregion // Constructors
+        #endregion // Constructors
 
-		#region Properties
+        #region Properties
 
-		public DbConnection Connection {
-			get { return DbConnection; }
-		}
+        public DbConnection Connection
+        {
+            get { return DbConnection; }
+        }
 
-		protected abstract DbConnection DbConnection {
-			get;
-		}
+        protected abstract DbConnection DbConnection { get; }
 
-		IDbConnection IDbTransaction.Connection {
-			get { return (IDbConnection) Connection; }
-		}
+        IDbConnection IDbTransaction.Connection
+        {
+            get { return (IDbConnection) Connection; }
+        }
 
-		public abstract IsolationLevel IsolationLevel {
-			get;
-		}
+        public abstract IsolationLevel IsolationLevel { get; }
 
-		#endregion // Properties
+        #endregion // Properties
 
-		#region Methods
+        #region Methods
 
-		public abstract void Commit ();
+        public abstract void Commit();
 
-		public abstract void Rollback ();
+        public abstract void Rollback();
 
-		public void Dispose ()
-		{
-			Dispose (true);
-		}
+        public void Dispose()
+        {
+            Dispose(true);
+        }
 
-		protected virtual void Dispose (bool disposing)
-		{
-		}
+        protected virtual void Dispose(bool disposing)
+        {
+        }
 
-		#endregion // Methods
-	}
+        #endregion // Methods
+    }
 }
 
 #endif

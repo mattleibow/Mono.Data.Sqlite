@@ -31,34 +31,35 @@
 
 using System;
 
-namespace System.Data.Common {
-	[AttributeUsage (AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
-	public sealed class DbProviderSpecificTypePropertyAttribute : Attribute
-	{
-		#region Fields
+namespace System.Data.Common
+{
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
+    public sealed class DbProviderSpecificTypePropertyAttribute : Attribute
+    {
+        #region Fields
 
-		bool isProviderSpecificTypeProperty;
+        private bool isProviderSpecificTypeProperty;
 
-		#endregion // Fields
+        #endregion // Fields
 
-		#region Constructors
+        #region Constructors
 
-		public DbProviderSpecificTypePropertyAttribute (bool isProviderSpecificTypeProperty)		    {
-			this.isProviderSpecificTypeProperty = isProviderSpecificTypeProperty;
-		}
+        public DbProviderSpecificTypePropertyAttribute(bool isProviderSpecificTypeProperty)
+        {
+            this.isProviderSpecificTypeProperty = isProviderSpecificTypeProperty;
+        }
 
-		#endregion // Constructors
+        #endregion // Constructors
 
-		#region Properties
+        #region Properties
 
-		public bool IsProviderSpecificTypeProperty{
-			get {
-				return this.isProviderSpecificTypeProperty;
-			}
-		}
+        public bool IsProviderSpecificTypeProperty
+        {
+            get { return this.isProviderSpecificTypeProperty; }
+        }
 
-		#endregion // Properties
-	}
+        #endregion // Properties
+    }
 }
 
 #endif

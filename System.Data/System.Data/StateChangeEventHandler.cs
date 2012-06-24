@@ -32,12 +32,11 @@
 
 namespace System.Data
 {
-	/// <summary>
-	/// Represents the method that will handle the StateChange event.
-	/// </summary>
+    /// <summary>
+    /// Represents the method that will handle the StateChange event.
+    /// </summary>
 #if !NET_2_0
 	[Serializable]
 #endif
-	public delegate void StateChangeEventHandler(object sender, StateChangeEventArgs e);
-
+    public delegate void StateChangeEventHandler(object sender, StateChangeEventArgs e);
 }

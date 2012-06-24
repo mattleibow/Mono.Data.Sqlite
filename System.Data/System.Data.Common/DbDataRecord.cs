@@ -37,241 +37,250 @@ using System.Runtime.CompilerServices;
 
 namespace System.Data.Common
 {
-	public abstract class DbDataRecord : IDataRecord
-	{
-		protected DbDataRecord ()
-		{
-		}
+    public abstract class DbDataRecord : IDataRecord
+    {
+        protected DbDataRecord()
+        {
+        }
 
-		public abstract int FieldCount { get; }
-		public abstract object this [string name] { get; }
-		public abstract object this [int i] { get; }
+        public abstract int FieldCount { get; }
+        public abstract object this[string name] { get; }
+        public abstract object this[int i] { get; }
 
-		public abstract bool GetBoolean (int i);
-		public abstract byte GetByte (int i);
-		public abstract long GetBytes (int i, long dataIndex, byte [] buffer, int bufferIndex,int length);
-		public abstract char GetChar (int i);
-		public abstract long GetChars (int i, long dataIndex, char [] buffer, int bufferIndex, int length);
-		public abstract string GetDataTypeName (int i);
+        public abstract bool GetBoolean(int i);
+        public abstract byte GetByte(int i);
+        public abstract long GetBytes(int i, long dataIndex, byte[] buffer, int bufferIndex, int length);
+        public abstract char GetChar(int i);
+        public abstract long GetChars(int i, long dataIndex, char[] buffer, int bufferIndex, int length);
+        public abstract string GetDataTypeName(int i);
 #if NET_2_0
-		protected abstract DbDataReader GetDbDataReader (int i);
+        protected abstract DbDataReader GetDbDataReader(int i);
 #endif
-		public abstract DateTime GetDateTime (int i);
-		public abstract decimal GetDecimal (int i);
-		public abstract double GetDouble (int i);
-		public abstract Type GetFieldType (int i);
-		public abstract float GetFloat (int i);
-		public abstract Guid GetGuid (int i);
-		public abstract short GetInt16 (int i);
-		public abstract int GetInt32 (int i);
-		public abstract long GetInt64 (int i);
-		public abstract string GetName (int i);
-		public abstract int GetOrdinal (string name);
-		public abstract string GetString (int i);
-		public abstract object GetValue (int i);
-		public abstract int GetValues (object [] values);
-		public abstract bool IsDBNull (int i);
+        public abstract DateTime GetDateTime(int i);
+        public abstract decimal GetDecimal(int i);
+        public abstract double GetDouble(int i);
+        public abstract Type GetFieldType(int i);
+        public abstract float GetFloat(int i);
+        public abstract Guid GetGuid(int i);
+        public abstract short GetInt16(int i);
+        public abstract int GetInt32(int i);
+        public abstract long GetInt64(int i);
+        public abstract string GetName(int i);
+        public abstract int GetOrdinal(string name);
+        public abstract string GetString(int i);
+        public abstract object GetValue(int i);
+        public abstract int GetValues(object[] values);
+        public abstract bool IsDBNull(int i);
 
-		public IDataReader GetData (int i)
-		{
-			return (IDataReader) GetValue (i);
-		}
-	}
+        public IDataReader GetData(int i)
+        {
+            return (IDataReader) GetValue(i);
+        }
+    }
 
-    class DbDataRecordImpl : DbDataRecord
-	{
-		#region Fields
+    internal class DbDataRecordImpl : DbDataRecord
+    {
+        #region Fields
 
-		readonly SchemaInfo [] schema;
-		readonly object [] values;
-		readonly int fieldCount;
+        private readonly SchemaInfo[] schema;
+        private readonly object[] values;
+        private readonly int fieldCount;
 
-		#endregion
-		
-		#region Constructors
+        #endregion
 
-		// FIXME: this class should actually be reimplemented to be one
-		// of the derived classes of DbDataRecord, which should become
-		// almost abstract.
-		internal DbDataRecordImpl (SchemaInfo[] schema, object[] values)
-		{
-			this.schema = schema;
-			this.values = values;
-			this.fieldCount = values.Length;
-		}
+        #region Constructors
 
-		#endregion
+        // FIXME: this class should actually be reimplemented to be one
+        // of the derived classes of DbDataRecord, which should become
+        // almost abstract.
+        internal DbDataRecordImpl(SchemaInfo[] schema, object[] values)
+        {
+            this.schema = schema;
+            this.values = values;
+            this.fieldCount = values.Length;
+        }
 
-		#region Properties
+        #endregion
 
-		public override int FieldCount {
-			get { return fieldCount; }
-		}
+        #region Properties
 
-		public override object this [string name] {
-			get { return this [GetOrdinal (name)]; }
-		}
+        public override int FieldCount
+        {
+            get { return fieldCount; }
+        }
 
-		public override object this [int i] {
-			get { return GetValue (i); }
-		}
+        public override object this[string name]
+        {
+            get { return this[GetOrdinal(name)]; }
+        }
 
-		#endregion
+        public override object this[int i]
+        {
+            get { return GetValue(i); }
+        }
 
-		#region Methods
+        #endregion
 
-		public override bool GetBoolean (int i)
-		{
-			return (bool) GetValue (i);
-		}
+        #region Methods
 
-		public override byte GetByte (int i)
-		{
-			return (byte) GetValue (i);
-		}
+        public override bool GetBoolean(int i)
+        {
+            return (bool) GetValue(i);
+        }
 
-		public override long GetBytes (int i, long dataIndex, byte[] buffer, int bufferIndex, int length)
-		{
-			object value = GetValue (i);
-			if (!(value is byte []))
-				throw new InvalidCastException ("Type is " + value.GetType ().ToString ());
+        public override byte GetByte(int i)
+        {
+            return (byte) GetValue(i);
+        }
 
-			if ( buffer == null ) {
-				// Return length of data
-				return ((byte []) value).Length;
-			} else {
-				// Copy data into buffer
-				Array.Copy ((byte []) value, (int) dataIndex, buffer, bufferIndex, length);
-				return ((byte []) value).Length - dataIndex;
-			}
-		}
+        public override long GetBytes(int i, long dataIndex, byte[] buffer, int bufferIndex, int length)
+        {
+            object value = GetValue(i);
+            if (!(value is byte[]))
+                throw new InvalidCastException("Type is " + value.GetType().ToString());
 
-		public override char GetChar (int i)
-		{
-			return (char) GetValue (i);
-		}
+            if (buffer == null)
+            {
+                // Return length of data
+                return ((byte[]) value).Length;
+            }
+            else
+            {
+                // Copy data into buffer
+                Array.Copy((byte[]) value, (int) dataIndex, buffer, bufferIndex, length);
+                return ((byte[]) value).Length - dataIndex;
+            }
+        }
 
-		public override long GetChars (int i, long dataIndex, char[] buffer, int bufferIndex, int length)
-		{
-			object value = GetValue (i);
-			char [] valueBuffer;
+        public override char GetChar(int i)
+        {
+            return (char) GetValue(i);
+        }
 
-			if (value is char[])
-				valueBuffer = (char []) value;
-			else if (value is string)
-				valueBuffer = ((string) value).ToCharArray ();
-			else
-				throw new InvalidCastException ("Type is " + value.GetType ().ToString ());
+        public override long GetChars(int i, long dataIndex, char[] buffer, int bufferIndex, int length)
+        {
+            object value = GetValue(i);
+            char[] valueBuffer;
 
-			if (buffer == null) {
-				// Return length of data
-				return valueBuffer.Length;
-			} else {
-				// Copy data into buffer
-				Array.Copy (valueBuffer, (int) dataIndex, buffer, bufferIndex, length);
-				return valueBuffer.Length - dataIndex;
-			}
-		}
+            if (value is char[])
+                valueBuffer = (char[]) value;
+            else if (value is string)
+                valueBuffer = ((string) value).ToCharArray();
+            else
+                throw new InvalidCastException("Type is " + value.GetType().ToString());
 
-		public override string GetDataTypeName (int i)
-		{
-			return schema[i].DataTypeName;
-		}
+            if (buffer == null)
+            {
+                // Return length of data
+                return valueBuffer.Length;
+            }
+            else
+            {
+                // Copy data into buffer
+                Array.Copy(valueBuffer, (int) dataIndex, buffer, bufferIndex, length);
+                return valueBuffer.Length - dataIndex;
+            }
+        }
 
-		public override DateTime GetDateTime (int i)
-		{
-			return (DateTime) GetValue (i);
-		}
+        public override string GetDataTypeName(int i)
+        {
+            return schema[i].DataTypeName;
+        }
+
+        public override DateTime GetDateTime(int i)
+        {
+            return (DateTime) GetValue(i);
+        }
 
 #if NET_2_0
-		[MonoTODO]
-		protected override DbDataReader GetDbDataReader (int ordinal)
-		{
-			throw new NotImplementedException ();
-		}
+        [MonoTODO]
+        protected override DbDataReader GetDbDataReader(int ordinal)
+        {
+            throw new NotImplementedException();
+        }
 #endif
 
-		public override decimal GetDecimal (int i)
-		{
-			return (decimal) GetValue (i);
-		}
+        public override decimal GetDecimal(int i)
+        {
+            return (decimal) GetValue(i);
+        }
 
-		public override double GetDouble (int i)
-		{
-			return (double) GetValue (i);
-		}
+        public override double GetDouble(int i)
+        {
+            return (double) GetValue(i);
+        }
 
-		public override Type GetFieldType (int i)
-		{
-			return schema[i].FieldType;
-		}
+        public override Type GetFieldType(int i)
+        {
+            return schema[i].FieldType;
+        }
 
-		public override float GetFloat (int i)
-		{
-			return (float) GetValue (i);
-		}
-		
-		public override Guid GetGuid (int i)
-		{
-			return (Guid) GetValue (i);
-		}
-		
-		public override short GetInt16 (int i)
-		{
-			return (short) GetValue (i);
-		}
-	
-		public override int GetInt32 (int i)
-		{
-			return (int) GetValue (i);
-		}
+        public override float GetFloat(int i)
+        {
+            return (float) GetValue(i);
+        }
 
-		public override long GetInt64 (int i)
-		{
-			return (long) GetValue (i);
-		}
+        public override Guid GetGuid(int i)
+        {
+            return (Guid) GetValue(i);
+        }
 
-		public override string GetName (int i)
-		{
-			return schema [i].ColumnName;
-		}
+        public override short GetInt16(int i)
+        {
+            return (short) GetValue(i);
+        }
 
-		public override int GetOrdinal (string name)
-		{
-			for (int i = 0; i < FieldCount; i++)
-				if (schema [i].ColumnName == name)
-					return i;
-			return -1;
-		}
+        public override int GetInt32(int i)
+        {
+            return (int) GetValue(i);
+        }
 
-		public override string GetString (int i)
-		{
-			return (string) GetValue (i);
-		}
+        public override long GetInt64(int i)
+        {
+            return (long) GetValue(i);
+        }
 
-		public override object GetValue (int i)
-		{
-			if (i < 0 || i > fieldCount)
-				throw new IndexOutOfRangeException ();
-			return values [i];
-		}
+        public override string GetName(int i)
+        {
+            return schema[i].ColumnName;
+        }
 
-		public override int GetValues (object[] values)
-		{
-			if (values == null)
-				throw new ArgumentNullException("values");
-			
-			int count = values.Length > this.values.Length ? this.values.Length : values.Length;
-			for(int i = 0; i < count; i++)
-				values [i] = this.values [i];
-			return count;
-		}
+        public override int GetOrdinal(string name)
+        {
+            for (int i = 0; i < FieldCount; i++)
+                if (schema[i].ColumnName == name)
+                    return i;
+            return -1;
+        }
 
-		public override bool IsDBNull (int i)
-		{
-			return GetValue (i) == DBNull.Value;
-		}
+        public override string GetString(int i)
+        {
+            return (string) GetValue(i);
+        }
 
-		#endregion // Methods
-	}
+        public override object GetValue(int i)
+        {
+            if (i < 0 || i > fieldCount)
+                throw new IndexOutOfRangeException();
+            return values[i];
+        }
+
+        public override int GetValues(object[] values)
+        {
+            if (values == null)
+                throw new ArgumentNullException("values");
+
+            int count = values.Length > this.values.Length ? this.values.Length : values.Length;
+            for (int i = 0; i < count; i++)
+                values[i] = this.values[i];
+            return count;
+        }
+
+        public override bool IsDBNull(int i)
+        {
+            return GetValue(i) == DBNull.Value;
+        }
+
+        #endregion // Methods
+    }
 }

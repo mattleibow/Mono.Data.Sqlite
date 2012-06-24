@@ -34,24 +34,21 @@ using System;
 
 namespace System.Data
 {
-	/// <summary>
-	/// Represents a parameter to a Command object, and optionally, its mapping to DataSet columns; and is implemented by .NET data providers that access data sources.
-	/// </summary>
-	public interface IDataParameter
-	{
-		
-		DbType DbType{get;set;}
+    /// <summary>
+    /// Represents a parameter to a Command object, and optionally, its mapping to DataSet columns; and is implemented by .NET data providers that access data sources.
+    /// </summary>
+    public interface IDataParameter
+    {
+        DbType DbType { get; set; }
 
-		ParameterDirection Direction{get;set;}
+        ParameterDirection Direction { get; set; }
 
-		bool IsNullable{get;}
+        bool IsNullable { get; }
 
-		string ParameterName{get;set;}
+        string ParameterName { get; set; }
 
-		string SourceColumn{get;set;}
+        string SourceColumn { get; set; }
 
-		object Value {get;set;}
-
-
-	}
+        object Value { get; set; }
+    }
 }

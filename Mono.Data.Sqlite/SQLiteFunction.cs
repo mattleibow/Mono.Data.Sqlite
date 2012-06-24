@@ -1,4 +1,4 @@
-﻿﻿/********************************************************
+﻿/********************************************************
  * ADO.NET 2.0 Data Provider for SQLite Version 3.X
  * Written by Robert Simpson (robert@blackcastlesoft.com)
  * 
@@ -12,7 +12,6 @@ namespace Mono.Data.Sqlite
     using System.Collections.Generic;
     using System.Runtime.InteropServices;
     using System.Globalization;
-
     using Community.CsharpSqlite;
 
     /// <summary>
@@ -53,14 +52,17 @@ namespace Mono.Data.Sqlite
         /// Holds a reference to the callback function for user functions
         /// </summary>
         private Sqlite3.dxFunc _InvokeFunc;
+
         /// <summary>
         /// Holds a reference to the callbakc function for stepping in an aggregate function
         /// </summary>
         private Sqlite3.dxStep _StepFunc;
+
         /// <summary>
         /// Holds a reference to the callback function for finalizing an aggregate function
         /// </summary>
         private Sqlite3.dxFinal _FinalFunc;
+
         /// <summary>
         /// Holds a reference to the callback function for collation sequences
         /// </summary>
@@ -92,10 +94,7 @@ namespace Mono.Data.Sqlite
         /// </summary>
         public SqliteConvert SqliteConvert
         {
-            get
-            {
-                return _base;
-            }
+            get { return _base; }
         }
 
         /// <summary>
@@ -202,7 +201,7 @@ namespace Mono.Data.Sqlite
                             int x;
                             byte[] blob;
 
-                            x = (int)_base.GetParamValueBytes(argint[n], 0, null, 0, 0);
+                            x = (int) _base.GetParamValueBytes(argint[n], 0, null, 0, 0);
                             blob = new byte[x];
                             _base.GetParamValueBytes(argint[n], 0, blob, 0, x);
                             parms[n] = blob;
@@ -221,7 +220,7 @@ namespace Mono.Data.Sqlite
         /// </summary>
         /// <param name="context">The context the return value applies to</param>
         /// <param name="returnValue">The parameter to return to SQLite</param>
-        void SetReturnValue(Sqlite3.sqlite3_context context, object returnValue)
+        private void SetReturnValue(Sqlite3.sqlite3_context context, object returnValue)
         {
             if (returnValue == null || returnValue == DBNull.Value)
             {
@@ -230,9 +229,9 @@ namespace Mono.Data.Sqlite
             }
 
             Type t = returnValue.GetType();
-            if (t == typeof(DateTime))
+            if (t == typeof (DateTime))
             {
-                _base.ReturnText(context, _base.ToString((DateTime)returnValue));
+                _base.ReturnText(context, _base.ToString((DateTime) returnValue));
                 return;
             }
             else
@@ -261,7 +260,7 @@ namespace Mono.Data.Sqlite
                     _base.ReturnText(context, returnValue.ToString());
                     return;
                 case TypeAffinity.Blob:
-                    _base.ReturnBlob(context, (byte[])returnValue);
+                    _base.ReturnBlob(context, (byte[]) returnValue);
                     return;
             }
         }
@@ -395,7 +394,8 @@ namespace Mono.Data.Sqlite
         /// have a SqliteFunctionAttribute attribute, and registering them accordingly.
         /// </summary>
 #if !PLATFORM_COMPACTFRAMEWORK
-        [global::System.Security.Permissions.FileIOPermission(global::System.Security.Permissions.SecurityAction.Assert, AllFiles = global::System.Security.Permissions.FileIOPermissionAccess.PathDiscovery)]
+        [global::System.Security.Permissions.FileIOPermission(global::System.Security.Permissions.SecurityAction.Assert,
+            AllFiles = global::System.Security.Permissions.FileIOPermissionAccess.PathDiscovery)]
 #endif
         static SqliteFunction()
         {
@@ -441,7 +441,7 @@ namespace Mono.Data.Sqlite
                     {
                         if (arTypes[x] == null) continue;
 
-                        object[] arAtt = arTypes[x].GetCustomAttributes(typeof(SqliteFunctionAttribute), false);
+                        object[] arAtt = arTypes[x].GetCustomAttributes(typeof (SqliteFunctionAttribute), false);
                         int u = arAtt.Length;
                         for (int y = 0; y < u; y++)
                         {
@@ -460,6 +460,7 @@ namespace Mono.Data.Sqlite
             {
             }
         }
+
         /// <summary>
         /// Manual method of registering a function.  The type must still have the SqliteFunctionAttributes in order to work
         /// properly, but this is a workaround for the Compact Framework where enumerating assemblies is not currently supported.
@@ -467,7 +468,7 @@ namespace Mono.Data.Sqlite
         /// <param name="typ">The type of the function to register</param>
         public static void RegisterFunction(Type typ)
         {
-            object[] arAtt = typ.GetCustomAttributes(typeof(SqliteFunctionAttribute), false);
+            object[] arAtt = typ.GetCustomAttributes(typeof (SqliteFunctionAttribute), false);
             int u = arAtt.Length;
             SqliteFunctionAttribute at;
 
@@ -500,16 +501,21 @@ namespace Mono.Data.Sqlite
 
             foreach (SqliteFunctionAttribute pr in _registeredFunctions)
             {
-                f = (SqliteFunction)Activator.CreateInstance(pr._instanceType);
+                f = (SqliteFunction) Activator.CreateInstance(pr._instanceType);
                 f._base = sqlbase;
                 f._InvokeFunc = (pr.FuncType == FunctionType.Scalar) ? new Sqlite3.dxFunc(f.ScalarCallback) : null;
                 f._StepFunc = (pr.FuncType == FunctionType.Aggregate) ? new Sqlite3.dxStep(f.StepCallback) : null;
                 f._FinalFunc = (pr.FuncType == FunctionType.Aggregate) ? new Sqlite3.dxFinal(f.FinalCallback) : null;
-                f._CompareFunc = (pr.FuncType == FunctionType.Collation) ? new Sqlite3.dxCompare(f.CompareCallback) : null;
-                f._CompareFunc16 = (pr.FuncType == FunctionType.Collation) ? new Sqlite3.dxCompare(f.CompareCallback16) : null;
+                f._CompareFunc = (pr.FuncType == FunctionType.Collation)
+                                     ? new Sqlite3.dxCompare(f.CompareCallback)
+                                     : null;
+                f._CompareFunc16 = (pr.FuncType == FunctionType.Collation)
+                                       ? new Sqlite3.dxCompare(f.CompareCallback16)
+                                       : null;
 
                 if (pr.FuncType != FunctionType.Collation)
-                    sqlbase.CreateFunction(pr.Name, pr.Arguments, (f is SqliteFunctionEx), f._InvokeFunc, f._StepFunc, f._FinalFunc);
+                    sqlbase.CreateFunction(pr.Name, pr.Arguments, (f is SqliteFunctionEx), f._InvokeFunc, f._StepFunc,
+                                           f._FinalFunc);
                 else
                     sqlbase.CreateCollation(pr.Name, f._CompareFunc, f._CompareFunc16);
 
@@ -551,11 +557,13 @@ namespace Mono.Data.Sqlite
         /// Scalar functions are designed to be called and return a result immediately.  Examples include ABS(), Upper(), Lower(), etc.
         /// </summary>
         Scalar = 0,
+
         /// <summary>
         /// Aggregate functions are designed to accumulate data until the end of a call and then return a result gleaned from the accumulated data.
         /// Examples include SUM(), COUNT(), AVG(), etc.
         /// </summary>
         Aggregate = 1,
+
         /// <summary>
         /// Collation sequences are used to sort textual data in a custom manner, and appear in an ORDER BY clause.  Typically text in an ORDER BY is
         /// sorted using a straight case-insensitive comparison function.  Custom collating sequences can be used to alter the behavior of text sorting
@@ -573,14 +581,17 @@ namespace Mono.Data.Sqlite
         /// The built-in BINARY collating sequence
         /// </summary>
         Binary = 1,
+
         /// <summary>
         /// The built-in NOCASE collating sequence
         /// </summary>
         NoCase = 2,
+
         /// <summary>
         /// The built-in REVERSE collating sequence
         /// </summary>
         Reverse = 3,
+
         /// <summary>
         /// A custom user-defined collating sequence
         /// </summary>
@@ -596,10 +607,12 @@ namespace Mono.Data.Sqlite
         /// The collation sequence is UTF8
         /// </summary>
         UTF8 = 1,
+
         /// <summary>
         /// The collation sequence is UTF16 little-endian
         /// </summary>
         UTF16LE = 2,
+
         /// <summary>
         /// The collation sequence is UTF16 big-endian
         /// </summary>
@@ -615,6 +628,7 @@ namespace Mono.Data.Sqlite
         /// The name of the collating sequence
         /// </summary>
         public string Name;
+
         /// <summary>
         /// The type of collating sequence
         /// </summary>

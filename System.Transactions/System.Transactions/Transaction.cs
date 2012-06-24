@@ -17,443 +17,463 @@ using System.Threading;
 
 namespace System.Transactions
 {
-	public class Transaction : IDisposable
-	{
-		[ThreadStatic]
-		static Transaction ambient;
+    public class Transaction : IDisposable
+    {
+        [ThreadStatic] private static Transaction ambient;
 
-		IsolationLevel level;
-		TransactionInformation info;
+        private IsolationLevel level;
+        private TransactionInformation info;
 
-		ArrayList dependents = new ArrayList ();
+        private ArrayList dependents = new ArrayList();
 
-		/* Volatile enlistments */
-		List <IEnlistmentNotification> volatiles;
+        /* Volatile enlistments */
+        private List<IEnlistmentNotification> volatiles;
 
-		/* Durable enlistments 
+        /* Durable enlistments 
 		   Durable RMs can also have 2 Phase commit but
 		   not in LTM, and that is what we are supporting
 		   right now   
 		 */
-		List <ISinglePhaseNotification> durables;
+        private List<ISinglePhaseNotification> durables;
 
-		delegate void AsyncCommit ();
-		
-		AsyncCommit asyncCommit = null;
-		bool committing;
-		bool committed = false;
-		bool aborted = false;
-		TransactionScope scope = null;
-		
-		Exception innerException;
-		Guid tag = Guid.NewGuid ();
+        private delegate void AsyncCommit();
 
-		List <IEnlistmentNotification> Volatiles {
-			get {
-				if (volatiles == null)
-					volatiles = new List <IEnlistmentNotification> ();
-				return volatiles;
-			}
-		}
+        private AsyncCommit asyncCommit = null;
+        private bool committing;
+        private bool committed = false;
+        private bool aborted = false;
+        private TransactionScope scope = null;
 
-		List <ISinglePhaseNotification> Durables {
-			get {
-				if (durables == null)
-					durables = new List <ISinglePhaseNotification> ();
-				return durables;
-			}
-		}
-		
-		internal Transaction ()
-		{
-			info = new TransactionInformation ();
-			level = IsolationLevel.Serializable;
-		}
+        private Exception innerException;
+        private Guid tag = Guid.NewGuid();
 
-		internal Transaction (Transaction other)
-		{
-			level = other.level;
-			info = other.info;
-			dependents = other.dependents;
-			volatiles = other.Volatiles;
-			durables = other.Durables;
-		}
+        private List<IEnlistmentNotification> Volatiles
+        {
+            get
+            {
+                if (volatiles == null)
+                    volatiles = new List<IEnlistmentNotification>();
+                return volatiles;
+            }
+        }
 
-		public event TransactionCompletedEventHandler TransactionCompleted;
+        private List<ISinglePhaseNotification> Durables
+        {
+            get
+            {
+                if (durables == null)
+                    durables = new List<ISinglePhaseNotification>();
+                return durables;
+            }
+        }
 
-		public static Transaction Current {
-			get { 
-				EnsureIncompleteCurrentScope ();
-				return CurrentInternal;
-			}
-			set { 
-				EnsureIncompleteCurrentScope ();
-				CurrentInternal = value;
-			}
-		}
+        internal Transaction()
+        {
+            info = new TransactionInformation();
+            level = IsolationLevel.Serializable;
+        }
 
-		internal static Transaction CurrentInternal {
-			get { return ambient; }
-			set { ambient = value; }
-		}
+        internal Transaction(Transaction other)
+        {
+            level = other.level;
+            info = other.info;
+            dependents = other.dependents;
+            volatiles = other.Volatiles;
+            durables = other.Durables;
+        }
 
-		public IsolationLevel IsolationLevel {
-			get { 
-				EnsureIncompleteCurrentScope ();
-				return level; 
-			}
-		}
+        public event TransactionCompletedEventHandler TransactionCompleted;
 
-		public TransactionInformation TransactionInformation {
-			get { 
-				EnsureIncompleteCurrentScope ();
-				return info; 
-			}
-		}
+        public static Transaction Current
+        {
+            get
+            {
+                EnsureIncompleteCurrentScope();
+                return CurrentInternal;
+            }
+            set
+            {
+                EnsureIncompleteCurrentScope();
+                CurrentInternal = value;
+            }
+        }
 
-		public Transaction Clone ()
-		{
-			return new Transaction (this);
-		}
+        internal static Transaction CurrentInternal
+        {
+            get { return ambient; }
+            set { ambient = value; }
+        }
 
-		public void Dispose ()
-		{
-			if (TransactionInformation.Status == TransactionStatus.Active)
-				Rollback();
-		}
+        public IsolationLevel IsolationLevel
+        {
+            get
+            {
+                EnsureIncompleteCurrentScope();
+                return level;
+            }
+        }
 
-		[MonoTODO]
-		public DependentTransaction DependentClone (
-			DependentCloneOption option)
-		{
-			DependentTransaction d = 
-				new DependentTransaction (this, option);
-			dependents.Add (d);
-			return d;
-		}
+        public TransactionInformation TransactionInformation
+        {
+            get
+            {
+                EnsureIncompleteCurrentScope();
+                return info;
+            }
+        }
 
-		[MonoTODO ("Only SinglePhase commit supported for durable resource managers.")]
-		[PermissionSetAttribute (SecurityAction.LinkDemand)]
-		public Enlistment EnlistDurable (Guid manager,
-			IEnlistmentNotification notification,
-			EnlistmentOptions options)
-		{
-			throw new NotImplementedException ("Only SinglePhase commit supported for durable resource managers.");
-		}
+        public Transaction Clone()
+        {
+            return new Transaction(this);
+        }
 
-		[MonoTODO ("Only Local Transaction Manager supported. Cannot have more than 1 durable resource per transaction. Only EnlistmentOptions.None supported yet.")]
-		[PermissionSetAttribute (SecurityAction.LinkDemand)]
-		public Enlistment EnlistDurable (Guid manager,
-			ISinglePhaseNotification notification,
-			EnlistmentOptions options)
-		{
-			var durables = Durables;
-			if (durables.Count == 1)
-				throw new NotImplementedException ("Only LTM supported. Cannot have more than 1 durable resource per transaction.");
+        public void Dispose()
+        {
+            if (TransactionInformation.Status == TransactionStatus.Active)
+                Rollback();
+        }
 
-			EnsureIncompleteCurrentScope ();
+        [MonoTODO]
+        public DependentTransaction DependentClone(
+            DependentCloneOption option)
+        {
+            DependentTransaction d =
+                new DependentTransaction(this, option);
+            dependents.Add(d);
+            return d;
+        }
 
-			if (options != EnlistmentOptions.None)
-				throw new NotImplementedException ("Implement me");
+        [MonoTODO("Only SinglePhase commit supported for durable resource managers.")]
+        [PermissionSetAttribute(SecurityAction.LinkDemand)]
+        public Enlistment EnlistDurable(Guid manager,
+                                        IEnlistmentNotification notification,
+                                        EnlistmentOptions options)
+        {
+            throw new NotImplementedException("Only SinglePhase commit supported for durable resource managers.");
+        }
 
-			durables.Add (notification);
+        [MonoTODO(
+            "Only Local Transaction Manager supported. Cannot have more than 1 durable resource per transaction. Only EnlistmentOptions.None supported yet."
+            )]
+        [PermissionSetAttribute(SecurityAction.LinkDemand)]
+        public Enlistment EnlistDurable(Guid manager,
+                                        ISinglePhaseNotification notification,
+                                        EnlistmentOptions options)
+        {
+            var durables = Durables;
+            if (durables.Count == 1)
+                throw new NotImplementedException(
+                    "Only LTM supported. Cannot have more than 1 durable resource per transaction.");
 
-			/* FIXME: Enlistment ?? */
-			return new Enlistment ();
-		}
+            EnsureIncompleteCurrentScope();
 
-		[MonoTODO]
-		public bool EnlistPromotableSinglePhase (
-			IPromotableSinglePhaseNotification notification)
-		{
-			throw new NotImplementedException ();
-		}
+            if (options != EnlistmentOptions.None)
+                throw new NotImplementedException("Implement me");
 
-		[MonoTODO ("EnlistmentOptions being ignored")]
-		public Enlistment EnlistVolatile (
-			IEnlistmentNotification notification,
-			EnlistmentOptions options)
-		{
-			return EnlistVolatileInternal (notification, options);
-		}
+            durables.Add(notification);
 
-		[MonoTODO ("EnlistmentOptions being ignored")]
-		public Enlistment EnlistVolatile (
-			ISinglePhaseNotification notification,
-			EnlistmentOptions options)
-		{
-			/* FIXME: Anything extra reqd for this? */
-			return EnlistVolatileInternal (notification, options);
-		}
+            /* FIXME: Enlistment ?? */
+            return new Enlistment();
+        }
 
-		private Enlistment EnlistVolatileInternal (
-			IEnlistmentNotification notification,
-			EnlistmentOptions options)
-		{
-			EnsureIncompleteCurrentScope (); 
-			/* FIXME: Handle options.EnlistDuringPrepareRequired */
-			Volatiles.Add (notification);
+        [MonoTODO]
+        public bool EnlistPromotableSinglePhase(
+            IPromotableSinglePhaseNotification notification)
+        {
+            throw new NotImplementedException();
+        }
 
-			/* FIXME: Enlistment.. ? */
-			return new Enlistment ();
-		}
+        [MonoTODO("EnlistmentOptions being ignored")]
+        public Enlistment EnlistVolatile(
+            IEnlistmentNotification notification,
+            EnlistmentOptions options)
+        {
+            return EnlistVolatileInternal(notification, options);
+        }
 
-		public override bool Equals (object obj)
-		{
-			return Equals (obj as Transaction);
-		}
+        [MonoTODO("EnlistmentOptions being ignored")]
+        public Enlistment EnlistVolatile(
+            ISinglePhaseNotification notification,
+            EnlistmentOptions options)
+        {
+            /* FIXME: Anything extra reqd for this? */
+            return EnlistVolatileInternal(notification, options);
+        }
 
-		// FIXME: Check whether this is correct (currently, GetHashCode() uses 'dependents' but this doesn't)
-		private bool Equals (Transaction t)
-		{
-			if (ReferenceEquals (t, this))
-				return true;
-			if (ReferenceEquals (t, null))
-				return false;
-			return this.level == t.level &&
-				this.info == t.info;
-		}
+        private Enlistment EnlistVolatileInternal(
+            IEnlistmentNotification notification,
+            EnlistmentOptions options)
+        {
+            EnsureIncompleteCurrentScope();
+            /* FIXME: Handle options.EnlistDuringPrepareRequired */
+            Volatiles.Add(notification);
 
-		public static bool operator == (Transaction x, Transaction y)
-		{
-			if (ReferenceEquals (x, null))
-				return ReferenceEquals (y, null);
-			return x.Equals (y);
-		}
+            /* FIXME: Enlistment.. ? */
+            return new Enlistment();
+        }
 
-		public static bool operator != (Transaction x, Transaction y)
-		{
-			return !(x == y);
-		}
+        public override bool Equals(object obj)
+        {
+            return Equals(obj as Transaction);
+        }
 
-		public override int GetHashCode ()
-		{
-			return (int) level ^ info.GetHashCode () ^ dependents.GetHashCode ();
-		}
+        // FIXME: Check whether this is correct (currently, GetHashCode() uses 'dependents' but this doesn't)
+        private bool Equals(Transaction t)
+        {
+            if (ReferenceEquals(t, this))
+                return true;
+            if (ReferenceEquals(t, null))
+                return false;
+            return this.level == t.level &&
+                   this.info == t.info;
+        }
 
-		public void Rollback ()
-		{
-			Rollback (null);
-		}
+        public static bool operator ==(Transaction x, Transaction y)
+        {
+            if (ReferenceEquals(x, null))
+                return ReferenceEquals(y, null);
+            return x.Equals(y);
+        }
 
-		public void Rollback (Exception ex)
-		{
-			EnsureIncompleteCurrentScope ();
-			Rollback (ex, null);
-		}
+        public static bool operator !=(Transaction x, Transaction y)
+        {
+            return !(x == y);
+        }
 
-		internal void Rollback (Exception ex, IEnlistmentNotification enlisted)
-		{
-			if (aborted)
-			{
-				FireCompleted ();
-				return;
-			}
+        public override int GetHashCode()
+        {
+            return (int) level ^ info.GetHashCode() ^ dependents.GetHashCode();
+        }
 
-			/* See test ExplicitTransaction7 */
-			if (info.Status == TransactionStatus.Committed)
-				throw new TransactionException ("Transaction has already been committed. Cannot accept any new work.");
+        public void Rollback()
+        {
+            Rollback(null);
+        }
 
-			innerException = ex;
-			Enlistment e = new Enlistment ();
-			foreach (IEnlistmentNotification prep in Volatiles)
-				if (prep != enlisted)
-					prep.Rollback (e);
+        public void Rollback(Exception ex)
+        {
+            EnsureIncompleteCurrentScope();
+            Rollback(ex, null);
+        }
 
-			var durables = Durables;
-			if (durables.Count > 0 && durables [0] != enlisted)
-				durables [0].Rollback (e);
+        internal void Rollback(Exception ex, IEnlistmentNotification enlisted)
+        {
+            if (aborted)
+            {
+                FireCompleted();
+                return;
+            }
 
-			Aborted = true;
+            /* See test ExplicitTransaction7 */
+            if (info.Status == TransactionStatus.Committed)
+                throw new TransactionException("Transaction has already been committed. Cannot accept any new work.");
 
-			FireCompleted ();
-		}
+            innerException = ex;
+            Enlistment e = new Enlistment();
+            foreach (IEnlistmentNotification prep in Volatiles)
+                if (prep != enlisted)
+                    prep.Rollback(e);
 
-		bool Aborted {
-			get { return aborted; }
-			set {
-				aborted = value;
-				if (aborted)
-					info.Status = TransactionStatus.Aborted;
-			}
-		}
-		
-		internal TransactionScope Scope {
-			get { return scope; }
-			set { scope = value; }
-		}
+            var durables = Durables;
+            if (durables.Count > 0 && durables[0] != enlisted)
+                durables[0].Rollback(e);
 
-		protected IAsyncResult BeginCommitInternal (AsyncCallback callback)
-		{
-			if (committed || committing)
-				throw new InvalidOperationException ("Commit has already been called for this transaction.");
+            Aborted = true;
 
-			this.committing = true;
+            FireCompleted();
+        }
 
-			asyncCommit = new AsyncCommit (DoCommit);
-			return asyncCommit.BeginInvoke (callback, null);
-		}
+        private bool Aborted
+        {
+            get { return aborted; }
+            set
+            {
+                aborted = value;
+                if (aborted)
+                    info.Status = TransactionStatus.Aborted;
+            }
+        }
 
-		protected void EndCommitInternal (IAsyncResult ar)
-		{
-			asyncCommit.EndInvoke (ar);
-		}
+        internal TransactionScope Scope
+        {
+            get { return scope; }
+            set { scope = value; }
+        }
 
-		internal void CommitInternal ()
-		{
-			if (committed || committing)
-				throw new InvalidOperationException ("Commit has already been called for this transaction.");
+        protected IAsyncResult BeginCommitInternal(AsyncCallback callback)
+        {
+            if (committed || committing)
+                throw new InvalidOperationException("Commit has already been called for this transaction.");
 
-			this.committing = true;
+            this.committing = true;
 
-			try {
-				DoCommit ();	
-			}
-			catch (TransactionException)
-			{
-				throw;
-			}
-			catch (Exception ex)
-			{
-				throw new TransactionAbortedException("Transaction failed", ex);
-			}
-		}
-		
-		private void DoCommit ()
-		{
-			/* Scope becomes null in TransactionScope.Dispose */
-			if (Scope != null) {
-				/* See test ExplicitTransaction8 */
-				Rollback (null, null);
-				CheckAborted ();
-			}
+            asyncCommit = new AsyncCommit(DoCommit);
+            return asyncCommit.BeginInvoke(callback, null);
+        }
 
-			var volatiles = Volatiles;
-			var durables = Durables;
-			if (volatiles.Count == 1 && durables.Count == 0)
-			{
-				/* Special case */
-				ISinglePhaseNotification single = volatiles[0] as ISinglePhaseNotification;
-				if (single != null)
-				{
-					DoSingleCommit(single);
-					Complete();
-					return;
-				}
-			}
+        protected void EndCommitInternal(IAsyncResult ar)
+        {
+            asyncCommit.EndInvoke(ar);
+        }
 
-			if (volatiles.Count > 0)
-				DoPreparePhase();
+        internal void CommitInternal()
+        {
+            if (committed || committing)
+                throw new InvalidOperationException("Commit has already been called for this transaction.");
 
-			if (durables.Count > 0)
-				DoSingleCommit(durables[0]);
+            this.committing = true;
 
-			if (volatiles.Count > 0)
-				DoCommitPhase();
-			
-			Complete();
-		}
+            try
+            {
+                DoCommit();
+            }
+            catch (TransactionException)
+            {
+                throw;
+            }
+            catch (Exception ex)
+            {
+                throw new TransactionAbortedException("Transaction failed", ex);
+            }
+        }
 
-		private void Complete ()
-		{
-			committing = false;
-			committed = true;
+        private void DoCommit()
+        {
+            /* Scope becomes null in TransactionScope.Dispose */
+            if (Scope != null)
+            {
+                /* See test ExplicitTransaction8 */
+                Rollback(null, null);
+                CheckAborted();
+            }
 
-			if (!aborted)
-				info.Status = TransactionStatus.Committed;
+            var volatiles = Volatiles;
+            var durables = Durables;
+            if (volatiles.Count == 1 && durables.Count == 0)
+            {
+                /* Special case */
+                ISinglePhaseNotification single = volatiles[0] as ISinglePhaseNotification;
+                if (single != null)
+                {
+                    DoSingleCommit(single);
+                    Complete();
+                    return;
+                }
+            }
 
-			FireCompleted ();
-		}
+            if (volatiles.Count > 0)
+                DoPreparePhase();
 
-		internal void InitScope (TransactionScope scope)
-		{
-			/* See test NestedTransactionScope10 */
-			CheckAborted ();
+            if (durables.Count > 0)
+                DoSingleCommit(durables[0]);
 
-			/* See test ExplicitTransaction6a */
-			if (committed)
-				throw new InvalidOperationException ("Commit has already been called on this transaction."); 
+            if (volatiles.Count > 0)
+                DoCommitPhase();
 
-			Scope = scope;	
-		}
+            Complete();
+        }
 
-		static void PrepareCallbackWrapper(object state)
-		{
-			PreparingEnlistment enlist = state as PreparingEnlistment;
-			enlist.EnlistmentNotification.Prepare(enlist);
-		}
+        private void Complete()
+        {
+            committing = false;
+            committed = true;
 
-		void DoPreparePhase ()
-		{
-			// Call prepare on all volatile managers.
-			foreach (IEnlistmentNotification enlist in Volatiles)
-			{
-				PreparingEnlistment pe = new PreparingEnlistment (this, enlist);
-				ThreadPool.QueueUserWorkItem (new WaitCallback(PrepareCallbackWrapper), pe);
+            if (!aborted)
+                info.Status = TransactionStatus.Committed;
 
-				/* Wait (with timeout) for manager to prepare */
-				TimeSpan timeout = Scope != null ? Scope.Timeout : TransactionManager.DefaultTimeout;
+            FireCompleted();
+        }
 
-				// FIXME: Should we managers in parallel or on-by-one?
-				if (!pe.WaitHandle.WaitOne(timeout, true))
-				{
-					this.Aborted = true;
-					throw new TimeoutException("Transaction timedout");
-				}
+        internal void InitScope(TransactionScope scope)
+        {
+            /* See test NestedTransactionScope10 */
+            CheckAborted();
 
-				if (!pe.IsPrepared)
-				{
-					/* FIXME: if not prepared & !aborted as yet, then 
+            /* See test ExplicitTransaction6a */
+            if (committed)
+                throw new InvalidOperationException("Commit has already been called on this transaction.");
+
+            Scope = scope;
+        }
+
+        private static void PrepareCallbackWrapper(object state)
+        {
+            PreparingEnlistment enlist = state as PreparingEnlistment;
+            enlist.EnlistmentNotification.Prepare(enlist);
+        }
+
+        private void DoPreparePhase()
+        {
+            // Call prepare on all volatile managers.
+            foreach (IEnlistmentNotification enlist in Volatiles)
+            {
+                PreparingEnlistment pe = new PreparingEnlistment(this, enlist);
+                ThreadPool.QueueUserWorkItem(new WaitCallback(PrepareCallbackWrapper), pe);
+
+                /* Wait (with timeout) for manager to prepare */
+                TimeSpan timeout = Scope != null ? Scope.Timeout : TransactionManager.DefaultTimeout;
+
+                // FIXME: Should we managers in parallel or on-by-one?
+                if (!pe.WaitHandle.WaitOne(timeout, true))
+                {
+                    this.Aborted = true;
+                    throw new TimeoutException("Transaction timedout");
+                }
+
+                if (!pe.IsPrepared)
+                {
+                    /* FIXME: if not prepared & !aborted as yet, then 
 						this is inDoubt ? . For now, setting aborted = true */
-					Aborted = true;
-					break;
-				}
-			}			
-			
-			/* Either InDoubt(tmp) or Prepare failed and
+                    Aborted = true;
+                    break;
+                }
+            }
+
+            /* Either InDoubt(tmp) or Prepare failed and
 			   Tx has rolledback */
-			CheckAborted ();
-		}
+            CheckAborted();
+        }
 
-		void DoCommitPhase ()
-		{
-			foreach (IEnlistmentNotification enlisted in Volatiles) {
-				Enlistment e = new Enlistment ();
-				enlisted.Commit (e);
-				/* Note: e.Done doesn't matter for volatile RMs */
-			}
-		}
+        private void DoCommitPhase()
+        {
+            foreach (IEnlistmentNotification enlisted in Volatiles)
+            {
+                Enlistment e = new Enlistment();
+                enlisted.Commit(e);
+                /* Note: e.Done doesn't matter for volatile RMs */
+            }
+        }
 
-		void DoSingleCommit (ISinglePhaseNotification single)
-		{
-			if (single == null)
-				return;
+        private void DoSingleCommit(ISinglePhaseNotification single)
+        {
+            if (single == null)
+                return;
 
-			SinglePhaseEnlistment enlistment = new SinglePhaseEnlistment (this, single);
-			single.SinglePhaseCommit (enlistment);
-			CheckAborted ();
-		}
+            SinglePhaseEnlistment enlistment = new SinglePhaseEnlistment(this, single);
+            single.SinglePhaseCommit(enlistment);
+            CheckAborted();
+        }
 
-		void CheckAborted ()
-		{
-			if (aborted)
-				throw new TransactionAbortedException ("Transaction has aborted", innerException);
-		}
+        private void CheckAborted()
+        {
+            if (aborted)
+                throw new TransactionAbortedException("Transaction has aborted", innerException);
+        }
 
-		void FireCompleted ()
-		{
-			if (TransactionCompleted != null)
-				TransactionCompleted (this, new TransactionEventArgs(this));
-		}
+        private void FireCompleted()
+        {
+            if (TransactionCompleted != null)
+                TransactionCompleted(this, new TransactionEventArgs(this));
+        }
 
-		static void EnsureIncompleteCurrentScope ()
-		{
-			if (CurrentInternal == null)
-				return;
-			if (CurrentInternal.Scope != null && CurrentInternal.Scope.IsComplete)
-				throw new InvalidOperationException ("The current TransactionScope is already complete");
-		}
-	}
+        private static void EnsureIncompleteCurrentScope()
+        {
+            if (CurrentInternal == null)
+                return;
+            if (CurrentInternal.Scope != null && CurrentInternal.Scope.IsComplete)
+                throw new InvalidOperationException("The current TransactionScope is already complete");
+        }
+    }
 }
 
 #endif

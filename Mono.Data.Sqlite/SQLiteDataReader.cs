@@ -1,4 +1,4 @@
-﻿﻿/********************************************************
+﻿/********************************************************
  * ADO.NET 2.0 Data Provider for SQLite Version 3.X
  * Written by Robert Simpson (robert@blackcastlesoft.com)
  * 
@@ -13,7 +13,6 @@ namespace Mono.Data.Sqlite
     using System.Collections.Generic;
     using System.Globalization;
     using System.Reflection;
-
     using Community.CsharpSqlite;
 
     /// <summary>
@@ -25,14 +24,17 @@ namespace Mono.Data.Sqlite
         /// Underlying command this reader is attached to
         /// </summary>
         private SqliteCommand _command;
+
         /// <summary>
         /// Index of the current statement in the command being processed
         /// </summary>
         private int _activeStatementIndex;
+
         /// <summary>
         /// Current statement being Read()
         /// </summary>
         private SqliteStatement _activeStatement;
+
         /// <summary>
         /// State of the current statement being processed.
         /// -1 = First Step() executed, so the first Read() will be ignored
@@ -41,14 +43,17 @@ namespace Mono.Data.Sqlite
         ///  2 = Non-row-returning statement, no records
         /// </summary>
         private int _readingState;
+
         /// <summary>
         /// Number of records affected by the insert/update statements executed on the command
         /// </summary>
         private int _rowsAffected;
+
         /// <summary>
         /// Count of fields (columns) in the row-returning statement currently being processed
         /// </summary>
         private int _fieldCount;
+
         /// <summary>
         /// Datatypes of active fields (columns) in the current statement, used for type-restricting data
         /// </summary>
@@ -96,51 +101,51 @@ namespace Mono.Data.Sqlite
         /// </summary>
         public override void Close()
         {
-                if (_command != null)
+            if (_command != null)
+            {
+                try
                 {
                     try
                     {
-                        try
+                        // Make sure we've not been canceled
+                        if (_version != 0)
                         {
-                            // Make sure we've not been canceled
-                            if (_version != 0)
+                            try
                             {
-                                try
-                                {
-                                    while (NextResult())
-                                    {
-                                    }
-                                }
-                                catch
+                                while (NextResult())
                                 {
                                 }
                             }
-                            _command.ClearDataReader();
-                        }
-                        finally
-                        {
-                            // If the datareader's behavior includes closing the connection, then do so here.
-                            if ((_commandBehavior & CommandBehavior.CloseConnection) != 0 && _command.Connection != null)
+                            catch
                             {
-                                // We need to call Dispose on the command before we call Dispose on the Connection,
-                                // otherwise we'll get a SQLITE_LOCKED exception.
-                                var conn = _command.Connection;
-                                _command.Dispose();
-                                conn.Close();
-                                _disposeCommand = false;
                             }
                         }
+                        _command.ClearDataReader();
                     }
                     finally
                     {
-                        if (_disposeCommand)
+                        // If the datareader's behavior includes closing the connection, then do so here.
+                        if ((_commandBehavior & CommandBehavior.CloseConnection) != 0 && _command.Connection != null)
+                        {
+                            // We need to call Dispose on the command before we call Dispose on the Connection,
+                            // otherwise we'll get a SQLITE_LOCKED exception.
+                            var conn = _command.Connection;
                             _command.Dispose();
+                            conn.Close();
+                            _disposeCommand = false;
+                        }
                     }
                 }
+                finally
+                {
+                    if (_disposeCommand)
+                        _command.Dispose();
+                }
+            }
 
-                _command = null;
-                _activeStatement = null;
-                _fieldTypeArray = null;
+            _command = null;
+            _activeStatement = null;
+            _fieldTypeArray = null;
         }
 
         /// <summary>
@@ -152,7 +157,7 @@ namespace Mono.Data.Sqlite
                 throw new InvalidOperationException("DataReader has been closed");
 
             if (_version == 0)
-                throw new SqliteException((int)SQLiteErrorCode.Abort, "Execution was aborted by the user");
+                throw new SqliteException((int) SQLiteErrorCode.Abort, "Execution was aborted by the user");
 
             if (_command.Connection.State != ConnectionState.Open || _command.Connection._version != _version)
                 throw new InvalidOperationException("Connection was closed, statement was terminated");
@@ -173,7 +178,9 @@ namespace Mono.Data.Sqlite
         /// <returns>Returns a DbEnumerator object.</returns>
         public override global::System.Collections.IEnumerator GetEnumerator()
         {
-            return new DbEnumerator(this, ((_commandBehavior & CommandBehavior.CloseConnection) == CommandBehavior.CloseConnection));
+            return new DbEnumerator(this,
+                                    ((_commandBehavior & CommandBehavior.CloseConnection) ==
+                                     CommandBehavior.CloseConnection));
         }
 
         /// <summary>
@@ -306,7 +313,7 @@ namespace Mono.Data.Sqlite
         public override long GetBytes(int i, long fieldOffset, byte[] buffer, int bufferoffset, int length)
         {
             VerifyType(i, DbType.Binary);
-            return _activeStatement._sql.GetBytes(_activeStatement, i, (int)fieldOffset, buffer, bufferoffset, length);
+            return _activeStatement._sql.GetBytes(_activeStatement, i, (int) fieldOffset, buffer, bufferoffset, length);
         }
 
         /// <summary>
@@ -335,7 +342,7 @@ namespace Mono.Data.Sqlite
         public override long GetChars(int i, long fieldoffset, char[] buffer, int bufferoffset, int length)
         {
             VerifyType(i, DbType.String);
-            return _activeStatement._sql.GetChars(_activeStatement, i, (int)fieldoffset, buffer, bufferoffset, length);
+            return _activeStatement._sql.GetChars(_activeStatement, i, (int) fieldoffset, buffer, bufferoffset, length);
         }
 
         /// <summary>
@@ -369,7 +376,9 @@ namespace Mono.Data.Sqlite
         public override decimal GetDecimal(int i)
         {
             VerifyType(i, DbType.Decimal);
-            return Decimal.Parse(_activeStatement._sql.GetText(_activeStatement, i), NumberStyles.AllowDecimalPoint | NumberStyles.AllowExponent | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture);
+            return Decimal.Parse(_activeStatement._sql.GetText(_activeStatement, i),
+                                 NumberStyles.AllowDecimalPoint | NumberStyles.AllowExponent |
+                                 NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture);
         }
 
         /// <summary>
@@ -571,7 +580,7 @@ namespace Mono.Data.Sqlite
                     // they are all done and return false to indicate no more resultsets exist.
                     if ((_commandBehavior & CommandBehavior.SingleResult) != 0)
                     {
-                        for (; ; )
+                        for (;;)
                         {
                             stmt = _command.GetStatement(_activeStatementIndex + 1);
                             if (stmt == null) break;
@@ -620,7 +629,8 @@ namespace Mono.Data.Sqlite
                     }
                     else // No rows, fieldCount is non-zero so stop here
                     {
-                        _readingState = 1; // This command returned columns but no rows, so return true, but HasRows = false and Read() returns false
+                        _readingState = 1;
+                            // This command returned columns but no rows, so return true, but HasRows = false and Read() returns false
                     }
                 }
 
@@ -666,7 +676,9 @@ namespace Mono.Data.Sqlite
             // If not initialized, then fetch the declared column datatype and attempt to convert it 
             // to a known DbType.
             if (typ.Affinity == TypeAffinity.Uninitialized)
-                typ.Type = SqliteConvert.TypeNameToDbType(_activeStatement._sql.ColumnType(_activeStatement, i, out typ.Affinity));
+                typ.Type =
+                    SqliteConvert.TypeNameToDbType(_activeStatement._sql.ColumnType(_activeStatement, i,
+                                                                                    out typ.Affinity));
             else
                 typ.Affinity = _activeStatement._sql.ColumnAffinity(_activeStatement, i);
 
@@ -681,7 +693,8 @@ namespace Mono.Data.Sqlite
         {
             CheckClosed();
 
-            if (_readingState == -1) // First step was already done at the NextResult() level, so don't step again, just return true.
+            if (_readingState == -1)
+                // First step was already done at the NextResult() level, so don't step again, just return true.
             {
                 _readingState = 0;
                 return true;

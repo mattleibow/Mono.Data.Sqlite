@@ -33,33 +33,34 @@
 using System;
 using System.ComponentModel;
 
-namespace System.Data {
-	[AttributeUsage (AttributeTargets.All)]
-	internal sealed class DataCategoryAttribute : CategoryAttribute
-	{
-		#region Fields
+namespace System.Data
+{
+    [AttributeUsage(AttributeTargets.All)]
+    internal sealed class DataCategoryAttribute : CategoryAttribute
+    {
+        #region Fields
 
 //		string category;
 
-		#endregion // Fields
+        #endregion // Fields
 
-		#region Constructors
+        #region Constructors
 
-		public DataCategoryAttribute (string category)
-		{
+        public DataCategoryAttribute(string category)
+        {
 //			this.category = category; 
-		}
+        }
 
-		#endregion // Constructors
+        #endregion // Constructors
 
-		#region Methods
+        #region Methods
 
-		[MonoTODO]
-		protected override string GetLocalizedString (string value)
-		{
-			throw new NotImplementedException ();
-		}
+        [MonoTODO]
+        protected override string GetLocalizedString(string value)
+        {
+            throw new NotImplementedException();
+        }
 
-		#endregion // Methods
-	}
+        #endregion // Methods
+    }
 }

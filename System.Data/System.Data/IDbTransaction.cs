@@ -34,17 +34,17 @@ using System;
 
 namespace System.Data
 {
-	/// <summary>
-	/// Represents a transaction to be performed at a data source, and is implemented by .NET data providers that access relational databases.
-	/// </summary>
-	public interface IDbTransaction : IDisposable
-	{
-		void Commit();
+    /// <summary>
+    /// Represents a transaction to be performed at a data source, and is implemented by .NET data providers that access relational databases.
+    /// </summary>
+    public interface IDbTransaction : IDisposable
+    {
+        void Commit();
 
-		void Rollback();
-		
-		IDbConnection Connection{get;}
+        void Rollback();
 
-		IsolationLevel IsolationLevel{get;}
-	}	
+        IDbConnection Connection { get; }
+
+        IsolationLevel IsolationLevel { get; }
+    }
 }

@@ -34,41 +34,43 @@ using System.Globalization;
 
 namespace System.Data
 {
-	public class TypedDataSetGeneratorException : DataException
-	{
-		readonly ArrayList errorList;
+    public class TypedDataSetGeneratorException : DataException
+    {
+        private readonly ArrayList errorList;
 
-		#region Constructors
+        #region Constructors
 
-		public TypedDataSetGeneratorException ()
-			: base (Locale.GetText ("System error."))
-		{
-		}
+        public TypedDataSetGeneratorException()
+            : base(Locale.GetText("System error."))
+        {
+        }
 
-		public TypedDataSetGeneratorException (ArrayList list)
-			: base (Locale.GetText ("System error."))
-		{
-			errorList = list;
-		}
+        public TypedDataSetGeneratorException(ArrayList list)
+            : base(Locale.GetText("System error."))
+        {
+            errorList = list;
+        }
 
 #if NET_2_0
-		public TypedDataSetGeneratorException (String message) : base (message)
-		{
-		}
-		
-		public TypedDataSetGeneratorException (String message, Exception innerException)
-			: base (message, innerException)
-		{
-		}
+        public TypedDataSetGeneratorException(String message) : base(message)
+        {
+        }
+
+        public TypedDataSetGeneratorException(String message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
 #endif
-		#endregion //Constructors
 
-		public ArrayList ErrorList {
-			get { return errorList; }
-		}
+        #endregion //Constructors
 
-		#region Methods
+        public ArrayList ErrorList
+        {
+            get { return errorList; }
+        }
 
-		#endregion // Methods
-	}
+        #region Methods
+
+        #endregion // Methods
+    }
 }

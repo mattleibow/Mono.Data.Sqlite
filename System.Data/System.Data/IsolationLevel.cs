@@ -32,24 +32,24 @@
 
 namespace System.Data
 {
-	/// <summary>
-	/// Specifies the transaction locking behavior for the connection.
-	/// This enumeration has a FlagsAttribute that allows a bitwise combination of its member values.
-	/// </summary>
+    /// <summary>
+    /// Specifies the transaction locking behavior for the connection.
+    /// This enumeration has a FlagsAttribute that allows a bitwise combination of its member values.
+    /// </summary>
 #if !NET_2_0
 	[Flags]
 	[Serializable]
 #endif
-	public enum IsolationLevel
-	{
-		Chaos = 16,
-		ReadUncommitted = 256,
-		ReadCommitted = 4096,		
-		RepeatableRead = 65536,
-		Serializable = 1048576,
+    public enum IsolationLevel
+    {
+        Chaos = 16,
+        ReadUncommitted = 256,
+        ReadCommitted = 4096,
+        RepeatableRead = 65536,
+        Serializable = 1048576,
 #if NET_2_0
-		Snapshot = 16777216,
+        Snapshot = 16777216,
 #endif
-		Unspecified = -1
-	}
+        Unspecified = -1
+    }
 }

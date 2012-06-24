@@ -34,17 +34,16 @@ using System;
 
 namespace System.Data
 {
-	/// <summary>
-	/// Specifies how a command string is interpreted.
-	/// </summary>
+    /// <summary>
+    /// Specifies how a command string is interpreted.
+    /// </summary>
 #if !NET_2_0
 	[Serializable]
 #endif
-	public enum CommandType
-	{
-		Text = 1,
-		StoredProcedure = 4,
-		TableDirect = 512
-		
-	}
+    public enum CommandType
+    {
+        Text = 1,
+        StoredProcedure = 4,
+        TableDirect = 512
+    }
 }

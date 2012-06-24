@@ -30,14 +30,16 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+
 #if NET_2_0 || TARGET_JVM
 
-namespace System.Data.Common {
-	public enum CatalogLocation 
-	{
-		End = 2,
-		Start = 1
-	}
+namespace System.Data.Common
+{
+    public enum CatalogLocation
+    {
+        End = 2,
+        Start = 1
+    }
 }
 
 #endif

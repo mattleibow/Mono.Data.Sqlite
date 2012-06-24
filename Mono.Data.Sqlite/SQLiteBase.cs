@@ -11,7 +11,6 @@ namespace Mono.Data.Sqlite
     using System.Data;
     using System.Runtime.InteropServices;
     using System.Collections.Generic;
-    
     using Community.CsharpSqlite;
 
     /// <summary>
@@ -21,18 +20,22 @@ namespace Mono.Data.Sqlite
     internal abstract class SQLiteBase : SqliteConvert, IDisposable
     {
         internal SQLiteBase(SQLiteDateFormats fmt)
-            : base(fmt) { }
+            : base(fmt)
+        {
+        }
 
-        static internal object _lock = new object();
+        internal static object _lock = new object();
 
         /// <summary>
         /// Returns a string representing the active version of SQLite
         /// </summary>
         internal abstract string Version { get; }
+
         /// <summary>
         /// Returns the number of changes the last executing insert/update caused.
         /// </summary>
         internal abstract int Changes { get; }
+
         /// <summary>
         /// Opens a database.
         /// </summary>
@@ -45,6 +48,7 @@ namespace Mono.Data.Sqlite
         /// <param name="maxPoolSize">The maximum size of the pool for the given filename</param>
         /// <param name="usePool">If true, the connection can be pulled from the connection pool</param>
         internal abstract void Open(string strFilename, SQLiteOpenFlagsEnum flags, int maxPoolSize, bool usePool);
+
         /// <summary>
         /// Closes the currently-open database.
         /// </summary>
@@ -53,11 +57,13 @@ namespace Mono.Data.Sqlite
         /// memory associated with the user-defined functions and collating sequences tied to the closed connection.
         /// </remarks>
         internal abstract void Close();
+
         /// <summary>
         /// Sets the busy timeout on the connection.  SqliteCommand will call this before executing any command.
         /// </summary>
         /// <param name="nTimeoutMS">The number of milliseconds to wait before returning SQLITE_BUSY</param>
         internal abstract void SetTimeout(int nTimeoutMS);
+
         /// <summary>
         /// Returns the text of the last error issued by SQLite
         /// </summary>
@@ -80,13 +86,16 @@ namespace Mono.Data.Sqlite
         /// SQL up to to either the end of the text or to the first semi-colon delimiter.  The remaining text is returned
         /// here for a subsequent call to Prepare() until all the text has been processed.</param>
         /// <returns>Returns an initialized SqliteStatement.</returns>
-        internal abstract SqliteStatement Prepare(SqliteConnection cnn, string strSql, SqliteStatement previous, uint timeoutMS, out string strRemain);
+        internal abstract SqliteStatement Prepare(SqliteConnection cnn, string strSql, SqliteStatement previous,
+                                                  uint timeoutMS, out string strRemain);
+
         /// <summary>
         /// Steps through a prepared statement.
         /// </summary>
         /// <param name="stmt">The SqliteStatement to step through</param>
         /// <returns>True if a row was returned, False if not.</returns>
         internal abstract bool Step(SqliteStatement stmt);
+
         /// <summary>
         /// Resets a prepared statement so it can be executed again.  If the error returned is SQLITE_SCHEMA, 
         /// transparently attempt to rebuild the SQL statement and throw an error if that was not possible.
@@ -94,6 +103,7 @@ namespace Mono.Data.Sqlite
         /// <param name="stmt">The statement to reset</param>
         /// <returns>Returns -1 if the schema changed while resetting, 0 if the reset was sucessful or 6 (SQLITE_LOCKED) if the reset failed due to a lock</returns>
         internal abstract int Reset(SqliteStatement stmt);
+
         internal abstract void Cancel();
 
         internal abstract void Bind_Double(SqliteStatement stmt, int index, double value);
@@ -116,29 +126,48 @@ namespace Mono.Data.Sqlite
         internal abstract string ColumnOriginalName(SqliteStatement stmt, int index);
         internal abstract string ColumnDatabaseName(SqliteStatement stmt, int index);
         internal abstract string ColumnTableName(SqliteStatement stmt, int index);
-        internal abstract void ColumnMetaData(string dataBase, string table, string column, out string dataType, out string collateSequence, out bool notNull, out bool primaryKey, out bool autoIncrement);
-        internal abstract void GetIndexColumnExtendedInfo(string database, string index, string column, out int sortMode, out int onError, out string collationSequence);
+
+        internal abstract void ColumnMetaData(string dataBase, string table, string column, out string dataType,
+                                              out string collateSequence, out bool notNull, out bool primaryKey,
+                                              out bool autoIncrement);
+
+        internal abstract void GetIndexColumnExtendedInfo(string database, string index, string column, out int sortMode,
+                                                          out int onError, out string collationSequence);
 
         internal abstract double GetDouble(SqliteStatement stmt, int index);
         internal abstract Int32 GetInt32(SqliteStatement stmt, int index);
         internal abstract Int64 GetInt64(SqliteStatement stmt, int index);
         internal abstract string GetText(SqliteStatement stmt, int index);
-        internal abstract long GetBytes(SqliteStatement stmt, int index, int nDataoffset, byte[] bDest, int nStart, int nLength);
-        internal abstract long GetChars(SqliteStatement stmt, int index, int nDataoffset, char[] bDest, int nStart, int nLength);
+
+        internal abstract long GetBytes(SqliteStatement stmt, int index, int nDataoffset, byte[] bDest, int nStart,
+                                        int nLength);
+
+        internal abstract long GetChars(SqliteStatement stmt, int index, int nDataoffset, char[] bDest, int nStart,
+                                        int nLength);
+
         internal abstract DateTime GetDateTime(SqliteStatement stmt, int index);
         internal abstract bool IsNull(SqliteStatement stmt, int index);
 
         internal abstract void CreateCollation(string strCollation, Sqlite3.dxCompare func, Sqlite3.dxCompare func16);
-        internal abstract void CreateFunction(string strFunction, int nArgs, bool needCollSeq, Sqlite3.dxFunc dxCallback, Sqlite3.dxStep funcstep, Sqlite3.dxFinal funcfinal);
+
+        internal abstract void CreateFunction(string strFunction, int nArgs, bool needCollSeq, Sqlite3.dxFunc dxCallback,
+                                              Sqlite3.dxStep funcstep, Sqlite3.dxFinal funcfinal);
+
         internal abstract CollationSequence GetCollationSequence(SqliteFunction func, Sqlite3.sqlite3_context context);
-        internal abstract int ContextCollateCompare(CollationEncodingEnum enc, Sqlite3.sqlite3_context context, string s1, string s2);
-        internal abstract int ContextCollateCompare(CollationEncodingEnum enc, Sqlite3.sqlite3_context context, char[] c1, char[] c2);
+
+        internal abstract int ContextCollateCompare(CollationEncodingEnum enc, Sqlite3.sqlite3_context context,
+                                                    string s1, string s2);
+
+        internal abstract int ContextCollateCompare(CollationEncodingEnum enc, Sqlite3.sqlite3_context context,
+                                                    char[] c1, char[] c2);
 
         // todo deprecated
         // internal abstract int AggregateCount(Sqlite3.sqlite3_context context);
         internal abstract Sqlite3.Mem AggregateContext(Sqlite3.sqlite3_context context);
 
-        internal abstract long GetParamValueBytes(Sqlite3.Mem ptr, int nDataOffset, byte[] bDest, int nStart, int nLength);
+        internal abstract long GetParamValueBytes(Sqlite3.Mem ptr, int nDataOffset, byte[] bDest, int nStart,
+                                                  int nLength);
+
         internal abstract double GetParamValueDouble(Sqlite3.Mem ptr);
         internal abstract int GetParamValueInt32(Sqlite3.Mem ptr);
         internal abstract long GetParamValueInt64(Sqlite3.Mem ptr);
@@ -185,7 +214,7 @@ namespace Mono.Data.Sqlite
             int len;
             return UTF8ToString(Sqlite3.sqlite3_errmsg_interop(db, out len), len);
 #else
-      return Sqlite3.sqlite3_errmsg(db);
+            return Sqlite3.sqlite3_errmsg(db);
 #endif
         }
 
@@ -196,7 +225,7 @@ namespace Mono.Data.Sqlite
 #if !SQLITE_STANDARD
                 int n = Sqlite3.sqlite3_finalize_interop(stmt);
 #else
-      int n = Sqlite3.sqlite3_finalize(stmt);
+                int n = Sqlite3.sqlite3_finalize(stmt);
 #endif
                 if (n > 0) throw new SqliteException(n, null);
             }
@@ -209,8 +238,8 @@ namespace Mono.Data.Sqlite
 #if !SQLITE_STANDARD
                 int n = Sqlite3.sqlite3_close_interop(db);
 #else
-      ResetConnection(db);
-      int n = Sqlite3.sqlite3_close(db);
+                ResetConnection(db);
+                int n = Sqlite3.sqlite3_close(db);
 #endif
                 if (n > 0) throw new SqliteException(n, SQLiteLastError(db));
             }
@@ -230,7 +259,7 @@ namespace Mono.Data.Sqlite
 #if !SQLITE_STANDARD
                         Sqlite3.sqlite3_reset_interop(stmt);
 #else
-          Sqlite3.sqlite3_reset(stmt);
+                        Sqlite3.sqlite3_reset(stmt);
 #endif
                     }
                 } while (stmt != null);
@@ -271,7 +300,7 @@ namespace Mono.Data.Sqlite
         MultiThread = 2,
         Serialized = 3,
     }
-    
+
     internal static class Disposers
     {
         internal static void Dispose(this Sqlite3.Vdbe statement)

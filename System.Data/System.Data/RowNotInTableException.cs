@@ -33,23 +33,23 @@ using System.Globalization;
 
 namespace System.Data
 {
-	public class RowNotInTableException : DataException
-	{
-		public RowNotInTableException ()
-			: base (Locale.GetText ("This DataRow is not in this DataTable"))
-		{
-		}
+    public class RowNotInTableException : DataException
+    {
+        public RowNotInTableException()
+            : base(Locale.GetText("This DataRow is not in this DataTable"))
+        {
+        }
 
-		public RowNotInTableException (string s)
-			: base (s)
-		{
-		}
+        public RowNotInTableException(string s)
+            : base(s)
+        {
+        }
 
 #if NET_2_0
-		public RowNotInTableException (string message, Exception innerException)
-			: base (message, innerException)
-		{
-		}
+        public RowNotInTableException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
 #endif
-	}
+    }
 }

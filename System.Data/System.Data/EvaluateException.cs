@@ -33,24 +33,23 @@ using System.Globalization;
 
 namespace System.Data
 {
-	public class EvaluateException : InvalidExpressionException
-	{
-		public EvaluateException ()
-			: base (Locale.GetText ("This expression cannot be evaluated"))
-		{
-		}
+    public class EvaluateException : InvalidExpressionException
+    {
+        public EvaluateException()
+            : base(Locale.GetText("This expression cannot be evaluated"))
+        {
+        }
 
-		public EvaluateException (string s)
-			: base (s)
-		{
-		}
+        public EvaluateException(string s)
+            : base(s)
+        {
+        }
 
 #if NET_2_0
-		public EvaluateException (string message, Exception innerException)
-			: base (message, innerException)
-		{
-		}
+        public EvaluateException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
 #endif
-
-	}
+    }
 }

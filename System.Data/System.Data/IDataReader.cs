@@ -32,23 +32,21 @@
 
 namespace System.Data
 {
-	/// <summary>
-	/// Provides a means of reading one or more forward-only streams of result sets obtained by executing a command at a data source, and is implemented by .NET data providers that access relational databases.
-	/// </summary>
-	public interface IDataReader  : IDisposable, IDataRecord
-	{
-		void Close();
-		
-		bool NextResult();
+    /// <summary>
+    /// Provides a means of reading one or more forward-only streams of result sets obtained by executing a command at a data source, and is implemented by .NET data providers that access relational databases.
+    /// </summary>
+    public interface IDataReader : IDisposable, IDataRecord
+    {
+        void Close();
 
-		bool Read();
+        bool NextResult();
 
-		int Depth{get;}
+        bool Read();
 
-		bool IsClosed{get;}
+        int Depth { get; }
 
-		int RecordsAffected{get;}
+        bool IsClosed { get; }
 
-
-	}
+        int RecordsAffected { get; }
+    }
 }

@@ -33,21 +33,21 @@ using System.Globalization;
 
 namespace System.Data.SqlTypes
 {
-	public sealed class SqlNullValueException : SqlTypeException
-	{
-		public SqlNullValueException ()
-			: base (Locale.GetText ("Data is Null. This method or property cannot be called on Null values."))
-		{
-		}
+    public sealed class SqlNullValueException : SqlTypeException
+    {
+        public SqlNullValueException()
+            : base(Locale.GetText("Data is Null. This method or property cannot be called on Null values."))
+        {
+        }
 
-		public SqlNullValueException (string message)
-			: base (message)
-		{
-		}
+        public SqlNullValueException(string message)
+            : base(message)
+        {
+        }
 
-		public SqlNullValueException (string message, Exception e)
-			: base (message, e)
-		{
-		}
-	}
+        public SqlNullValueException(string message, Exception e)
+            : base(message, e)
+        {
+        }
+    }
 }

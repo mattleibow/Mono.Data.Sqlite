@@ -38,28 +38,27 @@ using System.Security.Permissions;
 
 // General Information about the System.Transactions assembly
 
-[assembly: AssemblyTitle ("System.Transactions.dll")]
-[assembly: AssemblyDescription ("System.Transactions.dll")]
-[assembly: AssemblyDefaultAlias ("System.Transactions.dll")]
-
-[assembly: AssemblyCompany (Consts.MonoCompany)]
-[assembly: AssemblyProduct (Consts.MonoProduct)]
-[assembly: AssemblyCopyright (Consts.MonoCopyright)]
-[assembly: AssemblyVersion (Consts.FxVersion)]
-[assembly: SatelliteContractVersion (Consts.FxVersion)]
-[assembly: AssemblyInformationalVersion (Consts.FxFileVersion)]
-
-[assembly: NeutralResourcesLanguage ("en-US")]
-
-[assembly: ComVisible (false)]
-[assembly: ComCompatibleVersion (1, 0, 3300, 0)]
+[assembly: AssemblyTitle("System.Transactions.dll")]
+[assembly: AssemblyDescription("System.Transactions.dll")]
+[assembly: AssemblyDefaultAlias("System.Transactions.dll")]
+[assembly: AssemblyCompany(Consts.MonoCompany)]
+[assembly: AssemblyProduct(Consts.MonoProduct)]
+[assembly: AssemblyCopyright(Consts.MonoCopyright)]
+[assembly: AssemblyVersion(Consts.FxVersion)]
+[assembly: SatelliteContractVersion(Consts.FxVersion)]
+[assembly: AssemblyInformationalVersion(Consts.FxFileVersion)]
+[assembly: NeutralResourcesLanguage("en-US")]
+[assembly: ComVisible(false)]
+[assembly: ComCompatibleVersion(1, 0, 3300, 0)]
 [assembly: AllowPartiallyTrustedCallers]
 
 #if !TARGET_JVM
-	[assembly: CLSCompliant (true)]
-	// todo :: [assembly: AssemblyDelaySign (true)]
-	[assembly: AssemblyKeyFile("../mono.snk")]
+
+[assembly: CLSCompliant(true)]
+// todo :: [assembly: AssemblyDelaySign (true)]
+
+[assembly: AssemblyKeyFile("../mono.snk")]
 #endif
 
-[assembly: AssemblyFileVersion (Consts.FxFileVersion)]
-[assembly: BestFitMapping (false)]
+[assembly: AssemblyFileVersion(Consts.FxFileVersion)]
+[assembly: BestFitMapping(false)]

@@ -45,107 +45,111 @@ using System.ComponentModel;
 
 namespace System.Data
 {
-	/// <summary>
-	/// Base class for System.Data collection classes
-	/// that are used within a DataTable object
-	/// to represent a collection of
-	/// relations, tables, rows, columns, and constraints
-	/// </summary>
+    /// <summary>
+    /// Base class for System.Data collection classes
+    /// that are used within a DataTable object
+    /// to represent a collection of
+    /// relations, tables, rows, columns, and constraints
+    /// </summary>
+    public class InternalDataCollectionBase : ICollection, IEnumerable
+    {
+        #region Fields
 
-	public class InternalDataCollectionBase : ICollection, IEnumerable {
-		#region Fields
+        private ArrayList list = null;
+        private bool readOnly = false;
+        private bool synchronized = false;
 
-		private ArrayList list = null;
-		private bool readOnly = false;
-		private bool synchronized = false;
+        #endregion
 
-		#endregion
+        #region Constructors
 
-		#region Constructors
+        public InternalDataCollectionBase()
+        {
+            list = new ArrayList();
+        }
 
-		public InternalDataCollectionBase ()
-		{
-			list = new ArrayList();
-		}
+        #endregion
 
-		#endregion
+        #region Properties
 
-		#region Properties
+        /// <summary>
+        /// Gets the total number of elements in a collection.
+        /// </summary>
+        [Browsable(false)]
+        public virtual int Count
+        {
+            get { return list.Count; }
+        }
 
-		/// <summary>
-		/// Gets the total number of elements in a collection.
-		/// </summary>
-		[Browsable (false)]
-		public virtual int Count {
-			get { return list.Count; }
-		}
+        /// <summary>
+        /// Gets a value indicating whether the InternalDataCollectionBase is read-only.
+        /// </summary>
+        [Browsable(false)]
+        public bool IsReadOnly
+        {
+            get { return readOnly; }
+        }
 
-		/// <summary>
-		/// Gets a value indicating whether the InternalDataCollectionBase is read-only.
-		/// </summary>
-		[Browsable (false)]
-		public bool IsReadOnly {
-			get { return readOnly; }
-		}
+        /// <summary>
+        /// Gets a value indicating whether the InternalDataCollectionBase is synchronized.
+        /// </summary>
+        [Browsable(false)]
+        public bool IsSynchronized
+        {
+            get { return synchronized; }
+        }
 
-		/// <summary>
-		/// Gets a value indicating whether the InternalDataCollectionBase is synchronized.
-		/// </summary>
-		[Browsable (false)]
-		public bool IsSynchronized {
-			get { return synchronized; }
-		}
+        /// <summary>
+        /// Gets the items of the collection as a list.
+        /// </summary>
+        protected virtual ArrayList List
+        {
+            get { return list; }
+        }
 
-		/// <summary>
-		/// Gets the items of the collection as a list.
-		/// </summary>
-		protected virtual ArrayList List {
-			get { return list; }
-		}
+        /// <summary>
+        /// Gets an object that can be used to synchronize the collection.
+        /// </summary>
+        [Browsable(false)]
+        public object SyncRoot
+        {
+            get { return this; }
+        }
 
-		/// <summary>
-		/// Gets an object that can be used to synchronize the collection.
-		/// </summary>
-		[Browsable (false)]
-		public object SyncRoot {
-			get { return this; }
-		}
+        #endregion
 
+        #region Methods
 
-		#endregion
-
-		#region Methods
-
-		/// <summary>
-		/// Copies all the elements in the current InternalDataCollectionBase to a one-
-		/// dimensional Array, starting at the specified InternalDataCollectionBase index.
-		/// </summary>
-		public
+        /// <summary>
+        /// Copies all the elements in the current InternalDataCollectionBase to a one-
+        /// dimensional Array, starting at the specified InternalDataCollectionBase index.
+        /// </summary>
+        public
 #if NET_2_0
-		virtual
+            virtual
 #endif
-		void CopyTo (Array ar, int index)
-		{
-  			list.CopyTo (ar, index);
-  		}
+            void CopyTo(Array ar, int index)
+        {
+            list.CopyTo(ar, index);
+        }
 
-  		/// <summary>
-  		/// Gets an IEnumerator for the collection.
-  		/// </summary>
-		public
+        /// <summary>
+        /// Gets an IEnumerator for the collection.
+        /// </summary>
+        public
 #if NET_2_0
-		virtual
+            virtual
 #endif
-		IEnumerator GetEnumerator ()
-  		{
-  			return list.GetEnumerator ();
-  		}
+            IEnumerator GetEnumerator()
+        {
+            return list.GetEnumerator();
+        }
 
-		internal Array ToArray (Type type)
-		{
-			return list.ToArray (type);
-		}
+        internal Array ToArray(Type type)
+        {
+            return list.ToArray(type);
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 }

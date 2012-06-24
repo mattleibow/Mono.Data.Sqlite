@@ -36,374 +36,378 @@ using System.Globalization;
 
 namespace System.Data.SqlTypes
 {
-	public struct SqlDouble : INullable, IComparable
-	{
-		#region Fields
+    public struct SqlDouble : INullable, IComparable
+    {
+        #region Fields
 
-		private double value;
-		private bool notNull;
+        private double value;
+        private bool notNull;
 
-		public static readonly SqlDouble MaxValue = new SqlDouble (1.7976931348623157E+308);
-		public static readonly SqlDouble MinValue = new SqlDouble (-1.7976931348623157E+308);
-		public static readonly SqlDouble Null;
-		public static readonly SqlDouble Zero = new SqlDouble (0);
+        public static readonly SqlDouble MaxValue = new SqlDouble(1.7976931348623157E+308);
+        public static readonly SqlDouble MinValue = new SqlDouble(-1.7976931348623157E+308);
+        public static readonly SqlDouble Null;
+        public static readonly SqlDouble Zero = new SqlDouble(0);
 
-		#endregion
+        #endregion
 
-		#region Constructors
+        #region Constructors
 
-		public SqlDouble (double value)
-		{
-			this.value = value;
-			notNull = true;
-		}
+        public SqlDouble(double value)
+        {
+            this.value = value;
+            notNull = true;
+        }
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		public bool IsNull {
-			get { return !notNull; }
-		}
+        public bool IsNull
+        {
+            get { return !notNull; }
+        }
 
-		public double Value {
-			get {
-				if (this.IsNull)
-					throw new SqlNullValueException ();
-				else 
-					return value;
-			}
-		}
+        public double Value
+        {
+            get
+            {
+                if (this.IsNull)
+                    throw new SqlNullValueException();
+                else
+                    return value;
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region Methods
+        #region Methods
 
-		public static SqlDouble Add (SqlDouble x, SqlDouble y)
-		{
-			return (x + y);
-		}
-		
-		public int CompareTo (object value)
-		{
-			if (value == null)
-				return 1;
-			if (!(value is SqlDouble))
-				throw new ArgumentException (Locale.GetText ("Value is not a System.Data.SqlTypes.SqlDouble"));
+        public static SqlDouble Add(SqlDouble x, SqlDouble y)
+        {
+            return (x + y);
+        }
 
-			return CompareTo ((SqlDouble) value);
-		}
+        public int CompareTo(object value)
+        {
+            if (value == null)
+                return 1;
+            if (!(value is SqlDouble))
+                throw new ArgumentException(Locale.GetText("Value is not a System.Data.SqlTypes.SqlDouble"));
+
+            return CompareTo((SqlDouble) value);
+        }
 
 #if NET_2_0
-		public
+        public
 #endif
-		int CompareTo (SqlDouble value)
-		{
-			if (value.IsNull)
-				return 1;
-			else
-				return this.value.CompareTo (value.Value);
-		}
+            int CompareTo(SqlDouble value)
+        {
+            if (value.IsNull)
+                return 1;
+            else
+                return this.value.CompareTo(value.Value);
+        }
 
-		public static SqlDouble Divide (SqlDouble x, SqlDouble y)
-		{
-			return (x / y);
-		}
+        public static SqlDouble Divide(SqlDouble x, SqlDouble y)
+        {
+            return (x/y);
+        }
 
-		public override bool Equals (object value)
-		{
-			if (!(value is SqlDouble))
-				return false;
-			if (this.IsNull)
-				return ((SqlDouble)value).IsNull;
-			else if (((SqlDouble)value).IsNull)
-				return false;
-			else
-				return (bool) (this == (SqlDouble)value);
-		}
+        public override bool Equals(object value)
+        {
+            if (!(value is SqlDouble))
+                return false;
+            if (this.IsNull)
+                return ((SqlDouble) value).IsNull;
+            else if (((SqlDouble) value).IsNull)
+                return false;
+            else
+                return (bool) (this == (SqlDouble) value);
+        }
 
-		public static SqlBoolean Equals (SqlDouble x, SqlDouble y)
-		{
-			return (x == y);
-		}
+        public static SqlBoolean Equals(SqlDouble x, SqlDouble y)
+        {
+            return (x == y);
+        }
 
-		public override int GetHashCode ()
-		{
-			long LongValue = (long)value;
-			return (int)(LongValue ^ (LongValue >> 32));
-		}
+        public override int GetHashCode()
+        {
+            long LongValue = (long) value;
+            return (int) (LongValue ^ (LongValue >> 32));
+        }
 
-		public static SqlBoolean GreaterThan (SqlDouble x, SqlDouble y)
-		{
-			return (x > y);
-		}
+        public static SqlBoolean GreaterThan(SqlDouble x, SqlDouble y)
+        {
+            return (x > y);
+        }
 
-		public static SqlBoolean GreaterThanOrEqual (SqlDouble x, SqlDouble y)
-		{
-			return (x >= y);
-		}
+        public static SqlBoolean GreaterThanOrEqual(SqlDouble x, SqlDouble y)
+        {
+            return (x >= y);
+        }
 
-		public static SqlBoolean LessThan (SqlDouble x, SqlDouble y)
-		{
-			return (x < y);
-		}
+        public static SqlBoolean LessThan(SqlDouble x, SqlDouble y)
+        {
+            return (x < y);
+        }
 
-		public static SqlBoolean LessThanOrEqual (SqlDouble x, SqlDouble y)
-		{
-			return (x <= y);
-		}
+        public static SqlBoolean LessThanOrEqual(SqlDouble x, SqlDouble y)
+        {
+            return (x <= y);
+        }
 
-		public static SqlDouble Multiply (SqlDouble x, SqlDouble y)
-		{
-			return (x * y);
-		}
+        public static SqlDouble Multiply(SqlDouble x, SqlDouble y)
+        {
+            return (x*y);
+        }
 
-		public static SqlBoolean NotEquals (SqlDouble x, SqlDouble y)
-		{
-			return (x != y);
-		}
+        public static SqlBoolean NotEquals(SqlDouble x, SqlDouble y)
+        {
+            return (x != y);
+        }
 
-		public static SqlDouble Parse (string s)
-		{
-			return new SqlDouble (Double.Parse (s));
-		}
+        public static SqlDouble Parse(string s)
+        {
+            return new SqlDouble(Double.Parse(s));
+        }
 
-		public static SqlDouble Subtract (SqlDouble x, SqlDouble y)
-		{
-			return (x - y);
-		}
+        public static SqlDouble Subtract(SqlDouble x, SqlDouble y)
+        {
+            return (x - y);
+        }
 
-		public SqlBoolean ToSqlBoolean ()
-		{
-			return ((SqlBoolean) this);
-		}
-		
-		public SqlByte ToSqlByte ()
-		{
-			return ((SqlByte) this);
-		}
+        public SqlBoolean ToSqlBoolean()
+        {
+            return ((SqlBoolean) this);
+        }
 
-		public SqlDecimal ToSqlDecimal ()
-		{
-			return ((SqlDecimal) this);
-		}
+        public SqlByte ToSqlByte()
+        {
+            return ((SqlByte) this);
+        }
 
-		public SqlInt16 ToSqlInt16 ()
-		{
-			return ((SqlInt16) this);
-		}
+        public SqlDecimal ToSqlDecimal()
+        {
+            return ((SqlDecimal) this);
+        }
 
-		public SqlInt32 ToSqlInt32 ()
-		{
-			return ((SqlInt32) this);
-		}
+        public SqlInt16 ToSqlInt16()
+        {
+            return ((SqlInt16) this);
+        }
 
-		public SqlInt64 ToSqlInt64 ()
-		{
-			return ((SqlInt64) this);
-		}
+        public SqlInt32 ToSqlInt32()
+        {
+            return ((SqlInt32) this);
+        }
 
-		public SqlMoney ToSqlMoney ()
-		{
-			return ((SqlMoney) this);
-		}
+        public SqlInt64 ToSqlInt64()
+        {
+            return ((SqlInt64) this);
+        }
 
-		public SqlSingle ToSqlSingle ()
-		{
-			return ((SqlSingle) this);
-		}
+        public SqlMoney ToSqlMoney()
+        {
+            return ((SqlMoney) this);
+        }
 
-		public SqlString ToSqlString ()
-		{
-			return ((SqlString) this);
-		}
+        public SqlSingle ToSqlSingle()
+        {
+            return ((SqlSingle) this);
+        }
 
-		public override string ToString ()
-		{
-			if (!notNull)
-				return "Null";
-			else
-				return value.ToString ();
-		}
+        public SqlString ToSqlString()
+        {
+            return ((SqlString) this);
+        }
 
-		public static SqlDouble operator + (SqlDouble x, SqlDouble y)
-		{
-			double d = 0;
-			d = x.Value + y.Value;
-			
-			if (Double.IsInfinity (d))
-				throw new OverflowException ();
+        public override string ToString()
+        {
+            if (!notNull)
+                return "Null";
+            else
+                return value.ToString();
+        }
 
-			return new SqlDouble (d);
-		}
+        public static SqlDouble operator +(SqlDouble x, SqlDouble y)
+        {
+            double d = 0;
+            d = x.Value + y.Value;
 
-		public static SqlDouble operator / (SqlDouble x, SqlDouble y)
-		{
-			double d = x.Value / y.Value;
+            if (Double.IsInfinity(d))
+                throw new OverflowException();
 
-			if (Double.IsInfinity (d)) {
-				if (y.Value == 0)
-					throw new DivideByZeroException ();
-			}
-				
-			return new SqlDouble (d);
-		}
+            return new SqlDouble(d);
+        }
 
-		public static SqlBoolean operator == (SqlDouble x, SqlDouble y)
-		{
-			if (x.IsNull || y.IsNull)
-				return SqlBoolean.Null;
-			else
-				return new SqlBoolean (x.Value == y.Value);
-		}
+        public static SqlDouble operator /(SqlDouble x, SqlDouble y)
+        {
+            double d = x.Value/y.Value;
 
-		public static SqlBoolean operator > (SqlDouble x, SqlDouble y)
-		{
-			if (x.IsNull || y.IsNull)
-				return SqlBoolean.Null;
-			else
-				return new SqlBoolean (x.Value > y.Value);
-		}
+            if (Double.IsInfinity(d))
+            {
+                if (y.Value == 0)
+                    throw new DivideByZeroException();
+            }
 
-		public static SqlBoolean operator >= (SqlDouble x, SqlDouble y)
-		{
-			if (x.IsNull || y.IsNull)
-				return SqlBoolean.Null;
-			else
-				return new SqlBoolean (x.Value >= y.Value);
-		}
+            return new SqlDouble(d);
+        }
 
-		public static SqlBoolean operator != (SqlDouble x, SqlDouble y)
-		{
-			if (x.IsNull || y.IsNull)
-				return SqlBoolean.Null;
-			else
-				return new SqlBoolean (!(x.Value == y.Value));
-		}
+        public static SqlBoolean operator ==(SqlDouble x, SqlDouble y)
+        {
+            if (x.IsNull || y.IsNull)
+                return SqlBoolean.Null;
+            else
+                return new SqlBoolean(x.Value == y.Value);
+        }
 
-		public static SqlBoolean operator < (SqlDouble x, SqlDouble y)
-		{
-			if (x.IsNull || y.IsNull)
-				return SqlBoolean.Null;
-			else
-				return new SqlBoolean (x.Value < y.Value);
-		}
+        public static SqlBoolean operator >(SqlDouble x, SqlDouble y)
+        {
+            if (x.IsNull || y.IsNull)
+                return SqlBoolean.Null;
+            else
+                return new SqlBoolean(x.Value > y.Value);
+        }
 
-		public static SqlBoolean operator <= (SqlDouble x, SqlDouble y)
-		{
-			if (x.IsNull || y.IsNull)
-				return SqlBoolean.Null;
-			else
-				return new SqlBoolean (x.Value <= y.Value);
-		}
+        public static SqlBoolean operator >=(SqlDouble x, SqlDouble y)
+        {
+            if (x.IsNull || y.IsNull)
+                return SqlBoolean.Null;
+            else
+                return new SqlBoolean(x.Value >= y.Value);
+        }
 
-		public static SqlDouble operator * (SqlDouble x, SqlDouble y)
-		{
-			double d = x.Value * y.Value;
-			
-			if (Double.IsInfinity (d))
-				throw new OverflowException ();
+        public static SqlBoolean operator !=(SqlDouble x, SqlDouble y)
+        {
+            if (x.IsNull || y.IsNull)
+                return SqlBoolean.Null;
+            else
+                return new SqlBoolean(!(x.Value == y.Value));
+        }
 
-			return new SqlDouble (d);
+        public static SqlBoolean operator <(SqlDouble x, SqlDouble y)
+        {
+            if (x.IsNull || y.IsNull)
+                return SqlBoolean.Null;
+            else
+                return new SqlBoolean(x.Value < y.Value);
+        }
 
-		}
+        public static SqlBoolean operator <=(SqlDouble x, SqlDouble y)
+        {
+            if (x.IsNull || y.IsNull)
+                return SqlBoolean.Null;
+            else
+                return new SqlBoolean(x.Value <= y.Value);
+        }
 
-		public static SqlDouble operator - (SqlDouble x, SqlDouble y)
-		{
-			double d = x.Value - y.Value;
-			
-			if (Double.IsInfinity (d))
-				throw new OverflowException ();
+        public static SqlDouble operator *(SqlDouble x, SqlDouble y)
+        {
+            double d = x.Value*y.Value;
 
-			return new SqlDouble (d);
-		}
+            if (Double.IsInfinity(d))
+                throw new OverflowException();
 
-		public static SqlDouble operator - (SqlDouble x)
-		{
-			return new SqlDouble (-(x.Value));
-		}
+            return new SqlDouble(d);
+        }
 
-		public static explicit operator SqlDouble (SqlBoolean x)
-		{
-			if (x.IsNull)
-				return Null;
-			else
-				return new SqlDouble ((double)x.ByteValue);
-		}
+        public static SqlDouble operator -(SqlDouble x, SqlDouble y)
+        {
+            double d = x.Value - y.Value;
 
-		public static explicit operator double (SqlDouble x)
-		{
-			return x.Value;
-		}
+            if (Double.IsInfinity(d))
+                throw new OverflowException();
 
-		public static explicit operator SqlDouble (SqlString x)
-		{
-			checked {
-				return SqlDouble.Parse (x.Value);
-			}
-		}
+            return new SqlDouble(d);
+        }
 
-		public static implicit operator SqlDouble (double x)
-		{
-			return new SqlDouble (x);
-		}
+        public static SqlDouble operator -(SqlDouble x)
+        {
+            return new SqlDouble(-(x.Value));
+        }
 
-		public static implicit operator SqlDouble (SqlByte x)
-		{
-			if (x.IsNull)
-				return Null;
-			else
-				return new SqlDouble ((double) x.Value);
-		}
+        public static explicit operator SqlDouble(SqlBoolean x)
+        {
+            if (x.IsNull)
+                return Null;
+            else
+                return new SqlDouble((double) x.ByteValue);
+        }
 
-		public static implicit operator SqlDouble (SqlDecimal x)
-		{
-			if (x.IsNull)
-				return Null;
-			else
-				return new SqlDouble (x.ToDouble ());
-		}
+        public static explicit operator double(SqlDouble x)
+        {
+            return x.Value;
+        }
 
-		public static implicit operator SqlDouble (SqlInt16 x)
-		{
-			if (x.IsNull)
-				return Null;
-			else
-				return new SqlDouble ((double) x.Value);
-		}
+        public static explicit operator SqlDouble(SqlString x)
+        {
+            checked
+            {
+                return SqlDouble.Parse(x.Value);
+            }
+        }
 
-		public static implicit operator SqlDouble (SqlInt32 x)
-		{
-			if (x.IsNull)
-				return Null;
-			else
-				return new SqlDouble ((double) x.Value);
-		}
+        public static implicit operator SqlDouble(double x)
+        {
+            return new SqlDouble(x);
+        }
 
-		public static implicit operator SqlDouble (SqlInt64 x)
-		{
-			if (x.IsNull)
-				return Null;
-			else
-				return new SqlDouble ((double) x.Value);
-		}
+        public static implicit operator SqlDouble(SqlByte x)
+        {
+            if (x.IsNull)
+                return Null;
+            else
+                return new SqlDouble((double) x.Value);
+        }
 
-		public static implicit operator SqlDouble (SqlMoney x)
-		{
-			if (x.IsNull)
-				return Null;
-			else
-				return new SqlDouble ((double) x.Value);
-		}
+        public static implicit operator SqlDouble(SqlDecimal x)
+        {
+            if (x.IsNull)
+                return Null;
+            else
+                return new SqlDouble(x.ToDouble());
+        }
 
-		public static implicit operator SqlDouble (SqlSingle x)
-		{
-			if (x.IsNull)
-				return Null;
-			else
-				return new SqlDouble ((double) x.Value);
-		}
+        public static implicit operator SqlDouble(SqlInt16 x)
+        {
+            if (x.IsNull)
+                return Null;
+            else
+                return new SqlDouble((double) x.Value);
+        }
 
-		#endregion
-	}
+        public static implicit operator SqlDouble(SqlInt32 x)
+        {
+            if (x.IsNull)
+                return Null;
+            else
+                return new SqlDouble((double) x.Value);
+        }
+
+        public static implicit operator SqlDouble(SqlInt64 x)
+        {
+            if (x.IsNull)
+                return Null;
+            else
+                return new SqlDouble((double) x.Value);
+        }
+
+        public static implicit operator SqlDouble(SqlMoney x)
+        {
+            if (x.IsNull)
+                return Null;
+            else
+                return new SqlDouble((double) x.Value);
+        }
+
+        public static implicit operator SqlDouble(SqlSingle x)
+        {
+            if (x.IsNull)
+                return Null;
+            else
+                return new SqlDouble((double) x.Value);
+        }
+
+        #endregion
+    }
 }

@@ -33,23 +33,23 @@ using System.Globalization;
 
 namespace System.Data
 {
-	public class DuplicateNameException : DataException
-	{
-		public DuplicateNameException ()
-			: base (Locale.GetText ("There is a database object with the same name"))
-		{
-		}
+    public class DuplicateNameException : DataException
+    {
+        public DuplicateNameException()
+            : base(Locale.GetText("There is a database object with the same name"))
+        {
+        }
 
-		public DuplicateNameException (string s)
-			: base (s)
-		{
-		}
+        public DuplicateNameException(string s)
+            : base(s)
+        {
+        }
 
 #if NET_2_0
-		public DuplicateNameException (string message, Exception innerException)
-			: base (message, innerException)
-		{
-		}
+        public DuplicateNameException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
 #endif
-	}
+    }
 }

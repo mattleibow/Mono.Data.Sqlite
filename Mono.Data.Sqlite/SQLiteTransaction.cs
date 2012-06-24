@@ -20,6 +20,7 @@ namespace Mono.Data.Sqlite
         /// The connection to which this transaction is bound
         /// </summary>
         internal SqliteConnection _cnn;
+
         internal long _version; // Matches the version of the connection
         private IsolationLevel _level;
 
@@ -145,23 +146,29 @@ namespace Mono.Data.Sqlite
         {
             if (_cnn == null)
             {
-                if (throwError == true) throw new ArgumentNullException("No connection associated with this transaction");
+                if (throwError == true)
+                    throw new ArgumentNullException("No connection associated with this transaction");
                 else return false;
             }
 
             if (_cnn._transactionLevel == 0)
             {
-                if (throwError == true) throw new SqliteException((int)SQLiteErrorCode.Misuse, "No transaction is active on this connection");
+                if (throwError == true)
+                    throw new SqliteException((int) SQLiteErrorCode.Misuse,
+                                              "No transaction is active on this connection");
                 else return false;
             }
             if (_cnn._version != _version)
             {
-                if (throwError == true) throw new SqliteException((int)SQLiteErrorCode.Misuse, "The connection was closed and re-opened, changes were rolled back");
+                if (throwError == true)
+                    throw new SqliteException((int) SQLiteErrorCode.Misuse,
+                                              "The connection was closed and re-opened, changes were rolled back");
                 else return false;
             }
             if (_cnn.State != ConnectionState.Open)
             {
-                if (throwError == true) throw new SqliteException((int)SQLiteErrorCode.Misuse, "Connection was closed");
+                if (throwError == true)
+                    throw new SqliteException((int) SQLiteErrorCode.Misuse, "Connection was closed");
                 else return false;
             }
 

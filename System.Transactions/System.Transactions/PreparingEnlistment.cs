@@ -15,60 +15,62 @@ using System.Threading;
 
 namespace System.Transactions
 {
-	public class PreparingEnlistment : Enlistment
-	{
-		bool prepared = false;
-		Transaction tx;
-		IEnlistmentNotification enlisted;
-		WaitHandle waitHandle;
+    public class PreparingEnlistment : Enlistment
+    {
+        private bool prepared = false;
+        private Transaction tx;
+        private IEnlistmentNotification enlisted;
+        private WaitHandle waitHandle;
 
-		internal PreparingEnlistment (Transaction tx, IEnlistmentNotification enlisted)
-		{
-			this.tx = tx;
-			this.enlisted = enlisted;
-			waitHandle = new ManualResetEvent (false);
-		}
+        internal PreparingEnlistment(Transaction tx, IEnlistmentNotification enlisted)
+        {
+            this.tx = tx;
+            this.enlisted = enlisted;
+            waitHandle = new ManualResetEvent(false);
+        }
 
-		public void ForceRollback ()
-		{
-			ForceRollback (null);
-		}
+        public void ForceRollback()
+        {
+            ForceRollback(null);
+        }
 
-		[MonoTODO]
-		public void ForceRollback (Exception ex)
-		{
-			tx.Rollback (ex, enlisted);
-			/* See test RMFail2 */
-			((ManualResetEvent) waitHandle).Set ();
-		}
+        [MonoTODO]
+        public void ForceRollback(Exception ex)
+        {
+            tx.Rollback(ex, enlisted);
+            /* See test RMFail2 */
+            ((ManualResetEvent) waitHandle).Set();
+        }
 
-		[MonoTODO]
-		public void Prepared ()
-		{
-			prepared = true;
-			/* See test RMFail2 */
-			((ManualResetEvent) waitHandle).Set ();
-		}
+        [MonoTODO]
+        public void Prepared()
+        {
+            prepared = true;
+            /* See test RMFail2 */
+            ((ManualResetEvent) waitHandle).Set();
+        }
 
-		[MonoTODO]
-		public byte [] RecoveryInformation ()
-		{
-			throw new NotImplementedException ();
-		}
+        [MonoTODO]
+        public byte[] RecoveryInformation()
+        {
+            throw new NotImplementedException();
+        }
 
-		internal bool IsPrepared {
-			get { return prepared; }
-		}
+        internal bool IsPrepared
+        {
+            get { return prepared; }
+        }
 
-		internal WaitHandle WaitHandle {
-			get { return waitHandle; }
-		}
+        internal WaitHandle WaitHandle
+        {
+            get { return waitHandle; }
+        }
 
-		internal IEnlistmentNotification EnlistmentNotification
-		{
-			get { return enlisted; }
-		}
-	}
+        internal IEnlistmentNotification EnlistmentNotification
+        {
+            get { return enlisted; }
+        }
+    }
 }
 
 #endif

@@ -34,22 +34,21 @@ using System;
 
 namespace System.Data
 {
-
-	/// <summary>
-	/// Returns the current state of the connection to a data source.
-	/// This enumeration has a FlagsAttribute that allows a bitwise combination of its member values.
-	/// </summary>
-	[Flags]
+    /// <summary>
+    /// Returns the current state of the connection to a data source.
+    /// This enumeration has a FlagsAttribute that allows a bitwise combination of its member values.
+    /// </summary>
+    [Flags]
 #if !NET_2_0
 	[Serializable]
 #endif
-	public enum ConnectionState
-	{
-		Closed = 0,
-		Open = 1,
-		Connecting = 2,
-		Executing = 4,
-		Fetching = 8,
-		Broken = 16
-	}
+    public enum ConnectionState
+    {
+        Closed = 0,
+        Open = 1,
+        Connecting = 2,
+        Executing = 4,
+        Fetching = 8,
+        Broken = 16
+    }
 }

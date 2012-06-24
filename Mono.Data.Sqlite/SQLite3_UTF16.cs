@@ -1,4 +1,4 @@
-﻿﻿/********************************************************
+﻿/********************************************************
  * ADO.NET 2.0 Data Provider for SQLite Version 3.X
  * Written by Robert Simpson (robert@blackcastlesoft.com)
  * 
@@ -9,7 +9,6 @@ namespace Mono.Data.Sqlite
 {
     using System;
     using System.Runtime.InteropServices;
-
     using Sqlite3 = Community.CsharpSqlite.Sqlite3;
 
     /// <summary>
@@ -40,10 +39,10 @@ namespace Mono.Data.Sqlite
 #if !SQLITE_STANDARD
                 int n = Sqlite3.sqlite3_open16_interop(ToUTF8(strFilename), (int)flags, out db);
 #else
-        if ((flags & SQLiteOpenFlagsEnum.Create) == 0 && System.IO.File.Exists(strFilename) == false)
-          throw new SqliteException((int)SQLiteErrorCode.CantOpen, strFilename);
+                if ((flags & SQLiteOpenFlagsEnum.Create) == 0 && System.IO.File.Exists(strFilename) == false)
+                    throw new SqliteException((int) SQLiteErrorCode.CantOpen, strFilename);
 
-        int n = Sqlite3.sqlite3_open(strFilename, out db);
+                int n = Sqlite3.sqlite3_open(strFilename, out db);
 #endif
                 if (n > 0) throw new SqliteException(n, null);
 
@@ -59,7 +58,7 @@ namespace Mono.Data.Sqlite
 
         internal override void Bind_Text(SqliteStatement stmt, int index, string value)
         {
-            int n = Sqlite3.sqlite3_bind_text(stmt._sqlite_stmt, index, value, value.Length * 2, null);
+            int n = Sqlite3.sqlite3_bind_text(stmt._sqlite_stmt, index, value, value.Length*2, null);
             if (n > 0) throw new SqliteException(n, SQLiteLastError());
         }
 
@@ -74,7 +73,7 @@ namespace Mono.Data.Sqlite
             int len;
             return UTF16ToString(Sqlite3.sqlite3_column_name16_interop(stmt._sqlite_stmt, index, out len), len);
 #else
-      return Sqlite3.sqlite3_column_name(stmt._sqlite_stmt, index);
+            return Sqlite3.sqlite3_column_name(stmt._sqlite_stmt, index);
 #endif
         }
 
@@ -84,7 +83,7 @@ namespace Mono.Data.Sqlite
             int len;
             return UTF16ToString(Sqlite3.sqlite3_column_text16_interop(stmt._sqlite_stmt, index, out len), len);
 #else
-      return Sqlite3.sqlite3_column_text(stmt._sqlite_stmt, index);
+            return Sqlite3.sqlite3_column_text(stmt._sqlite_stmt, index);
 #endif
         }
 
@@ -94,7 +93,7 @@ namespace Mono.Data.Sqlite
             int len;
             return UTF16ToString(Sqlite3.sqlite3_column_origin_name16_interop(stmt._sqlite_stmt, index, out len), len);
 #else
-      return Sqlite3.sqlite3_column_origin_name(stmt._sqlite_stmt, index);
+            return Sqlite3.sqlite3_column_origin_name(stmt._sqlite_stmt, index);
 #endif
         }
 
@@ -104,7 +103,7 @@ namespace Mono.Data.Sqlite
             int len;
             return UTF16ToString(Sqlite3.sqlite3_column_database_name16_interop(stmt._sqlite_stmt, index, out len), len);
 #else
-      return Sqlite3.sqlite3_column_database_name(stmt._sqlite_stmt, index);
+            return Sqlite3.sqlite3_column_database_name(stmt._sqlite_stmt, index);
 #endif
         }
 
@@ -114,7 +113,7 @@ namespace Mono.Data.Sqlite
             int len;
             return UTF16ToString(Sqlite3.sqlite3_column_table_name16_interop(stmt._sqlite_stmt, index, out len), len);
 #else
-      return Sqlite3.sqlite3_column_table_name(stmt._sqlite_stmt, index);
+            return Sqlite3.sqlite3_column_table_name(stmt._sqlite_stmt, index);
 #endif
         }
 
@@ -124,18 +123,18 @@ namespace Mono.Data.Sqlite
             int len;
             return UTF16ToString(Sqlite3.sqlite3_value_text16_interop(ptr, out len), len);
 #else
-      return Sqlite3.sqlite3_value_text(ptr);
+            return Sqlite3.sqlite3_value_text(ptr);
 #endif
         }
 
         internal override void ReturnError(Sqlite3.sqlite3_context context, string value)
         {
-            Sqlite3.sqlite3_result_error(context, value, value.Length * 2);
+            Sqlite3.sqlite3_result_error(context, value, value.Length*2);
         }
 
         internal override void ReturnText(Sqlite3.sqlite3_context context, string value)
         {
-            Sqlite3.sqlite3_result_text(context, value, value.Length * 2, null);
+            Sqlite3.sqlite3_result_text(context, value, value.Length*2, null);
         }
     }
 }

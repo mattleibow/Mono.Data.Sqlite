@@ -35,29 +35,32 @@ using System.Globalization;
 
 namespace System.Data.Common
 {
-	internal sealed class DbConnectionStringBuilderHelper
-	{
-		#region Methods
-		public static int ConvertToInt32 (object value) 
-		{
-			return Int32.Parse (value.ToString (), CultureInfo.InvariantCulture);
-		}
+    internal sealed class DbConnectionStringBuilderHelper
+    {
+        #region Methods
 
-		public static bool ConvertToBoolean (object value) 
-		{
-			if (value == null)
-				throw new ArgumentNullException ("null value cannot be converted" +
-								 " to boolean");
-			string upper = value.ToString ().ToUpper ().Trim ();
-			if (upper == "YES" || upper == "TRUE")
-				return true;
-			if (upper == "NO" || upper == "FALSE")
-				return false;
-			throw new ArgumentException (String.Format ("Invalid boolean value: {0}",
-								    value.ToString ()));
-		}
-		#endregion // Methods
-	}
+        public static int ConvertToInt32(object value)
+        {
+            return Int32.Parse(value.ToString(), CultureInfo.InvariantCulture);
+        }
+
+        public static bool ConvertToBoolean(object value)
+        {
+            if (value == null)
+                throw new ArgumentNullException("null value cannot be converted" +
+                                                " to boolean");
+            string upper = value.ToString().ToUpper().Trim();
+            if (upper == "YES" || upper == "TRUE")
+                return true;
+            if (upper == "NO" || upper == "FALSE")
+                return false;
+            throw new ArgumentException(String.Format("Invalid boolean value: {0}",
+                                                      value.ToString()));
+        }
+
+        #endregion // Methods
+    }
 }
 
-#endif // NET_2_0
+#endif
+// NET_2_0

@@ -1,4 +1,4 @@
-﻿﻿/********************************************************
+﻿/********************************************************
  * ADO.NET 2.0 Data Provider for SQLite Version 3.X
  * Written by Robert Simpson (robert@blackcastlesoft.com)
  * 
@@ -19,7 +19,11 @@ namespace Mono.Data.Sqlite
     /// SQLite implementation of DbParameterCollection.
     /// </summary>
 #if !PLATFORM_COMPACTFRAMEWORK
-    [Editor("Microsoft.VSDesigner.Data.Design.DBParametersEditor, Microsoft.VSDesigner, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a", "System.Drawing.Design.UITypeEditor, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), ListBindable(false)]
+    [Editor(
+        "Microsoft.VSDesigner.Data.Design.DBParametersEditor, Microsoft.VSDesigner, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+        ,
+        "System.Drawing.Design.UITypeEditor, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
+        ), ListBindable(false)]
 #endif
     public sealed class SqliteParameterCollection : DbParameterCollection
     {
@@ -27,10 +31,12 @@ namespace Mono.Data.Sqlite
         /// The underlying command to which this collection belongs
         /// </summary>
         private SqliteCommand _command;
+
         /// <summary>
         /// The internal array of parameters in this collection
         /// </summary>
         private List<SqliteParameter> _parameterList;
+
         /// <summary>
         /// Determines whether or not all parameters have been bound to their statement(s)
         /// </summary>
@@ -150,7 +156,7 @@ namespace Mono.Data.Sqlite
             if (n == -1)
             {
                 n = _parameterList.Count;
-                _parameterList.Add((SqliteParameter)parameter);
+                _parameterList.Add((SqliteParameter) parameter);
             }
 
             SetParameter(n, parameter);
@@ -168,7 +174,7 @@ namespace Mono.Data.Sqlite
 #endif
         public override int Add(object value)
         {
-            return Add((SqliteParameter)value);
+            return Add((SqliteParameter) value);
         }
 
         /// <summary>
@@ -204,7 +210,7 @@ namespace Mono.Data.Sqlite
         {
             int x = values.Length;
             for (int n = 0; n < x; n++)
-                Add((SqliteParameter)(values.GetValue(n)));
+                Add((SqliteParameter) (values.GetValue(n)));
         }
 
         /// <summary>
@@ -233,7 +239,7 @@ namespace Mono.Data.Sqlite
         /// <returns>True if the parameter is in the collection</returns>
         public override bool Contains(object value)
         {
-            return _parameterList.Contains((SqliteParameter)value);
+            return _parameterList.Contains((SqliteParameter) value);
         }
 
         /// <summary>
@@ -261,14 +267,8 @@ namespace Mono.Data.Sqlite
         /// <returns>The specified named SQLite parameter</returns>
         public new SqliteParameter this[string parameterName]
         {
-            get
-            {
-                return (SqliteParameter)GetParameter(parameterName);
-            }
-            set
-            {
-                SetParameter(parameterName, value);
-            }
+            get { return (SqliteParameter) GetParameter(parameterName); }
+            set { SetParameter(parameterName, value); }
         }
 
         /// <summary>
@@ -278,15 +278,10 @@ namespace Mono.Data.Sqlite
         /// <returns>The specified SQLite parameter</returns>
         public new SqliteParameter this[int index]
         {
-            get
-            {
-                return (SqliteParameter)GetParameter(index);
-            }
-            set
-            {
-                SetParameter(index, value);
-            }
+            get { return (SqliteParameter) GetParameter(index); }
+            set { SetParameter(index, value); }
         }
+
         /// <summary>
         /// Retrieve a parameter by name from the collection
         /// </summary>
@@ -317,7 +312,9 @@ namespace Mono.Data.Sqlite
             int x = _parameterList.Count;
             for (int n = 0; n < x; n++)
             {
-                if (String.Compare(parameterName, _parameterList[n].ParameterName, true, CultureInfo.InvariantCulture) == 0)
+                if (
+                    String.Compare(parameterName, _parameterList[n].ParameterName, true, CultureInfo.InvariantCulture) ==
+                    0)
                     return n;
             }
             return -1;
@@ -330,7 +327,7 @@ namespace Mono.Data.Sqlite
         /// <returns>-1 if not found, otherwise a zero-based index of the parameter</returns>
         public override int IndexOf(object value)
         {
-            return _parameterList.IndexOf((SqliteParameter)value);
+            return _parameterList.IndexOf((SqliteParameter) value);
         }
 
         /// <summary>
@@ -341,7 +338,7 @@ namespace Mono.Data.Sqlite
         public override void Insert(int index, object value)
         {
             _unboundFlag = true;
-            _parameterList.Insert(index, (SqliteParameter)value);
+            _parameterList.Insert(index, (SqliteParameter) value);
         }
 
         /// <summary>
@@ -351,7 +348,7 @@ namespace Mono.Data.Sqlite
         public override void Remove(object value)
         {
             _unboundFlag = true;
-            _parameterList.Remove((SqliteParameter)value);
+            _parameterList.Remove((SqliteParameter) value);
         }
 
         /// <summary>
@@ -391,7 +388,7 @@ namespace Mono.Data.Sqlite
         protected override void SetParameter(int index, DbParameter value)
         {
             _unboundFlag = true;
-            _parameterList[index] = (SqliteParameter)value;
+            _parameterList[index] = (SqliteParameter) value;
         }
 
         /// <summary>

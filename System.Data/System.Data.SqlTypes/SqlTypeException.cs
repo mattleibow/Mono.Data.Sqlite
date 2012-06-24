@@ -33,21 +33,21 @@ using System.Globalization;
 
 namespace System.Data.SqlTypes
 {
-	public class SqlTypeException : SystemException
-	{
-		public SqlTypeException()
-			: base (Locale.GetText ("A sql exception has occured."))
-		{
-		}
+    public class SqlTypeException : SystemException
+    {
+        public SqlTypeException()
+            : base(Locale.GetText("A sql exception has occured."))
+        {
+        }
 
-		public SqlTypeException (string message)
-			: base (message)
-		{
-		}
+        public SqlTypeException(string message)
+            : base(message)
+        {
+        }
 
-		public SqlTypeException (string message, Exception e)
-			: base (message, e)
-		{
-		}
-	}
+        public SqlTypeException(string message, Exception e)
+            : base(message, e)
+        {
+        }
+    }
 }

@@ -1,4 +1,4 @@
-﻿﻿/********************************************************
+﻿/********************************************************
  * ADO.NET 2.0 Data Provider for SQLite Version 3.X
  * Written by Robert Simpson (robert@blackcastlesoft.com)
  * 
@@ -11,7 +11,6 @@ namespace Mono.Data.Sqlite
     using System.Data;
     using System.Collections.Generic;
     using System.Globalization;
-
     using Community.CsharpSqlite;
 
     /// <summary>
@@ -23,26 +22,32 @@ namespace Mono.Data.Sqlite
         /// The underlying SQLite object this statement is bound to
         /// </summary>
         internal SQLiteBase _sql;
+
         /// <summary>
         /// The command text of this SQL statement
         /// </summary>
         internal string _sqlStatement;
+
         /// <summary>
         /// The actual statement pointer
         /// </summary>
         internal Sqlite3.Vdbe _sqlite_stmt;
+
         /// <summary>
         /// An index from which unnamed parameters begin
         /// </summary>
         internal int _unnamedParameters;
+
         /// <summary>
         /// Names of the parameters as SQLite understands them to be
         /// </summary>
         internal string[] _paramNames;
+
         /// <summary>
         /// Parameters for this statement
         /// </summary>
         internal SqliteParameter[] _paramValues;
+
         /// <summary>
         /// Command this statement belongs to (if any)
         /// </summary>
@@ -112,7 +117,9 @@ namespace Mono.Data.Sqlite
             int x = _paramNames.Length;
             for (int n = 0; n < x; n++)
             {
-                if (String.Compare(_paramNames[n], startAt, s, 0, Math.Max(_paramNames[n].Length - startAt, s.Length), true, CultureInfo.InvariantCulture) == 0)
+                if (
+                    String.Compare(_paramNames[n], startAt, s, 0, Math.Max(_paramNames[n].Length - startAt, s.Length),
+                                   true, CultureInfo.InvariantCulture) == 0)
                 {
                     _paramValues[n] = p;
                     return true;
@@ -122,6 +129,7 @@ namespace Mono.Data.Sqlite
         }
 
         #region IDisposable Members
+
         /// <summary>
         /// Disposes and finalizes the statement
         /// </summary>
@@ -138,6 +146,7 @@ namespace Mono.Data.Sqlite
             _sql = null;
             _sqlStatement = null;
         }
+
         #endregion
 
         /// <summary>
@@ -162,7 +171,7 @@ namespace Mono.Data.Sqlite
         private void BindParameter(int index, SqliteParameter param)
         {
             if (param == null)
-                throw new SqliteException((int)SQLiteErrorCode.Error, "Insufficient parameters supplied to the command");
+                throw new SqliteException((int) SQLiteErrorCode.Error, "Insufficient parameters supplied to the command");
 
             object obj = param.Value;
             DbType objType = param.DbType;
@@ -203,17 +212,19 @@ namespace Mono.Data.Sqlite
                     _sql.Bind_Double(this, index, Convert.ToDouble(obj, CultureInfo.CurrentCulture));
                     break;
                 case DbType.Binary:
-                    _sql.Bind_Blob(this, index, (byte[])obj);
+                    _sql.Bind_Blob(this, index, (byte[]) obj);
                     break;
                 case DbType.Guid:
                     if (_command.Connection._binaryGuid == true)
-                        _sql.Bind_Blob(this, index, ((Guid)obj).ToByteArray());
+                        _sql.Bind_Blob(this, index, ((Guid) obj).ToByteArray());
                     else
                         _sql.Bind_Text(this, index, obj.ToString());
 
                     break;
                 case DbType.Decimal: // Dont store decimal as double ... loses precision
-                    _sql.Bind_Text(this, index, Convert.ToDecimal(obj, CultureInfo.CurrentCulture).ToString(CultureInfo.InvariantCulture));
+                    _sql.Bind_Text(this, index,
+                                   Convert.ToDecimal(obj, CultureInfo.CurrentCulture).ToString(
+                                       CultureInfo.InvariantCulture));
                     break;
                 default:
                     _sql.Bind_Text(this, index, obj.ToString());
@@ -231,7 +242,9 @@ namespace Mono.Data.Sqlite
             int pos = typedefs.IndexOf("TYPES", 0, StringComparison.OrdinalIgnoreCase);
             if (pos == -1) throw new ArgumentOutOfRangeException();
 
-            string[] types = typedefs.Substring(pos + 6).Replace(" ", "").Replace(";", "").Replace("\"", "").Replace("[", "").Replace("]", "").Replace("`", "").Split(',', '\r', '\n', '\t');
+            string[] types =
+                typedefs.Substring(pos + 6).Replace(" ", "").Replace(";", "").Replace("\"", "").Replace("[", "").Replace
+                    ("]", "").Replace("`", "").Split(',', '\r', '\n', '\t');
 
             int n;
             for (n = 0; n < types.Length; n++)

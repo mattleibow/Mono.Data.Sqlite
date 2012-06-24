@@ -36,85 +36,89 @@ using System.Globalization;
 
 namespace System.Data.SqlTypes
 {
-	public struct SqlGuid : INullable, IComparable
-	{
-		#region Fields
+    public struct SqlGuid : INullable, IComparable
+    {
+        #region Fields
 
-	        Guid value;
+        private Guid value;
 
-		private bool notNull;
+        private bool notNull;
 
-		public static readonly SqlGuid Null;
+        public static readonly SqlGuid Null;
 
-		#endregion
+        #endregion
 
-		#region Constructors
+        #region Constructors
 
-		public SqlGuid (byte[] value) 
-		{
-			this.value = new Guid (value);
-			notNull = true;
-		}
+        public SqlGuid(byte[] value)
+        {
+            this.value = new Guid(value);
+            notNull = true;
+        }
 
-		public SqlGuid (Guid g) 
-		{
-			this.value = g;
-			notNull = true;
-		}
+        public SqlGuid(Guid g)
+        {
+            this.value = g;
+            notNull = true;
+        }
 
-		public SqlGuid (string s) 
-		{
-			this.value = new Guid (s);
-			notNull = true;
-		}
+        public SqlGuid(string s)
+        {
+            this.value = new Guid(s);
+            notNull = true;
+        }
 
-		public SqlGuid (int a, short b, short c, byte d, byte e, byte f, byte g, byte h, byte i, byte j, byte k) 
-		{
-			this.value = new Guid (a, b, c, d, e, f, g, h, i, j, k);
-			notNull = true;
-		}
+        public SqlGuid(int a, short b, short c, byte d, byte e, byte f, byte g, byte h, byte i, byte j, byte k)
+        {
+            this.value = new Guid(a, b, c, d, e, f, g, h, i, j, k);
+            notNull = true;
+        }
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		public bool IsNull {
-			get { return !notNull; }
-		}
+        public bool IsNull
+        {
+            get { return !notNull; }
+        }
 
-		public Guid Value { 
-			get { 
-				if (this.IsNull) 
-					throw new SqlNullValueException ("The property contains Null.");
-				else 
-					return value; 
-			}
-		}
+        public Guid Value
+        {
+            get
+            {
+                if (this.IsNull)
+                    throw new SqlNullValueException("The property contains Null.");
+                else
+                    return value;
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region Methods
+        #region Methods
 
-		public int CompareTo (object value)
-		{
-			if (value == null)
-				return 1;
-			if (!(value is SqlGuid))
-				throw new ArgumentException (Locale.GetText ("Value is not a System.Data.SqlTypes.SqlGuid"));
+        public int CompareTo(object value)
+        {
+            if (value == null)
+                return 1;
+            if (!(value is SqlGuid))
+                throw new ArgumentException(Locale.GetText("Value is not a System.Data.SqlTypes.SqlGuid"));
 
-			return CompareTo ((SqlGuid) value);
-		}
+            return CompareTo((SqlGuid) value);
+        }
+
 #if NET_2_0
-		public
+        public
 #endif
-		int CompareTo (SqlGuid value)
-		{
-			if (value.IsNull)
-				return 1;
-			else
-                                // LAMESPEC : ms.net implementation actually compares all the 16 bytes.
-                                // This code is kept for future changes, if required.
-                                /*
+            int CompareTo(SqlGuid value)
+        {
+            if (value.IsNull)
+                return 1;
+            else
+                // LAMESPEC : ms.net implementation actually compares all the 16 bytes.
+                // This code is kept for future changes, if required.
+                /*
 				{
 					//MSDN documentation says that CompareTo is different from 
 					//Guid's CompareTo. It uses the SQL Server behavior where
@@ -130,171 +134,168 @@ namespace System.Data.SqlTypes
 			                return 0;
 				}
                                 */
-                                return this.value.CompareTo (value.Value);
-				
-		}
+                return this.value.CompareTo(value.Value);
+        }
 
-		public override bool Equals (object value)
-		{
-			if (!(value is SqlGuid))
-				return false;
-			else if (this.IsNull)
-				return ((SqlGuid)value).IsNull;
-			else if (((SqlGuid)value).IsNull)
-				return false;
-			else
-				return (bool) (this == (SqlGuid)value);
-		}
+        public override bool Equals(object value)
+        {
+            if (!(value is SqlGuid))
+                return false;
+            else if (this.IsNull)
+                return ((SqlGuid) value).IsNull;
+            else if (((SqlGuid) value).IsNull)
+                return false;
+            else
+                return (bool) (this == (SqlGuid) value);
+        }
 
-		public static SqlBoolean Equals (SqlGuid x, SqlGuid y)
-		{
-			return (x == y);
-		}
+        public static SqlBoolean Equals(SqlGuid x, SqlGuid y)
+        {
+            return (x == y);
+        }
 
-		public override int GetHashCode ()
-		{
-			byte [] bytes  = this.ToByteArray ();
-			
-			int result = 10;
-			foreach (byte b in  bytes) {
-				result = 91 * result + b.GetHashCode ();
-			}
+        public override int GetHashCode()
+        {
+            byte[] bytes = this.ToByteArray();
 
-			return result;
-		}
+            int result = 10;
+            foreach (byte b in  bytes)
+            {
+                result = 91*result + b.GetHashCode();
+            }
 
-		public static SqlBoolean GreaterThan (SqlGuid x, SqlGuid y)
-		{
-			return (x > y);
-		}
+            return result;
+        }
 
-		public static SqlBoolean GreaterThanOrEqual (SqlGuid x, SqlGuid y)
-		{
-			return (x >= y);
-		}
+        public static SqlBoolean GreaterThan(SqlGuid x, SqlGuid y)
+        {
+            return (x > y);
+        }
 
-		public static SqlBoolean LessThan (SqlGuid x, SqlGuid y)
-		{
-			return (x < y);
-		}
+        public static SqlBoolean GreaterThanOrEqual(SqlGuid x, SqlGuid y)
+        {
+            return (x >= y);
+        }
 
-		public static SqlBoolean LessThanOrEqual (SqlGuid x, SqlGuid y)
-		{
-			return (x <= y);
-		}
+        public static SqlBoolean LessThan(SqlGuid x, SqlGuid y)
+        {
+            return (x < y);
+        }
 
-		public static SqlBoolean NotEquals (SqlGuid x, SqlGuid y)
-		{
-			return (x != y);
-		}
+        public static SqlBoolean LessThanOrEqual(SqlGuid x, SqlGuid y)
+        {
+            return (x <= y);
+        }
 
-		public static SqlGuid Parse (string s)
-		{
-			return new SqlGuid (s);
-		}
+        public static SqlBoolean NotEquals(SqlGuid x, SqlGuid y)
+        {
+            return (x != y);
+        }
 
-		public byte[] ToByteArray()
-		{
-			return value.ToByteArray ();
-		}
+        public static SqlGuid Parse(string s)
+        {
+            return new SqlGuid(s);
+        }
 
-		public SqlBinary ToSqlBinary ()
-		{
-			return ((SqlBinary)this);
-		}
+        public byte[] ToByteArray()
+        {
+            return value.ToByteArray();
+        }
 
-		public SqlString ToSqlString ()
-		{
-			return ((SqlString)this);
-		}
+        public SqlBinary ToSqlBinary()
+        {
+            return ((SqlBinary) this);
+        }
 
-		public override string ToString ()
-		{
-			if (!notNull)
-				return "Null";
-			else
-				return value.ToString ();
-		}
+        public SqlString ToSqlString()
+        {
+            return ((SqlString) this);
+        }
 
-		public static SqlBoolean operator == (SqlGuid x, SqlGuid y)
-		{
-			if (x.IsNull || y.IsNull) return SqlBoolean.Null;
-			return new SqlBoolean (x.Value == y.Value);
-		}
+        public override string ToString()
+        {
+            if (!notNull)
+                return "Null";
+            else
+                return value.ToString();
+        }
 
-		public static SqlBoolean operator > (SqlGuid x, SqlGuid y)
-		{
-			if (x.IsNull || y.IsNull)
-				return SqlBoolean.Null;
+        public static SqlBoolean operator ==(SqlGuid x, SqlGuid y)
+        {
+            if (x.IsNull || y.IsNull) return SqlBoolean.Null;
+            return new SqlBoolean(x.Value == y.Value);
+        }
 
-			if (x.Value.CompareTo (y.Value) > 0)
-				return new SqlBoolean (true);
-			else
-				return new SqlBoolean (false);
-		}
+        public static SqlBoolean operator >(SqlGuid x, SqlGuid y)
+        {
+            if (x.IsNull || y.IsNull)
+                return SqlBoolean.Null;
 
-		public static SqlBoolean operator >= (SqlGuid x, SqlGuid y)
-		{
-			if (x.IsNull || y.IsNull)
-				return SqlBoolean.Null;
-			
-			if (x.Value.CompareTo (y.Value) >= 0)
-				return new SqlBoolean (true);
-			else
-				return new SqlBoolean (false);
+            if (x.Value.CompareTo(y.Value) > 0)
+                return new SqlBoolean(true);
+            else
+                return new SqlBoolean(false);
+        }
 
-		}
+        public static SqlBoolean operator >=(SqlGuid x, SqlGuid y)
+        {
+            if (x.IsNull || y.IsNull)
+                return SqlBoolean.Null;
 
-		public static SqlBoolean operator != (SqlGuid x, SqlGuid y)
-		{
-			if (x.IsNull || y.IsNull) return SqlBoolean.Null;
-			return new SqlBoolean (!(x.Value == y.Value));
-		}
+            if (x.Value.CompareTo(y.Value) >= 0)
+                return new SqlBoolean(true);
+            else
+                return new SqlBoolean(false);
+        }
 
-		public static SqlBoolean operator < (SqlGuid x, SqlGuid y)
-		{
-			if (x.IsNull || y.IsNull)
-				return SqlBoolean.Null;
+        public static SqlBoolean operator !=(SqlGuid x, SqlGuid y)
+        {
+            if (x.IsNull || y.IsNull) return SqlBoolean.Null;
+            return new SqlBoolean(!(x.Value == y.Value));
+        }
 
-			if (x.Value.CompareTo (y.Value) < 0)
-				return new SqlBoolean (true);
-			else
-				return new SqlBoolean (false);
+        public static SqlBoolean operator <(SqlGuid x, SqlGuid y)
+        {
+            if (x.IsNull || y.IsNull)
+                return SqlBoolean.Null;
 
-		}
+            if (x.Value.CompareTo(y.Value) < 0)
+                return new SqlBoolean(true);
+            else
+                return new SqlBoolean(false);
+        }
 
-		public static SqlBoolean operator <= (SqlGuid x, SqlGuid y)
-		{
-			if (x.IsNull || y.IsNull)
-				return SqlBoolean.Null;
+        public static SqlBoolean operator <=(SqlGuid x, SqlGuid y)
+        {
+            if (x.IsNull || y.IsNull)
+                return SqlBoolean.Null;
 
-			if (x.Value.CompareTo (y.Value) <= 0)
-				return new SqlBoolean (true);
-			else
-				return new SqlBoolean (false);
-		}
+            if (x.Value.CompareTo(y.Value) <= 0)
+                return new SqlBoolean(true);
+            else
+                return new SqlBoolean(false);
+        }
 
-		public static explicit operator SqlGuid (SqlBinary x)
-		{
-			return new SqlGuid (x.Value);
-		}
+        public static explicit operator SqlGuid(SqlBinary x)
+        {
+            return new SqlGuid(x.Value);
+        }
 
-		public static explicit operator Guid (SqlGuid x)
-		{
-			return x.Value;
-		}
+        public static explicit operator Guid(SqlGuid x)
+        {
+            return x.Value;
+        }
 
-		public static explicit operator SqlGuid (SqlString x)
-		{
-			return new SqlGuid (x.Value);
-		}
+        public static explicit operator SqlGuid(SqlString x)
+        {
+            return new SqlGuid(x.Value);
+        }
 
-		public static implicit operator SqlGuid (Guid x)
-		{
-			return new SqlGuid (x);
-		}
+        public static implicit operator SqlGuid(Guid x)
+        {
+            return new SqlGuid(x);
+        }
 
-		#endregion
-	}
+        #endregion
+    }
 }
-			

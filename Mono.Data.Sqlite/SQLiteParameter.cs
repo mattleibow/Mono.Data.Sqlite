@@ -21,18 +21,22 @@ namespace Mono.Data.Sqlite
         /// The data type of the parameter
         /// </summary>
         internal int _dbType;
+
         /// <summary>
         /// The value of the data in the parameter
         /// </summary>
         private Object _objValue;
+
         /// <summary>
         /// The source column for the parameter
         /// </summary>
         private string _sourceColumn;
+
         /// <summary>
         /// The column name
         /// </summary>
         private string _parameterName;
+
         /// <summary>
         /// The data size, unused by SQLite
         /// </summary>
@@ -45,7 +49,7 @@ namespace Mono.Data.Sqlite
         /// Default constructor
         /// </summary>
         public SqliteParameter()
-            : this(null, (DbType)(-1), 0, null)
+            : this(null, (DbType) (-1), 0, null)
         {
         }
 
@@ -54,7 +58,7 @@ namespace Mono.Data.Sqlite
         /// </summary>
         /// <param name="parameterName">The parameter name</param>
         public SqliteParameter(string parameterName)
-            : this(parameterName, (DbType)(-1), 0, null)
+            : this(parameterName, (DbType) (-1), 0, null)
         {
         }
 
@@ -64,7 +68,7 @@ namespace Mono.Data.Sqlite
         /// <param name="parameterName">The parameter name</param>
         /// <param name="value">The initial value of the parameter</param>
         public SqliteParameter(string parameterName, object value)
-            : this(parameterName, (DbType)(-1), 0, null)
+            : this(parameterName, (DbType) (-1), 0, null)
         {
             Value = value;
         }
@@ -142,7 +146,7 @@ namespace Mono.Data.Sqlite
         public SqliteParameter(string parameterName, DbType parameterType, int parameterSize, string sourceColumn)
         {
             _parameterName = parameterName;
-            _dbType = (int)parameterType;
+            _dbType = (int) parameterType;
             _sourceColumn = sourceColumn;
             _objValue = null;
             _dataSize = parameterSize;
@@ -151,7 +155,9 @@ namespace Mono.Data.Sqlite
         }
 
         private SqliteParameter(SqliteParameter source)
-            : this(source.ParameterName, (DbType)source._dbType, 0, source.Direction, source.IsNullable, 0, 0, source.SourceColumn, source.Value)
+            : this(
+                source.ParameterName, (DbType) source._dbType, 0, source.Direction, source.IsNullable, 0, 0,
+                source.SourceColumn, source.Value)
         {
             _nullMapping = source._nullMapping;
         }
@@ -172,7 +178,9 @@ namespace Mono.Data.Sqlite
 #if !PLATFORM_COMPACTFRAMEWORK
         [EditorBrowsable(EditorBrowsableState.Advanced)]
 #endif
-        public SqliteParameter(string parameterName, DbType parameterType, int parameterSize, ParameterDirection direction, bool isNullable, byte precision, byte scale, string sourceColumn, object value)
+        public SqliteParameter(string parameterName, DbType parameterType, int parameterSize,
+                               ParameterDirection direction, bool isNullable, byte precision, byte scale,
+                               string sourceColumn, object value)
             : this(parameterName, parameterType, parameterSize, sourceColumn)
         {
             Direction = direction;
@@ -196,7 +204,9 @@ namespace Mono.Data.Sqlite
 #if !PLATFORM_COMPACTFRAMEWORK
         [EditorBrowsable(EditorBrowsableState.Advanced)]
 #endif
-        public SqliteParameter(string parameterName, DbType parameterType, int parameterSize, ParameterDirection direction, byte precision, byte scale, string sourceColumn, bool sourceColumnNullMapping, object value)
+        public SqliteParameter(string parameterName, DbType parameterType, int parameterSize,
+                               ParameterDirection direction, byte precision, byte scale, string sourceColumn,
+                               bool sourceColumnNullMapping, object value)
             : this(parameterName, parameterType, parameterSize, sourceColumn)
         {
             Direction = direction;
@@ -230,14 +240,8 @@ namespace Mono.Data.Sqlite
         /// </summary>
         public override bool IsNullable
         {
-            get
-            {
-                return _nullable;
-            }
-            set
-            {
-                _nullable = value;
-            }
+            get { return _nullable; }
+            set { _nullable = value; }
         }
 
         /// <summary>
@@ -247,7 +251,7 @@ namespace Mono.Data.Sqlite
         [DbProviderSpecificTypeProperty(true)]
         [RefreshProperties(RefreshProperties.All)]
 #endif
-        public override DbType DbType
+            public override DbType DbType
         {
             get
             {
@@ -259,12 +263,9 @@ namespace Mono.Data.Sqlite
                     }
                     return DbType.String; // Unassigned default value is String
                 }
-                return (DbType)_dbType;
+                return (DbType) _dbType;
             }
-            set
-            {
-                _dbType = (int)value;
-            }
+            set { _dbType = (int) value; }
         }
 
         /// <summary>
@@ -272,10 +273,7 @@ namespace Mono.Data.Sqlite
         /// </summary>
         public override ParameterDirection Direction
         {
-            get
-            {
-                return ParameterDirection.Input;
-            }
+            get { return ParameterDirection.Input; }
             set
             {
                 if (value != ParameterDirection.Input)
@@ -288,14 +286,8 @@ namespace Mono.Data.Sqlite
         /// </summary>
         public override string ParameterName
         {
-            get
-            {
-                return _parameterName;
-            }
-            set
-            {
-                _parameterName = value;
-            }
+            get { return _parameterName; }
+            set { _parameterName = value; }
         }
 
         /// <summary>
@@ -310,18 +302,12 @@ namespace Mono.Data.Sqlite
         /// Returns the size of the parameter
         /// </summary>
 #if !PLATFORM_COMPACTFRAMEWORK
-        [DefaultValue((int)0)]
+        [DefaultValue((int) 0)]
 #endif
-        public override int Size
+            public override int Size
         {
-            get
-            {
-                return _dataSize;
-            }
-            set
-            {
-                _dataSize = value;
-            }
+            get { return _dataSize; }
+            set { _dataSize = value; }
         }
 
         /// <summary>
@@ -329,14 +315,8 @@ namespace Mono.Data.Sqlite
         /// </summary>
         public override string SourceColumn
         {
-            get
-            {
-                return _sourceColumn;
-            }
-            set
-            {
-                _sourceColumn = value;
-            }
+            get { return _sourceColumn; }
+            set { _sourceColumn = value; }
         }
 
         /// <summary>
@@ -344,33 +324,25 @@ namespace Mono.Data.Sqlite
         /// </summary>
         public override bool SourceColumnNullMapping
         {
-            get
-            {
-                return _nullMapping;
-            }
-            set
-            {
-                _nullMapping = value;
-            }
+            get { return _nullMapping; }
+            set { _nullMapping = value; }
         }
 
         /// <summary>
         /// Gets and sets the parameter value.  If no datatype was specified, the datatype will assume the type from the value given.
         /// </summary>
 #if !PLATFORM_COMPACTFRAMEWORK
-        [TypeConverter(typeof(StringConverter)), RefreshProperties(RefreshProperties.All)]
+        [TypeConverter(typeof (StringConverter)), RefreshProperties(RefreshProperties.All)]
 #endif
-        public override object Value
+            public override object Value
         {
-            get
-            {
-                return _objValue;
-            }
+            get { return _objValue; }
             set
             {
                 _objValue = value;
-                if (_dbType == -1 && _objValue != null && _objValue != DBNull.Value) // If the DbType has never been assigned, try to glean one from the value's datatype 
-                    _dbType = (int)SqliteConvert.TypeToDbType(_objValue.GetType());
+                if (_dbType == -1 && _objValue != null && _objValue != DBNull.Value)
+                    // If the DbType has never been assigned, try to glean one from the value's datatype 
+                    _dbType = (int) SqliteConvert.TypeToDbType(_objValue.GetType());
             }
         }
 

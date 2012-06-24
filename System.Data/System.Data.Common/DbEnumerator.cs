@@ -35,82 +35,86 @@ using System.Collections;
 using System.ComponentModel;
 using System.Data;
 
-namespace System.Data.Common {
-	public class DbEnumerator : IEnumerator
-	{
-		#region Fields
+namespace System.Data.Common
+{
+    public class DbEnumerator : IEnumerator
+    {
+        #region Fields
 
-		readonly IDataReader reader;
-		readonly bool closeReader;
-		readonly SchemaInfo [] schema;
-		readonly object [] values;
-	
-		#endregion // Fields
+        private readonly IDataReader reader;
+        private readonly bool closeReader;
+        private readonly SchemaInfo[] schema;
+        private readonly object[] values;
 
-		#region Constructors
+        #endregion // Fields
 
-		public DbEnumerator (IDataReader reader) 
-			: this (reader, false)
-		{
-		}
+        #region Constructors
 
-		public DbEnumerator (IDataReader reader, bool closeReader)
-		{
-			this.reader = reader;
-			this.closeReader = closeReader;
-			this.values = new object [reader.FieldCount];
-			this.schema = LoadSchema (reader);
-		}
+        public DbEnumerator(IDataReader reader)
+            : this(reader, false)
+        {
+        }
 
-		#endregion // Constructors
+        public DbEnumerator(IDataReader reader, bool closeReader)
+        {
+            this.reader = reader;
+            this.closeReader = closeReader;
+            this.values = new object[reader.FieldCount];
+            this.schema = LoadSchema(reader);
+        }
 
-		#region Properties
+        #endregion // Constructors
 
-		public object Current {
-			get { 
-				reader.GetValues (values);
-				return new DbDataRecordImpl (schema, values); 
-			}
-		}
+        #region Properties
 
-		#endregion // Properties
+        public object Current
+        {
+            get
+            {
+                reader.GetValues(values);
+                return new DbDataRecordImpl(schema, values);
+            }
+        }
 
-		#region Methods
+        #endregion // Properties
 
-		private static SchemaInfo[] LoadSchema (IDataReader reader)
-		{
-			int fieldCount = reader.FieldCount;
-			SchemaInfo[] schema = new SchemaInfo [fieldCount];
+        #region Methods
 
-			for(int i=0; i < fieldCount; i++) {
-				SchemaInfo columnSchema = new SchemaInfo ();
+        private static SchemaInfo[] LoadSchema(IDataReader reader)
+        {
+            int fieldCount = reader.FieldCount;
+            SchemaInfo[] schema = new SchemaInfo[fieldCount];
 
-				columnSchema.ColumnName = reader.GetName(i);
-				columnSchema.ColumnOrdinal = i; 
-				columnSchema.DataTypeName = reader.GetDataTypeName (i);
-				columnSchema.FieldType = reader.GetFieldType (i);
+            for (int i = 0; i < fieldCount; i++)
+            {
+                SchemaInfo columnSchema = new SchemaInfo();
 
-				schema [i] = columnSchema;
-			}
+                columnSchema.ColumnName = reader.GetName(i);
+                columnSchema.ColumnOrdinal = i;
+                columnSchema.DataTypeName = reader.GetDataTypeName(i);
+                columnSchema.FieldType = reader.GetFieldType(i);
 
-			return schema;
-		}
+                schema[i] = columnSchema;
+            }
 
-		public bool MoveNext ()
-		{
-			if (reader.Read ()) 
-				return true;
-			if (closeReader)
-				reader.Close ();
-			return false;
-		}
+            return schema;
+        }
 
-		[EditorBrowsable (EditorBrowsableState.Never)]
-		public void Reset ()
-		{
-			throw new NotSupportedException ();
-		}
-		
-		#endregion // Methods
-	}
+        public bool MoveNext()
+        {
+            if (reader.Read())
+                return true;
+            if (closeReader)
+                reader.Close();
+            return false;
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public void Reset()
+        {
+            throw new NotSupportedException();
+        }
+
+        #endregion // Methods
+    }
 }

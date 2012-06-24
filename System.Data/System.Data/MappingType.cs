@@ -34,15 +34,14 @@ using System;
 
 namespace System.Data
 {
-	/// <summary>
-	/// Specifies how a DataColumn is mapped.
-	/// </summary>
-	public enum MappingType
-	{
-		Element = 1,
-		Attribute = 2,
-		SimpleContent = 3,
-		Hidden = 4
-		
-	}
+    /// <summary>
+    /// Specifies how a DataColumn is mapped.
+    /// </summary>
+    public enum MappingType
+    {
+        Element = 1,
+        Attribute = 2,
+        SimpleContent = 3,
+        Hidden = 4
+    }
 }

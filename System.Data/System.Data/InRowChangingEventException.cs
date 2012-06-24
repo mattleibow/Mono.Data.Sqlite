@@ -33,24 +33,23 @@ using System.Globalization;
 
 namespace System.Data
 {
-	public class InRowChangingEventException : DataException
-	{
-		public InRowChangingEventException ()
-			: base (Locale.GetText ("Cannot EndEdit within a RowChanging event"))
-		{
-		}
+    public class InRowChangingEventException : DataException
+    {
+        public InRowChangingEventException()
+            : base(Locale.GetText("Cannot EndEdit within a RowChanging event"))
+        {
+        }
 
-		public InRowChangingEventException (string s)
-			: base (s)
-		{
-		}
+        public InRowChangingEventException(string s)
+            : base(s)
+        {
+        }
 
 #if NET_2_0
-		public InRowChangingEventException (string message, Exception innerException)
-			: base (message, innerException)
-		{
-		}
+        public InRowChangingEventException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
 #endif
-
-	}
+    }
 }

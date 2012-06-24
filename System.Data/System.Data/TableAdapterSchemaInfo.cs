@@ -36,32 +36,35 @@ using System.Data.Common;
 
 namespace System.Data
 {
-	internal enum GenerateMethodsType {
-		None,
-		Get,
-		Fill,
-		Both
-	}
-	
-	internal enum QueryType {
-		NoData,
-		Rowset,
-		Scalar
-	}
-	
-	internal class DbSourceMethodInfo
-	{
-		public GenerateMethodsType MethodType;
-		public string Name;
-		public string Modifier;
-		public string QueryType;
-		public string ScalarCallRetval;
-	}
-	
-	internal class DbCommandInfo
-	{
-		public DbCommand Command;
-		public DbSourceMethodInfo[] Methods;
-	}
+    internal enum GenerateMethodsType
+    {
+        None,
+        Get,
+        Fill,
+        Both
+    }
+
+    internal enum QueryType
+    {
+        NoData,
+        Rowset,
+        Scalar
+    }
+
+    internal class DbSourceMethodInfo
+    {
+        public GenerateMethodsType MethodType;
+        public string Name;
+        public string Modifier;
+        public string QueryType;
+        public string ScalarCallRetval;
+    }
+
+    internal class DbCommandInfo
+    {
+        public DbCommand Command;
+        public DbSourceMethodInfo[] Methods;
+    }
 }
+
 #endif

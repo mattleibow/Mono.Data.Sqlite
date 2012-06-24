@@ -36,111 +36,110 @@ using System.Collections;
 using System.ComponentModel;
 using System.Runtime.InteropServices;
 
-namespace System.Data.Common {
-	public abstract class DbParameterCollection : MarshalByRefObject, IDataParameterCollection, IList, ICollection, IEnumerable
-	{
-		#region Constructors
+namespace System.Data.Common
+{
+    public abstract class DbParameterCollection : MarshalByRefObject, IDataParameterCollection, IList, ICollection,
+                                                  IEnumerable
+    {
+        #region Constructors
 
-		protected DbParameterCollection ()
-		{
-		}
+        protected DbParameterCollection()
+        {
+        }
 
-		#endregion // Constructors
+        #endregion // Constructors
 
-		#region Properties
+        #region Properties
 
-		[Browsable (false)]
-		[DesignerSerializationVisibility (DesignerSerializationVisibility.Hidden)]
-		public abstract int Count {
-			get;
-		}
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public abstract int Count { get; }
 
-		object IDataParameterCollection.this [string parameterName] {
-			get { return this [parameterName]; }
-			set { this [parameterName] = (DbParameter) value; }
-		}
+        object IDataParameterCollection.this[string parameterName]
+        {
+            get { return this[parameterName]; }
+            set { this[parameterName] = (DbParameter) value; }
+        }
 
-		object IList.this [int index] {
-			get { return this [index]; }
-			set { this [index] = (DbParameter) value; }
-		}
+        object IList.this[int index]
+        {
+            get { return this[index]; }
+            set { this[index] = (DbParameter) value; }
+        }
 
-		[Browsable (false)]
-		[DesignerSerializationVisibility (DesignerSerializationVisibility.Hidden)]
-		[EditorBrowsable (EditorBrowsableState.Never)]
-		public abstract bool IsFixedSize {
-			get;
-		}
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public abstract bool IsFixedSize { get; }
 
-		[Browsable (false)]
-		[DesignerSerializationVisibility (DesignerSerializationVisibility.Hidden)]
-		[EditorBrowsable (EditorBrowsableState.Never)]
-		public abstract bool IsReadOnly {
-			get;
-		}
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public abstract bool IsReadOnly { get; }
 
-		[Browsable (false)]
-		[DesignerSerializationVisibility (DesignerSerializationVisibility.Hidden)]
-		[EditorBrowsable (EditorBrowsableState.Never)]
-		public abstract bool IsSynchronized {
-			get;
-		}
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public abstract bool IsSynchronized { get; }
 
-		public DbParameter this [string parameterName] {
-			get {
-				int index = IndexOf (parameterName);
-				return this [index];
-			}
-			set {
-				int index = IndexOf (parameterName);
-				this [index] = value;
-			}
-		}
+        public DbParameter this[string parameterName]
+        {
+            get
+            {
+                int index = IndexOf(parameterName);
+                return this[index];
+            }
+            set
+            {
+                int index = IndexOf(parameterName);
+                this[index] = value;
+            }
+        }
 
-		public DbParameter this [int index] {
-			get { return GetParameter (index); }
-			set { SetParameter (index, value); }
-		}
+        public DbParameter this[int index]
+        {
+            get { return GetParameter(index); }
+            set { SetParameter(index, value); }
+        }
 
-		[Browsable (false)]
-		[DesignerSerializationVisibility (DesignerSerializationVisibility.Hidden)]
-		[EditorBrowsable (EditorBrowsableState.Never)]
-		public abstract object SyncRoot {
-			get;
-		}
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public abstract object SyncRoot { get; }
 
-		#endregion // Properties
+        #endregion // Properties
 
-		#region Methods
+        #region Methods
 
-		public abstract int Add (object value);
+        public abstract int Add(object value);
 
 #if NET_2_0
-		public abstract void AddRange (Array values);
-		protected abstract DbParameter GetParameter (String parameterName);
-		protected abstract void SetParameter (String parameterName, 
-						      DbParameter value);
+        public abstract void AddRange(Array values);
+        protected abstract DbParameter GetParameter(String parameterName);
+
+        protected abstract void SetParameter(String parameterName,
+                                             DbParameter value);
 #endif
 
-		public abstract void Clear ();
-		public abstract bool Contains (object value);
-		public abstract bool Contains (string value);
-		public abstract void CopyTo (Array array, int index);
+        public abstract void Clear();
+        public abstract bool Contains(object value);
+        public abstract bool Contains(string value);
+        public abstract void CopyTo(Array array, int index);
 
-		[EditorBrowsable (EditorBrowsableState.Never)]
-		public abstract IEnumerator GetEnumerator ();
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public abstract IEnumerator GetEnumerator();
 
-		protected abstract DbParameter GetParameter (int index);
-		public abstract int IndexOf (object value);
-		public abstract int IndexOf (string parameterName);
-		public abstract void Insert (int index, object value);
-		public abstract void Remove (object value);
-		public abstract void RemoveAt (int index);
-		public abstract void RemoveAt (string parameterName);
-		protected abstract void SetParameter (int index, DbParameter value);
+        protected abstract DbParameter GetParameter(int index);
+        public abstract int IndexOf(object value);
+        public abstract int IndexOf(string parameterName);
+        public abstract void Insert(int index, object value);
+        public abstract void Remove(object value);
+        public abstract void RemoveAt(int index);
+        public abstract void RemoveAt(string parameterName);
+        protected abstract void SetParameter(int index, DbParameter value);
 
-		#endregion // Methods
-	}
+        #endregion // Methods
+    }
 }
 
 #endif

@@ -27,15 +27,18 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+
 #if NET_2_0 || TARGET_JVM
 
-namespace System.Data {
-	public enum ConflictOption
-	{
-		CompareAllSearchableValues=1,
-		CompareRowVersion=2,
-		OverwriteChanges=3
-	}
+namespace System.Data
+{
+    public enum ConflictOption
+    {
+        CompareAllSearchableValues = 1,
+        CompareRowVersion = 2,
+        OverwriteChanges = 3
+    }
 }
 
-#endif // NET_2_0
+#endif
+// NET_2_0

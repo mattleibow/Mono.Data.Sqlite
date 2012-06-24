@@ -33,23 +33,23 @@ using System.Globalization;
 
 namespace System.Data
 {
-	public class InvalidConstraintException : DataException
-	{
-		public InvalidConstraintException ()
-			: base (Locale.GetText ("Cannot access or create this relation"))
-		{
-		}
+    public class InvalidConstraintException : DataException
+    {
+        public InvalidConstraintException()
+            : base(Locale.GetText("Cannot access or create this relation"))
+        {
+        }
 
-		public InvalidConstraintException (string s)
-			: base (s)
-		{
-		}
+        public InvalidConstraintException(string s)
+            : base(s)
+        {
+        }
 
 #if NET_2_0
-		public InvalidConstraintException (string message, Exception innerException)
-			: base (message, innerException)
-		{
-		}
+        public InvalidConstraintException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
 #endif
-	}
+    }
 }

@@ -36,119 +36,123 @@ using System.Collections;
 using System.ComponentModel;
 using System.Data;
 
-namespace System.Data.Common {
-	public abstract class DbDataReader : MarshalByRefObject, IDataReader, IDataRecord, IDisposable, IEnumerable
-	{
-		#region Constructors
+namespace System.Data.Common
+{
+    public abstract class DbDataReader : MarshalByRefObject, IDataReader, IDataRecord, IDisposable, IEnumerable
+    {
+        #region Constructors
 
-		protected DbDataReader ()
-		{
-		}
+        protected DbDataReader()
+        {
+        }
 
-		#endregion // Constructors
+        #endregion // Constructors
 
-		#region Properties
+        #region Properties
 
-		public abstract int Depth { get; }
-		public abstract int FieldCount { get; }
-		public abstract bool HasRows { get; }
-		public abstract bool IsClosed { get; }
-		public abstract object this [int ordinal] { get; }
-		public abstract object this [string name] { get; }
-		public abstract int RecordsAffected { get; }
+        public abstract int Depth { get; }
+        public abstract int FieldCount { get; }
+        public abstract bool HasRows { get; }
+        public abstract bool IsClosed { get; }
+        public abstract object this[int ordinal] { get; }
+        public abstract object this[string name] { get; }
+        public abstract int RecordsAffected { get; }
 
 #if NET_2_0
-		public virtual int VisibleFieldCount {
-			get { return FieldCount; }
-		}
-#endif
-		#endregion // Properties
-
-		#region Methods
-
-		public abstract void Close ();
-		public abstract bool GetBoolean (int ordinal);
-		public abstract byte GetByte (int ordinal);
-		public abstract long GetBytes (int ordinal, long dataOffset, byte[] buffer, int bufferOffset, int length);
-		public abstract char GetChar (int ordinal);
-		public abstract long GetChars (int ordinal, long dataOffset, char[] buffer, int bufferOffset, int length);
-
-		[EditorBrowsable (EditorBrowsableState.Never)]
-		public void Dispose ()
-		{
-			Dispose (true);	
-		}
-		
-		protected virtual void Dispose (bool disposing)
-		{
-			if (disposing)
-				Close ();
-		}
-#if NET_2_0
-		[EditorBrowsable (EditorBrowsableState.Never)]
-		public DbDataReader GetData (int ordinal)
-		{
-			return ((DbDataReader) this [ordinal]);
-		}
+        public virtual int VisibleFieldCount
+        {
+            get { return FieldCount; }
+        }
 #endif
 
-		public abstract string GetDataTypeName (int ordinal);
-		public abstract DateTime GetDateTime (int ordinal);
-		public abstract decimal GetDecimal (int ordinal);
-		public abstract double GetDouble (int ordinal);
+        #endregion // Properties
 
-		[EditorBrowsable (EditorBrowsableState.Never)]
-		public abstract IEnumerator GetEnumerator ();
+        #region Methods
 
-		public abstract Type GetFieldType (int ordinal);
-		public abstract float GetFloat (int ordinal);
-		public abstract Guid GetGuid (int ordinal);
-		public abstract short GetInt16 (int ordinal);
-		public abstract int GetInt32 (int ordinal);
-		public abstract long GetInt64 (int ordinal);
-		public abstract string GetName (int ordinal);
-		public abstract int GetOrdinal (string name);
+        public abstract void Close();
+        public abstract bool GetBoolean(int ordinal);
+        public abstract byte GetByte(int ordinal);
+        public abstract long GetBytes(int ordinal, long dataOffset, byte[] buffer, int bufferOffset, int length);
+        public abstract char GetChar(int ordinal);
+        public abstract long GetChars(int ordinal, long dataOffset, char[] buffer, int bufferOffset, int length);
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public void Dispose()
+        {
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (disposing)
+                Close();
+        }
 
 #if NET_2_0
-		[EditorBrowsable (EditorBrowsableState.Never)]
-		public virtual Type GetProviderSpecificFieldType (int ordinal)
-		{
-			return GetFieldType (ordinal);
-		}
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public DbDataReader GetData(int ordinal)
+        {
+            return ((DbDataReader) this[ordinal]);
+        }
+#endif
 
-		[EditorBrowsable (EditorBrowsableState.Never)]
-		public virtual object GetProviderSpecificValue (int ordinal)
-		{
-			return GetValue (ordinal);
-		}
+        public abstract string GetDataTypeName(int ordinal);
+        public abstract DateTime GetDateTime(int ordinal);
+        public abstract decimal GetDecimal(int ordinal);
+        public abstract double GetDouble(int ordinal);
 
-		[EditorBrowsable (EditorBrowsableState.Never)]
-		public virtual int GetProviderSpecificValues (object[] values)
-		{
-			return GetValues (values);
-		}
-	
-		protected virtual DbDataReader GetDbDataReader (int ordinal)
-		{
-			return ((DbDataReader) this [ordinal]);
-		}
-#endif 
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public abstract IEnumerator GetEnumerator();
 
-		public abstract string GetString (int ordinal);
-		public abstract object GetValue (int ordinal);
-		public abstract int GetValues (object[] values);
+        public abstract Type GetFieldType(int ordinal);
+        public abstract float GetFloat(int ordinal);
+        public abstract Guid GetGuid(int ordinal);
+        public abstract short GetInt16(int ordinal);
+        public abstract int GetInt32(int ordinal);
+        public abstract long GetInt64(int ordinal);
+        public abstract string GetName(int ordinal);
+        public abstract int GetOrdinal(string name);
 
-		IDataReader IDataRecord.GetData (int ordinal)
-		{
-			return ((IDataReader) this).GetData (ordinal);
-		}
+#if NET_2_0
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public virtual Type GetProviderSpecificFieldType(int ordinal)
+        {
+            return GetFieldType(ordinal);
+        }
 
-		public abstract bool IsDBNull (int ordinal);
-		public abstract bool NextResult ();
-		public abstract bool Read ();
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public virtual object GetProviderSpecificValue(int ordinal)
+        {
+            return GetValue(ordinal);
+        }
 
-		#endregion // Methods
-	}
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public virtual int GetProviderSpecificValues(object[] values)
+        {
+            return GetValues(values);
+        }
+
+        protected virtual DbDataReader GetDbDataReader(int ordinal)
+        {
+            return ((DbDataReader) this[ordinal]);
+        }
+#endif
+
+        public abstract string GetString(int ordinal);
+        public abstract object GetValue(int ordinal);
+        public abstract int GetValues(object[] values);
+
+        IDataReader IDataRecord.GetData(int ordinal)
+        {
+            return ((IDataReader) this).GetData(ordinal);
+        }
+
+        public abstract bool IsDBNull(int ordinal);
+        public abstract bool NextResult();
+        public abstract bool Read();
+
+        #endregion // Methods
+    }
 }
 
 #endif

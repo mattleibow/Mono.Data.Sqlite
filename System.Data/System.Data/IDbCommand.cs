@@ -34,37 +34,37 @@ using System;
 
 namespace System.Data
 {
-	/// <summary>
-	/// Represents a SQL statement that is executed while connected to a data source, and is implemented by .NET data providers that access relational databases.
-	/// </summary>
-	public interface IDbCommand : IDisposable
-	{
-		void Cancel();
-		
-		IDbDataParameter CreateParameter();
-		
-		int ExecuteNonQuery();
+    /// <summary>
+    /// Represents a SQL statement that is executed while connected to a data source, and is implemented by .NET data providers that access relational databases.
+    /// </summary>
+    public interface IDbCommand : IDisposable
+    {
+        void Cancel();
 
-		IDataReader ExecuteReader();
+        IDbDataParameter CreateParameter();
 
-		IDataReader ExecuteReader(CommandBehavior behavior);
+        int ExecuteNonQuery();
 
-		object ExecuteScalar();
+        IDataReader ExecuteReader();
 
-		void Prepare();
+        IDataReader ExecuteReader(CommandBehavior behavior);
 
-		string CommandText{get; set;}
+        object ExecuteScalar();
 
-		int CommandTimeout{get; set;}
+        void Prepare();
 
-		CommandType CommandType{get; set;}
+        string CommandText { get; set; }
 
-		IDbConnection Connection{get; set;}
+        int CommandTimeout { get; set; }
 
-		IDataParameterCollection Parameters{get;}
+        CommandType CommandType { get; set; }
 
-		IDbTransaction Transaction{get; set;}
+        IDbConnection Connection { get; set; }
 
-		UpdateRowSource UpdatedRowSource{get; set;}
-	}
+        IDataParameterCollection Parameters { get; }
+
+        IDbTransaction Transaction { get; set; }
+
+        UpdateRowSource UpdatedRowSource { get; set; }
+    }
 }

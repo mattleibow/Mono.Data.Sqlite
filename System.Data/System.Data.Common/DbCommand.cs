@@ -35,121 +35,127 @@
 using System.ComponentModel;
 using System.Data;
 
-namespace System.Data.Common {
-	public abstract class DbCommand : Component, IDbCommand, IDisposable
-	{
-		protected DbCommand ()
-		{
-		}
+namespace System.Data.Common
+{
+    public abstract class DbCommand : Component, IDbCommand, IDisposable
+    {
+        protected DbCommand()
+        {
+        }
 
-		#region Properties
+        #region Properties
 
-		[DefaultValue ("")]
-		[RefreshProperties (RefreshProperties.All)]
-		public abstract string CommandText { get; set; }
+        [DefaultValue("")]
+        [RefreshProperties(RefreshProperties.All)]
+        public abstract string CommandText { get; set; }
 
-		public abstract int CommandTimeout { get; set; }
+        public abstract int CommandTimeout { get; set; }
 
-		[DefaultValue (CommandType.Text)]
-		[RefreshProperties (RefreshProperties.All)]
-		public abstract CommandType CommandType { get; set; }
+        [DefaultValue(CommandType.Text)]
+        [RefreshProperties(RefreshProperties.All)]
+        public abstract CommandType CommandType { get; set; }
 
-		[DefaultValue (null)]
-		[Browsable (false)]
-		[DesignerSerializationVisibility (DesignerSerializationVisibility.Hidden)]
-		public DbConnection Connection {
-			get { return DbConnection; }
-			set { DbConnection = value; }
-		}
+        [DefaultValue(null)]
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public DbConnection Connection
+        {
+            get { return DbConnection; }
+            set { DbConnection = value; }
+        }
 
-		protected abstract DbConnection DbConnection { get; set; }
-		protected abstract DbParameterCollection DbParameterCollection { get; }
-		protected abstract DbTransaction DbTransaction { get; set; }
+        protected abstract DbConnection DbConnection { get; set; }
+        protected abstract DbParameterCollection DbParameterCollection { get; }
+        protected abstract DbTransaction DbTransaction { get; set; }
 
-		[EditorBrowsable (EditorBrowsableState.Never)]
-		[Browsable (false)]
-		[DefaultValue (true)]
-		[DesignOnly (true)]
-		public abstract bool DesignTimeVisible { get; set; }
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        [Browsable(false)]
+        [DefaultValue(true)]
+        [DesignOnly(true)]
+        public abstract bool DesignTimeVisible { get; set; }
 
-		IDbConnection IDbCommand.Connection {
-			get { return Connection; }
-			set { Connection = (DbConnection) value; }
-		}
+        IDbConnection IDbCommand.Connection
+        {
+            get { return Connection; }
+            set { Connection = (DbConnection) value; }
+        }
 
-		IDataParameterCollection IDbCommand.Parameters {
-			get { return Parameters; }
-		}
+        IDataParameterCollection IDbCommand.Parameters
+        {
+            get { return Parameters; }
+        }
 
-		IDbTransaction IDbCommand.Transaction {
-			get { return Transaction; }
-			set { Transaction = (DbTransaction) value; }
-		}
+        IDbTransaction IDbCommand.Transaction
+        {
+            get { return Transaction; }
+            set { Transaction = (DbTransaction) value; }
+        }
 
-		[Browsable (false)]
-		[DesignerSerializationVisibility (DesignerSerializationVisibility.Hidden)]
-		public DbParameterCollection Parameters {
-			get { return DbParameterCollection; }
-		}
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public DbParameterCollection Parameters
+        {
+            get { return DbParameterCollection; }
+        }
 
-		[Browsable (false)]
-		[DefaultValue (null)]
-		[DesignerSerializationVisibility (DesignerSerializationVisibility.Hidden)]
-		public DbTransaction Transaction {
-			get { return DbTransaction; }
-			set { DbTransaction = value; }
-		}
+        [Browsable(false)]
+        [DefaultValue(null)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        public DbTransaction Transaction
+        {
+            get { return DbTransaction; }
+            set { DbTransaction = value; }
+        }
 
-		[DefaultValue (UpdateRowSource.Both)]
-		public abstract UpdateRowSource UpdatedRowSource { get; set; }
+        [DefaultValue(UpdateRowSource.Both)]
+        public abstract UpdateRowSource UpdatedRowSource { get; set; }
 
-		#endregion // Properties
+        #endregion // Properties
 
-		#region Methods
+        #region Methods
 
-		public abstract void Cancel ();
-		protected abstract DbParameter CreateDbParameter ();
+        public abstract void Cancel();
+        protected abstract DbParameter CreateDbParameter();
 
-		public DbParameter CreateParameter ()
-		{
-			return CreateDbParameter ();
-		}
+        public DbParameter CreateParameter()
+        {
+            return CreateDbParameter();
+        }
 
-		protected abstract DbDataReader ExecuteDbDataReader (CommandBehavior behavior);
-		public abstract int ExecuteNonQuery ();
-		
-		public DbDataReader ExecuteReader ()
-		{
-			return ExecuteDbDataReader (CommandBehavior.Default);
-		}
+        protected abstract DbDataReader ExecuteDbDataReader(CommandBehavior behavior);
+        public abstract int ExecuteNonQuery();
 
-		public DbDataReader ExecuteReader (CommandBehavior behavior)
-		{
-                        return ExecuteDbDataReader (behavior);
-		}
+        public DbDataReader ExecuteReader()
+        {
+            return ExecuteDbDataReader(CommandBehavior.Default);
+        }
 
-		public abstract object ExecuteScalar ();
+        public DbDataReader ExecuteReader(CommandBehavior behavior)
+        {
+            return ExecuteDbDataReader(behavior);
+        }
 
-		IDbDataParameter IDbCommand.CreateParameter ()
-		{
-			return CreateParameter ();
-		}
+        public abstract object ExecuteScalar();
 
-		IDataReader IDbCommand.ExecuteReader ()
-		{
-			return ExecuteReader ();
-		}
+        IDbDataParameter IDbCommand.CreateParameter()
+        {
+            return CreateParameter();
+        }
 
-		IDataReader IDbCommand.ExecuteReader (CommandBehavior behavior)
-		{
-			return ExecuteReader (behavior);
-		}
+        IDataReader IDbCommand.ExecuteReader()
+        {
+            return ExecuteReader();
+        }
 
-		public abstract void Prepare ();
-		
-		#endregion // Methods
+        IDataReader IDbCommand.ExecuteReader(CommandBehavior behavior)
+        {
+            return ExecuteReader(behavior);
+        }
 
-	}
+        public abstract void Prepare();
+
+        #endregion // Methods
+    }
 }
 
 #endif

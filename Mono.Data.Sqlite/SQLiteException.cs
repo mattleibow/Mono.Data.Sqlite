@@ -1,4 +1,4 @@
-﻿﻿/********************************************************
+﻿/********************************************************
  * ADO.NET 2.0 Data Provider for SQLite Version 3.X
  * Written by Robert Simpson (robert@blackcastlesoft.com)
  * 
@@ -27,7 +27,7 @@ namespace Mono.Data.Sqlite
         public SqliteException(int errorCode, string extendedInformation)
             : base(GetStockErrorMessage(errorCode, extendedInformation))
         {
-            _errorCode = (SQLiteErrorCode)errorCode;
+            _errorCode = (SQLiteErrorCode) errorCode;
         }
 
         /// <summary>
@@ -84,34 +84,34 @@ namespace Mono.Data.Sqlite
         }
 
         private static string[] _errorMessages = {
-      "SQLite OK",
-      "SQLite error",
-      "An internal logic error in SQLite",
-      "Access permission denied",
-      "Callback routine requested an abort",
-      "The database file is locked",
-      "A table in the database is locked",
-      "malloc() failed",
-      "Attempt to write a read-only database",
-      "Operation terminated by sqlite3_interrupt()",
-      "Some kind of disk I/O error occurred",
-      "The database disk image is malformed",
-      "Table or record not found",
-      "Insertion failed because the database is full",
-      "Unable to open the database file",
-      "Database lock protocol error",
-      "Database is empty",
-      "The database schema changed",
-      "Too much data for one row of a table",
-      "Abort due to constraint violation",
-      "Data type mismatch",
-      "Library used incorrectly",
-      "Uses OS features not supported on host",
-      "Authorization denied",
-      "Auxiliary database format error",
-      "2nd parameter to sqlite3_bind() out of range",
-      "File opened that is not a database file",
-    };
+            "SQLite OK",
+            "SQLite error",
+            "An internal logic error in SQLite",
+            "Access permission denied",
+            "Callback routine requested an abort",
+            "The database file is locked",
+            "A table in the database is locked",
+            "malloc() failed",
+            "Attempt to write a read-only database",
+            "Operation terminated by sqlite3_interrupt()",
+            "Some kind of disk I/O error occurred",
+            "The database disk image is malformed",
+            "Table or record not found",
+            "Insertion failed because the database is full",
+            "Unable to open the database file",
+            "Database lock protocol error",
+            "Database is empty",
+            "The database schema changed",
+            "Too much data for one row of a table",
+            "Abort due to constraint violation",
+            "Data type mismatch",
+            "Library used incorrectly",
+            "Uses OS features not supported on host",
+            "Authorization denied",
+            "Auxiliary database format error",
+            "2nd parameter to sqlite3_bind() out of range",
+            "File opened that is not a database file",
+        };
     }
 
     /// <summary>
@@ -123,114 +123,142 @@ namespace Mono.Data.Sqlite
         /// Success
         /// </summary>
         Ok = 0,
+
         /// <summary>
         /// SQL error or missing database
         /// </summary>
         Error,
+
         /// <summary>
         /// Internal logic error in SQLite
         /// </summary>
         Internal,
+
         /// <summary>
         /// Access permission denied
         /// </summary>
         Perm,
+
         /// <summary>
         /// Callback routine requested an abort
         /// </summary>
         Abort,
+
         /// <summary>
         /// The database file is locked
         /// </summary>
         Busy,
+
         /// <summary>
         /// A table in the database is locked
         /// </summary>
         Locked,
+
         /// <summary>
         /// malloc() failed
         /// </summary>
         NoMem,
+
         /// <summary>
         /// Attempt to write a read-only database
         /// </summary>
         ReadOnly,
+
         /// <summary>
         /// Operation terminated by sqlite3_interrupt()
         /// </summary>
         Interrupt,
+
         /// <summary>
         /// Some kind of disk I/O error occurred
         /// </summary>
         IOErr,
+
         /// <summary>
         /// The database disk image is malformed
         /// </summary>
         Corrupt,
+
         /// <summary>
         /// Table or record not found
         /// </summary>
         NotFound,
+
         /// <summary>
         /// Insertion failed because database is full
         /// </summary>
         Full,
+
         /// <summary>
         /// Unable to open the database file
         /// </summary>
         CantOpen,
+
         /// <summary>
         /// Database lock protocol error
         /// </summary>
         Protocol,
+
         /// <summary>
         /// Database is empty
         /// </summary>
         Empty,
+
         /// <summary>
         /// The database schema changed
         /// </summary>
         Schema,
+
         /// <summary>
         /// Too much data for one row of a table
         /// </summary>
         TooBig,
+
         /// <summary>
         /// Abort due to constraint violation
         /// </summary>
         Constraint,
+
         /// <summary>
         /// Data type mismatch
         /// </summary>
         Mismatch,
+
         /// <summary>
         /// Library used incorrectly
         /// </summary>
         Misuse,
+
         /// <summary>
         /// Uses OS features not supported on host
         /// </summary>
         NOLFS,
+
         /// <summary>
         /// Authorization denied
         /// </summary>
         Auth,
+
         /// <summary>
         /// Auxiliary database format error
         /// </summary>
         Format,
+
         /// <summary>
         /// 2nd parameter to sqlite3_bind out of range
         /// </summary>
         Range,
+
         /// <summary>
         /// File opened that is not a database file
         /// </summary>
         NotADatabase,
+
         /// <summary>
         /// sqlite3_step() has another row ready
         /// </summary>
         Row = 100,
+
         /// <summary>
         /// sqlite3_step() has finished executing
         /// </summary>

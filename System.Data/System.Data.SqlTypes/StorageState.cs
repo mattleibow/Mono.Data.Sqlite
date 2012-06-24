@@ -26,16 +26,18 @@
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-   
+
+
 #if NET_2_0
 
-namespace System.Data.SqlTypes {
-	public enum StorageState
-	{
-		Buffer = 0,
-		Stream = 1,
-		UnmanagedBuffer = 2
-	}
+namespace System.Data.SqlTypes
+{
+    public enum StorageState
+    {
+        Buffer = 0,
+        Stream = 1,
+        UnmanagedBuffer = 2
+    }
 }
 
 #endif

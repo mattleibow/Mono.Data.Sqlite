@@ -32,24 +32,25 @@
 using System;
 using System.Globalization;
 
-namespace System.Data.SqlTypes {
-	public sealed class SqlAlreadyFilledException : SqlTypeException
-	{
-		public SqlAlreadyFilledException()
-			: base (Locale.GetText ("A SqlAlreadyFilled exception has occured."))
-		{
-		}
+namespace System.Data.SqlTypes
+{
+    public sealed class SqlAlreadyFilledException : SqlTypeException
+    {
+        public SqlAlreadyFilledException()
+            : base(Locale.GetText("A SqlAlreadyFilled exception has occured."))
+        {
+        }
 
-		public SqlAlreadyFilledException (string message)
-			: base (message)
-		{
-		}
+        public SqlAlreadyFilledException(string message)
+            : base(message)
+        {
+        }
 
-		public SqlAlreadyFilledException (string message, Exception e)
-			: base (message, e)
-		{
-		}
-	}
+        public SqlAlreadyFilledException(string message, Exception e)
+            : base(message, e)
+        {
+        }
+    }
 }
 
 #endif

@@ -33,24 +33,23 @@ using System.Globalization;
 
 namespace System.Data
 {
-	public class InvalidExpressionException : DataException
-	{
-		public InvalidExpressionException ()
-			: base (Locale.GetText ("This Expression is invalid"))
-		{
-		}
+    public class InvalidExpressionException : DataException
+    {
+        public InvalidExpressionException()
+            : base(Locale.GetText("This Expression is invalid"))
+        {
+        }
 
-		public InvalidExpressionException (string s)
-			: base (s)
-		{
-		}
+        public InvalidExpressionException(string s)
+            : base(s)
+        {
+        }
 
 #if NET_2_0
-		public InvalidExpressionException (string message, Exception innerException)
-			: base (message, innerException)
-		{
-		}
+        public InvalidExpressionException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
 #endif
-
-	}
+    }
 }

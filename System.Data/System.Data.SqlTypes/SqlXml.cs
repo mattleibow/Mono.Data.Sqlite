@@ -38,103 +38,119 @@ using System.Xml;
 
 namespace System.Data.SqlTypes
 {
-	public sealed class SqlXml : INullable
-	{
-		bool notNull;
-		string xmlValue;
-		
-		public SqlXml ()
-		{
-			notNull = false;
-			xmlValue = null;
-		}
+    public sealed class SqlXml : INullable
+    {
+        private bool notNull;
+        private string xmlValue;
 
-		public SqlXml (Stream value)
+        public SqlXml()
+        {
+            notNull = false;
+            xmlValue = null;
+        }
+
+        public SqlXml(Stream value)
             : this(value, Encoding.Unicode)
-		{
-		}
+        {
+        }
 
-		public SqlXml (Stream value, Encoding encoding)
-		{
-			if (value == null) {
-				notNull = false;
-				xmlValue = null;
-			} else {
-				int len = (int) value.Length;
-				
-				if (len < 1) {
-					xmlValue = String.Empty;
-				} else {
-					int bufSize = 8192;
-					StringBuilder sb = new StringBuilder (len);
-		    		
-					value.Position = 0;
-	 				// Now read value into a byte buffer.
-					byte [] bytes = null;
-				
-					if (len < bufSize)
-						bufSize = len;
-					bytes = new byte [bufSize];
+        public SqlXml(Stream value, Encoding encoding)
+        {
+            if (value == null)
+            {
+                notNull = false;
+                xmlValue = null;
+            }
+            else
+            {
+                int len = (int) value.Length;
 
-					while (len > 0) {
-						// Read may return anything from 0 to bufSize.
-						int n = value.Read(bytes, 0, bufSize);
-						sb.Append (encoding.GetString (bytes, 0, n));
-					
-						// The end of the file is reached.
-						if (n==0)
-						    break;
-						len -= n;
-					}
-					xmlValue = sb.ToString ();
-				}
-				notNull = true;
-			}
-		}
+                if (len < 1)
+                {
+                    xmlValue = String.Empty;
+                }
+                else
+                {
+                    int bufSize = 8192;
+                    StringBuilder sb = new StringBuilder(len);
 
-		public SqlXml (XmlReader value)
-		{
-			if (value == null) {
-				notNull = false;
-				xmlValue = null;
-			} else {
-				if (value.Read ()) {
-					value.MoveToContent ();
-					xmlValue = value.ReadOuterXml();
-				} else 
-					xmlValue = String.Empty;
-				notNull = true;
-			}
-		}
+                    value.Position = 0;
+                    // Now read value into a byte buffer.
+                    byte[] bytes = null;
 
-		public bool IsNull {
-			get { return !notNull; }
-		}
+                    if (len < bufSize)
+                        bufSize = len;
+                    bytes = new byte[bufSize];
 
-		public static SqlXml Null {
-			get {
-				return new SqlXml ();
-			}
-		}
+                    while (len > 0)
+                    {
+                        // Read may return anything from 0 to bufSize.
+                        int n = value.Read(bytes, 0, bufSize);
+                        sb.Append(encoding.GetString(bytes, 0, n));
 
-		public string Value {
-			get {
-				if (notNull)
-					return xmlValue;
-				throw new SqlNullValueException ();
-			}
-		}
+                        // The end of the file is reached.
+                        if (n == 0)
+                            break;
+                        len -= n;
+                    }
+                    xmlValue = sb.ToString();
+                }
+                notNull = true;
+            }
+        }
 
-		public XmlReader CreateReader ()
-		{
-			if (notNull) {
-			   	XmlReaderSettings xs = new XmlReaderSettings ();
-				xs.ConformanceLevel = ConformanceLevel.Fragment;
-				return XmlTextReader.Create (new StringReader (xmlValue), xs);
-			} else
-				throw new SqlNullValueException (); 
-		}
-	}
+        public SqlXml(XmlReader value)
+        {
+            if (value == null)
+            {
+                notNull = false;
+                xmlValue = null;
+            }
+            else
+            {
+                if (value.Read())
+                {
+                    value.MoveToContent();
+                    xmlValue = value.ReadOuterXml();
+                }
+                else
+                    xmlValue = String.Empty;
+                notNull = true;
+            }
+        }
+
+        public bool IsNull
+        {
+            get { return !notNull; }
+        }
+
+        public static SqlXml Null
+        {
+            get { return new SqlXml(); }
+        }
+
+        public string Value
+        {
+            get
+            {
+                if (notNull)
+                    return xmlValue;
+                throw new SqlNullValueException();
+            }
+        }
+
+        public XmlReader CreateReader()
+        {
+            if (notNull)
+            {
+                XmlReaderSettings xs = new XmlReaderSettings();
+                xs.ConformanceLevel = ConformanceLevel.Fragment;
+                return XmlTextReader.Create(new StringReader(xmlValue), xs);
+            }
+            else
+                throw new SqlNullValueException();
+        }
+    }
 }
 
 #endif

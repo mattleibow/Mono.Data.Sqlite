@@ -30,15 +30,17 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+
 #if NET_2_0
 
-namespace System.Data.Common {
-	public enum IdentifierCase 
-	{
-		Insensitive = 1,
-		Sensitive = 2,
-		Unknown = 0
-	}
+namespace System.Data.Common
+{
+    public enum IdentifierCase
+    {
+        Insensitive = 1,
+        Sensitive = 2,
+        Unknown = 0
+    }
 }
 
 #endif

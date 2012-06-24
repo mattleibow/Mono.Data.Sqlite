@@ -33,23 +33,23 @@ using System.Globalization;
 
 namespace System.Data
 {
-	public class VersionNotFoundException : DataException
-	{
-		public VersionNotFoundException ()
-			: base (Locale.GetText ("This DataRow has been deleted"))
-		{
-		}
+    public class VersionNotFoundException : DataException
+    {
+        public VersionNotFoundException()
+            : base(Locale.GetText("This DataRow has been deleted"))
+        {
+        }
 
-		public VersionNotFoundException (string s)
-			: base (s)
-		{
-		}
-        
+        public VersionNotFoundException(string s)
+            : base(s)
+        {
+        }
+
 #if NET_2_0
-		public VersionNotFoundException (string message, Exception innerException)
-			: base (message, innerException)
-		{
-		}
+        public VersionNotFoundException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
 #endif
-	}
+    }
 }

@@ -34,81 +34,92 @@
 using System.Collections;
 using System.ComponentModel;
 
-namespace System.Data.Common {
-	public abstract class DbParameter : MarshalByRefObject, IDbDataParameter, IDataParameter
-	{
-		#region Constructors
-		internal static Hashtable dbTypeMapping;
-		protected DbParameter ()
-		{
-		}
+namespace System.Data.Common
+{
+    public abstract class DbParameter : MarshalByRefObject, IDbDataParameter, IDataParameter
+    {
+        #region Constructors
 
-		#endregion // Constructors
+        internal static Hashtable dbTypeMapping;
 
-		#region Properties
+        protected DbParameter()
+        {
+        }
 
-		[Browsable (false)]
-		[DesignerSerializationVisibility (DesignerSerializationVisibility.Hidden)]
-		[RefreshProperties (RefreshProperties.All)]
-		public abstract DbType DbType { get; set; }
+        #endregion // Constructors
 
-		[DefaultValue (ParameterDirection.Input)]
-		[RefreshProperties (RefreshProperties.All)]
-		public abstract ParameterDirection Direction { get; set; }
+        #region Properties
 
-		[DefaultValue ("")]
-		public abstract string ParameterName { get; set; }
-		public abstract int Size { get; set; }
-		byte IDbDataParameter.Precision { 
-			get { return  0; }
-			set {} 
-		}
-		byte IDbDataParameter.Scale { 
-			get { return 0; }
-			set {} 
-		}
+        [Browsable(false)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
+        [RefreshProperties(RefreshProperties.All)]
+        public abstract DbType DbType { get; set; }
 
-		[DefaultValue (null)]
-		[RefreshProperties (RefreshProperties.All)]
-		public abstract object Value { get; set; }
+        [DefaultValue(ParameterDirection.Input)]
+        [RefreshProperties(RefreshProperties.All)]
+        public abstract ParameterDirection Direction { get; set; }
 
-		[Browsable (false)]
-		[DesignOnly (true)]
-		[EditorBrowsable (EditorBrowsableState.Never)]
-		public abstract bool IsNullable { get; set; }
+        [DefaultValue("")]
+        public abstract string ParameterName { get; set; }
 
-		[DefaultValue ("")]
-		public abstract string SourceColumn { get; set; }
+        public abstract int Size { get; set; }
 
-		[RefreshProperties (RefreshProperties.All)]
-		[DefaultValue (false)]
-		[EditorBrowsable (EditorBrowsableState.Advanced)]
-		public abstract bool SourceColumnNullMapping { get; set; }
+        byte IDbDataParameter.Precision
+        {
+            get { return 0; }
+            set { }
+        }
 
-		#endregion // Properties
+        byte IDbDataParameter.Scale
+        {
+            get { return 0; }
+            set { }
+        }
 
-		#region Methods
-		[EditorBrowsable (EditorBrowsableState.Advanced)]
-		public abstract void ResetDbType ();
-		
-		internal virtual object FrameworkDbType {
-			get {return null;}
-			set {}
-		}
-		
-		internal protected static Hashtable DbTypeMapping {
-			get { return dbTypeMapping;}
-			set { dbTypeMapping = value;}
-		}
-		
-		// LAMESPEC: Implementors should populate the dbTypeMapping accordingly
-		internal virtual Type SystemType {
-			get {
-				return (Type) dbTypeMapping [DbType];
-			}
-		}
-		#endregion // Methods
-	}
+        [DefaultValue(null)]
+        [RefreshProperties(RefreshProperties.All)]
+        public abstract object Value { get; set; }
+
+        [Browsable(false)]
+        [DesignOnly(true)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public abstract bool IsNullable { get; set; }
+
+        [DefaultValue("")]
+        public abstract string SourceColumn { get; set; }
+
+        [RefreshProperties(RefreshProperties.All)]
+        [DefaultValue(false)]
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public abstract bool SourceColumnNullMapping { get; set; }
+
+        #endregion // Properties
+
+        #region Methods
+
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public abstract void ResetDbType();
+
+        internal virtual object FrameworkDbType
+        {
+            get { return null; }
+            set { }
+        }
+
+        protected internal static Hashtable DbTypeMapping
+        {
+            get { return dbTypeMapping; }
+            set { dbTypeMapping = value; }
+        }
+
+        // LAMESPEC: Implementors should populate the dbTypeMapping accordingly
+        internal virtual Type SystemType
+        {
+            get { return (Type) dbTypeMapping[DbType]; }
+        }
+
+        #endregion // Methods
+    }
 }
 
 #endif

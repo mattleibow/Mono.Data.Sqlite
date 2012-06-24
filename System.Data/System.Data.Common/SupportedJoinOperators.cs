@@ -28,19 +28,20 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+
 #if NET_2_0
 
-namespace System.Data.Common {
-
-	[Flags]
-	public enum SupportedJoinOperators
-	{
-		None = 0,
-		Inner = 1 << 0,
-		LeftOuter = 1 << 1,
-		RightOuter = 1 << 2,
-		FullOuter = 1 << 3
-	}
+namespace System.Data.Common
+{
+    [Flags]
+    public enum SupportedJoinOperators
+    {
+        None = 0,
+        Inner = 1 << 0,
+        LeftOuter = 1 << 1,
+        RightOuter = 1 << 2,
+        FullOuter = 1 << 3
+    }
 }
 
 #endif

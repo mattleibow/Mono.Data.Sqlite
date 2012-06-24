@@ -5,7 +5,9 @@
  * Released to the public domain, use at your own risk!
  ********************************************************/
 
+
 #if !PLATFORM_COMPACTFRAMEWORK
+
 namespace Mono.Data.Sqlite
 {
     using System;
@@ -90,4 +92,6 @@ namespace Mono.Data.Sqlite
         #endregion
     }
 }
-#endif // !PLATFORM_COMPACT_FRAMEWORK
+
+#endif
+// !PLATFORM_COMPACT_FRAMEWORK

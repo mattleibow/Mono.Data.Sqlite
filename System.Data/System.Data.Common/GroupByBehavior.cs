@@ -30,17 +30,19 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+
 #if NET_2_0
 
-namespace System.Data.Common {
-	public enum GroupByBehavior 
-	{
-		ExactMatch = 4,
-		MustContainAll = 3,
-		NotSupported = 1,
-		Unknown = 0,
-		Unrelated = 2
-	}
+namespace System.Data.Common
+{
+    public enum GroupByBehavior
+    {
+        ExactMatch = 4,
+        MustContainAll = 3,
+        NotSupported = 1,
+        Unknown = 0,
+        Unrelated = 2
+    }
 }
 
 #endif

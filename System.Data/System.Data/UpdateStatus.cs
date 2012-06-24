@@ -34,17 +34,17 @@ using System;
 
 namespace System.Data
 {
-	/// <summary>
-	/// Specifies the action to take with regard to the current and remaining rows during an Update.
-	/// </summary>
+    /// <summary>
+    /// Specifies the action to take with regard to the current and remaining rows during an Update.
+    /// </summary>
 #if !NET_2_0
 	[Serializable]
 #endif
-	public enum UpdateStatus
-	{
-		Continue = 0,
-		ErrorsOccurred = 1,
-		SkipCurrentRow = 2,
-		SkipAllRemainingRows = 3
-	}
+    public enum UpdateStatus
+    {
+        Continue = 0,
+        ErrorsOccurred = 1,
+        SkipCurrentRow = 2,
+        SkipAllRemainingRows = 3
+    }
 }

@@ -34,17 +34,17 @@ using System;
 
 namespace System.Data
 {
-	/// <summary>
-	/// Specifies how query command results are applied to the row being updated.
-	/// </summary>
+    /// <summary>
+    /// Specifies how query command results are applied to the row being updated.
+    /// </summary>
 #if !NET_2_0
 	[Serializable]
 #endif
-	public enum UpdateRowSource
-	{
-		None = 0,
-		OutputParameters = 1,
-		FirstReturnedRecord = 2,
-		Both = 3
-	}
+    public enum UpdateRowSource
+    {
+        None = 0,
+        OutputParameters = 1,
+        FirstReturnedRecord = 2,
+        Both = 3
+    }
 }

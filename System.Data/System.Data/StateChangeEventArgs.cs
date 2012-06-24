@@ -35,36 +35,39 @@
 
 using System;
 
-namespace System.Data {
-	public sealed class StateChangeEventArgs : EventArgs 
-	{
-		#region Fields
+namespace System.Data
+{
+    public sealed class StateChangeEventArgs : EventArgs
+    {
+        #region Fields
 
-		ConnectionState originalState;
-		ConnectionState currentState;
+        private ConnectionState originalState;
+        private ConnectionState currentState;
 
-		#endregion // Fields
+        #endregion // Fields
 
-		#region Constructors
+        #region Constructors
 
-		public StateChangeEventArgs (ConnectionState originalState, ConnectionState currentState)
-		{
-			this.originalState = originalState;
-			this.currentState = currentState;
-		}
+        public StateChangeEventArgs(ConnectionState originalState, ConnectionState currentState)
+        {
+            this.originalState = originalState;
+            this.currentState = currentState;
+        }
 
-		#endregion // Constructors
+        #endregion // Constructors
 
-		#region Properties
+        #region Properties
 
-		public ConnectionState CurrentState {
-			get { return currentState; }
-		}
+        public ConnectionState CurrentState
+        {
+            get { return currentState; }
+        }
 
-		public ConnectionState OriginalState {
-			get { return originalState; }
-		}
+        public ConnectionState OriginalState
+        {
+            get { return originalState; }
+        }
 
-		#endregion // Properties
-	}
+        #endregion // Properties
+    }
 }

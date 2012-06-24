@@ -14,7 +14,6 @@ namespace Mono.Data.Sqlite
     using System.Collections;
     using System.Globalization;
     using System.Reflection;
-
 #if !PLATFORM_COMPACTFRAMEWORK
     using System.ComponentModel.Design;
 
@@ -105,13 +104,12 @@ namespace Mono.Data.Sqlite
                 object value;
                 TryGetValue("synchronous", out value);
                 if (value is string)
-                    return (SynchronizationModes)TypeDescriptor.GetConverter(typeof(SynchronizationModes)).ConvertFrom(value);
-                else return (SynchronizationModes)value;
+                    return
+                        (SynchronizationModes)
+                        TypeDescriptor.GetConverter(typeof (SynchronizationModes)).ConvertFrom(value);
+                else return (SynchronizationModes) value;
             }
-            set
-            {
-                this["synchronous"] = value;
-            }
+            set { this["synchronous"] = value; }
         }
 
         /// <summary>
@@ -127,10 +125,7 @@ namespace Mono.Data.Sqlite
                 TryGetValue("useutf16encoding", out value);
                 return SqliteConvert.ToBoolean(value);
             }
-            set
-            {
-                this["useutf16encoding"] = value;
-            }
+            set { this["useutf16encoding"] = value; }
         }
 
         /// <summary>
@@ -146,10 +141,7 @@ namespace Mono.Data.Sqlite
                 TryGetValue("pooling", out value);
                 return SqliteConvert.ToBoolean(value);
             }
-            set
-            {
-                this["pooling"] = value;
-            }
+            set { this["pooling"] = value; }
         }
 
         /// <summary>
@@ -166,10 +158,7 @@ namespace Mono.Data.Sqlite
                 TryGetValue("binaryguid", out value);
                 return SqliteConvert.ToBoolean(value);
             }
-            set
-            {
-                this["binaryguid"] = value;
-            }
+            set { this["binaryguid"] = value; }
         }
 
         /// <summary>
@@ -186,10 +175,7 @@ namespace Mono.Data.Sqlite
                 TryGetValue("data source", out value);
                 return value.ToString();
             }
-            set
-            {
-                this["data source"] = value;
-            }
+            set { this["data source"] = value; }
         }
 
         /// <summary>
@@ -204,10 +190,7 @@ namespace Mono.Data.Sqlite
                 TryGetValue("uri", out value);
                 return value.ToString();
             }
-            set
-            {
-                this["uri"] = value;
-            }
+            set { this["uri"] = value; }
         }
 
         /// <summary>
@@ -225,10 +208,7 @@ namespace Mono.Data.Sqlite
                 TryGetValue("default timeout", out value);
                 return Convert.ToInt32(value, CultureInfo.CurrentCulture);
             }
-            set
-            {
-                this["default timeout"] = value;
-            }
+            set { this["default timeout"] = value; }
         }
 
         /// <summary>
@@ -245,10 +225,7 @@ namespace Mono.Data.Sqlite
                 TryGetValue("enlist", out value);
                 return SqliteConvert.ToBoolean(value);
             }
-            set
-            {
-                this["enlist"] = value;
-            }
+            set { this["enlist"] = value; }
         }
 
         /// <summary>
@@ -265,10 +242,7 @@ namespace Mono.Data.Sqlite
                 TryGetValue("failifmissing", out value);
                 return SqliteConvert.ToBoolean(value);
             }
-            set
-            {
-                this["failifmissing"] = value;
-            }
+            set { this["failifmissing"] = value; }
         }
 
         /// <summary>
@@ -286,10 +260,7 @@ namespace Mono.Data.Sqlite
                 TryGetValue("legacy format", out value);
                 return SqliteConvert.ToBoolean(value);
             }
-            set
-            {
-                this["legacy format"] = value;
-            }
+            set { this["legacy format"] = value; }
         }
 
         /// <summary>
@@ -306,10 +277,7 @@ namespace Mono.Data.Sqlite
                 TryGetValue("read only", out value);
                 return SqliteConvert.ToBoolean(value);
             }
-            set
-            {
-                this["read only"] = value;
-            }
+            set { this["read only"] = value; }
         }
 
         /// <summary>
@@ -326,10 +294,7 @@ namespace Mono.Data.Sqlite
                 TryGetValue("password", out value);
                 return value.ToString();
             }
-            set
-            {
-                this["password"] = value;
-            }
+            set { this["password"] = value; }
         }
 
         /// <summary>
@@ -346,10 +311,7 @@ namespace Mono.Data.Sqlite
                 TryGetValue("page size", out value);
                 return Convert.ToInt32(value, CultureInfo.CurrentCulture);
             }
-            set
-            {
-                this["page size"] = value;
-            }
+            set { this["page size"] = value; }
         }
 
         /// <summary>
@@ -366,10 +328,7 @@ namespace Mono.Data.Sqlite
                 TryGetValue("max page count", out value);
                 return Convert.ToInt32(value, CultureInfo.CurrentCulture);
             }
-            set
-            {
-                this["max page count"] = value;
-            }
+            set { this["max page count"] = value; }
         }
 
         /// <summary>
@@ -386,10 +345,7 @@ namespace Mono.Data.Sqlite
                 TryGetValue("cache size", out value);
                 return Convert.ToInt32(value, CultureInfo.CurrentCulture);
             }
-            set
-            {
-                this["cache size"] = value;
-            }
+            set { this["cache size"] = value; }
         }
 
         /// <summary>
@@ -404,13 +360,11 @@ namespace Mono.Data.Sqlite
                 object value;
                 TryGetValue("datetimeformat", out value);
                 if (value is string)
-                    return (SQLiteDateFormats)TypeDescriptor.GetConverter(typeof(SQLiteDateFormats)).ConvertFrom(value);
-                else return (SQLiteDateFormats)value;
+                    return
+                        (SQLiteDateFormats) TypeDescriptor.GetConverter(typeof (SQLiteDateFormats)).ConvertFrom(value);
+                else return (SQLiteDateFormats) value;
             }
-            set
-            {
-                this["datetimeformat"] = value;
-            }
+            set { this["datetimeformat"] = value; }
         }
 
         /// <summary>
@@ -426,14 +380,13 @@ namespace Mono.Data.Sqlite
                 object value;
                 TryGetValue("journal mode", out value);
                 if (value is string)
-                    return (SQLiteJournalModeEnum)TypeDescriptor.GetConverter(typeof(SQLiteJournalModeEnum)).ConvertFrom(value);
+                    return
+                        (SQLiteJournalModeEnum)
+                        TypeDescriptor.GetConverter(typeof (SQLiteJournalModeEnum)).ConvertFrom(value);
                 else
-                    return (SQLiteJournalModeEnum)value;
+                    return (SQLiteJournalModeEnum) value;
             }
-            set
-            {
-                this["journal mode"] = value;
-            }
+            set { this["journal mode"] = value; }
         }
 
         /// <summary>
@@ -449,14 +402,11 @@ namespace Mono.Data.Sqlite
                 object value;
                 TryGetValue("default isolationlevel", out value);
                 if (value is string)
-                    return (IsolationLevel)TypeDescriptor.GetConverter(typeof(IsolationLevel)).ConvertFrom(value);
+                    return (IsolationLevel) TypeDescriptor.GetConverter(typeof (IsolationLevel)).ConvertFrom(value);
                 else
-                    return (IsolationLevel)value;
+                    return (IsolationLevel) value;
             }
-            set
-            {
-                this["default isolationlevel"] = value;
-            }
+            set { this["default isolationlevel"] = value; }
         }
 
         /// <summary>
@@ -478,14 +428,14 @@ namespace Mono.Data.Sqlite
             // Attempt to coerce the value into something more solid
             if (b)
             {
-                if (pd.PropertyType == typeof(Boolean))
+                if (pd.PropertyType == typeof (Boolean))
                     value = SqliteConvert.ToBoolean(value);
                 else
                     value = TypeDescriptor.GetConverter(pd.PropertyType).ConvertFrom(value);
             }
             else
             {
-                DefaultValueAttribute att = pd.Attributes[typeof(DefaultValueAttribute)] as DefaultValueAttribute;
+                DefaultValueAttribute att = pd.Attributes[typeof (DefaultValueAttribute)] as DefaultValueAttribute;
                 if (att != null)
                 {
                     value = att.Value;

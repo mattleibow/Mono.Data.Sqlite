@@ -34,31 +34,30 @@ using System;
 
 namespace System.Data
 {
-	/// <summary>
-	/// Represents an open connection to a data source, and is implemented by .NET data providers that access relational databases.
-	/// </summary>
-	public interface IDbConnection : IDisposable
-	{
-		IDbTransaction BeginTransaction();
+    /// <summary>
+    /// Represents an open connection to a data source, and is implemented by .NET data providers that access relational databases.
+    /// </summary>
+    public interface IDbConnection : IDisposable
+    {
+        IDbTransaction BeginTransaction();
 
-		IDbTransaction BeginTransaction(IsolationLevel il);
+        IDbTransaction BeginTransaction(IsolationLevel il);
 
-		void ChangeDatabase(string databaseName);
+        void ChangeDatabase(string databaseName);
 
-		void Close();
+        void Close();
 
-		IDbCommand CreateCommand();
+        IDbCommand CreateCommand();
 
-		void Open();
+        void Open();
 
 
-		string ConnectionString{get; set;}
+        string ConnectionString { get; set; }
 
-		int ConnectionTimeout{get;}
+        int ConnectionTimeout { get; }
 
-		string Database{get;}
+        string Database { get; }
 
-		ConnectionState State{get;}
-
-	}
+        ConnectionState State { get; }
+    }
 }

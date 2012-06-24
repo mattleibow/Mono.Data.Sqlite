@@ -32,19 +32,17 @@
 
 namespace System.Data
 {
-	
-	/// <summary>
-	/// Determines the action that occurs when 
-	/// the AcceptChanges or RejectChanges method 
-	/// is invoked on a DataTable with a ForeignKeyConstraint.
-	/// </summary>
+    /// <summary>
+    /// Determines the action that occurs when 
+    /// the AcceptChanges or RejectChanges method 
+    /// is invoked on a DataTable with a ForeignKeyConstraint.
+    /// </summary>
 #if !NET_2_0
 	[Serializable]
 #endif
-	public enum AcceptRejectRule
-	{		
-		None = 0,
-		Cascade = 1
-	}
-
+    public enum AcceptRejectRule
+    {
+        None = 0,
+        Cascade = 1
+    }
 }

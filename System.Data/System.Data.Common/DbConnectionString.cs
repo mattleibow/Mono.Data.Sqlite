@@ -35,79 +35,81 @@ using System.Collections.Specialized;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace System.Data.Common {
+namespace System.Data.Common
+{
+    [Obsolete()]
+    internal class DbConnectionString : DbConnectionOptions, ISerializable
+    {
+        #region Fields
 
-	[Obsolete ()]
-	internal class DbConnectionString : DbConnectionOptions, ISerializable {
+        private KeyRestrictionBehavior behavior;
 
-		#region Fields
+        #endregion // Fields
 
-		KeyRestrictionBehavior behavior;
+        #region Constructors
 
-		#endregion // Fields
+        protected internal DbConnectionString(DbConnectionString constr)
+        {
+            options = constr.options;
+        }
 
-		#region Constructors
+        public DbConnectionString(string connectionString)
+            : base(connectionString)
+        {
+            options = new NameValueCollection();
+            ParseConnectionString(connectionString);
+        }
 
-		protected internal DbConnectionString (DbConnectionString constr)
-		{
-			options = constr.options;
-		}
+        [MonoTODO]
+        protected DbConnectionString(SerializationInfo si, StreamingContext sc)
+        {
+        }
 
-		public DbConnectionString (string connectionString)
-			: base (connectionString)
-		{
-			options = new NameValueCollection ();
-			ParseConnectionString (connectionString);
-		}
-		
-		[MonoTODO]
-		protected DbConnectionString (SerializationInfo si, StreamingContext sc)
-		{
-		}
+        [MonoTODO]
+        public DbConnectionString(string connectionString, string restrictions, KeyRestrictionBehavior behavior)
+            : this(connectionString)
+        {
+            this.behavior = behavior;
+        }
 
-		[MonoTODO]
-		public DbConnectionString (string connectionString, string restrictions, KeyRestrictionBehavior behavior)
-			: this (connectionString)
-		{
-			this.behavior = behavior;
-		}
+        #endregion // Constructors
 
-		#endregion // Constructors
+        #region Properties
 
-		#region Properties
+        public KeyRestrictionBehavior Behavior
+        {
+            get { return behavior; }
+        }
 
-		public KeyRestrictionBehavior Behavior {
-			get { return behavior; }
-		}
+        [MonoTODO]
+        public string Restrictions
+        {
+            get { throw new NotImplementedException(); }
+        }
 
-		[MonoTODO]
-		public string Restrictions {
-			get { throw new NotImplementedException (); }
-		}
-		
-		#endregion // Properties
+        #endregion // Properties
 
-		#region Methods
+        #region Methods
 
-		[MonoTODO]
-		public virtual void GetObjectData (SerializationInfo info, StreamingContext context)
-		{
-			throw new NotImplementedException ();
-		}
+        [MonoTODO]
+        public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            throw new NotImplementedException();
+        }
 
-		protected virtual string KeywordLookup (string keyname)
-		{
-			return keyname;
-		}
+        protected virtual string KeywordLookup(string keyname)
+        {
+            return keyname;
+        }
 
-		[MonoTODO]
-		public virtual void PermissionDemand ()
-		{
-			throw new NotImplementedException ();
-		}
+        [MonoTODO]
+        public virtual void PermissionDemand()
+        {
+            throw new NotImplementedException();
+        }
 
-		#endregion // Methods
-	}
+        #endregion // Methods
+    }
 }
 
 #endif

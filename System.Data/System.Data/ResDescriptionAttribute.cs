@@ -33,32 +33,34 @@
 using System;
 using System.ComponentModel;
 
-namespace System.Data {
-	[AttributeUsage (AttributeTargets.All)]
-	internal sealed class ResDescriptionAttribute : DescriptionAttribute
-	{
-		#region Fields
+namespace System.Data
+{
+    [AttributeUsage(AttributeTargets.All)]
+    internal sealed class ResDescriptionAttribute : DescriptionAttribute
+    {
+        #region Fields
 
-		string description;
+        private string description;
 
-		#endregion // Fields
+        #endregion // Fields
 
-		#region Constructors
+        #region Constructors
 
-		public ResDescriptionAttribute (string description)
-			: base (description)
-		{
-			this.description = description; 
-		}
+        public ResDescriptionAttribute(string description)
+            : base(description)
+        {
+            this.description = description;
+        }
 
-		#endregion // Constructors
+        #endregion // Constructors
 
-		#region Properties
+        #region Properties
 
-		public override string Description {
-			get { return description; }
-		}
+        public override string Description
+        {
+            get { return description; }
+        }
 
-		#endregion // Properties
-	}
+        #endregion // Properties
+    }
 }

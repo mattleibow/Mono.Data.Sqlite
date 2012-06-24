@@ -38,311 +38,322 @@ using System.Globalization;
 
 namespace System.Data.SqlTypes
 {
-	/// <summary>
-	/// Represents a variable-length stream of binary data to be stored in or retrieved from a database.
-	/// </summary>
+    /// <summary>
+    /// Represents a variable-length stream of binary data to be stored in or retrieved from a database.
+    /// </summary>
 #if NET_2_0
 #endif
-	public struct SqlBinary : INullable, IComparable
+    public struct SqlBinary : INullable, IComparable
 #if NET_2_0
 #endif
-	{
+    {
+        #region Fields
 
-		#region Fields
+        private byte[] value;
+        private bool notNull;
 
-		byte[] value;
-		private bool notNull;
+        public static readonly SqlBinary Null;
 
-		public static readonly SqlBinary Null;
+        #endregion
 
-		#endregion
+        #region Constructors
 
-		#region Constructors
-		
-		public SqlBinary (byte[] value) 
-		{
-			this.value = value;
-			notNull = true;
-		}
+        public SqlBinary(byte[] value)
+        {
+            this.value = value;
+            notNull = true;
+        }
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		public bool IsNull {
-			get { return !notNull; }
-		}
+        public bool IsNull
+        {
+            get { return !notNull; }
+        }
 
-		public byte this[int index] {
-			get { 
-				if (this.IsNull)
-					throw new SqlNullValueException ("The property contains Null.");
-				else if (index >= this.Length)
-					throw new IndexOutOfRangeException ("The index parameter indicates a position beyond the length of the byte array.");
-				else
-					return value [index]; 
-			}
-		}
+        public byte this[int index]
+        {
+            get
+            {
+                if (this.IsNull)
+                    throw new SqlNullValueException("The property contains Null.");
+                else if (index >= this.Length)
+                    throw new IndexOutOfRangeException(
+                        "The index parameter indicates a position beyond the length of the byte array.");
+                else
+                    return value[index];
+            }
+        }
 
-		public int Length {
-			get { 
-				if (this.IsNull)
-					throw new SqlNullValueException ("The property contains Null.");
-				else
-					return value.Length;
-			}
-		}
+        public int Length
+        {
+            get
+            {
+                if (this.IsNull)
+                    throw new SqlNullValueException("The property contains Null.");
+                else
+                    return value.Length;
+            }
+        }
 
-		public byte[] Value 
-		{
-			get { 
-				if (this.IsNull) 
-					throw new SqlNullValueException ("The property contains Null.");
-				else 
-					return value; 
-			}
-		}
+        public byte[] Value
+        {
+            get
+            {
+                if (this.IsNull)
+                    throw new SqlNullValueException("The property contains Null.");
+                else
+                    return value;
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region Methods
+        #region Methods
+
 #if NET_2_0
-		public static SqlBinary Add (SqlBinary x, SqlBinary y)
-		{
-			return (x + y);
-		}
+        public static SqlBinary Add(SqlBinary x, SqlBinary y)
+        {
+            return (x + y);
+        }
 #endif
 
-		public int CompareTo (object value)
-		{
-			if (value == null)
-				return 1;
-			if (!(value is SqlBinary))
-				throw new ArgumentException (Locale.GetText ("Value is not a System.Data.SqlTypes.SqlBinary"));
+        public int CompareTo(object value)
+        {
+            if (value == null)
+                return 1;
+            if (!(value is SqlBinary))
+                throw new ArgumentException(Locale.GetText("Value is not a System.Data.SqlTypes.SqlBinary"));
 
-			return CompareTo ((SqlBinary) value);
-		}
+            return CompareTo((SqlBinary) value);
+        }
+
 #if NET_2_0
-		public
+        public
 #endif
-		int CompareTo (SqlBinary value) 
-		{
-			if (value.IsNull)
-				return 1;
-			else
-				return Compare (this, value);
-		}
+            int CompareTo(SqlBinary value)
+        {
+            if (value.IsNull)
+                return 1;
+            else
+                return Compare(this, value);
+        }
 
-		public static SqlBinary Concat (SqlBinary x, SqlBinary y) 
-		{
-			return (x + y);
-		}
+        public static SqlBinary Concat(SqlBinary x, SqlBinary y)
+        {
+            return (x + y);
+        }
 
-		public override bool Equals (object value) 
-		{
-			if (!(value is SqlBinary))
-				return false;
-			else if (this.IsNull)
-				return ((SqlBinary)value).IsNull;
-			else if (((SqlBinary)value).IsNull)
-				return false;
-			else
-				return (bool) (this == (SqlBinary)value);
-		}
+        public override bool Equals(object value)
+        {
+            if (!(value is SqlBinary))
+                return false;
+            else if (this.IsNull)
+                return ((SqlBinary) value).IsNull;
+            else if (((SqlBinary) value).IsNull)
+                return false;
+            else
+                return (bool) (this == (SqlBinary) value);
+        }
 
-		public static SqlBoolean Equals(SqlBinary x, SqlBinary y) 
-		{
-			return (x == y);
-		}
+        public static SqlBoolean Equals(SqlBinary x, SqlBinary y)
+        {
+            return (x == y);
+        }
 
-		public override int GetHashCode () 
-		{
-			// FIXME: I'm not sure is this a right way
-			int result = 10;
-			for (int i = 0; i < value.Length; i++) {
-				
-				result = 91 * result + (int)value [i];
-			}
-			
-			return result;
-		}
+        public override int GetHashCode()
+        {
+            // FIXME: I'm not sure is this a right way
+            int result = 10;
+            for (int i = 0; i < value.Length; i++)
+            {
+                result = 91*result + (int) value[i];
+            }
 
-		#endregion
+            return result;
+        }
 
-		#region Operators
+        #endregion
 
-		public static SqlBoolean GreaterThan (SqlBinary x, SqlBinary y) 
-		{
-			return (x > y);
-		}
+        #region Operators
 
-		public static SqlBoolean GreaterThanOrEqual (SqlBinary x, SqlBinary y) 
-		{
-			return (x >= y);
-		}
+        public static SqlBoolean GreaterThan(SqlBinary x, SqlBinary y)
+        {
+            return (x > y);
+        }
 
-		public static SqlBoolean LessThan (SqlBinary x, SqlBinary y) 
-		{
-			return (x < y);
-		}
+        public static SqlBoolean GreaterThanOrEqual(SqlBinary x, SqlBinary y)
+        {
+            return (x >= y);
+        }
 
-		public static SqlBoolean LessThanOrEqual (SqlBinary x, SqlBinary y) 
-		{
-			return (x <= y);
-		}
+        public static SqlBoolean LessThan(SqlBinary x, SqlBinary y)
+        {
+            return (x < y);
+        }
 
-		public static SqlBoolean NotEquals (SqlBinary x, SqlBinary y) 
-		{
-			return (x != y);
-		}
+        public static SqlBoolean LessThanOrEqual(SqlBinary x, SqlBinary y)
+        {
+            return (x <= y);
+        }
 
-		public SqlGuid ToSqlGuid () 
-		{
-			return (SqlGuid)this;
-		}
+        public static SqlBoolean NotEquals(SqlBinary x, SqlBinary y)
+        {
+            return (x != y);
+        }
 
-		public override string ToString () 
-		{
-			if (!notNull)
-				return "Null";
-			return "SqlBinary(" + value.Length + ")";
-		}
+        public SqlGuid ToSqlGuid()
+        {
+            return (SqlGuid) this;
+        }
 
-		#endregion
+        public override string ToString()
+        {
+            if (!notNull)
+                return "Null";
+            return "SqlBinary(" + value.Length + ")";
+        }
 
-		#region Operators
+        #endregion
 
-		public static SqlBinary operator + (SqlBinary x, SqlBinary y) 
-		{
-			byte [] b = new byte [x.Value.Length + y.Value.Length];
-			int j = 0;
-			int i;
+        #region Operators
 
-			for (i = 0; i < x.Value.Length; i++) 
-				b [i] = x.Value [i];
-			
+        public static SqlBinary operator +(SqlBinary x, SqlBinary y)
+        {
+            byte[] b = new byte[x.Value.Length + y.Value.Length];
+            int j = 0;
+            int i;
 
-			for (; i < (x.Value.Length + y.Value.Length); i++) {
-				b [i] = y.Value [j];
-				j++;
-			}	
-			
-			return new SqlBinary (b);
-		}
-			
-		public static SqlBoolean operator == (SqlBinary x, SqlBinary y) 
-		{
-			if (x.IsNull || y.IsNull) 
-				return SqlBoolean.Null;
-			else
-				return new SqlBoolean (Compare (x, y) == 0);
-		}
+            for (i = 0; i < x.Value.Length; i++)
+                b[i] = x.Value[i];
 
-		public static SqlBoolean operator > (SqlBinary x, SqlBinary y) 
-		{
-			if (x.IsNull || y.IsNull) 
-				return SqlBoolean.Null;
 
-			return new SqlBoolean (Compare (x, y) > 0);
-		}
+            for (; i < (x.Value.Length + y.Value.Length); i++)
+            {
+                b[i] = y.Value[j];
+                j++;
+            }
 
-		public static SqlBoolean operator >= (SqlBinary x, SqlBinary y) 
-		{
-			if (x.IsNull || y.IsNull) 
-				return SqlBoolean.Null;
+            return new SqlBinary(b);
+        }
 
-			return new SqlBoolean (Compare (x, y) >= 0);
-		}
+        public static SqlBoolean operator ==(SqlBinary x, SqlBinary y)
+        {
+            if (x.IsNull || y.IsNull)
+                return SqlBoolean.Null;
+            else
+                return new SqlBoolean(Compare(x, y) == 0);
+        }
 
-		public static SqlBoolean operator != (SqlBinary x, SqlBinary y) 
-		{
-			if (x.IsNull || y.IsNull) 
-				return SqlBoolean.Null;
-			else
-				return new SqlBoolean (Compare (x, y) != 0);
-		}
+        public static SqlBoolean operator >(SqlBinary x, SqlBinary y)
+        {
+            if (x.IsNull || y.IsNull)
+                return SqlBoolean.Null;
 
-		public static SqlBoolean operator < (SqlBinary x, SqlBinary y) 
-		{
-			if (x.IsNull || y.IsNull) 
-				return SqlBoolean.Null;
+            return new SqlBoolean(Compare(x, y) > 0);
+        }
 
-			return new SqlBoolean (Compare (x, y) < 0);
-		}
+        public static SqlBoolean operator >=(SqlBinary x, SqlBinary y)
+        {
+            if (x.IsNull || y.IsNull)
+                return SqlBoolean.Null;
 
-		public static SqlBoolean operator <= (SqlBinary x, SqlBinary y) 
-		{
-			if (x.IsNull || y.IsNull) 
-				return SqlBoolean.Null;
+            return new SqlBoolean(Compare(x, y) >= 0);
+        }
 
-			return new SqlBoolean (Compare (x, y) <= 0);
-		}
+        public static SqlBoolean operator !=(SqlBinary x, SqlBinary y)
+        {
+            if (x.IsNull || y.IsNull)
+                return SqlBoolean.Null;
+            else
+                return new SqlBoolean(Compare(x, y) != 0);
+        }
 
-		public static explicit operator byte[] (SqlBinary x) 
-		{
-			return x.Value;
-		}
+        public static SqlBoolean operator <(SqlBinary x, SqlBinary y)
+        {
+            if (x.IsNull || y.IsNull)
+                return SqlBoolean.Null;
 
-		public static explicit operator SqlBinary (SqlGuid x) 
-		{
-			return new SqlBinary (x.ToByteArray ());
-		}
+            return new SqlBoolean(Compare(x, y) < 0);
+        }
 
-		public static implicit operator SqlBinary (byte[] x) 
-		{
-			return new SqlBinary (x);
-		}
+        public static SqlBoolean operator <=(SqlBinary x, SqlBinary y)
+        {
+            if (x.IsNull || y.IsNull)
+                return SqlBoolean.Null;
 
-		#endregion
+            return new SqlBoolean(Compare(x, y) <= 0);
+        }
 
-		// Helper method to Compare methods and operators.
-		// Returns 0 if x == y
-		//         1 if x > y
-		//        -1 if x < y
-		private static int Compare(SqlBinary x, SqlBinary y)
-		{
-			
-			int LengthDiff = 0;
+        public static explicit operator byte[](SqlBinary x)
+        {
+            return x.Value;
+        }
 
-			// If they are different size test are bytes something else than 0
-			if (x.Value.Length != y.Value.Length) {
-				
-				LengthDiff = x.Value.Length - y.Value.Length;
+        public static explicit operator SqlBinary(SqlGuid x)
+        {
+            return new SqlBinary(x.ToByteArray());
+        }
 
-				// If more than zero, x is longer
-				if (LengthDiff > 0) {
-					
-					for (int i = x.Value.Length - 1; i > x.Value.Length - LengthDiff; i--) {
-						// If byte is more than zero the x is bigger
-						if (x.Value [i] != (byte)0)
-							return 1;
-					}
-				} else {
+        public static implicit operator SqlBinary(byte[] x)
+        {
+            return new SqlBinary(x);
+        }
 
-					for (int i = y.Value.Length - 1; i > y.Value.Length - LengthDiff; i--) {
-						// If byte is more than zero then y is bigger
-						if (y.Value [i] != (byte)0)
-							return -1;
-					}
-				}				
-			}
+        #endregion
 
-			// choose shorter
-			int lenght = (LengthDiff > 0) ? y.Value.Length : x.Value.Length;
+        // Helper method to Compare methods and operators.
+        // Returns 0 if x == y
+        //         1 if x > y
+        //        -1 if x < y
+        private static int Compare(SqlBinary x, SqlBinary y)
+        {
+            int LengthDiff = 0;
 
-			for (int i = lenght - 1 ; i > 0; i--) {
-				
-				byte X = x.Value [i];
-				byte Y = y.Value [i];
-				
-				if (X > Y) 
-					return 1;
-				else if (X < Y)
-					return -1;
-			}
+            // If they are different size test are bytes something else than 0
+            if (x.Value.Length != y.Value.Length)
+            {
+                LengthDiff = x.Value.Length - y.Value.Length;
 
-			// If we are here, x and y were same size
-			return 0;
-		}
-	}
+                // If more than zero, x is longer
+                if (LengthDiff > 0)
+                {
+                    for (int i = x.Value.Length - 1; i > x.Value.Length - LengthDiff; i--)
+                    {
+                        // If byte is more than zero the x is bigger
+                        if (x.Value[i] != (byte) 0)
+                            return 1;
+                    }
+                }
+                else
+                {
+                    for (int i = y.Value.Length - 1; i > y.Value.Length - LengthDiff; i--)
+                    {
+                        // If byte is more than zero then y is bigger
+                        if (y.Value[i] != (byte) 0)
+                            return -1;
+                    }
+                }
+            }
+
+            // choose shorter
+            int lenght = (LengthDiff > 0) ? y.Value.Length : x.Value.Length;
+
+            for (int i = lenght - 1; i > 0; i--)
+            {
+                byte X = x.Value[i];
+                byte Y = y.Value[i];
+
+                if (X > Y)
+                    return 1;
+                else if (X < Y)
+                    return -1;
+            }
+
+            // If we are here, x and y were same size
+            return 0;
+        }
+    }
 }

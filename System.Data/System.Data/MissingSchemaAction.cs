@@ -34,17 +34,17 @@ using System;
 
 namespace System.Data
 {
-	/// <summary>
-	/// Specifies the action to take when adding data to the DataSet and the required DataTable or DataColumn is missing.
-	/// </summary>
+    /// <summary>
+    /// Specifies the action to take when adding data to the DataSet and the required DataTable or DataColumn is missing.
+    /// </summary>
 #if !NET_2_0
 	[Serializable]
 #endif
-	public enum MissingSchemaAction
-	{
-		Add = 1,
-		Ignore = 2,
-		Error = 3,
-		AddWithKey = 4
-	}
+    public enum MissingSchemaAction
+    {
+        Add = 1,
+        Ignore = 2,
+        Error = 3,
+        AddWithKey = 4
+    }
 }

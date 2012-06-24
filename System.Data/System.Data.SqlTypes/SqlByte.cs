@@ -37,431 +37,450 @@ using System.Globalization;
 
 namespace System.Data.SqlTypes
 {
-	public struct SqlByte : INullable, IComparable
-	{
-		#region Fields
+    public struct SqlByte : INullable, IComparable
+    {
+        #region Fields
 
-		byte value;
-		private bool notNull;
+        private byte value;
+        private bool notNull;
 
-		public static readonly SqlByte MaxValue = new SqlByte (0xff);
-		public static readonly SqlByte MinValue = new SqlByte (0);
-		public static readonly SqlByte Null;
-		public static readonly SqlByte Zero = new SqlByte (0);
+        public static readonly SqlByte MaxValue = new SqlByte(0xff);
+        public static readonly SqlByte MinValue = new SqlByte(0);
+        public static readonly SqlByte Null;
+        public static readonly SqlByte Zero = new SqlByte(0);
 
-		#endregion
+        #endregion
 
-		#region Constructors
+        #region Constructors
 
-		public SqlByte (byte value) 
-		{
-			this.value = value;
-			notNull = true;
-		}
+        public SqlByte(byte value)
+        {
+            this.value = value;
+            notNull = true;
+        }
 
-		#endregion
+        #endregion
 
-		#region Properties
+        #region Properties
 
-		public bool IsNull {
-			get { return !notNull; }
-		}
+        public bool IsNull
+        {
+            get { return !notNull; }
+        }
 
-		public byte Value { 
-			get { 
-				if (this.IsNull) 
-					throw new SqlNullValueException ();
-				else 
-					return value; 
-			}
-		}
+        public byte Value
+        {
+            get
+            {
+                if (this.IsNull)
+                    throw new SqlNullValueException();
+                else
+                    return value;
+            }
+        }
 
-		#endregion
+        #endregion
 
-		#region Methods
+        #region Methods
 
-		public static SqlByte Add (SqlByte x, SqlByte y)
-		{
-			return (x + y);
-		}
+        public static SqlByte Add(SqlByte x, SqlByte y)
+        {
+            return (x + y);
+        }
 
-		public static SqlByte BitwiseAnd (SqlByte x, SqlByte y)
-		{
-			return (x & y);
-		}
+        public static SqlByte BitwiseAnd(SqlByte x, SqlByte y)
+        {
+            return (x & y);
+        }
 
-		public static SqlByte BitwiseOr (SqlByte x, SqlByte y)
-		{
-			return (x | y);
-		}
+        public static SqlByte BitwiseOr(SqlByte x, SqlByte y)
+        {
+            return (x | y);
+        }
 
-		public int CompareTo (object value)
-		{
-			if (value == null)
-				return 1;
-			if (!(value is SqlByte))
-				throw new ArgumentException (Locale.GetText ("Value is not a System.Data.SqlTypes.SqlByte"));
+        public int CompareTo(object value)
+        {
+            if (value == null)
+                return 1;
+            if (!(value is SqlByte))
+                throw new ArgumentException(Locale.GetText("Value is not a System.Data.SqlTypes.SqlByte"));
 
-			return CompareTo ((SqlByte) value);
-		}
-#if NET_2_0
-		public
-#endif
-		int CompareTo (SqlByte value)
-		{
-			if (value.IsNull)
-				return 1;
-			else
-				return this.value.CompareTo (value.Value);
-		}
-
-		public static SqlByte Divide (SqlByte x, SqlByte y)
-		{
-			return (x / y);
-		}
-
-		public override bool Equals (object value)
-		{
-			if (!(value is SqlByte))
-				return false;
-			else if (this.IsNull)
-				return ((SqlByte)value).IsNull;
-			else if (((SqlByte)value).IsNull)
-				return false;
-			else
-				return (bool) (this == (SqlByte)value);
-		}
-
-		public static SqlBoolean Equals (SqlByte x, SqlByte y)
-		{
-			return (x == y);
-		}
-
-		public override int GetHashCode ()
-		{
-			return (int)value;
-		}
-
-		public static SqlBoolean GreaterThan (SqlByte x, SqlByte y)
-		{
-			return (x > y);
-		}
-
-		public static SqlBoolean GreaterThanOrEqual (SqlByte x, SqlByte y)
-		{
-			return (x >= y);
-		}
-
-		public static SqlBoolean LessThan (SqlByte x, SqlByte y)
-		{
-			return (x < y);
-		}
-
-		public static SqlBoolean LessThanOrEqual (SqlByte x, SqlByte y)
-		{
-			return (x <= y);
-		}
-
-		public static SqlByte Mod (SqlByte x, SqlByte y)
-		{
-			return (x % y);
-		}
+            return CompareTo((SqlByte) value);
+        }
 
 #if NET_2_0
-		// Why did Microsoft add this method in 2.0???  What's 
-		// the difference????
-		public static SqlByte Modulus (SqlByte x, SqlByte y) 
-		{
-			return (x % y);
-		}
+        public
+#endif
+            int CompareTo(SqlByte value)
+        {
+            if (value.IsNull)
+                return 1;
+            else
+                return this.value.CompareTo(value.Value);
+        }
+
+        public static SqlByte Divide(SqlByte x, SqlByte y)
+        {
+            return (x/y);
+        }
+
+        public override bool Equals(object value)
+        {
+            if (!(value is SqlByte))
+                return false;
+            else if (this.IsNull)
+                return ((SqlByte) value).IsNull;
+            else if (((SqlByte) value).IsNull)
+                return false;
+            else
+                return (bool) (this == (SqlByte) value);
+        }
+
+        public static SqlBoolean Equals(SqlByte x, SqlByte y)
+        {
+            return (x == y);
+        }
+
+        public override int GetHashCode()
+        {
+            return (int) value;
+        }
+
+        public static SqlBoolean GreaterThan(SqlByte x, SqlByte y)
+        {
+            return (x > y);
+        }
+
+        public static SqlBoolean GreaterThanOrEqual(SqlByte x, SqlByte y)
+        {
+            return (x >= y);
+        }
+
+        public static SqlBoolean LessThan(SqlByte x, SqlByte y)
+        {
+            return (x < y);
+        }
+
+        public static SqlBoolean LessThanOrEqual(SqlByte x, SqlByte y)
+        {
+            return (x <= y);
+        }
+
+        public static SqlByte Mod(SqlByte x, SqlByte y)
+        {
+            return (x%y);
+        }
+
+#if NET_2_0
+        // Why did Microsoft add this method in 2.0???  What's 
+        // the difference????
+        public static SqlByte Modulus(SqlByte x, SqlByte y)
+        {
+            return (x%y);
+        }
 #endif
 
-		public static SqlByte Multiply (SqlByte x, SqlByte y)
-		{
-			return (x * y);
-		}
+        public static SqlByte Multiply(SqlByte x, SqlByte y)
+        {
+            return (x*y);
+        }
 
-		public static SqlBoolean NotEquals (SqlByte x, SqlByte y)
-		{
-			return (x != y);
-		}
+        public static SqlBoolean NotEquals(SqlByte x, SqlByte y)
+        {
+            return (x != y);
+        }
 
-		public static SqlByte OnesComplement (SqlByte x)
-		{
-			return ~x;
-		}
+        public static SqlByte OnesComplement(SqlByte x)
+        {
+            return ~x;
+        }
 
-		public static SqlByte Parse (string s)
-		{
-			checked {
-				return new SqlByte (Byte.Parse (s));
-			}
-		}
+        public static SqlByte Parse(string s)
+        {
+            checked
+            {
+                return new SqlByte(Byte.Parse(s));
+            }
+        }
 
-		public static SqlByte Subtract (SqlByte x, SqlByte y)
-		{
-			return (x - y);
-		}
+        public static SqlByte Subtract(SqlByte x, SqlByte y)
+        {
+            return (x - y);
+        }
 
-		public SqlBoolean ToSqlBoolean ()
-		{
-			return ((SqlBoolean)this);
-		}
-		
-		public SqlDecimal ToSqlDecimal ()
-		{
-			return ((SqlDecimal)this);
-		}
+        public SqlBoolean ToSqlBoolean()
+        {
+            return ((SqlBoolean) this);
+        }
 
-		public SqlDouble ToSqlDouble ()
-		{
-			return ((SqlDouble)this);
-		}
+        public SqlDecimal ToSqlDecimal()
+        {
+            return ((SqlDecimal) this);
+        }
 
-		public SqlInt16 ToSqlInt16 ()
-		{
-			return ((SqlInt16)this);
-		}
+        public SqlDouble ToSqlDouble()
+        {
+            return ((SqlDouble) this);
+        }
 
-		public SqlInt32 ToSqlInt32 ()
-		{
-			return ((SqlInt32)this);
-		}
+        public SqlInt16 ToSqlInt16()
+        {
+            return ((SqlInt16) this);
+        }
 
-		public SqlInt64 ToSqlInt64 ()
-		{
-			return ((SqlInt64)this);
-		}
+        public SqlInt32 ToSqlInt32()
+        {
+            return ((SqlInt32) this);
+        }
 
-		public SqlMoney ToSqlMoney ()
-		{
-			return ((SqlMoney)this);
-		}
+        public SqlInt64 ToSqlInt64()
+        {
+            return ((SqlInt64) this);
+        }
 
-		public SqlSingle ToSqlSingle ()
-		{
-			return ((SqlSingle)this);
-		}
+        public SqlMoney ToSqlMoney()
+        {
+            return ((SqlMoney) this);
+        }
 
-		public SqlString ToSqlString ()
-		{
-			return ((SqlString)this);
-		}
+        public SqlSingle ToSqlSingle()
+        {
+            return ((SqlSingle) this);
+        }
 
-		public override string ToString ()
-		{
-			if (this.IsNull)
-				return "Null";
-			else
-				return value.ToString ();
-		}
+        public SqlString ToSqlString()
+        {
+            return ((SqlString) this);
+        }
 
-		public static SqlByte Xor (SqlByte x, SqlByte y)
-		{
-			return (x ^ y);
-		}
+        public override string ToString()
+        {
+            if (this.IsNull)
+                return "Null";
+            else
+                return value.ToString();
+        }
 
-		public static SqlByte operator + (SqlByte x, SqlByte y)
-		{
-			checked {
-				return new SqlByte ((byte) (x.Value + y.Value));
-			}
-		}
+        public static SqlByte Xor(SqlByte x, SqlByte y)
+        {
+            return (x ^ y);
+        }
 
-		public static SqlByte operator & (SqlByte x, SqlByte y)
-		{
-			return new SqlByte ((byte) (x.Value & y.Value));
-		}
+        public static SqlByte operator +(SqlByte x, SqlByte y)
+        {
+            checked
+            {
+                return new SqlByte((byte) (x.Value + y.Value));
+            }
+        }
 
-		public static SqlByte operator | (SqlByte x, SqlByte y)
-		{
-			return new SqlByte ((byte) (x.Value | y.Value));
-		}
+        public static SqlByte operator &(SqlByte x, SqlByte y)
+        {
+            return new SqlByte((byte) (x.Value & y.Value));
+        }
 
-		public static SqlByte operator / (SqlByte x, SqlByte y)
-		{
-			checked {
-				return new SqlByte ((byte) (x.Value / y.Value));
-			}
-		}
+        public static SqlByte operator |(SqlByte x, SqlByte y)
+        {
+            return new SqlByte((byte) (x.Value | y.Value));
+        }
 
-		public static SqlBoolean operator == (SqlByte x, SqlByte y)
-		{
-			if (x.IsNull || y.IsNull) 
-				return SqlBoolean.Null;
-			else
-				return new SqlBoolean (x.Value == y.Value);
-		}
+        public static SqlByte operator /(SqlByte x, SqlByte y)
+        {
+            checked
+            {
+                return new SqlByte((byte) (x.Value/y.Value));
+            }
+        }
 
-		public static SqlByte operator ^ (SqlByte x, SqlByte y)
-		{
-			return new SqlByte ((byte) (x.Value ^ y.Value));
-		}
+        public static SqlBoolean operator ==(SqlByte x, SqlByte y)
+        {
+            if (x.IsNull || y.IsNull)
+                return SqlBoolean.Null;
+            else
+                return new SqlBoolean(x.Value == y.Value);
+        }
 
-		public static SqlBoolean operator > (SqlByte x, SqlByte y)
-		{
-			if (x.IsNull || y.IsNull) 
-				return SqlBoolean.Null;
-			else
-				return new SqlBoolean (x.Value > y.Value);
-		}
+        public static SqlByte operator ^(SqlByte x, SqlByte y)
+        {
+            return new SqlByte((byte) (x.Value ^ y.Value));
+        }
 
-		public static SqlBoolean operator >= (SqlByte x, SqlByte y)
-		{
-			if (x.IsNull || y.IsNull) 
-				return SqlBoolean.Null;
-			else
-				return new SqlBoolean (x.Value >= y.Value);
-		}
+        public static SqlBoolean operator >(SqlByte x, SqlByte y)
+        {
+            if (x.IsNull || y.IsNull)
+                return SqlBoolean.Null;
+            else
+                return new SqlBoolean(x.Value > y.Value);
+        }
 
-		public static SqlBoolean operator != (SqlByte x, SqlByte y)
-		{
-			if (x.IsNull || y.IsNull) 
-				return SqlBoolean.Null;
-			else
-				return new SqlBoolean (!(x.Value == y.Value));
-		}
+        public static SqlBoolean operator >=(SqlByte x, SqlByte y)
+        {
+            if (x.IsNull || y.IsNull)
+                return SqlBoolean.Null;
+            else
+                return new SqlBoolean(x.Value >= y.Value);
+        }
 
-		public static SqlBoolean operator < (SqlByte x, SqlByte y)
-		{
-			if (x.IsNull || y.IsNull) 
-				return SqlBoolean.Null;
-			else
-				return new SqlBoolean (x.Value < y.Value);
-		}
+        public static SqlBoolean operator !=(SqlByte x, SqlByte y)
+        {
+            if (x.IsNull || y.IsNull)
+                return SqlBoolean.Null;
+            else
+                return new SqlBoolean(!(x.Value == y.Value));
+        }
 
-		public static SqlBoolean operator <= (SqlByte x, SqlByte y)
-		{
-			if (x.IsNull || y.IsNull) 
-				return SqlBoolean.Null;
-			else
-				return new SqlBoolean (x.Value <= y.Value);
-		}
+        public static SqlBoolean operator <(SqlByte x, SqlByte y)
+        {
+            if (x.IsNull || y.IsNull)
+                return SqlBoolean.Null;
+            else
+                return new SqlBoolean(x.Value < y.Value);
+        }
 
-		public static SqlByte operator % (SqlByte x, SqlByte y)
-		{
-			return new SqlByte ((byte) (x.Value % y.Value));
-		}
+        public static SqlBoolean operator <=(SqlByte x, SqlByte y)
+        {
+            if (x.IsNull || y.IsNull)
+                return SqlBoolean.Null;
+            else
+                return new SqlBoolean(x.Value <= y.Value);
+        }
 
-		public static SqlByte operator * (SqlByte x, SqlByte y)
-		{
-			checked {
-				return new SqlByte ((byte) (x.Value * y.Value));
-			}
-		}
+        public static SqlByte operator %(SqlByte x, SqlByte y)
+        {
+            return new SqlByte((byte) (x.Value%y.Value));
+        }
 
-		public static SqlByte operator ~ (SqlByte x)
-		{
-			return new SqlByte ((byte) ~x.Value);
-		}
+        public static SqlByte operator *(SqlByte x, SqlByte y)
+        {
+            checked
+            {
+                return new SqlByte((byte) (x.Value*y.Value));
+            }
+        }
 
-		public static SqlByte operator - (SqlByte x, SqlByte y)
-		{
-			checked {
-				return new SqlByte ((byte) (x.Value - y.Value));
-			}
-		}
+        public static SqlByte operator ~(SqlByte x)
+        {
+            return new SqlByte((byte) ~x.Value);
+        }
 
-		public static explicit operator SqlByte (SqlBoolean x)
-		{
-			if (x.IsNull)
-				return Null;
-			else
-				return new SqlByte (x.ByteValue);
-		}
+        public static SqlByte operator -(SqlByte x, SqlByte y)
+        {
+            checked
+            {
+                return new SqlByte((byte) (x.Value - y.Value));
+            }
+        }
 
-		public static explicit operator byte (SqlByte x)
-		{
-			return x.Value;
-		}
+        public static explicit operator SqlByte(SqlBoolean x)
+        {
+            if (x.IsNull)
+                return Null;
+            else
+                return new SqlByte(x.ByteValue);
+        }
 
-		public static explicit operator SqlByte (SqlDecimal x)
-		{
-			checked {
-				if (x.IsNull)
-					return Null;
-				else 
-					return new SqlByte ((byte)x.Value);
-			}
-		}
+        public static explicit operator byte(SqlByte x)
+        {
+            return x.Value;
+        }
 
-		public static explicit operator SqlByte (SqlDouble x)
-		{
-			if (x.IsNull)
-				return Null;
-			else {
-				checked {
-					return new SqlByte ((byte)x.Value);
-				}
-			}
-		}
+        public static explicit operator SqlByte(SqlDecimal x)
+        {
+            checked
+            {
+                if (x.IsNull)
+                    return Null;
+                else
+                    return new SqlByte((byte) x.Value);
+            }
+        }
 
-		public static explicit operator SqlByte (SqlInt16 x)
-		{
-			checked {
-				if (x.IsNull)
-					return Null;
-				else 			       
-					return new SqlByte ((byte)x.Value);
-			}
-		}
+        public static explicit operator SqlByte(SqlDouble x)
+        {
+            if (x.IsNull)
+                return Null;
+            else
+            {
+                checked
+                {
+                    return new SqlByte((byte) x.Value);
+                }
+            }
+        }
 
-		public static explicit operator SqlByte (SqlInt32 x)
-		{
-			checked {
-				if (x.IsNull)
-					return Null;
-				else 			       
-					return new SqlByte ((byte)x.Value);
-			}
-		}
+        public static explicit operator SqlByte(SqlInt16 x)
+        {
+            checked
+            {
+                if (x.IsNull)
+                    return Null;
+                else
+                    return new SqlByte((byte) x.Value);
+            }
+        }
 
-		public static explicit operator SqlByte (SqlInt64 x)
-		{
-			if (x.IsNull)
-				return Null;
-			else {
-				checked {
-					return new SqlByte ((byte)x.Value);
-				}
-			}
-		}
+        public static explicit operator SqlByte(SqlInt32 x)
+        {
+            checked
+            {
+                if (x.IsNull)
+                    return Null;
+                else
+                    return new SqlByte((byte) x.Value);
+            }
+        }
 
-		public static explicit operator SqlByte (SqlMoney x)
-		{
-			checked {
-				if (x.IsNull)
-					return Null;
-				else 					
-					return new SqlByte ((byte)x.Value);
-			}
-		}
+        public static explicit operator SqlByte(SqlInt64 x)
+        {
+            if (x.IsNull)
+                return Null;
+            else
+            {
+                checked
+                {
+                    return new SqlByte((byte) x.Value);
+                }
+            }
+        }
 
-		public static explicit operator SqlByte (SqlSingle x)
-		{
-			if (x.IsNull)
-				return Null;
-			else {
-				checked {
-					return new SqlByte ((byte)x.Value);
-				}
-			}
-		}
+        public static explicit operator SqlByte(SqlMoney x)
+        {
+            checked
+            {
+                if (x.IsNull)
+                    return Null;
+                else
+                    return new SqlByte((byte) x.Value);
+            }
+        }
+
+        public static explicit operator SqlByte(SqlSingle x)
+        {
+            if (x.IsNull)
+                return Null;
+            else
+            {
+                checked
+                {
+                    return new SqlByte((byte) x.Value);
+                }
+            }
+        }
 
 
-		public static explicit operator SqlByte (SqlString x)
-		{			
-			checked {
-				return SqlByte.Parse (x.Value);
-			}
-		}
+        public static explicit operator SqlByte(SqlString x)
+        {
+            checked
+            {
+                return SqlByte.Parse(x.Value);
+            }
+        }
 
-		public static implicit operator SqlByte (byte x)
-		{
-			return new SqlByte (x);
-		}
-		
-		#endregion
-	}
+        public static implicit operator SqlByte(byte x)
+        {
+            return new SqlByte(x);
+        }
+
+        #endregion
+    }
 }
-			

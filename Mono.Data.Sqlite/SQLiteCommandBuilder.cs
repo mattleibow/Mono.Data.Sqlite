@@ -1,4 +1,4 @@
-﻿﻿/********************************************************
+﻿/********************************************************
  * ADO.NET 2.0 Data Provider for SQLite Version 3.X
  * Written by Robert Simpson (robert@blackcastlesoft.com)
  * 
@@ -63,16 +63,10 @@ namespace Mono.Data.Sqlite
 #if !PLATFORM_COMPACTFRAMEWORK
         [Browsable(false)]
 #endif
-        public override CatalogLocation CatalogLocation
+            public override CatalogLocation CatalogLocation
         {
-            get
-            {
-                return base.CatalogLocation;
-            }
-            set
-            {
-                base.CatalogLocation = value;
-            }
+            get { return base.CatalogLocation; }
+            set { base.CatalogLocation = value; }
         }
 
         /// <summary>
@@ -81,16 +75,10 @@ namespace Mono.Data.Sqlite
 #if !PLATFORM_COMPACTFRAMEWORK
         [Browsable(false)]
 #endif
-        public override string CatalogSeparator
+            public override string CatalogSeparator
         {
-            get
-            {
-                return base.CatalogSeparator;
-            }
-            set
-            {
-                base.CatalogSeparator = value;
-            }
+            get { return base.CatalogSeparator; }
+            set { base.CatalogSeparator = value; }
         }
 
         /// <summary>
@@ -102,14 +90,8 @@ namespace Mono.Data.Sqlite
         [DefaultValue("[")]
         public override string QuotePrefix
         {
-            get
-            {
-                return base.QuotePrefix;
-            }
-            set
-            {
-                base.QuotePrefix = value;
-            }
+            get { return base.QuotePrefix; }
+            set { base.QuotePrefix = value; }
         }
 
         /// <summary>
@@ -118,16 +100,10 @@ namespace Mono.Data.Sqlite
 #if !PLATFORM_COMPACTFRAMEWORK
         [Browsable(false)]
 #endif
-        public override string QuoteSuffix
+            public override string QuoteSuffix
         {
-            get
-            {
-                return base.QuoteSuffix;
-            }
-            set
-            {
-                base.QuoteSuffix = value;
-            }
+            get { return base.QuoteSuffix; }
+            set { base.QuoteSuffix = value; }
         }
 
         /// <summary>
@@ -138,8 +114,8 @@ namespace Mono.Data.Sqlite
         public override string QuoteIdentifier(string unquotedIdentifier)
         {
             if (String.IsNullOrEmpty(QuotePrefix)
-              || String.IsNullOrEmpty(QuoteSuffix)
-              || String.IsNullOrEmpty(unquotedIdentifier))
+                || String.IsNullOrEmpty(QuoteSuffix)
+                || String.IsNullOrEmpty(unquotedIdentifier))
                 return unquotedIdentifier;
 
             return QuotePrefix + unquotedIdentifier.Replace(QuoteSuffix, QuoteSuffix + QuoteSuffix) + QuoteSuffix;
@@ -153,15 +129,18 @@ namespace Mono.Data.Sqlite
         public override string UnquoteIdentifier(string quotedIdentifier)
         {
             if (String.IsNullOrEmpty(QuotePrefix)
-              || String.IsNullOrEmpty(QuoteSuffix)
-              || String.IsNullOrEmpty(quotedIdentifier))
+                || String.IsNullOrEmpty(QuoteSuffix)
+                || String.IsNullOrEmpty(quotedIdentifier))
                 return quotedIdentifier;
 
             if (quotedIdentifier.StartsWith(QuotePrefix, StringComparison.InvariantCultureIgnoreCase) == false
-              || quotedIdentifier.EndsWith(QuoteSuffix, StringComparison.InvariantCultureIgnoreCase) == false)
+                || quotedIdentifier.EndsWith(QuoteSuffix, StringComparison.InvariantCultureIgnoreCase) == false)
                 return quotedIdentifier;
 
-            return quotedIdentifier.Substring(QuotePrefix.Length, quotedIdentifier.Length - (QuotePrefix.Length + QuoteSuffix.Length)).Replace(QuoteSuffix + QuoteSuffix, QuoteSuffix);
+            return
+                quotedIdentifier.Substring(QuotePrefix.Length,
+                                           quotedIdentifier.Length - (QuotePrefix.Length + QuoteSuffix.Length)).Replace(
+                                               QuoteSuffix + QuoteSuffix, QuoteSuffix);
         }
 
         /// <summary>
@@ -170,16 +149,10 @@ namespace Mono.Data.Sqlite
 #if !PLATFORM_COMPACTFRAMEWORK
         [Browsable(false)]
 #endif
-        public override string SchemaSeparator
+            public override string SchemaSeparator
         {
-            get
-            {
-                return base.SchemaSeparator;
-            }
-            set
-            {
-                base.SchemaSeparator = value;
-            }
+            get { return base.SchemaSeparator; }
+            set { base.SchemaSeparator = value; }
         }
     }
 }

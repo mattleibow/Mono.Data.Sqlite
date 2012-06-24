@@ -32,15 +32,15 @@
 
 namespace System.Data
 {
-	/// <summary>
-	/// Associates a source table with a table in a DataSet, and is implemented by the DataTableMapping class, which is used in common by .NET data providers.
-	/// </summary>
-	public interface ITableMapping
-	{
-		IColumnMappingCollection ColumnMappings{get;}
+    /// <summary>
+    /// Associates a source table with a table in a DataSet, and is implemented by the DataTableMapping class, which is used in common by .NET data providers.
+    /// </summary>
+    public interface ITableMapping
+    {
+        IColumnMappingCollection ColumnMappings { get; }
 
-		string DataSetTable{get; set;}
+        string DataSetTable { get; set; }
 
-		string SourceTable{get; set;}
-	}
+        string SourceTable { get; set; }
+    }
 }

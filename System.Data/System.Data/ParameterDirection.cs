@@ -34,17 +34,17 @@ using System;
 
 namespace System.Data
 {
-	/// <summary>
-	/// Specifies the type of a parameter within a query relative to the DataSet.
-	/// </summary>
+    /// <summary>
+    /// Specifies the type of a parameter within a query relative to the DataSet.
+    /// </summary>
 #if !NET_2_0
 	[Serializable]
 #endif
-	public enum ParameterDirection
-	{
-		Input = 1,
-		Output = 2,
-		InputOutput = 3,
-		ReturnValue = 6
-	}
+    public enum ParameterDirection
+    {
+        Input = 1,
+        Output = 2,
+        InputOutput = 3,
+        ReturnValue = 6
+    }
 }

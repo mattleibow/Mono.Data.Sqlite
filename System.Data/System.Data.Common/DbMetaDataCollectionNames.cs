@@ -25,16 +25,20 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#if NET_2_0
-namespace System.Data.Common {
-	[MonoTODO]
-	public static class DbMetaDataCollectionNames {
 
-		public static readonly string DataSourceInformation = "DataSourceInformation";
-		public static readonly string DataTypes = "DataTypes" ;
-		public static readonly string MetaDataCollections = "MetaDataCollections";
-		public static readonly string ReservedWords = "ReservedWords";
-		public static readonly string Restrictions = "Restrictions";
-	}
+#if NET_2_0
+
+namespace System.Data.Common
+{
+    [MonoTODO]
+    public static class DbMetaDataCollectionNames
+    {
+        public static readonly string DataSourceInformation = "DataSourceInformation";
+        public static readonly string DataTypes = "DataTypes";
+        public static readonly string MetaDataCollections = "MetaDataCollections";
+        public static readonly string ReservedWords = "ReservedWords";
+        public static readonly string Restrictions = "Restrictions";
+    }
 }
+
 #endif

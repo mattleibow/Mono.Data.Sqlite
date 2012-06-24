@@ -34,21 +34,21 @@ using System.Runtime.Serialization;
 
 namespace System.Data.SqlTypes
 {
-	public sealed class SqlTruncateException : SqlTypeException
-	{
-		public SqlTruncateException ()
-			: base (Locale.GetText ("This value is being truncated"))
-		{
-		}
+    public sealed class SqlTruncateException : SqlTypeException
+    {
+        public SqlTruncateException()
+            : base(Locale.GetText("This value is being truncated"))
+        {
+        }
 
-		public SqlTruncateException (string message)
-			: base (message)
-		{
-		}
+        public SqlTruncateException(string message)
+            : base(message)
+        {
+        }
 
-		public SqlTruncateException (string message, Exception e)
-			: base (message, e)
-		{
-		}
-	}
+        public SqlTruncateException(string message, Exception e)
+            : base(message, e)
+        {
+        }
+    }
 }

@@ -9,24 +9,25 @@
 // (C)2006 Novell Inc,
 //
 
+
 #if NET_2_0
 
 namespace System.Transactions
 {
-	public class Enlistment
-	{
-		internal bool done;
+    public class Enlistment
+    {
+        internal bool done;
 
-		internal Enlistment ()
-		{
-			done = false;
-		}
+        internal Enlistment()
+        {
+            done = false;
+        }
 
-		public void Done ()
-		{
-			done = true;
-		}
-	}
+        public void Done()
+        {
+            done = true;
+        }
+    }
 }
 
 #endif

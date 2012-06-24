@@ -32,26 +32,27 @@ using System;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
-namespace System.Data.Common {
-	public abstract class DbException : ExternalException
-	{
-		protected DbException ()
-		{
-		}
+namespace System.Data.Common
+{
+    public abstract class DbException : ExternalException
+    {
+        protected DbException()
+        {
+        }
 
-		protected DbException (string message) : base(message) 
-		{
-		}
+        protected DbException(string message) : base(message)
+        {
+        }
 
-		protected DbException (string message, Exception innerException)
-			: base (message, innerException)
-		{
-		}
+        protected DbException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
 
-		protected DbException (string message, int errorCode) : base(message,errorCode) 
-		{
-		}
-	}
+        protected DbException(string message, int errorCode) : base(message, errorCode)
+        {
+        }
+    }
 }
 
 #endif

@@ -33,24 +33,23 @@ using System.Globalization;
 
 namespace System.Data
 {
-	public class NoNullAllowedException : DataException
-	{
-		public NoNullAllowedException ()
-			: base (Locale.GetText ("Cannot insert a NULL value"))
-		{
-		}
+    public class NoNullAllowedException : DataException
+    {
+        public NoNullAllowedException()
+            : base(Locale.GetText("Cannot insert a NULL value"))
+        {
+        }
 
-		public NoNullAllowedException (string s)
-			: base (s)
-		{
-		}
+        public NoNullAllowedException(string s)
+            : base(s)
+        {
+        }
 
 #if NET_2_0
-		public NoNullAllowedException (string message, Exception innerException)
-			: base (message, innerException)
-		{
-		}
+        public NoNullAllowedException(string message, Exception innerException)
+            : base(message, innerException)
+        {
+        }
 #endif
-
-	}
+    }
 }

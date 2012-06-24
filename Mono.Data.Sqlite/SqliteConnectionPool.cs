@@ -9,7 +9,6 @@ namespace Mono.Data.Sqlite
 {
     using System;
     using System.Collections.Generic;
-
     using Community.CsharpSqlite;
 
     internal static class SqliteConnectionPool
@@ -34,7 +33,8 @@ namespace Mono.Data.Sqlite
         /// <summary>
         /// The connection pool object
         /// </summary>
-        private static SortedList<string, Pool> _connections = new SortedList<string, Pool>(StringComparer.OrdinalIgnoreCase);
+        private static SortedList<string, Pool> _connections =
+            new SortedList<string, Pool>(StringComparer.OrdinalIgnoreCase);
 
         /// <summary>
         /// The default version number new pools will get
