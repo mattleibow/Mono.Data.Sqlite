@@ -40,7 +40,7 @@ namespace MonoTests.Mono.Data.Sqlite
     [TestFixture]
     public class SqliteDataReaderTest
     {
-        readonly static string _uri = "./test.db";
+        readonly static string _uri = "test.db";
         readonly static string _connectionString = "URI=file://" + _uri + ", version=3";
         SqliteConnection _conn = new SqliteConnection();
 
@@ -50,10 +50,19 @@ namespace MonoTests.Mono.Data.Sqlite
             if (!File.Exists(_uri) || new FileInfo(_uri).Length == 0)
             {
                 // ignore all tests
-                Assert.Ignore("#000 ignoring all fixtures. No database present");
+                // Assert.Ignore("#000 ignoring all fixtures. No database present");
+
+                _conn.ConnectionString = _connectionString;
+                using (_conn)
+                {
+                    _conn.Open();
+                    SqliteCommand cmd = _conn.CreateCommand();
+                    cmd.CommandText = File.ReadAllText("test.sql");
+                    cmd.ExecuteNonQuery();
+                    _conn.Close();
+                }
             }
         }
-
 
         [Test]
         [Category("NotWorking")]
