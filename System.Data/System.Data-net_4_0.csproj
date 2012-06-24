@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{155AEF28-C81F-405D-9072-9D52780E3E70}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <NoWarn>1699,649</NoWarn>
+    <NoStdLib>true</NoStdLib>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <AssemblyName>System.Data.Mine</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE;NET_1_1;NET_2_0;NET_3_0;NET_3_5;NET_4_0</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>NET_1_1;NET_2_0;NET_3_0;NET_3_5;NET_4_0</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup>
+    <AssemblyOriginatorKeyFile>
+    </AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Compile Include="..\Consts.cs">
+      <Link>Consts.cs</Link>
+    </Compile>
+    <Compile Include="Assembly\AssemblyInfo.cs" />
+    <Compile Include="Locale.cs" />
+    <Compile Include="MonoTODOAttribute.cs" />
+    <Compile Include="System.Data\AcceptRejectRule.cs" />
+    <Compile Include="System.Data\ColumnTypeConverter.cs" />
+    <Compile Include="System.Data\CommandBehavior.cs" />
+    <Compile Include="System.Data\CommandType.cs" />
+    <Compile Include="System.Data\ConnectionState.cs" />
+    <Compile Include="System.Data\ConflictOption.cs" />
+    <Compile Include="System.Data\ConstraintConverter.cs" />
+    <Compile Include="System.Data\ConstraintException.cs" />
+    <Compile Include="System.Data\DataCategoryAttribute.cs" />
+    <Compile Include="System.Data\DataException.cs" />
+    <Compile Include="System.Data\RelationshipConverter.cs" />
+    <Compile Include="System.Data\DbType.cs" />
+    <Compile Include="System.Data\DefaultValueTypeConverter.cs" />
+    <Compile Include="System.Data\DeletedRowInaccessibleException.cs" />
+    <Compile Include="System.Data\DuplicateNameException.cs" />
+    <Compile Include="System.Data\EvaluateException.cs" />
+    <Compile Include="System.Data\IColumnMapping.cs" />
+    <Compile Include="System.Data\IColumnMappingCollection.cs" />
+    <Compile Include="System.Data\IDataParameter.cs" />
+    <Compile Include="System.Data\IDataParameterCollection.cs" />
+    <Compile Include="System.Data\IDataReader.cs" />
+    <Compile Include="System.Data\IDataRecord.cs" />
+    <Compile Include="System.Data\IDbCommand.cs" />
+    <Compile Include="System.Data\IDbConnection.cs" />
+    <Compile Include="System.Data\IDbDataParameter.cs" />
+    <Compile Include="System.Data\IDbTransaction.cs" />
+    <Compile Include="System.Data\InRowChangingEventException.cs" />
+    <Compile Include="System.Data\InternalDataCollectionBase.cs" />
+    <Compile Include="System.Data\InvalidConstraintException.cs" />
+    <Compile Include="System.Data\InvalidExpressionException.cs" />
+    <Compile Include="System.Data\ISafeDataRecord.cs" />
+    <Compile Include="System.Data\IsolationLevel.cs" />
+    <Compile Include="System.Data\ITableMapping.cs" />
+    <Compile Include="System.Data\ITableMappingCollection.cs" />
+    <Compile Include="System.Data\KeyRestrictionBehavior.cs" />
+    <Compile Include="System.Data\LoadOption.cs" />
+    <Compile Include="System.Data\MappingType.cs" />
+    <Compile Include="System.Data\MissingMappingAction.cs" />
+    <Compile Include="System.Data\MissingPrimaryKeyException.cs" />
+    <Compile Include="System.Data\MissingSchemaAction.cs" />
+    <Compile Include="System.Data\NoNullAllowedException.cs" />
+    <Compile Include="System.Data\OperationAbortedException.cs" />
+    <Compile Include="System.Data\ParameterDirection.cs" />
+    <Compile Include="System.Data\PropertyAttributes.cs" />
+    <Compile Include="System.Data\PropertyCollection.cs" />
+    <Compile Include="System.Data\ReadOnlyException.cs" />
+    <Compile Include="System.Data\ResDescriptionAttribute.cs" />
+    <Compile Include="System.Data\RowNotInTableException.cs" />
+    <Compile Include="System.Data\Rule.cs" />
+    <Compile Include="System.Data\SchemaType.cs" />
+    <Compile Include="System.Data\SerializationFormat.cs" />
+    <Compile Include="System.Data\SchemaSerializationMode.cs" />
+    <Compile Include="System.Data\SqlDbType.cs" />
+    <Compile Include="System.Data\StateChangeEventArgs.cs" />
+    <Compile Include="System.Data\StateChangeEventHandler.cs" />
+    <Compile Include="System.Data\StatementCompletedEventArgs.cs" />
+    <Compile Include="System.Data\StatementCompletedEventHandler.cs" />
+    <Compile Include="System.Data\StatementType.cs" />
+    <Compile Include="System.Data\StrongTypingException.cs" />
+    <Compile Include="System.Data\SyntaxErrorException.cs" />
+    <Compile Include="System.Data\TableAdapterSchemaInfo.cs" />
+    <Compile Include="System.Data\TypeDataSetGeneratorException.cs" />
+    <Compile Include="System.Data\UpdateRowSource.cs" />
+    <Compile Include="System.Data\UpdateStatus.cs" />
+    <Compile Include="System.Data\VersionNotFoundException.cs" />
+    <Compile Include="System.Data.Common\CatalogLocation.cs" />
+    <Compile Include="System.Data.Common\ComparerFactory.cs" />
+    <Compile Include="System.Data.Common\DbCommandBuilder.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="System.Data.Common\DbConnectionStringBuilder.cs" />
+    <Compile Include="System.Data.Common\DbConnectionStringBuilderHelper.cs" />
+    <Compile Include="System.Data.Common\DbCommand.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="System.Data.Common\DbConnection.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="System.Data.Common\DbConnectionOptions.cs" />
+    <Compile Include="System.Data.Common\DbConnectionString.cs" />
+    <Compile Include="System.Data.Common\DbDataPermissionAttribute.cs" />
+    <Compile Include="System.Data.Common\DbDataPermission.cs" />
+    <Compile Include="System.Data.Common\DbDataReader.cs" />
+    <Compile Include="System.Data.Common\DbDataSourceEnumerator.cs" />
+    <Compile Include="System.Data.Common\DbException.cs" />
+    <Compile Include="System.Data.Common\DbMetaDataCollectionNames.cs" />
+    <Compile Include="System.Data.Common\DbMetaDataColumnNames.cs" />
+    <Compile Include="System.Data.Common\DbParameterCollection.cs" />
+    <Compile Include="System.Data.Common\DbParameter.cs" />
+    <Compile Include="System.Data.Common\DbProviderFactory.cs" />
+    <Compile Include="System.Data.Common\DbProviderSpecificTypePropertyAttribute.cs" />
+    <Compile Include="System.Data.Common\DbTable.cs" />
+    <Compile Include="System.Data.Common\DbTransaction.cs" />
+    <Compile Include="System.Data.Common\DbTypes.cs" />
+    <Compile Include="System.Data.Common\ExceptionHelper.cs" />
+    <Compile Include="System.Data.Common\GroupByBehavior.cs" />
+    <Compile Include="System.Data.Common\IdentifierCase.cs" />
+    <Compile Include="System.Data.Common\PermissionHelper.cs" />
+    <Compile Include="System.Data.Common\SchemaInfo.cs" />
+    <Compile Include="System.Data.Common\SchemaTableColumn.cs" />
+    <Compile Include="System.Data.Common\SchemaTableOptionalColumn.cs" />
+    <Compile Include="System.Data.Common\SupportedJoinOperators.cs" />
+    <Compile Include="System.Data.SqlTypes\INullable.cs" />
+    <Compile Include="System.Data.SqlTypes\SqlBinary.cs" />
+    <Compile Include="System.Data.SqlTypes\SqlBoolean.cs" />
+    <Compile Include="System.Data.SqlTypes\SqlByte.cs" />
+    <Compile Include="System.Data.SqlTypes\SqlBytes.cs" />
+    <Compile Include="System.Data.SqlTypes\SqlChars.cs" />
+    <Compile Include="System.Data.SqlTypes\SqlCompareOptions.cs" />
+    <Compile Include="System.Data.SqlTypes\SqlDateTime.cs" />
+    <Compile Include="System.Data.SqlTypes\SqlDecimal.cs" />
+    <Compile Include="System.Data.SqlTypes\SqlDouble.cs" />
+    <Compile Include="System.Data.SqlTypes\SqlGuid.cs" />
+    <Compile Include="System.Data.SqlTypes\SqlInt16.cs" />
+    <Compile Include="System.Data.SqlTypes\SqlInt32.cs" />
+    <Compile Include="System.Data.SqlTypes\SqlInt64.cs" />
+    <Compile Include="System.Data.SqlTypes\SqlMoney.cs" />
+    <Compile Include="System.Data.SqlTypes\SqlNullValueException.cs" />
+    <Compile Include="System.Data.SqlTypes\SqlSingle.cs" />
+    <Compile Include="System.Data.SqlTypes\SqlString.cs" />
+    <Compile Include="System.Data.SqlTypes\SqlTruncateException.cs" />
+    <Compile Include="System.Data.SqlTypes\SqlTypeException.cs" />
+    <Compile Include="System.Data.SqlTypes\StorageState.cs" />
+    <Compile Include="System.Data.SqlTypes\SqlAlreadyFilledException.cs" />
+    <Compile Include="System.Data.SqlTypes\SqlNotFilledException.cs" />
+    <Compile Include="System.Data.SqlTypes\SqlXml.cs" />
+  </ItemGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\System.Transactions\System.Transactions-net_4_0.csproj">
+      <Project>{4E2CF341-BE18-41A6-99AF-7D211A316531}</Project>
+      <Name>System.Transactions-net_4_0</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\mono.snk">
+      <Link>mono.snk</Link>
+    </None>
+  </ItemGroup>
+</Project>

@@ -34,3 +34,5 @@ _ReSharper*/
 [Tt]est[Rr]esult*
 *.ncrunch*
 *.suo
+*.suo
+*.userprefs

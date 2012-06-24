@@ -1,6 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Transactions-net_4_0", "System.Transactions\System.Transactions-net_4_0.csproj", "{4E2CF341-BE18-41A6-99AF-7D211A316531}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Transactions-tests-net_4_0", "System.Transactions\System.Transactions-tests-net_4_0.csproj", "{67FF95AC-7956-4727-9178-E1A804D116B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Data-net_4_0", "System.Data\System.Data-net_4_0.csproj", "{155AEF28-C81F-405D-9072-9D52780E3E70}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Data-tests_net_4_0", "System.Data\System.Data-tests_net_4_0.csproj", "{2A5AB601-60D3-471F-BE3E-13C845FE000A}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Data.Sqlite", "Mono.Data.Sqlite\Mono.Data.Sqlite.csproj", "{E081FE00-6E78-4919-B633-01528EB16AD0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Data.Sqlite.Test", "Mono.Data.Sqlite.Test\Mono.Data.Sqlite.Test.csproj", "{DF05B7CE-DEEA-42B7-8915-8BCDCFC49798}"
@@ -15,6 +23,30 @@ Global
 		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{155AEF28-C81F-405D-9072-9D52780E3E70}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{155AEF28-C81F-405D-9072-9D52780E3E70}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{155AEF28-C81F-405D-9072-9D52780E3E70}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{155AEF28-C81F-405D-9072-9D52780E3E70}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{155AEF28-C81F-405D-9072-9D52780E3E70}.Release|Any CPU.Build.0 = Release|Any CPU
+		{155AEF28-C81F-405D-9072-9D52780E3E70}.Release|x86.ActiveCfg = Release|Any CPU
+		{2A5AB601-60D3-471F-BE3E-13C845FE000A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2A5AB601-60D3-471F-BE3E-13C845FE000A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2A5AB601-60D3-471F-BE3E-13C845FE000A}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2A5AB601-60D3-471F-BE3E-13C845FE000A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2A5AB601-60D3-471F-BE3E-13C845FE000A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2A5AB601-60D3-471F-BE3E-13C845FE000A}.Release|x86.ActiveCfg = Release|Any CPU
+		{4E2CF341-BE18-41A6-99AF-7D211A316531}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4E2CF341-BE18-41A6-99AF-7D211A316531}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4E2CF341-BE18-41A6-99AF-7D211A316531}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{4E2CF341-BE18-41A6-99AF-7D211A316531}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4E2CF341-BE18-41A6-99AF-7D211A316531}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4E2CF341-BE18-41A6-99AF-7D211A316531}.Release|x86.ActiveCfg = Release|Any CPU
+		{67FF95AC-7956-4727-9178-E1A804D116B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{67FF95AC-7956-4727-9178-E1A804D116B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{67FF95AC-7956-4727-9178-E1A804D116B9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{67FF95AC-7956-4727-9178-E1A804D116B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{67FF95AC-7956-4727-9178-E1A804D116B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{67FF95AC-7956-4727-9178-E1A804D116B9}.Release|x86.ActiveCfg = Release|Any CPU
 		{DF05B7CE-DEEA-42B7-8915-8BCDCFC49798}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DF05B7CE-DEEA-42B7-8915-8BCDCFC49798}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF05B7CE-DEEA-42B7-8915-8BCDCFC49798}.Debug|x86.ActiveCfg = Debug|x86
@@ -42,5 +74,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = D:\GitHub\mono\mcs\class\System.Data\System.Data-net_4_0.csproj
 	EndGlobalSection
 EndGlobal

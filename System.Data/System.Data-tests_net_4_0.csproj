@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2A5AB601-60D3-471F-BE3E-13C845FE000A}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <NoWarn>1699,649,618,169,612,219,168</NoWarn>
+    <OutputPath>.\</OutputPath>
+    <NoStdLib>true</NoStdLib>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <AssemblyName>System.Data_test_net_4_0</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>DEBUG;TRACE;NET_1_1;NET_2_0;NET_3_0;NET_3_5;NET_4_0</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AdditionalLibPaths>./../../class/lib/net_4_0</AdditionalLibPaths>
+    <OutputPath>bin\Debug\</OutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>NET_1_1;NET_2_0;NET_3_0;NET_3_5;NET_4_0</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AdditionalLibPaths>./../../class/lib/net_4_0</AdditionalLibPaths>
+    <OutputPath>bin\Release\</OutputPath>
+  </PropertyGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Compile Include="Test\System.Data.SqlTypes\SqlBinaryTest.cs" />
+    <Compile Include="Test\System.Data.SqlTypes\SqlBooleanTest.cs" />
+    <Compile Include="Test\System.Data.SqlTypes\SqlBytesTest.cs" />
+    <Compile Include="Test\System.Data.SqlTypes\SqlByteTest.cs" />
+    <Compile Include="Test\System.Data.SqlTypes\SqlCharsTest.cs" />
+    <Compile Include="Test\System.Data.SqlTypes\SqlDoubleTest.cs" />
+    <Compile Include="Test\System.Data.SqlTypes\SqlInt16Test.cs" />
+    <Compile Include="Test\System.Data.SqlTypes\SqlInt32Test.cs" />
+    <Compile Include="Test\System.Data.SqlTypes\SqlInt64Test.cs" />
+    <Compile Include="Test\System.Data.SqlTypes\SqlSingleTest.cs" />
+    <Compile Include="Test\System.Data.SqlTypes\SqlMoneyTest.cs" />
+    <Compile Include="Test\System.Data.SqlTypes\SqlDateTimeTest.cs" />
+    <Compile Include="Test\System.Data.SqlTypes\SqlGuidTest.cs" />
+    <Compile Include="Test\System.Data.SqlTypes\SqlDecimalTest.cs" />
+    <Compile Include="Test\System.Data.SqlTypes\SqlStringTest.cs" />
+    <Compile Include="Test\System.Data.SqlTypes\SqlXmlTest.cs" />
+    <Compile Include="Test\System.Data.Common\DBDataPermissionAttributeTest.cs" />
+    <Compile Include="Test\System.Data.Common\DBDataPermissionTest.cs" />
+    <Compile Include="Test\System.Data.Common\DbCommandBuilderTest.cs" />
+    <Compile Include="Test\System.Data.Common\DbConnectionStringBuilderTest.cs" />
+    <Compile Include="Test\System.Data.Common\DbTransactionTest.cs" />
+  </ItemGroup>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="nunit.framework, Version=2.5.10.11092, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>.\nunit.framework.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="System.Data-net_4_0.csproj">
+      <Project>{155AEF28-C81F-405D-9072-9D52780E3E70}</Project>
+      <Name>System.Data-net_4_0</Name>
+    </ProjectReference>
+  </ItemGroup>
+</Project>
