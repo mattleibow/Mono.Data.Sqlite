@@ -22,10 +22,6 @@ namespace Mono.Data.Sqlite
         /// </summary>
         internal int _dbType;
         /// <summary>
-        /// The version information for mapping the parameter
-        /// </summary>
-        private DataRowVersion _rowVersion;
-        /// <summary>
         /// The value of the data in the parameter
         /// </summary>
         private Object _objValue;
@@ -49,7 +45,7 @@ namespace Mono.Data.Sqlite
         /// Default constructor
         /// </summary>
         public SqliteParameter()
-            : this(null, (DbType)(-1), 0, null, DataRowVersion.Current)
+            : this(null, (DbType)(-1), 0, null)
         {
         }
 
@@ -58,7 +54,7 @@ namespace Mono.Data.Sqlite
         /// </summary>
         /// <param name="parameterName">The parameter name</param>
         public SqliteParameter(string parameterName)
-            : this(parameterName, (DbType)(-1), 0, null, DataRowVersion.Current)
+            : this(parameterName, (DbType)(-1), 0, null)
         {
         }
 
@@ -68,7 +64,7 @@ namespace Mono.Data.Sqlite
         /// <param name="parameterName">The parameter name</param>
         /// <param name="value">The initial value of the parameter</param>
         public SqliteParameter(string parameterName, object value)
-            : this(parameterName, (DbType)(-1), 0, null, DataRowVersion.Current)
+            : this(parameterName, (DbType)(-1), 0, null)
         {
             Value = value;
         }
@@ -79,7 +75,7 @@ namespace Mono.Data.Sqlite
         /// <param name="parameterName">The parameter name</param>
         /// <param name="dbType">The datatype of the parameter</param>
         public SqliteParameter(string parameterName, DbType dbType)
-            : this(parameterName, dbType, 0, null, DataRowVersion.Current)
+            : this(parameterName, dbType, 0, null)
         {
         }
 
@@ -90,19 +86,7 @@ namespace Mono.Data.Sqlite
         /// <param name="dbType">The data type</param>
         /// <param name="sourceColumn">The source column</param>
         public SqliteParameter(string parameterName, DbType dbType, string sourceColumn)
-            : this(parameterName, dbType, 0, sourceColumn, DataRowVersion.Current)
-        {
-        }
-
-        /// <summary>
-        /// Constructs a named parameter of the specified type, source column and row version
-        /// </summary>
-        /// <param name="parameterName">The parameter name</param>
-        /// <param name="dbType">The data type</param>
-        /// <param name="sourceColumn">The source column</param>
-        /// <param name="rowVersion">The row version information</param>
-        public SqliteParameter(string parameterName, DbType dbType, string sourceColumn, DataRowVersion rowVersion)
-            : this(parameterName, dbType, 0, sourceColumn, rowVersion)
+            : this(parameterName, dbType, 0, sourceColumn)
         {
         }
 
@@ -111,7 +95,7 @@ namespace Mono.Data.Sqlite
         /// </summary>
         /// <param name="dbType">The datatype of the parameter</param>
         public SqliteParameter(DbType dbType)
-            : this(null, dbType, 0, null, DataRowVersion.Current)
+            : this(null, dbType, 0, null)
         {
         }
 
@@ -121,7 +105,7 @@ namespace Mono.Data.Sqlite
         /// <param name="dbType">The datatype of the parameter</param>
         /// <param name="value">The initial value of the parameter</param>
         public SqliteParameter(DbType dbType, object value)
-            : this(null, dbType, 0, null, DataRowVersion.Current)
+            : this(null, dbType, 0, null)
         {
             Value = value;
         }
@@ -132,18 +116,7 @@ namespace Mono.Data.Sqlite
         /// <param name="dbType">The datatype of the parameter</param>
         /// <param name="sourceColumn">The source column</param>
         public SqliteParameter(DbType dbType, string sourceColumn)
-            : this(null, dbType, 0, sourceColumn, DataRowVersion.Current)
-        {
-        }
-
-        /// <summary>
-        /// Constructs an unnamed parameter of the specified data type, source column and row version
-        /// </summary>
-        /// <param name="dbType">The data type</param>
-        /// <param name="sourceColumn">The source column</param>
-        /// <param name="rowVersion">The row version information</param>
-        public SqliteParameter(DbType dbType, string sourceColumn, DataRowVersion rowVersion)
-            : this(null, dbType, 0, sourceColumn, rowVersion)
+            : this(null, dbType, 0, sourceColumn)
         {
         }
 
@@ -154,19 +127,7 @@ namespace Mono.Data.Sqlite
         /// <param name="parameterType">The data type</param>
         /// <param name="parameterSize">The size of the parameter</param>
         public SqliteParameter(string parameterName, DbType parameterType, int parameterSize)
-            : this(parameterName, parameterType, parameterSize, null, DataRowVersion.Current)
-        {
-        }
-
-        /// <summary>
-        /// Constructs a named parameter of the specified type, size and source column
-        /// </summary>
-        /// <param name="parameterName">The name of the parameter</param>
-        /// <param name="parameterType">The data type</param>
-        /// <param name="parameterSize">The size of the parameter</param>
-        /// <param name="sourceColumn">The source column</param>
-        public SqliteParameter(string parameterName, DbType parameterType, int parameterSize, string sourceColumn)
-            : this(parameterName, parameterType, parameterSize, sourceColumn, DataRowVersion.Current)
+            : this(parameterName, parameterType, parameterSize, null)
         {
         }
 
@@ -178,12 +139,11 @@ namespace Mono.Data.Sqlite
         /// <param name="parameterSize">The size of the parameter</param>
         /// <param name="sourceColumn">The source column</param>
         /// <param name="rowVersion">The row version information</param>
-        public SqliteParameter(string parameterName, DbType parameterType, int parameterSize, string sourceColumn, DataRowVersion rowVersion)
+        public SqliteParameter(string parameterName, DbType parameterType, int parameterSize, string sourceColumn)
         {
             _parameterName = parameterName;
             _dbType = (int)parameterType;
             _sourceColumn = sourceColumn;
-            _rowVersion = rowVersion;
             _objValue = null;
             _dataSize = parameterSize;
             _nullMapping = false;
@@ -191,7 +151,7 @@ namespace Mono.Data.Sqlite
         }
 
         private SqliteParameter(SqliteParameter source)
-            : this(source.ParameterName, (DbType)source._dbType, 0, source.Direction, source.IsNullable, 0, 0, source.SourceColumn, source.SourceVersion, source.Value)
+            : this(source.ParameterName, (DbType)source._dbType, 0, source.Direction, source.IsNullable, 0, 0, source.SourceColumn, source.Value)
         {
             _nullMapping = source._nullMapping;
         }
@@ -212,8 +172,8 @@ namespace Mono.Data.Sqlite
 #if !PLATFORM_COMPACTFRAMEWORK
         [EditorBrowsable(EditorBrowsableState.Advanced)]
 #endif
-        public SqliteParameter(string parameterName, DbType parameterType, int parameterSize, ParameterDirection direction, bool isNullable, byte precision, byte scale, string sourceColumn, DataRowVersion rowVersion, object value)
-            : this(parameterName, parameterType, parameterSize, sourceColumn, rowVersion)
+        public SqliteParameter(string parameterName, DbType parameterType, int parameterSize, ParameterDirection direction, bool isNullable, byte precision, byte scale, string sourceColumn, object value)
+            : this(parameterName, parameterType, parameterSize, sourceColumn)
         {
             Direction = direction;
             IsNullable = isNullable;
@@ -236,8 +196,8 @@ namespace Mono.Data.Sqlite
 #if !PLATFORM_COMPACTFRAMEWORK
         [EditorBrowsable(EditorBrowsableState.Advanced)]
 #endif
-        public SqliteParameter(string parameterName, DbType parameterType, int parameterSize, ParameterDirection direction, byte precision, byte scale, string sourceColumn, DataRowVersion rowVersion, bool sourceColumnNullMapping, object value)
-            : this(parameterName, parameterType, parameterSize, sourceColumn, rowVersion)
+        public SqliteParameter(string parameterName, DbType parameterType, int parameterSize, ParameterDirection direction, byte precision, byte scale, string sourceColumn, bool sourceColumnNullMapping, object value)
+            : this(parameterName, parameterType, parameterSize, sourceColumn)
         {
             Direction = direction;
             SourceColumnNullMapping = sourceColumnNullMapping;
@@ -250,7 +210,7 @@ namespace Mono.Data.Sqlite
         /// <param name="parameterType">The data type</param>
         /// <param name="parameterSize">The size of the parameter</param>
         public SqliteParameter(DbType parameterType, int parameterSize)
-            : this(null, parameterType, parameterSize, null, DataRowVersion.Current)
+            : this(null, parameterType, parameterSize, null)
         {
         }
 
@@ -261,19 +221,7 @@ namespace Mono.Data.Sqlite
         /// <param name="parameterSize">The size of the parameter</param>
         /// <param name="sourceColumn">The source column</param>
         public SqliteParameter(DbType parameterType, int parameterSize, string sourceColumn)
-            : this(null, parameterType, parameterSize, sourceColumn, DataRowVersion.Current)
-        {
-        }
-
-        /// <summary>
-        /// Constructs an unnamed parameter of the specified type, size, source column and row version
-        /// </summary>
-        /// <param name="parameterType">The data type</param>
-        /// <param name="parameterSize">The size of the parameter</param>
-        /// <param name="sourceColumn">The source column</param>
-        /// <param name="rowVersion">The row version information</param>
-        public SqliteParameter(DbType parameterType, int parameterSize, string sourceColumn, DataRowVersion rowVersion)
-            : this(null, parameterType, parameterSize, sourceColumn, rowVersion)
+            : this(null, parameterType, parameterSize, sourceColumn)
         {
         }
 
@@ -403,21 +351,6 @@ namespace Mono.Data.Sqlite
             set
             {
                 _nullMapping = value;
-            }
-        }
-
-        /// <summary>
-        /// Gets and sets the row version
-        /// </summary>
-        public override DataRowVersion SourceVersion
-        {
-            get
-            {
-                return _rowVersion;
-            }
-            set
-            {
-                _rowVersion = value;
             }
         }
 

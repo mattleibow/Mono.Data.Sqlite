@@ -130,21 +130,6 @@ namespace Test.Mono.Data.Sqlite
             dbcmd.CommandText = "SELECT count(*) FROM MONO_TEST";
             Console.WriteLine("read and display a non-column scalar = 3: " + dbcmd.ExecuteScalar());
 
-            Console.WriteLine("read and display data using DataAdapter/DataSet...");
-            SqliteDataAdapter adapter = new SqliteDataAdapter("SELECT * FROM MONO_TEST", connectionString);
-            DataSet dataset = new DataSet();
-            adapter.Fill(dataset);
-            foreach (DataTable myTable in dataset.Tables)
-            {
-                foreach (DataRow myRow in myTable.Rows)
-                {
-                    foreach (DataColumn myColumn in myTable.Columns)
-                    {
-                        Console.WriteLine(" " + myRow[myColumn]);
-                    }
-                }
-            }
-
             /*Console.WriteLine("read and display data using DataAdapter/DataTable...");
             DataTable dt = new DataTable();
             adapter.Fill(dt);
@@ -173,8 +158,6 @@ namespace Test.Mono.Data.Sqlite
                 Console.WriteLine("Testing an execution error: " + e.GetType().Name + ": " + e.Message);
             }*/
 
-            dataset.Dispose();
-            adapter.Dispose();
             reader.Close();
             dbcmd.Dispose();
             dbcon.Close();

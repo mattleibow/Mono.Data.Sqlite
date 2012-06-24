@@ -22,32 +22,9 @@ namespace Mono.Data.Sqlite
         /// Default constructor
         /// </summary>
         public SqliteCommandBuilder()
-            : this(null)
-        {
-        }
-
-        /// <summary>
-        /// Initializes the command builder and associates it with the specified data adapter.
-        /// </summary>
-        /// <param name="adp"></param>
-        public SqliteCommandBuilder(SqliteDataAdapter adp)
         {
             QuotePrefix = "[";
             QuoteSuffix = "]";
-            DataAdapter = adp;
-        }
-
-        /// <summary>
-        /// Minimal amount of parameter processing.  Primarily sets the DbType for the parameter equal to the provider type in the schema
-        /// </summary>
-        /// <param name="parameter">The parameter to use in applying custom behaviors to a row</param>
-        /// <param name="row">The row to apply the parameter to</param>
-        /// <param name="statementType">The type of statement</param>
-        /// <param name="whereClause">Whether the application of the parameter is part of a WHERE clause</param>
-        protected override void ApplyParameterInfo(DbParameter parameter, DataRow row, StatementType statementType, bool whereClause)
-        {
-            SqliteParameter param = (SqliteParameter)parameter;
-            param.DbType = (DbType)row[SchemaTableColumn.ProviderType];
         }
 
         /// <summary>
@@ -78,94 +55,6 @@ namespace Mono.Data.Sqlite
         protected override string GetParameterPlaceholder(int parameterOrdinal)
         {
             return GetParameterName(parameterOrdinal);
-        }
-
-        /// <summary>
-        /// Sets the handler for receiving row updating events.  Used by the DbCommandBuilder to autogenerate SQL
-        /// statements that may not have previously been generated.
-        /// </summary>
-        /// <param name="adapter">A data adapter to receive events on.</param>
-        protected override void SetRowUpdatingHandler(DbDataAdapter adapter)
-        {
-            if (adapter == base.DataAdapter)
-            {
-                ((SqliteDataAdapter)adapter).RowUpdating -= new EventHandler<RowUpdatingEventArgs>(RowUpdatingEventHandler);
-            }
-            else
-            {
-                ((SqliteDataAdapter)adapter).RowUpdating += new EventHandler<RowUpdatingEventArgs>(RowUpdatingEventHandler);
-            }
-        }
-
-        private void RowUpdatingEventHandler(object sender, RowUpdatingEventArgs e)
-        {
-            base.RowUpdatingHandler(e);
-        }
-
-        /// <summary>
-        /// Gets/sets the DataAdapter for this CommandBuilder
-        /// </summary>
-        public new SqliteDataAdapter DataAdapter
-        {
-            get { return (SqliteDataAdapter)base.DataAdapter; }
-            set { base.DataAdapter = value; }
-        }
-
-        /// <summary>
-        /// Returns the automatically-generated SQLite command to delete rows from the database
-        /// </summary>
-        /// <returns></returns>
-        public new SqliteCommand GetDeleteCommand()
-        {
-            return (SqliteCommand)base.GetDeleteCommand();
-        }
-
-        /// <summary>
-        /// Returns the automatically-generated SQLite command to delete rows from the database
-        /// </summary>
-        /// <param name="useColumnsForParameterNames"></param>
-        /// <returns></returns>
-        public new SqliteCommand GetDeleteCommand(bool useColumnsForParameterNames)
-        {
-            return (SqliteCommand)base.GetDeleteCommand(useColumnsForParameterNames);
-        }
-
-        /// <summary>
-        /// Returns the automatically-generated SQLite command to update rows in the database
-        /// </summary>
-        /// <returns></returns>
-        public new SqliteCommand GetUpdateCommand()
-        {
-            return (SqliteCommand)base.GetUpdateCommand();
-        }
-
-        /// <summary>
-        /// Returns the automatically-generated SQLite command to update rows in the database
-        /// </summary>
-        /// <param name="useColumnsForParameterNames"></param>
-        /// <returns></returns>
-        public new SqliteCommand GetUpdateCommand(bool useColumnsForParameterNames)
-        {
-            return (SqliteCommand)base.GetUpdateCommand(useColumnsForParameterNames);
-        }
-
-        /// <summary>
-        /// Returns the automatically-generated SQLite command to insert rows into the database
-        /// </summary>
-        /// <returns></returns>
-        public new SqliteCommand GetInsertCommand()
-        {
-            return (SqliteCommand)base.GetInsertCommand();
-        }
-
-        /// <summary>
-        /// Returns the automatically-generated SQLite command to insert rows into the database
-        /// </summary>
-        /// <param name="useColumnsForParameterNames"></param>
-        /// <returns></returns>
-        public new SqliteCommand GetInsertCommand(bool useColumnsForParameterNames)
-        {
-            return (SqliteCommand)base.GetInsertCommand(useColumnsForParameterNames);
         }
 
         /// <summary>
@@ -291,54 +180,6 @@ namespace Mono.Data.Sqlite
             {
                 base.SchemaSeparator = value;
             }
-        }
-
-        /// <summary>
-        /// Override helper, which can help the base command builder choose the right keys for the given query
-        /// </summary>
-        /// <param name="sourceCommand"></param>
-        /// <returns></returns>
-        protected override DataTable GetSchemaTable(DbCommand sourceCommand)
-        {
-            using (IDataReader reader = sourceCommand.ExecuteReader(CommandBehavior.KeyInfo | CommandBehavior.SchemaOnly))
-            {
-                DataTable schema = reader.GetSchemaTable();
-
-                // If the query contains a primary key, turn off the IsUnique property
-                // for all the non-key columns
-                if (HasSchemaPrimaryKey(schema))
-                    ResetIsUniqueSchemaColumn(schema);
-
-                // if table has no primary key we use unique columns as a fall back
-                return schema;
-            }
-        }
-
-        private bool HasSchemaPrimaryKey(DataTable schema)
-        {
-            DataColumn IsKeyColumn = schema.Columns[SchemaTableColumn.IsKey];
-
-            foreach (DataRow schemaRow in schema.Rows)
-            {
-                if ((bool)schemaRow[IsKeyColumn] == true)
-                    return true;
-            }
-
-            return false;
-        }
-
-        private void ResetIsUniqueSchemaColumn(DataTable schema)
-        {
-            DataColumn IsUniqueColumn = schema.Columns[SchemaTableColumn.IsUnique];
-            DataColumn IsKeyColumn = schema.Columns[SchemaTableColumn.IsKey];
-
-            foreach (DataRow schemaRow in schema.Rows)
-            {
-                if ((bool)schemaRow[IsKeyColumn] == false)
-                    schemaRow[IsUniqueColumn] = false;
-            }
-
-            schema.AcceptChanges();
         }
     }
 }

@@ -55,11 +55,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Transactions" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
@@ -80,17 +75,11 @@
     </Compile>
     <Compile Include="SQLiteConnectionStringBuilder.cs" />
     <Compile Include="SQLiteConvert.cs" />
-    <Compile Include="SQLiteDataAdapter.cs">
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="SQLiteDataReader.cs" />
-    <Compile Include="SqliteDataSourceEnumerator.cs" />
     <Compile Include="SQLiteEnlistment.cs" />
     <Compile Include="SQLiteException.cs" />
-    <Compile Include="SQLiteFactory.cs" />
     <Compile Include="SQLiteFunction.cs" />
     <Compile Include="SQLiteFunctionAttribute.cs" />
-    <Compile Include="SQLiteKeyReader.cs" />
     <Compile Include="SQLiteMetaDataCollectionNames.cs" />
     <Compile Include="SQLiteParameter.cs" />
     <Compile Include="SQLiteParameterCollection.cs" />
@@ -103,6 +92,14 @@
     <ProjectReference Include="..\..\..\Libraries\csharp-sqlite\Community.CsharpSqlite\Community.CsharpSqlite.csproj">
       <Project>{f1653f20-d47d-4f29-8c55-3c835542af5f}</Project>
       <Name>Community.CsharpSqlite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Data\System.Data-net_4_0.csproj">
+      <Project>{155aef28-c81f-405d-9072-9d52780e3e70}</Project>
+      <Name>System.Data-net_4_0</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Transactions\System.Transactions-net_4_0.csproj">
+      <Project>{4e2cf341-be18-41a6-99af-7d211a316531}</Project>
+      <Name>System.Transactions-net_4_0</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

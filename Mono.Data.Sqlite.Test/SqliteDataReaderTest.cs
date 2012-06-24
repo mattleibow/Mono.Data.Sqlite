@@ -65,33 +65,6 @@ namespace MonoTests.Mono.Data.Sqlite
         }
 
         [Test]
-        [Category("NotWorking")]
-        public void GetSchemaTableTest()
-        {
-            _conn.ConnectionString = _connectionString;
-            SqliteDataReader reader = null;
-            using (_conn)
-            {
-                _conn.Open();
-                SqliteCommand cmd = (SqliteCommand)_conn.CreateCommand();
-                cmd.CommandText = "select * from test";
-                reader = cmd.ExecuteReader();
-                try
-                {
-                    DataTable dt = reader.GetSchemaTable();
-                    Assert.IsNotNull(dt, "#GS1 should return valid table");
-                    Assert.IsTrue(dt.Rows.Count > 0, "#GS2 should return with rows ;-)");
-                }
-                finally
-                {
-                    if (reader != null && !reader.IsClosed)
-                        reader.Close();
-                    _conn.Close();
-                }
-            }
-        }
-
-        [Test]
         public void TypeOfNullInResultTest()
         {
             _conn.ConnectionString = _connectionString;

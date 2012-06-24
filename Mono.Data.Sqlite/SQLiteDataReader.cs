@@ -14,6 +14,8 @@ namespace Mono.Data.Sqlite
     using System.Globalization;
     using System.Reflection;
 
+    using Community.CsharpSqlite;
+
     /// <summary>
     /// SQLite implementation of DbDataReader.
     /// </summary>
@@ -62,11 +64,6 @@ namespace Mono.Data.Sqlite
         /// </summary>
         internal bool _disposeCommand;
 
-        /// <summary>
-        /// An array of rowid's for the active statement if CommandBehavior.KeyInfo is specified
-        /// </summary>
-        private SqliteKeyReader _keyInfo;
-
         internal long _version; // Matches the version of the connection
 
         /// <summary>
@@ -99,8 +96,6 @@ namespace Mono.Data.Sqlite
         /// </summary>
         public override void Close()
         {
-            try
-            {
                 if (_command != null)
                 {
                     try
@@ -146,15 +141,6 @@ namespace Mono.Data.Sqlite
                 _command = null;
                 _activeStatement = null;
                 _fieldTypeArray = null;
-            }
-            finally
-            {
-                if (_keyInfo != null)
-                {
-                    _keyInfo.Dispose();
-                    _keyInfo = null;
-                }
-            }
         }
 
         /// <summary>
@@ -210,10 +196,8 @@ namespace Mono.Data.Sqlite
             get
             {
                 CheckClosed();
-                if (_keyInfo == null)
-                    return _fieldCount;
 
-                return _fieldCount + _keyInfo.Count;
+                return _fieldCount;
             }
         }
 
@@ -292,9 +276,6 @@ namespace Mono.Data.Sqlite
         /// <returns>bool</returns>
         public override bool GetBoolean(int i)
         {
-            if (i >= VisibleFieldCount && _keyInfo != null)
-                return _keyInfo.GetBoolean(i - VisibleFieldCount);
-
             VerifyType(i, DbType.Boolean);
             return Convert.ToBoolean(GetValue(i), CultureInfo.CurrentCulture);
         }
@@ -306,9 +287,6 @@ namespace Mono.Data.Sqlite
         /// <returns>byte</returns>
         public override byte GetByte(int i)
         {
-            if (i >= VisibleFieldCount && _keyInfo != null)
-                return _keyInfo.GetByte(i - VisibleFieldCount);
-
             VerifyType(i, DbType.Byte);
             return Convert.ToByte(_activeStatement._sql.GetInt32(_activeStatement, i));
         }
@@ -327,9 +305,6 @@ namespace Mono.Data.Sqlite
         /// </remarks>
         public override long GetBytes(int i, long fieldOffset, byte[] buffer, int bufferoffset, int length)
         {
-            if (i >= VisibleFieldCount && _keyInfo != null)
-                return _keyInfo.GetBytes(i - VisibleFieldCount, fieldOffset, buffer, bufferoffset, length);
-
             VerifyType(i, DbType.Binary);
             return _activeStatement._sql.GetBytes(_activeStatement, i, (int)fieldOffset, buffer, bufferoffset, length);
         }
@@ -341,9 +316,6 @@ namespace Mono.Data.Sqlite
         /// <returns>char</returns>
         public override char GetChar(int i)
         {
-            if (i >= VisibleFieldCount && _keyInfo != null)
-                return _keyInfo.GetChar(i - VisibleFieldCount);
-
             VerifyType(i, DbType.SByte);
             return Convert.ToChar(_activeStatement._sql.GetInt32(_activeStatement, i));
         }
@@ -362,9 +334,6 @@ namespace Mono.Data.Sqlite
         /// </remarks>
         public override long GetChars(int i, long fieldoffset, char[] buffer, int bufferoffset, int length)
         {
-            if (i >= VisibleFieldCount && _keyInfo != null)
-                return _keyInfo.GetChars(i - VisibleFieldCount, fieldoffset, buffer, bufferoffset, length);
-
             VerifyType(i, DbType.String);
             return _activeStatement._sql.GetChars(_activeStatement, i, (int)fieldoffset, buffer, bufferoffset, length);
         }
@@ -376,9 +345,6 @@ namespace Mono.Data.Sqlite
         /// <returns>string</returns>
         public override string GetDataTypeName(int i)
         {
-            if (i >= VisibleFieldCount && _keyInfo != null)
-                return _keyInfo.GetDataTypeName(i - VisibleFieldCount);
-
             SQLiteType typ = GetSQLiteType(i);
             if (typ.Type == DbType.Object) return SqliteConvert.SQLiteTypeToType(typ).Name;
             return _activeStatement._sql.ColumnType(_activeStatement, i, out typ.Affinity);
@@ -391,9 +357,6 @@ namespace Mono.Data.Sqlite
         /// <returns>DateTime</returns>
         public override DateTime GetDateTime(int i)
         {
-            if (i >= VisibleFieldCount && _keyInfo != null)
-                return _keyInfo.GetDateTime(i - VisibleFieldCount);
-
             VerifyType(i, DbType.DateTime);
             return _activeStatement._sql.GetDateTime(_activeStatement, i);
         }
@@ -405,9 +368,6 @@ namespace Mono.Data.Sqlite
         /// <returns>decimal</returns>
         public override decimal GetDecimal(int i)
         {
-            if (i >= VisibleFieldCount && _keyInfo != null)
-                return _keyInfo.GetDecimal(i - VisibleFieldCount);
-
             VerifyType(i, DbType.Decimal);
             return Decimal.Parse(_activeStatement._sql.GetText(_activeStatement, i), NumberStyles.AllowDecimalPoint | NumberStyles.AllowExponent | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture);
         }
@@ -419,9 +379,6 @@ namespace Mono.Data.Sqlite
         /// <returns>double</returns>
         public override double GetDouble(int i)
         {
-            if (i >= VisibleFieldCount && _keyInfo != null)
-                return _keyInfo.GetDouble(i - VisibleFieldCount);
-
             VerifyType(i, DbType.Double);
             return _activeStatement._sql.GetDouble(_activeStatement, i);
         }
@@ -433,9 +390,6 @@ namespace Mono.Data.Sqlite
         /// <returns>Type</returns>
         public override Type GetFieldType(int i)
         {
-            if (i >= VisibleFieldCount && _keyInfo != null)
-                return _keyInfo.GetFieldType(i - VisibleFieldCount);
-
             return SqliteConvert.SQLiteTypeToType(GetSQLiteType(i));
         }
 
@@ -446,9 +400,6 @@ namespace Mono.Data.Sqlite
         /// <returns>float</returns>
         public override float GetFloat(int i)
         {
-            if (i >= VisibleFieldCount && _keyInfo != null)
-                return _keyInfo.GetFloat(i - VisibleFieldCount);
-
             VerifyType(i, DbType.Single);
             return Convert.ToSingle(_activeStatement._sql.GetDouble(_activeStatement, i));
         }
@@ -460,9 +411,6 @@ namespace Mono.Data.Sqlite
         /// <returns>Guid</returns>
         public override Guid GetGuid(int i)
         {
-            if (i >= VisibleFieldCount && _keyInfo != null)
-                return _keyInfo.GetGuid(i - VisibleFieldCount);
-
             TypeAffinity affinity = VerifyType(i, DbType.Guid);
             if (affinity == TypeAffinity.Blob)
             {
@@ -481,9 +429,6 @@ namespace Mono.Data.Sqlite
         /// <returns>Int16</returns>
         public override Int16 GetInt16(int i)
         {
-            if (i >= VisibleFieldCount && _keyInfo != null)
-                return _keyInfo.GetInt16(i - VisibleFieldCount);
-
             VerifyType(i, DbType.Int16);
             return Convert.ToInt16(_activeStatement._sql.GetInt32(_activeStatement, i));
         }
@@ -495,9 +440,6 @@ namespace Mono.Data.Sqlite
         /// <returns>Int32</returns>
         public override Int32 GetInt32(int i)
         {
-            if (i >= VisibleFieldCount && _keyInfo != null)
-                return _keyInfo.GetInt32(i - VisibleFieldCount);
-
             VerifyType(i, DbType.Int32);
             return _activeStatement._sql.GetInt32(_activeStatement, i);
         }
@@ -509,9 +451,6 @@ namespace Mono.Data.Sqlite
         /// <returns>Int64</returns>
         public override Int64 GetInt64(int i)
         {
-            if (i >= VisibleFieldCount && _keyInfo != null)
-                return _keyInfo.GetInt64(i - VisibleFieldCount);
-
             VerifyType(i, DbType.Int64);
             return _activeStatement._sql.GetInt64(_activeStatement, i);
         }
@@ -523,9 +462,6 @@ namespace Mono.Data.Sqlite
         /// <returns>string</returns>
         public override string GetName(int i)
         {
-            if (i >= VisibleFieldCount && _keyInfo != null)
-                return _keyInfo.GetName(i - VisibleFieldCount);
-
             return _activeStatement._sql.ColumnName(_activeStatement, i);
         }
 
@@ -536,242 +472,10 @@ namespace Mono.Data.Sqlite
         /// <returns>The int i of the column</returns>
         public override int GetOrdinal(string name)
         {
-            CheckClosed();
-            int r = _activeStatement._sql.ColumnIndex(_activeStatement, name);
-            if (r == -1 && _keyInfo != null)
-            {
-                r = _keyInfo.GetOrdinal(name);
-                if (r > -1) r += VisibleFieldCount;
-            }
-
-            return r;
-        }
-
-        /// <summary>
-        /// Schema information in SQLite is difficult to map into .NET conventions, so a lot of work must be done
-        /// to gather the necessary information so it can be represented in an ADO.NET manner.
-        /// </summary>
-        /// <returns>Returns a DataTable containing the schema information for the active SELECT statement being processed.</returns>
-        public override DataTable GetSchemaTable()
-        {
-            return GetSchemaTable(true, false);
-        }
-
-        internal DataTable GetSchemaTable(bool wantUniqueInfo, bool wantDefaultValue)
-        {
-            CheckClosed();
-
-            DataTable tbl = new DataTable("SchemaTable");
-            DataTable tblIndexes = null;
-            DataTable tblIndexColumns;
-            DataRow row;
-            string temp;
-            string strCatalog = "";
-            string strTable = "";
-            string strColumn = "";
-
-            tbl.Locale = CultureInfo.InvariantCulture;
-            tbl.Columns.Add(SchemaTableColumn.ColumnName, typeof(String));
-            tbl.Columns.Add(SchemaTableColumn.ColumnOrdinal, typeof(int));
-            tbl.Columns.Add(SchemaTableColumn.ColumnSize, typeof(int));
-            tbl.Columns.Add(SchemaTableColumn.NumericPrecision, typeof(short));
-            tbl.Columns.Add(SchemaTableColumn.NumericScale, typeof(short));
-            tbl.Columns.Add(SchemaTableColumn.IsUnique, typeof(Boolean));
-            tbl.Columns.Add(SchemaTableColumn.IsKey, typeof(Boolean));
-            tbl.Columns.Add(SchemaTableOptionalColumn.BaseServerName, typeof(string));
-            tbl.Columns.Add(SchemaTableOptionalColumn.BaseCatalogName, typeof(String));
-            tbl.Columns.Add(SchemaTableColumn.BaseColumnName, typeof(String));
-            tbl.Columns.Add(SchemaTableColumn.BaseSchemaName, typeof(String));
-            tbl.Columns.Add(SchemaTableColumn.BaseTableName, typeof(String));
-            tbl.Columns.Add(SchemaTableColumn.DataType, typeof(Type));
-            tbl.Columns.Add(SchemaTableColumn.AllowDBNull, typeof(Boolean));
-            tbl.Columns.Add(SchemaTableColumn.ProviderType, typeof(int));
-            tbl.Columns.Add(SchemaTableColumn.IsAliased, typeof(Boolean));
-            tbl.Columns.Add(SchemaTableColumn.IsExpression, typeof(Boolean));
-            tbl.Columns.Add(SchemaTableOptionalColumn.IsAutoIncrement, typeof(Boolean));
-            tbl.Columns.Add(SchemaTableOptionalColumn.IsRowVersion, typeof(Boolean));
-            tbl.Columns.Add(SchemaTableOptionalColumn.IsHidden, typeof(Boolean));
-            tbl.Columns.Add(SchemaTableColumn.IsLong, typeof(Boolean));
-            tbl.Columns.Add(SchemaTableOptionalColumn.IsReadOnly, typeof(Boolean));
-            tbl.Columns.Add(SchemaTableOptionalColumn.ProviderSpecificDataType, typeof(Type));
-            tbl.Columns.Add(SchemaTableOptionalColumn.DefaultValue, typeof(object));
-            tbl.Columns.Add("DataTypeName", typeof(string));
-            tbl.Columns.Add("CollationType", typeof(string));
-            tbl.BeginLoadData();
-
-            for (int n = 0; n < _fieldCount; n++)
-            {
-                row = tbl.NewRow();
-
-                DbType typ = GetSQLiteType(n).Type;
-
-                // Default settings for the column
-                row[SchemaTableColumn.ColumnName] = GetName(n);
-                row[SchemaTableColumn.ColumnOrdinal] = n;
-                row[SchemaTableColumn.ColumnSize] = SqliteConvert.DbTypeToColumnSize(typ);
-                row[SchemaTableColumn.NumericPrecision] = SqliteConvert.DbTypeToNumericPrecision(typ);
-                row[SchemaTableColumn.NumericScale] = SqliteConvert.DbTypeToNumericScale(typ);
-                row[SchemaTableColumn.ProviderType] = GetSQLiteType(n).Type;
-                row[SchemaTableColumn.IsLong] = false;
-                row[SchemaTableColumn.AllowDBNull] = true;
-                row[SchemaTableOptionalColumn.IsReadOnly] = false;
-                row[SchemaTableOptionalColumn.IsRowVersion] = false;
-                row[SchemaTableColumn.IsUnique] = false;
-                row[SchemaTableColumn.IsKey] = false;
-                row[SchemaTableOptionalColumn.IsAutoIncrement] = false;
-                row[SchemaTableColumn.DataType] = GetFieldType(n);
-                row[SchemaTableOptionalColumn.IsHidden] = false;
-
-#if !MONOTOUCH
-                strColumn = _command.Connection._sql.ColumnOriginalName(_activeStatement, n);
-                if (String.IsNullOrEmpty(strColumn) == false) row[SchemaTableColumn.BaseColumnName] = strColumn;
-
-                row[SchemaTableColumn.IsExpression] = String.IsNullOrEmpty(strColumn);
-                row[SchemaTableColumn.IsAliased] = (String.Compare(GetName(n), strColumn, true, CultureInfo.InvariantCulture) != 0);
-
-                temp = _command.Connection._sql.ColumnTableName(_activeStatement, n);
-                if (String.IsNullOrEmpty(temp) == false) row[SchemaTableColumn.BaseTableName] = temp;
-
-                temp = _command.Connection._sql.ColumnDatabaseName(_activeStatement, n);
-                if (String.IsNullOrEmpty(temp) == false) row[SchemaTableOptionalColumn.BaseCatalogName] = temp;
-#endif
-
-                string dataType = null;
-                // If we have a table-bound column, extract the extra information from it
-                if (String.IsNullOrEmpty(strColumn) == false)
-                {
-                    string collSeq;
-                    bool bNotNull;
-                    bool bPrimaryKey;
-                    bool bAutoIncrement;
-                    string[] arSize;
-
-                    // Get the column meta data
-                    _command.Connection._sql.ColumnMetaData(
-                      (string)row[SchemaTableOptionalColumn.BaseCatalogName],
-                      (string)row[SchemaTableColumn.BaseTableName],
-                      strColumn,
-                      out dataType, out collSeq, out bNotNull, out bPrimaryKey, out bAutoIncrement);
-
-                    if (bNotNull || bPrimaryKey) row[SchemaTableColumn.AllowDBNull] = false;
-
-                    row[SchemaTableColumn.IsKey] = bPrimaryKey;
-                    row[SchemaTableOptionalColumn.IsAutoIncrement] = bAutoIncrement;
-                    row["CollationType"] = collSeq;
-
-                    // For types like varchar(50) and such, extract the size
-                    arSize = dataType.Split('(');
-                    if (arSize.Length > 1)
-                    {
-                        dataType = arSize[0];
-                        arSize = arSize[1].Split(')');
-                        if (arSize.Length > 1)
-                        {
-                            arSize = arSize[0].Split(',', '.');
-                            if (GetSQLiteType(n).Type == DbType.String || GetSQLiteType(n).Type == DbType.Binary)
-                            {
-                                row[SchemaTableColumn.ColumnSize] = Convert.ToInt32(arSize[0], CultureInfo.InvariantCulture);
-                            }
-                            else
-                            {
-                                row[SchemaTableColumn.NumericPrecision] = Convert.ToInt32(arSize[0], CultureInfo.InvariantCulture);
-                                if (arSize.Length > 1)
-                                    row[SchemaTableColumn.NumericScale] = Convert.ToInt32(arSize[1], CultureInfo.InvariantCulture);
-                            }
-                        }
-                    }
-
-                    if (wantDefaultValue)
-                    {
-                        // Determine the default value for the column, which sucks because we have to query the schema for each column
-                        using (SqliteCommand cmdTable = new SqliteCommand(String.Format(CultureInfo.InvariantCulture, "PRAGMA [{0}].TABLE_INFO([{1}])",
-                          row[SchemaTableOptionalColumn.BaseCatalogName],
-                          row[SchemaTableColumn.BaseTableName]
-                          ), _command.Connection))
-                        using (DbDataReader rdTable = cmdTable.ExecuteReader())
-                        {
-                            // Find the matching column
-                            while (rdTable.Read())
-                            {
-                                if (String.Compare((string)row[SchemaTableColumn.BaseColumnName], rdTable.GetString(1), true, CultureInfo.InvariantCulture) == 0)
-                                {
-                                    if (rdTable.IsDBNull(4) == false)
-                                        row[SchemaTableOptionalColumn.DefaultValue] = rdTable[4];
-
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    // Determine IsUnique properly, which is a pain in the butt!
-                    if (wantUniqueInfo)
-                    {
-                        if ((string)row[SchemaTableOptionalColumn.BaseCatalogName] != strCatalog
-                          || (string)row[SchemaTableColumn.BaseTableName] != strTable)
-                        {
-                            strCatalog = (string)row[SchemaTableOptionalColumn.BaseCatalogName];
-                            strTable = (string)row[SchemaTableColumn.BaseTableName];
-
-                            tblIndexes = _command.Connection.GetSchema("Indexes", new string[] {
-                (string)row[SchemaTableOptionalColumn.BaseCatalogName],
-                null,
-                (string)row[SchemaTableColumn.BaseTableName],
-                null });
-                        }
-
-                        foreach (DataRow rowIndexes in tblIndexes.Rows)
-                        {
-                            tblIndexColumns = _command.Connection.GetSchema("IndexColumns", new string[] {
-                (string)row[SchemaTableOptionalColumn.BaseCatalogName],
-                null,
-                (string)row[SchemaTableColumn.BaseTableName],
-                (string)rowIndexes["INDEX_NAME"],
-                null
-                });
-                            foreach (DataRow rowColumnIndex in tblIndexColumns.Rows)
-                            {
-                                if (String.Compare((string)rowColumnIndex["COLUMN_NAME"], strColumn, true, CultureInfo.InvariantCulture) == 0)
-                                {
-                                    if (tblIndexColumns.Rows.Count == 1 && (bool)row[SchemaTableColumn.AllowDBNull] == false)
-                                        row[SchemaTableColumn.IsUnique] = rowIndexes["UNIQUE"];
-
-                                    // If its an integer primary key and the only primary key in the table, then its a rowid alias and is autoincrement
-                                    // NOTE:  Currently commented out because this is not always the desired behavior.  For example, a 1:1 relationship with
-                                    //        another table, where the other table is autoincrement, but this one is not, and uses the rowid from the other.
-                                    //        It is safer to only set Autoincrement on tables where we're SURE the user specified AUTOINCREMENT, even if its a rowid column.
-
-                                    if (tblIndexColumns.Rows.Count == 1 && (bool)rowIndexes["PRIMARY_KEY"] == true && String.IsNullOrEmpty(dataType) == false &&
-                                      String.Compare(dataType, "integer", true, CultureInfo.InvariantCulture) == 0)
-                                    {
-                                        //  row[SchemaTableOptionalColumn.IsAutoIncrement] = true;
-                                    }
-
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    if (String.IsNullOrEmpty(dataType))
-                    {
-                        TypeAffinity affin;
-                        dataType = _activeStatement._sql.ColumnType(_activeStatement, n, out affin);
-                    }
-
-                    if (String.IsNullOrEmpty(dataType) == false)
-                        row["DataTypeName"] = dataType;
-                }
-                tbl.Rows.Add(row);
-            }
-
-            if (_keyInfo != null)
-                _keyInfo.AppendSchemaTable(tbl);
-
-            tbl.AcceptChanges();
-            tbl.EndLoadData();
-
-            return tbl;
+            var index = _columns.IndexOf(name.ToUpperInvariant());
+            if (index == -1)
+                throw new ArgumentException("Column does not exist.");
+            return index;
         }
 
         /// <summary>
@@ -781,9 +485,6 @@ namespace Mono.Data.Sqlite
         /// <returns>string</returns>
         public override string GetString(int i)
         {
-            if (i >= VisibleFieldCount && _keyInfo != null)
-                return _keyInfo.GetString(i - VisibleFieldCount);
-
             VerifyType(i, DbType.String);
             return _activeStatement._sql.GetText(_activeStatement, i);
         }
@@ -795,9 +496,6 @@ namespace Mono.Data.Sqlite
         /// <returns>object</returns>
         public override object GetValue(int i)
         {
-            if (i >= VisibleFieldCount && _keyInfo != null)
-                return _keyInfo.GetValue(i - VisibleFieldCount);
-
             SQLiteType typ = GetSQLiteType(i);
 
             return _activeStatement._sql.GetValue(_activeStatement, i, typ);
@@ -848,9 +546,6 @@ namespace Mono.Data.Sqlite
         /// <returns>True or False</returns>
         public override bool IsDBNull(int i)
         {
-            if (i >= VisibleFieldCount && _keyInfo != null)
-                return _keyInfo.IsDBNull(i - VisibleFieldCount);
-
             return _activeStatement._sql.IsNull(_activeStatement, i);
         }
 
@@ -934,12 +629,21 @@ namespace Mono.Data.Sqlite
                 _fieldCount = fieldCount;
                 _fieldTypeArray = null;
 
-                if ((_commandBehavior & CommandBehavior.KeyInfo) != 0)
-                    LoadKeyInfo();
+                var cols = new string[_fieldCount];
+
+                // load column names
+                for (int i = 0; i < _fieldCount; i++)
+                {
+                    cols[i] = Sqlite3.sqlite3_column_name(_activeStatement._sqlite_stmt, i).ToUpperInvariant();
+                }
+
+                _columns = new List<string>(cols);
 
                 return true;
             }
         }
+
+        private List<string> _columns;
 
         /// <summary>
         /// Retrieves the SQLiteType for a given column, and caches it to avoid repetetive interop calls.
@@ -989,9 +693,6 @@ namespace Mono.Data.Sqlite
                 {
                     if (_activeStatement._sql.Step(_activeStatement) == true)
                     {
-                        if (_keyInfo != null)
-                            _keyInfo.Reset();
-
                         return true;
                     }
                 }
@@ -1028,14 +729,6 @@ namespace Mono.Data.Sqlite
         public override object this[int i]
         {
             get { return GetValue(i); }
-        }
-
-        private void LoadKeyInfo()
-        {
-            if (_keyInfo != null)
-                _keyInfo.Dispose();
-
-            _keyInfo = new SqliteKeyReader(_command.Connection, this, _activeStatement);
         }
     }
 }

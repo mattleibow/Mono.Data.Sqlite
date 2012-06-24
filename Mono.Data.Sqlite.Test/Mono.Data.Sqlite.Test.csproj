@@ -56,17 +56,12 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="SqliteCommandUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqliteConnectionTest.cs" />
-    <Compile Include="SqliteDataAdapterUnitTests.cs" />
     <Compile Include="SqliteDataReaderTest.cs" />
     <Compile Include="SqliteExceptionUnitTests.cs" />
     <Compile Include="SqliteParameterUnitTests.cs" />
@@ -84,6 +79,10 @@
     <ProjectReference Include="..\Mono.Data.Sqlite\Mono.Data.Sqlite.csproj">
       <Project>{e081fe00-6e78-4919-b633-01528eb16ad0}</Project>
       <Name>Mono.Data.Sqlite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Data\System.Data-net_4_0.csproj">
+      <Project>{155aef28-c81f-405d-9072-9d52780e3e70}</Project>
+      <Name>System.Data-net_4_0</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

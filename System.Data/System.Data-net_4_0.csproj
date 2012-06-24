@@ -46,6 +46,8 @@
     <Compile Include="Assembly\AssemblyInfo.cs" />
     <Compile Include="Locale.cs" />
     <Compile Include="MonoTODOAttribute.cs" />
+    <Compile Include="System.Data.Common\DbDataRecord.cs" />
+    <Compile Include="System.Data.Common\DbEnumerator.cs" />
     <Compile Include="System.Data\AcceptRejectRule.cs" />
     <Compile Include="System.Data\ColumnTypeConverter.cs" />
     <Compile Include="System.Data\CommandBehavior.cs" />
@@ -129,13 +131,11 @@
     <Compile Include="System.Data.Common\DbDataPermissionAttribute.cs" />
     <Compile Include="System.Data.Common\DbDataPermission.cs" />
     <Compile Include="System.Data.Common\DbDataReader.cs" />
-    <Compile Include="System.Data.Common\DbDataSourceEnumerator.cs" />
     <Compile Include="System.Data.Common\DbException.cs" />
     <Compile Include="System.Data.Common\DbMetaDataCollectionNames.cs" />
     <Compile Include="System.Data.Common\DbMetaDataColumnNames.cs" />
     <Compile Include="System.Data.Common\DbParameterCollection.cs" />
     <Compile Include="System.Data.Common\DbParameter.cs" />
-    <Compile Include="System.Data.Common\DbProviderFactory.cs" />
     <Compile Include="System.Data.Common\DbProviderSpecificTypePropertyAttribute.cs" />
     <Compile Include="System.Data.Common\DbTable.cs" />
     <Compile Include="System.Data.Common\DbTransaction.cs" />
