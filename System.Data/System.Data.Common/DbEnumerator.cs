@@ -109,7 +109,6 @@ namespace System.Data.Common
             return false;
         }
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public void Reset()
         {
             throw new NotSupportedException();

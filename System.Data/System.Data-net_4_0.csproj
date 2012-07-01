@@ -91,7 +91,6 @@
     <Compile Include="System.Data\NoNullAllowedException.cs" />
     <Compile Include="System.Data\OperationAbortedException.cs" />
     <Compile Include="System.Data\ParameterDirection.cs" />
-    <Compile Include="System.Data\PropertyAttributes.cs" />
     <Compile Include="System.Data\PropertyCollection.cs" />
     <Compile Include="System.Data\ReadOnlyException.cs" />
     <Compile Include="System.Data\ResDescriptionAttribute.cs" />
@@ -115,17 +114,11 @@
     <Compile Include="System.Data\VersionNotFoundException.cs" />
     <Compile Include="System.Data.Common\CatalogLocation.cs" />
     <Compile Include="System.Data.Common\ComparerFactory.cs" />
-    <Compile Include="System.Data.Common\DbCommandBuilder.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="System.Data.Common\DbCommandBuilder.cs" />
     <Compile Include="System.Data.Common\DbConnectionStringBuilder.cs" />
     <Compile Include="System.Data.Common\DbConnectionStringBuilderHelper.cs" />
-    <Compile Include="System.Data.Common\DbCommand.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="System.Data.Common\DbConnection.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="System.Data.Common\DbCommand.cs" />
+    <Compile Include="System.Data.Common\DbConnection.cs" />
     <Compile Include="System.Data.Common\DbConnectionOptions.cs" />
     <Compile Include="System.Data.Common\DbConnectionString.cs" />
     <Compile Include="System.Data.Common\DbDataPermissionAttribute.cs" />

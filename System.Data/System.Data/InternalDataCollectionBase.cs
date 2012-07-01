@@ -75,7 +75,6 @@ namespace System.Data
         /// <summary>
         /// Gets the total number of elements in a collection.
         /// </summary>
-        [Browsable(false)]
         public virtual int Count
         {
             get { return list.Count; }
@@ -84,7 +83,6 @@ namespace System.Data
         /// <summary>
         /// Gets a value indicating whether the InternalDataCollectionBase is read-only.
         /// </summary>
-        [Browsable(false)]
         public bool IsReadOnly
         {
             get { return readOnly; }
@@ -93,7 +91,6 @@ namespace System.Data
         /// <summary>
         /// Gets a value indicating whether the InternalDataCollectionBase is synchronized.
         /// </summary>
-        [Browsable(false)]
         public bool IsSynchronized
         {
             get { return synchronized; }
@@ -110,7 +107,6 @@ namespace System.Data
         /// <summary>
         /// Gets an object that can be used to synchronize the collection.
         /// </summary>
-        [Browsable(false)]
         public object SyncRoot
         {
             get { return this; }

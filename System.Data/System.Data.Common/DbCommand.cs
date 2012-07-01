@@ -32,12 +32,9 @@
 
 #if NET_2_0 || TARGET_JVM
 
-using System.ComponentModel;
-using System.Data;
-
 namespace System.Data.Common
 {
-    public abstract class DbCommand : Component, IDbCommand, IDisposable
+    public abstract class DbCommand : IDbCommand, IDisposable
     {
         protected DbCommand()
         {
@@ -45,19 +42,12 @@ namespace System.Data.Common
 
         #region Properties
 
-        [DefaultValue("")]
-        [RefreshProperties(RefreshProperties.All)]
         public abstract string CommandText { get; set; }
 
         public abstract int CommandTimeout { get; set; }
 
-        [DefaultValue(CommandType.Text)]
-        [RefreshProperties(RefreshProperties.All)]
         public abstract CommandType CommandType { get; set; }
 
-        [DefaultValue(null)]
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public DbConnection Connection
         {
             get { return DbConnection; }
@@ -67,12 +57,6 @@ namespace System.Data.Common
         protected abstract DbConnection DbConnection { get; set; }
         protected abstract DbParameterCollection DbParameterCollection { get; }
         protected abstract DbTransaction DbTransaction { get; set; }
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        [Browsable(false)]
-        [DefaultValue(true)]
-        [DesignOnly(true)]
-        public abstract bool DesignTimeVisible { get; set; }
 
         IDbConnection IDbCommand.Connection
         {
@@ -91,23 +75,17 @@ namespace System.Data.Common
             set { Transaction = (DbTransaction) value; }
         }
 
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public DbParameterCollection Parameters
         {
             get { return DbParameterCollection; }
         }
 
-        [Browsable(false)]
-        [DefaultValue(null)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public DbTransaction Transaction
         {
             get { return DbTransaction; }
             set { DbTransaction = value; }
         }
 
-        [DefaultValue(UpdateRowSource.Both)]
         public abstract UpdateRowSource UpdatedRowSource { get; set; }
 
         #endregion // Properties
@@ -155,6 +133,11 @@ namespace System.Data.Common
         public abstract void Prepare();
 
         #endregion // Methods
+
+        public virtual void Dispose()
+        {
+            
+        }
     }
 }
 

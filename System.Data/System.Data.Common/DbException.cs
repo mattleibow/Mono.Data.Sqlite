@@ -27,9 +27,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#if NET_2_0
-using System;
-using System.Globalization;
 using System.Runtime.InteropServices;
 
 namespace System.Data.Common
@@ -40,7 +37,8 @@ namespace System.Data.Common
         {
         }
 
-        protected DbException(string message) : base(message)
+        protected DbException(string message)
+            : base(message)
         {
         }
 
@@ -49,10 +47,9 @@ namespace System.Data.Common
         {
         }
 
-        protected DbException(string message, int errorCode) : base(message, errorCode)
+        protected DbException(string message, int errorCode)
+            : base(message, errorCode)
         {
         }
     }
 }
-
-#endif

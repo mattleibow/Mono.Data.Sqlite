@@ -8,10 +8,8 @@
 namespace Mono.Data.Sqlite
 {
     using System;
-    using System.Data;
     using System.Data.Common;
     using System.Globalization;
-    using System.ComponentModel;
 
     /// <summary>
     /// SQLite implementation of DbCommandBuilder.
@@ -58,55 +56,6 @@ namespace Mono.Data.Sqlite
         }
 
         /// <summary>
-        /// Overridden to hide its property from the designer
-        /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
-        [Browsable(false)]
-#endif
-            public override CatalogLocation CatalogLocation
-        {
-            get { return base.CatalogLocation; }
-            set { base.CatalogLocation = value; }
-        }
-
-        /// <summary>
-        /// Overridden to hide its property from the designer
-        /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
-        [Browsable(false)]
-#endif
-            public override string CatalogSeparator
-        {
-            get { return base.CatalogSeparator; }
-            set { base.CatalogSeparator = value; }
-        }
-
-        /// <summary>
-        /// Overridden to hide its property from the designer
-        /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
-        [Browsable(false)]
-#endif
-        [DefaultValue("[")]
-        public override string QuotePrefix
-        {
-            get { return base.QuotePrefix; }
-            set { base.QuotePrefix = value; }
-        }
-
-        /// <summary>
-        /// Overridden to hide its property from the designer
-        /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
-        [Browsable(false)]
-#endif
-            public override string QuoteSuffix
-        {
-            get { return base.QuoteSuffix; }
-            set { base.QuoteSuffix = value; }
-        }
-
-        /// <summary>
         /// Places brackets around an identifier
         /// </summary>
         /// <param name="unquotedIdentifier">The identifier to quote</param>
@@ -141,18 +90,6 @@ namespace Mono.Data.Sqlite
                 quotedIdentifier.Substring(QuotePrefix.Length,
                                            quotedIdentifier.Length - (QuotePrefix.Length + QuoteSuffix.Length)).Replace(
                                                QuoteSuffix + QuoteSuffix, QuoteSuffix);
-        }
-
-        /// <summary>
-        /// Overridden to hide its property from the designer
-        /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
-        [Browsable(false)]
-#endif
-            public override string SchemaSeparator
-        {
-            get { return base.SchemaSeparator; }
-            set { base.SchemaSeparator = value; }
         }
     }
 }

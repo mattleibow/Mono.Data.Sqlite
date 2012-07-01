@@ -33,13 +33,10 @@
 #if NET_2_0 || TARGET_JVM
 
 using System.Collections;
-using System.ComponentModel;
-using System.Runtime.InteropServices;
 
 namespace System.Data.Common
 {
-    public abstract class DbParameterCollection : MarshalByRefObject, IDataParameterCollection, IList, ICollection,
-                                                  IEnumerable
+    public abstract class DbParameterCollection : IDataParameterCollection, IList, ICollection, IEnumerable
     {
         #region Constructors
 
@@ -51,8 +48,6 @@ namespace System.Data.Common
 
         #region Properties
 
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public abstract int Count { get; }
 
         object IDataParameterCollection.this[string parameterName]
@@ -67,19 +62,10 @@ namespace System.Data.Common
             set { this[index] = (DbParameter) value; }
         }
 
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public abstract bool IsFixedSize { get; }
 
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public abstract bool IsReadOnly { get; }
 
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public abstract bool IsSynchronized { get; }
 
         public DbParameter this[string parameterName]
@@ -102,9 +88,6 @@ namespace System.Data.Common
             set { SetParameter(index, value); }
         }
 
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public abstract object SyncRoot { get; }
 
         #endregion // Properties
@@ -113,20 +96,17 @@ namespace System.Data.Common
 
         public abstract int Add(object value);
 
-#if NET_2_0
         public abstract void AddRange(Array values);
         protected abstract DbParameter GetParameter(String parameterName);
 
         protected abstract void SetParameter(String parameterName,
                                              DbParameter value);
-#endif
 
         public abstract void Clear();
         public abstract bool Contains(object value);
         public abstract bool Contains(string value);
         public abstract void CopyTo(Array array, int index);
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public abstract IEnumerator GetEnumerator();
 
         protected abstract DbParameter GetParameter(int index);

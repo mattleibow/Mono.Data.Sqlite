@@ -30,9 +30,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System.ComponentModel;
 using System.Security.Permissions;
-using System.Globalization;
 
 namespace System.Data.Common
 {
@@ -103,14 +101,12 @@ namespace System.Data.Common
 
         #region // Methods
 
-        [EditorBrowsableAttribute(EditorBrowsableState.Never)]
         public bool ShouldSerializeConnectionString()
         {
             // FIXME: configurable ? why is this in the attribute class ?
             return false;
         }
 
-        [EditorBrowsableAttribute(EditorBrowsableState.Never)]
         public bool ShouldSerializeKeyRestrictions()
         {
             // FIXME: configurable ? why is this in the attribute class ?

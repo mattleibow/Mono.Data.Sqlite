@@ -39,10 +39,9 @@ using System.Text;
 
 namespace System.Data.Common
 {
-    public abstract class DbCommandBuilder : Component
+    public abstract class DbCommandBuilder : IDisposable
     {
         private bool _setAllValues;
-        private bool _disposed;
 
         private CatalogLocation _catalogLocation = CatalogLocation.Start;
         private ConflictOption _conflictOption = ConflictOption.CompareAllSearchableValues;
@@ -155,15 +154,9 @@ namespace System.Data.Common
             set { _setAllValues = value; }
         }
 
-        protected override void Dispose(bool disposing)
+        public virtual void Dispose()
         {
-            if (!_disposed)
-            {
-                if (disposing)
-                {
-                }
-                _disposed = true;
-            }
+
         }
 
         public virtual string QuoteIdentifier(string unquotedIdentifier)

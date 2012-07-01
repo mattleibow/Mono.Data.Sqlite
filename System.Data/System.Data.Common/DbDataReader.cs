@@ -76,7 +76,6 @@ namespace System.Data.Common
         public abstract char GetChar(int ordinal);
         public abstract long GetChars(int ordinal, long dataOffset, char[] buffer, int bufferOffset, int length);
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public void Dispose()
         {
             Dispose(true);
@@ -88,20 +87,16 @@ namespace System.Data.Common
                 Close();
         }
 
-#if NET_2_0
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public DbDataReader GetData(int ordinal)
         {
             return ((DbDataReader) this[ordinal]);
         }
-#endif
 
         public abstract string GetDataTypeName(int ordinal);
         public abstract DateTime GetDateTime(int ordinal);
         public abstract decimal GetDecimal(int ordinal);
         public abstract double GetDouble(int ordinal);
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public abstract IEnumerator GetEnumerator();
 
         public abstract Type GetFieldType(int ordinal);
@@ -113,20 +108,16 @@ namespace System.Data.Common
         public abstract string GetName(int ordinal);
         public abstract int GetOrdinal(string name);
 
-#if NET_2_0
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual Type GetProviderSpecificFieldType(int ordinal)
         {
             return GetFieldType(ordinal);
         }
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual object GetProviderSpecificValue(int ordinal)
         {
             return GetValue(ordinal);
         }
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual int GetProviderSpecificValues(object[] values)
         {
             return GetValues(values);
@@ -136,7 +127,6 @@ namespace System.Data.Common
         {
             return ((DbDataReader) this[ordinal]);
         }
-#endif
 
         public abstract string GetString(int ordinal);
         public abstract object GetValue(int ordinal);

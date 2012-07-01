@@ -16,11 +16,6 @@ namespace Mono.Data.Sqlite
     /// <summary>
     /// SQLite implementation of DbCommand.
     /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
-    [Designer(
-        "SQLite.Designer.SqliteCommandDesigner, SQLite.Designer, Version=1.0.36.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139"
-        ), ToolboxItem(true)]
-#endif
     public sealed class SqliteCommand : DbCommand, ICloneable
     {
         /// <summary>
@@ -122,7 +117,6 @@ namespace Mono.Data.Sqlite
             : this(source.CommandText, source.Connection, source.Transaction)
         {
             CommandTimeout = source.CommandTimeout;
-            DesignTimeVisible = source.DesignTimeVisible;
             UpdatedRowSource = source.UpdatedRowSource;
 
             foreach (SqliteParameter param in source._parameterCollection)
@@ -164,36 +158,33 @@ namespace Mono.Data.Sqlite
         /// Disposes of the command and clears all member variables
         /// </summary>
         /// <param name="disposing">Whether or not the class is being explicitly or implicitly disposed</param>
-        protected override void Dispose(bool disposing)
+        public override void Dispose()
         {
-            base.Dispose(disposing);
-
-            if (disposing)
+            base.Dispose();
+            
+            // If a reader is active on this command, don't destroy the command, instead let the reader do it
+            SqliteDataReader reader = null;
+            if (_activeReader != null)
             {
-                // If a reader is active on this command, don't destroy the command, instead let the reader do it
-                SqliteDataReader reader = null;
-                if (_activeReader != null)
+                try
                 {
-                    try
-                    {
-                        reader = _activeReader.Target as SqliteDataReader;
-                    }
-                    catch
-                    {
-                    }
+                    reader = _activeReader.Target as SqliteDataReader;
                 }
-
-                if (reader != null)
+                catch
                 {
-                    reader._disposeCommand = true;
-                    _activeReader = null;
-                    return;
                 }
-
-                Connection = null;
-                _parameterCollection.Clear();
-                _commandText = null;
             }
+
+            if (reader != null)
+            {
+                reader._disposeCommand = true;
+                _activeReader = null;
+                return;
+            }
+
+            Connection = null;
+            _parameterCollection.Clear();
+            _commandText = null;
         }
 
         /// <summary>
@@ -308,15 +299,7 @@ namespace Mono.Data.Sqlite
         /// <summary>
         /// The SQL command text associated with the command
         /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
-        [DefaultValue(""), RefreshProperties(RefreshProperties.All),
-         Editor(
-             "Microsoft.VSDesigner.Data.SQL.Design.SqlCommandTextEditor, Microsoft.VSDesigner, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
-             ,
-             "System.Drawing.Design.UITypeEditor, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
-             )]
-#endif
-            public override string CommandText
+        public override string CommandText
         {
             get { return _commandText; }
             set
@@ -338,10 +321,7 @@ namespace Mono.Data.Sqlite
         /// <summary>
         /// The amount of time to wait for the connection to become available before erroring out
         /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
-        [DefaultValue((int) 30)]
-#endif
-            public override int CommandTimeout
+        public override int CommandTimeout
         {
             get { return _commandTimeout; }
             set { _commandTimeout = value; }
@@ -350,10 +330,7 @@ namespace Mono.Data.Sqlite
         /// <summary>
         /// The type of the command.  SQLite only supports CommandType.Text
         /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
-        [RefreshProperties(RefreshProperties.All), DefaultValue(CommandType.Text)]
-#endif
-            public override CommandType CommandType
+        public override CommandType CommandType
         {
             get { return CommandType.Text; }
             set
@@ -386,15 +363,7 @@ namespace Mono.Data.Sqlite
         /// <summary>
         /// The connection associated with this command
         /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
-        [DefaultValue((string) null),
-         Editor(
-             "Microsoft.VSDesigner.Data.Design.DbConnectionEditor, Microsoft.VSDesigner, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
-             ,
-             "System.Drawing.Design.UITypeEditor, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
-             )]
-#endif
-            public new SqliteConnection Connection
+        public new SqliteConnection Connection
         {
             get { return _cnn; }
             set
@@ -429,10 +398,7 @@ namespace Mono.Data.Sqlite
         /// <summary>
         /// Returns the SqliteParameterCollection for the given command
         /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
-#endif
-            public new SqliteParameterCollection Parameters
+        public new SqliteParameterCollection Parameters
         {
             get { return _parameterCollection; }
         }
@@ -449,10 +415,7 @@ namespace Mono.Data.Sqlite
         /// The transaction associated with this command.  SQLite only supports one transaction per connection, so this property forwards to the
         /// command's underlying connection.
         /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-#endif
-            public new SqliteTransaction Transaction
+        public new SqliteTransaction Transaction
         {
             get { return _transaction; }
             set
@@ -601,24 +564,6 @@ namespace Mono.Data.Sqlite
         {
             get { return _updateRowSource; }
             set { _updateRowSource = value; }
-        }
-
-        /// <summary>
-        /// Determines if the command is visible at design time.  Defaults to True.
-        /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
-        [DesignOnly(true), Browsable(false), DefaultValue(true), EditorBrowsable(EditorBrowsableState.Never)]
-#endif
-            public override bool DesignTimeVisible
-        {
-            get { return _designTimeVisible; }
-            set
-            {
-                _designTimeVisible = value;
-#if !PLATFORM_COMPACTFRAMEWORK
-                TypeDescriptor.Refresh(this);
-#endif
-            }
         }
 
         /// <summary>

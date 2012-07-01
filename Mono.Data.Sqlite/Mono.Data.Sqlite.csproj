@@ -64,15 +64,9 @@
     <Compile Include="MonoPInvokeCallbackAttribute.cs" />
     <Compile Include="SQLiteBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SQLiteCommand.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="SQLiteCommandBuilder.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="SQLiteConnection.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="SQLiteCommand.cs" />
+    <Compile Include="SQLiteCommandBuilder.cs" />
+    <Compile Include="SQLiteConnection.cs" />
     <Compile Include="SQLiteConnectionStringBuilder.cs" />
     <Compile Include="SQLiteConvert.cs" />
     <Compile Include="SQLiteDataReader.cs" />
@@ -85,7 +79,6 @@
     <Compile Include="SQLiteParameterCollection.cs" />
     <Compile Include="SQLiteStatement.cs" />
     <Compile Include="SQLiteTransaction.cs" />
-    <Compile Include="SR.Designer.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

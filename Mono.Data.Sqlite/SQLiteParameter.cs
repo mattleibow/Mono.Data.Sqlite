@@ -175,9 +175,6 @@ namespace Mono.Data.Sqlite
         /// <param name="sourceColumn">The source column</param>
         /// <param name="rowVersion">The row version information</param>
         /// <param name="value">The initial value to assign the parameter</param>   
-#if !PLATFORM_COMPACTFRAMEWORK
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-#endif
         public SqliteParameter(string parameterName, DbType parameterType, int parameterSize,
                                ParameterDirection direction, bool isNullable, byte precision, byte scale,
                                string sourceColumn, object value)
@@ -201,9 +198,6 @@ namespace Mono.Data.Sqlite
         /// <param name="rowVersion">The row version information</param>
         /// <param name="sourceColumnNullMapping">Whether or not this parameter is for comparing NULL's</param>
         /// <param name="value">The intial value to assign the parameter</param>
-#if !PLATFORM_COMPACTFRAMEWORK
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-#endif
         public SqliteParameter(string parameterName, DbType parameterType, int parameterSize,
                                ParameterDirection direction, byte precision, byte scale, string sourceColumn,
                                bool sourceColumnNullMapping, object value)
@@ -247,11 +241,7 @@ namespace Mono.Data.Sqlite
         /// <summary>
         /// Returns the datatype of the parameter
         /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
-        [DbProviderSpecificTypeProperty(true)]
-        [RefreshProperties(RefreshProperties.All)]
-#endif
-            public override DbType DbType
+        public override DbType DbType
         {
             get
             {
@@ -301,10 +291,7 @@ namespace Mono.Data.Sqlite
         /// <summary>
         /// Returns the size of the parameter
         /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
-        [DefaultValue((int) 0)]
-#endif
-            public override int Size
+        public override int Size
         {
             get { return _dataSize; }
             set { _dataSize = value; }
@@ -331,10 +318,7 @@ namespace Mono.Data.Sqlite
         /// <summary>
         /// Gets and sets the parameter value.  If no datatype was specified, the datatype will assume the type from the value given.
         /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
-        [TypeConverter(typeof (StringConverter)), RefreshProperties(RefreshProperties.All)]
-#endif
-            public override object Value
+        public override object Value
         {
             get { return _objValue; }
             set

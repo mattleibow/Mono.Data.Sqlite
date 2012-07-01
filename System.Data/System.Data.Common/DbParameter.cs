@@ -32,7 +32,6 @@
 
 #if NET_2_0 || TARGET_JVM
 using System.Collections;
-using System.ComponentModel;
 
 namespace System.Data.Common
 {
@@ -50,16 +49,10 @@ namespace System.Data.Common
 
         #region Properties
 
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        [RefreshProperties(RefreshProperties.All)]
         public abstract DbType DbType { get; set; }
 
-        [DefaultValue(ParameterDirection.Input)]
-        [RefreshProperties(RefreshProperties.All)]
         public abstract ParameterDirection Direction { get; set; }
 
-        [DefaultValue("")]
         public abstract string ParameterName { get; set; }
 
         public abstract int Size { get; set; }
@@ -76,28 +69,18 @@ namespace System.Data.Common
             set { }
         }
 
-        [DefaultValue(null)]
-        [RefreshProperties(RefreshProperties.All)]
         public abstract object Value { get; set; }
 
-        [Browsable(false)]
-        [DesignOnly(true)]
-        [EditorBrowsable(EditorBrowsableState.Never)]
         public abstract bool IsNullable { get; set; }
 
-        [DefaultValue("")]
         public abstract string SourceColumn { get; set; }
 
-        [RefreshProperties(RefreshProperties.All)]
-        [DefaultValue(false)]
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public abstract bool SourceColumnNullMapping { get; set; }
 
         #endregion // Properties
 
         #region Methods
 
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
         public abstract void ResetDbType();
 
         internal virtual object FrameworkDbType

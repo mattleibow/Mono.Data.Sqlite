@@ -18,13 +18,6 @@ namespace Mono.Data.Sqlite
     /// <summary>
     /// SQLite implementation of DbParameterCollection.
     /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
-    [Editor(
-        "Microsoft.VSDesigner.Data.Design.DBParametersEditor, Microsoft.VSDesigner, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
-        ,
-        "System.Drawing.Design.UITypeEditor, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
-        ), ListBindable(false)]
-#endif
     public sealed class SqliteParameterCollection : DbParameterCollection
     {
         /// <summary>
@@ -169,9 +162,6 @@ namespace Mono.Data.Sqlite
         /// </summary>
         /// <param name="value">The parameter to add</param>
         /// <returns>A zero-based index of where the parameter is located in the array</returns>
-#if !PLATFORM_COMPACTFRAMEWORK
-        [EditorBrowsable(EditorBrowsableState.Never)]
-#endif
         public override int Add(object value)
         {
             return Add((SqliteParameter) value);

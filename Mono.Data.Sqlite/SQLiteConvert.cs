@@ -9,15 +9,9 @@ namespace Mono.Data.Sqlite
 {
     using System;
     using System.Data;
-    using System.Runtime.InteropServices;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.Globalization;
     using System.Text;
-#if !PLATFORM_COMPACTFRAMEWORK
-    using System.ComponentModel.Design;
-
-#endif
 
     /// <summary>
     /// This base class provides datatype conversion services for the SQLite provider.

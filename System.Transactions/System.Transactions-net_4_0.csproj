@@ -10,7 +10,7 @@
     <NoWarn>1699</NoWarn>
     <NoStdLib>true</NoStdLib>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <AssemblyName>System.Transactions</AssemblyName>
+    <AssemblyName>System.Transactions.Mine</AssemblyName>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">

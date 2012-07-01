@@ -259,19 +259,6 @@ namespace Mono.Data.Sqlite
             }
         }
 
-#if PLATFORM_COMPACTFRAMEWORK
-    /// <summary>
-    /// Obsolete
-    /// </summary>
-    public override int ConnectionTimeout
-    {
-      get
-      {
-        return 30;
-      }
-    }
-#endif
-
         /// <summary>
         /// Creates a clone of the connection.  All attached databases and user-defined functions are cloned.  If the existing connection is open, the cloned connection 
         /// will also be opened.
@@ -285,13 +272,11 @@ namespace Mono.Data.Sqlite
         /// <summary>
         /// Disposes of the SqliteConnection, closing it if it is active.
         /// </summary>
-        /// <param name="disposing">True if the connection is being explicitly closed.</param>
-        protected override void Dispose(bool disposing)
+        public override void Dispose()
         {
-            base.Dispose(disposing);
+            base.Dispose();
 
-            if (disposing)
-                Close();
+            Close();
         }
 
         /// <summary>
@@ -304,32 +289,6 @@ namespace Mono.Data.Sqlite
             FileStream fs = File.Create(databaseFileName);
             fs.Close();
         }
-
-#if !SQLITE_STANDARD
-    /// <summary>
-    /// On NTFS volumes, this function turns on the compression attribute for the given file.
-    /// It must not be open or referenced at the time of the function call.
-    /// </summary>
-    /// <param name="databaseFileName">The file to compress</param>
-        [Obsolete("This functionality is being removed from a future version of the SQLite provider")]
-        static public void CompressFile(string databaseFileName)
-        {
-            Sqlite3.sqlite3_compressfile(databaseFileName);
-        }
-#endif
-
-#if !SQLITE_STANDARD
-    /// <summary>
-    /// On NTFS volumes, this function removes the compression attribute for the given file.
-    /// It must not be open or referenced at the time of the function call.
-    /// </summary>
-    /// <param name="databaseFileName">The file to decompress</param>
-        [Obsolete("This functionality is being removed from a future version of the SQLite provider")]
-        static public void DecompressFile(string databaseFileName)
-        {
-            Sqlite3.sqlite3_decompressfile(databaseFileName);
-        }
-#endif
 
         /// <summary>
         /// Raises the state change event when the state of the connection changes
@@ -615,15 +574,7 @@ namespace Mono.Data.Sqlite
         /// </item>
         /// </list>
         /// </remarks>
-#if !PLATFORM_COMPACTFRAMEWORK
-        [RefreshProperties(RefreshProperties.All), DefaultValue("")]
-        [Editor(
-            "SQLite.Designer.SqliteConnectionStringEditor, SQLite.Designer, Version=1.0.36.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139"
-            ,
-            "System.Drawing.Design.UITypeEditor, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"
-            )]
-#endif
-            public override string ConnectionString
+        public override string ConnectionString
         {
             get { return _connectionString; }
             set
@@ -659,10 +610,7 @@ namespace Mono.Data.Sqlite
         /// <summary>
         /// Returns the filename without extension or path
         /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-#endif
-            public override string DataSource
+        public override string DataSource
         {
             get { return _dataSource; }
         }
@@ -670,10 +618,7 @@ namespace Mono.Data.Sqlite
         /// <summary>
         /// Returns an empty string
         /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-#endif
-            public override string Database
+        public override string Database
         {
             get { return "main"; }
         }
@@ -832,10 +777,6 @@ namespace Mono.Data.Sqlite
                 fileName = ":memory:";
             else
             {
-#if PLATFORM_COMPACTFRAMEWORK
-       if (fileName.StartsWith(".\\"))
-         fileName = Path.GetDirectoryName(System.Reflection.Assembly.GetCallingAssembly().GetName().CodeBase) + fileName.Substring(1);
-#endif
                 fileName = ExpandFileName(fileName);
             }
             try
@@ -992,10 +933,7 @@ namespace Mono.Data.Sqlite
         /// <summary>
         /// Returns the version of the underlying SQLite database engine
         /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-#endif
-            public override string ServerVersion
+        public override string ServerVersion
         {
             get
             {
@@ -1017,10 +955,7 @@ namespace Mono.Data.Sqlite
         /// <summary>
         /// Returns the state of the connection.
         /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
-        [Browsable(false), DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-#endif
-            public override ConnectionState State
+        public override ConnectionState State
         {
             get { return _connectionState; }
         }
@@ -1070,13 +1005,9 @@ namespace Mono.Data.Sqlite
             {
                 string dataDirectory;
 
-#if PLATFORM_COMPACTFRAMEWORK
-        dataDirectory = Path.GetDirectoryName(System.Reflection.Assembly.GetCallingAssembly().GetName().CodeBase);
-#else
                 dataDirectory = AppDomain.CurrentDomain.GetData("DataDirectory") as string;
                 if (String.IsNullOrEmpty(dataDirectory))
                     dataDirectory = AppDomain.CurrentDomain.BaseDirectory;
-#endif
 
                 if (sourceFile.Length > _dataDirectory.Length)
                 {
