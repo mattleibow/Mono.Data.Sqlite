@@ -12,7 +12,7 @@
 
 namespace System.Transactions
 {
-    public class TransactionException : SystemException
+    public class TransactionException : Exception
     {
         protected TransactionException()
         {

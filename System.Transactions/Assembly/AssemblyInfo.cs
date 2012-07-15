@@ -34,7 +34,6 @@ using System.Resources;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security;
-using System.Security.Permissions;
 
 // General Information about the System.Transactions assembly
 
@@ -48,9 +47,6 @@ using System.Security.Permissions;
 [assembly: SatelliteContractVersion(Consts.FxVersion)]
 [assembly: AssemblyInformationalVersion(Consts.FxFileVersion)]
 [assembly: NeutralResourcesLanguage("en-US")]
-[assembly: ComVisible(false)]
-[assembly: ComCompatibleVersion(1, 0, 3300, 0)]
-[assembly: AllowPartiallyTrustedCallers]
 
 #if !TARGET_JVM
 
@@ -61,4 +57,3 @@ using System.Security.Permissions;
 #endif
 
 [assembly: AssemblyFileVersion(Consts.FxFileVersion)]
-[assembly: BestFitMapping(false)]

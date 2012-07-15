@@ -17,7 +17,7 @@ namespace System.Transactions
 {
     //[ComImport]
     // [Guid (whatever)]
-    [InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
+    //[InterfaceType(ComInterfaceType.InterfaceIsIUnknown)]
     public interface IDtcTransaction
     {
         void Abort(IntPtr manager, int whatever, int whatever2);

@@ -62,9 +62,9 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="System.Transactions-net_4_0.csproj">
-      <Project>{4E2CF341-BE18-41A6-99AF-7D211A316531}</Project>
-      <Name>System.Transactions-net_4_0</Name>
+    <ProjectReference Include="System.Transactions.csproj">
+      <Project>{e706726a-a6b2-42f1-8502-c0f3ac04b0d5}</Project>
+      <Name>System.Transactions.Portable</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

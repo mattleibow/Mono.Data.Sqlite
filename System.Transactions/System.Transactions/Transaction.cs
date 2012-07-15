@@ -12,19 +12,52 @@
 #if NET_2_0
 using System.Collections;
 using System.Collections.Generic;
-using System.Security.Permissions;
 using System.Threading;
 
 namespace System.Transactions
 {
     public class Transaction : IDisposable
     {
-        [ThreadStatic] private static Transaction ambient;
+        // this is because WP does not support the [ThreadStatic]
+        static Transaction ambient
+        {
+            get
+            {
+                lock (_privateInstances)
+                {
+                    Transaction instance;
+                    if (!_privateInstances.TryGetValue(Thread.CurrentThread.ManagedThreadId, out instance))
+                    {
+                        instance = new Transaction();
+                        _privateInstances.Add(Thread.CurrentThread.ManagedThreadId, instance);
+                    }
+
+                    return instance;
+                }
+            }
+
+            set
+            {
+                lock (_privateInstances)
+                {
+                    if (_privateInstances.ContainsKey(Thread.CurrentThread.ManagedThreadId))
+                    {
+                        _privateInstances[Thread.CurrentThread.ManagedThreadId] = value;
+                    }
+                    else
+                    {
+                        _privateInstances.Add(Thread.CurrentThread.ManagedThreadId, value);
+                    }
+                }
+            }
+        }
+        private static readonly Dictionary<int, Transaction> _privateInstances = new Dictionary<int, Transaction>();
+
 
         private IsolationLevel level;
         private TransactionInformation info;
 
-        private ArrayList dependents = new ArrayList();
+        private List<object> dependents = new List<object>();
 
         /* Volatile enlistments */
         private List<IEnlistmentNotification> volatiles;
@@ -144,7 +177,6 @@ namespace System.Transactions
         }
 
         [MonoTODO("Only SinglePhase commit supported for durable resource managers.")]
-        [PermissionSetAttribute(SecurityAction.LinkDemand)]
         public Enlistment EnlistDurable(Guid manager,
                                         IEnlistmentNotification notification,
                                         EnlistmentOptions options)
@@ -155,7 +187,6 @@ namespace System.Transactions
         [MonoTODO(
             "Only Local Transaction Manager supported. Cannot have more than 1 durable resource per transaction. Only EnlistmentOptions.None supported yet."
             )]
-        [PermissionSetAttribute(SecurityAction.LinkDemand)]
         public Enlistment EnlistDurable(Guid manager,
                                         ISinglePhaseNotification notification,
                                         EnlistmentOptions options)
@@ -414,7 +445,7 @@ namespace System.Transactions
                 TimeSpan timeout = Scope != null ? Scope.Timeout : TransactionManager.DefaultTimeout;
 
                 // FIXME: Should we managers in parallel or on-by-one?
-                if (!pe.WaitHandle.WaitOne(timeout, true))
+                if (!pe.WaitHandle.WaitOne(timeout))
                 {
                     this.Aborted = true;
                     throw new TimeoutException("Transaction timedout");
