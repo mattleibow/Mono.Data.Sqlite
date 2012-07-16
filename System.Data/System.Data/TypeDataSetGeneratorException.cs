@@ -31,12 +31,13 @@
 using System;
 using System.Collections;
 using System.Globalization;
+    using System.Collections.Generic;
 
 namespace System.Data
 {
     public class TypedDataSetGeneratorException : DataException
     {
-        private readonly ArrayList errorList;
+        private readonly List<object> errorList;
 
         #region Constructors
 
@@ -45,7 +46,7 @@ namespace System.Data
         {
         }
 
-        public TypedDataSetGeneratorException(ArrayList list)
+        public TypedDataSetGeneratorException(List<object> list)
             : base(Locale.GetText("System error."))
         {
             errorList = list;
@@ -64,7 +65,7 @@ namespace System.Data
 
         #endregion //Constructors
 
-        public ArrayList ErrorList
+        public List<object> ErrorList
         {
             get { return errorList; }
         }

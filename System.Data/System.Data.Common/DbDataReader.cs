@@ -38,7 +38,7 @@ using System.Data;
 
 namespace System.Data.Common
 {
-    public abstract class DbDataReader : MarshalByRefObject, IDataReader, IDataRecord, IDisposable, IEnumerable
+    public abstract class DbDataReader : IDataReader, IDataRecord, IDisposable, IEnumerable
     {
         #region Constructors
 

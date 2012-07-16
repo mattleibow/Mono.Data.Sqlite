@@ -32,17 +32,19 @@
 #if NET_2_0
 
 using System.Collections;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 using System.Security;
 using System.Text;
 
 namespace System.Data.Common
 {
+    using System.Linq;
+
     internal class DbConnectionOptions
     {
         #region Fields
 
-        internal NameValueCollection options;
+        internal Dictionary<string, string> options;
         internal string normalizedConnectionString;
 
         #endregion // Fields
@@ -60,12 +62,12 @@ namespace System.Data.Common
 
         public DbConnectionOptions(string connectionString)
         {
-            options = new NameValueCollection();
+            options = new Dictionary<string, string>();
             ParseConnectionString(connectionString);
         }
 
         [MonoTODO]
-        public DbConnectionOptions(string connectionString, Hashtable synonyms, bool useFirstKeyValuePair)
+        public DbConnectionOptions(string connectionString, object synonyms, bool useFirstKeyValuePair)
             : this(connectionString)
         {
         }
@@ -102,7 +104,7 @@ namespace System.Data.Common
 
         public bool ContainsKey(string keyword)
         {
-            return (options.Get(keyword) != null);
+            return (options[keyword] != null);
         }
 
         public bool ConvertValueToBoolean(string keyname, bool defaultvalue)
@@ -130,12 +132,6 @@ namespace System.Data.Common
             if (ContainsKey(keyname))
                 return this[keyname];
             return defaultValue;
-        }
-
-        [MonoTODO]
-        protected internal virtual PermissionSet CreatePermissionSet()
-        {
-            throw new NotImplementedException();
         }
 
         [MonoTODO]
@@ -250,8 +246,8 @@ namespace System.Data.Common
             }
 
             StringBuilder normalized = new StringBuilder();
-            ArrayList keys = new ArrayList();
-            keys.AddRange(Keys);
+            List<object> keys = new List<object>();
+            keys.AddRange(options.Keys.ToArray());
             keys.Sort();
             foreach (string key in keys)
             {

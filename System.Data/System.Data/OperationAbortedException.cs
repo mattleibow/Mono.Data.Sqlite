@@ -36,7 +36,7 @@ using System.Globalization;
 
 namespace System.Data
 {
-    public sealed class OperationAbortedException : SystemException
+    public sealed class OperationAbortedException : Exception
     {
         #region Constructors
 

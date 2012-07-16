@@ -737,7 +737,7 @@ namespace MonoTests.System.Data.Common
 				Assert.AreEqual (typeof (ArgumentNullException), ex.GetType (), "#2");
 				Assert.IsNull (ex.InnerException, "#3");
 				Assert.IsNotNull (ex.Message, "#4");
-				Assert.AreEqual ("keyName", ex.ParamName, "#5");
+				Assert.AreEqual ("keyword", ex.ParamName, "#5");
 			}
 		}
 
@@ -1642,7 +1642,7 @@ namespace MonoTests.System.Data.Common
 				Assert.AreEqual (typeof (ArgumentNullException), ex.GetType (), "#A2");
 				Assert.IsNull (ex.InnerException, "#A3");
 				Assert.IsNotNull (ex.Message, "#A4");
-				Assert.AreEqual ("keyName", ex.ParamName, "#A5");
+				Assert.AreEqual ("keyword", ex.ParamName, "#A5");
 			}
 
 			try {
@@ -1653,7 +1653,7 @@ namespace MonoTests.System.Data.Common
 				Assert.AreEqual (typeof (ArgumentNullException), ex.GetType (), "#B2");
 				Assert.IsNull (ex.InnerException, "#B3");
 				Assert.IsNotNull (ex.Message, "#B4");
-				Assert.AreEqual ("keyName", ex.ParamName, "#B5");
+				Assert.AreEqual ("keyword", ex.ParamName, "#B5");
 			}
 		}
 
@@ -1788,35 +1788,6 @@ namespace MonoTests.System.Data.Common
 				Assert.AreEqual ("keyword", ex.ParamName, "#5");
 			}
 		}
-
-                [Test]
-                public void ICTD_GetClassNameTest ()
-                {
-                        ICustomTypeDescriptor ictd = (ICustomTypeDescriptor) builder;
-                        string className = ictd.GetClassName ();
-                        Assert.AreEqual (builder.GetType ().ToString (), className, "#1");
-
-                        AttributeCollection collection = ictd.GetAttributes ();
-                        Assert.AreEqual (2, collection.Count, "#2");
-                        object [] attr = builder.GetType ().GetCustomAttributes (typeof (DefaultMemberAttribute), false);
-                        if (attr.Length > 0) {
-                                DefaultMemberAttribute defAtt = (DefaultMemberAttribute) attr [0];
-                                Assert.AreEqual ("Item", defAtt.MemberName, "#3");
-                        } else
-                                Assert.Fail ("#3");
-
-                        string compName = ictd.GetComponentName ();
-                        Assert.IsNull (compName, "#4");
-
-                        TypeConverter converter = ictd.GetConverter ();
-                        Assert.AreEqual (typeof (CollectionConverter), converter.GetType (), "#5");
-
-                        EventDescriptor evtDesc = ictd.GetDefaultEvent ();
-                        Assert.IsNull (evtDesc, "#6");
-
-                        PropertyDescriptor property = ictd.GetDefaultProperty ();
-                        Assert.IsNull (property, "#7");
-                }
 
 		[Test]
 		public void EmbeddedCharTest1 ()

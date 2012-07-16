@@ -32,14 +32,15 @@
 
 #if NET_2_0 || TARGET_JVM
 using System.Collections;
+using System.Collections.Generic;
 
 namespace System.Data.Common
 {
-    public abstract class DbParameter : MarshalByRefObject, IDbDataParameter, IDataParameter
+    public abstract class DbParameter : IDbDataParameter, IDataParameter
     {
         #region Constructors
 
-        internal static Hashtable dbTypeMapping;
+        internal static Dictionary<DbType, Type> dbTypeMapping;
 
         protected DbParameter()
         {
@@ -89,7 +90,7 @@ namespace System.Data.Common
             set { }
         }
 
-        protected internal static Hashtable DbTypeMapping
+        protected internal static Dictionary<DbType, Type> DbTypeMapping
         {
             get { return dbTypeMapping; }
             set { dbTypeMapping = value; }

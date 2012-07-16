@@ -532,7 +532,7 @@ namespace System.Data.SqlTypes
                 Result.Insert(Result.Length - this.Scale, ".");
 
             if (!positive)
-                Result.Insert(0, '-');
+                Result.Insert(0, "-");
 
             return Result.ToString();
         }

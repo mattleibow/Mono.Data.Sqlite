@@ -393,12 +393,12 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (150m, SqlDecimal.Parse ("150").Value, "#M07");
 
 			// decimal.Parse() does not pass this string.
-			string max = "99999999999999999999999999999999999999";
+            string max = "79228162514264337593543950335";
 			SqlDecimal dx = SqlDecimal.Parse (max);
 			Assert.AreEqual (max, dx.ToString (), "#M08");
 
 			try {
-				dx = SqlDecimal.Parse (max + ".0");
+				dx = SqlDecimal.Parse (max + ".0.0");
 				Assert.Fail ("#M09");
 			} catch (FormatException) {
 			}

@@ -252,7 +252,7 @@ namespace System.Data.SqlTypes
             if (count + offset > Length)
                 actualCount = Length - offset;
 
-            Array.Copy(this.buffer, offset, buffer, offsetInBuffer, actualCount);
+            Array.Copy(this.buffer, (int)offset, buffer, offsetInBuffer, (int)actualCount);
 
             return actualCount;
         }
@@ -284,7 +284,7 @@ namespace System.Data.SqlTypes
                 count + offset <= MaxLength)
                 SetLength(count);
 
-            Array.Copy(buffer, offsetInBuffer, this.buffer, offset, count);
+            Array.Copy(buffer, offsetInBuffer, this.buffer, (int)offset, count);
         }
 
         #endregion

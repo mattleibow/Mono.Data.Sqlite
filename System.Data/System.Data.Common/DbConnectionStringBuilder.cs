@@ -40,7 +40,7 @@ using System.Text;
 
 namespace System.Data.Common
 {
-    public class DbConnectionStringBuilder : IDictionary, ICollection, IEnumerable, ICustomTypeDescriptor
+    public class DbConnectionStringBuilder : IDictionary, ICollection, IEnumerable
     {
         #region Fields
 
@@ -58,24 +58,20 @@ namespace System.Data.Common
         public DbConnectionStringBuilder(bool useOdbcRules)
         {
             this.useOdbcRules = useOdbcRules;
-            _dictionary = new Dictionary<string, object>(StringComparer.InvariantCultureIgnoreCase);
+            _dictionary = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         }
 
         #endregion // Constructors
 
         #region Properties
 
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [EditorBrowsable(EditorBrowsableState.Never)]
-        [Browsable(false)]
-        [DesignOnly(true)]
         public bool BrowsableConnectionString
         {
             get { throw new NotImplementedException(); }
             set { throw new NotImplementedException(); }
         }
 
-        [RefreshProperties(RefreshProperties.All)]
         public string ConnectionString
         {
             get
@@ -103,25 +99,21 @@ namespace System.Data.Common
             }
         }
 
-        [Browsable(false)]
         public virtual int Count
         {
             get { return _dictionary.Count; }
         }
 
-        [Browsable(false)]
         public virtual bool IsFixedSize
         {
             get { return false; }
         }
 
-        [Browsable(false)]
         public bool IsReadOnly
         {
             get { throw new NotImplementedException(); }
         }
 
-        [Browsable(false)]
         public virtual object this[string keyword]
         {
             get
@@ -165,7 +157,6 @@ namespace System.Data.Common
             }
         }
 
-        [Browsable(false)]
         public virtual ICollection Keys
         {
             get
@@ -193,7 +184,6 @@ namespace System.Data.Common
             set { this[(string) keyword] = value; }
         }
 
-        [Browsable(false)]
         public virtual ICollection Values
         {
             get
@@ -220,7 +210,7 @@ namespace System.Data.Common
             if (builder == null)
                 throw new ArgumentNullException("builder");
             if (keyword == null)
-                throw new ArgumentNullException("keyName");
+                throw new ArgumentNullException("keyword");
             if (keyword.Length == 0)
                 throw new ArgumentException("Empty keyword is not valid.");
 
@@ -232,7 +222,7 @@ namespace System.Data.Common
                 builder.Append(keyword);
             builder.Append('=');
 
-            if (value == null || value.Length == 0)
+            if (string.IsNullOrEmpty(value))
                 return;
 
             if (!useOdbcRules)
@@ -320,7 +310,7 @@ namespace System.Data.Common
                     return;
                 }
 
-                bool isDriver = (string.Compare(keyword, "Driver", StringComparison.InvariantCultureIgnoreCase) == 0);
+                bool isDriver = (string.Compare(keyword, "Driver", StringComparison.OrdinalIgnoreCase) == 0);
                 if (isDriver)
                 {
                     if (value[0] == '{' && lastChar == '}' && !needBraces)
@@ -398,7 +388,7 @@ namespace System.Data.Common
         }
 
         [MonoTODO]
-        protected virtual void GetProperties(Hashtable propertyDescriptors)
+        protected virtual void GetProperties(IDictionary propertyDescriptors)
         {
             throw new NotImplementedException();
         }
@@ -455,77 +445,6 @@ namespace System.Data.Common
         IEnumerator IEnumerable.GetEnumerator()
         {
             return (IEnumerator) _dictionary.GetEnumerator();
-        }
-
-        private static object _staticAttributeCollection = null;
-
-        AttributeCollection ICustomTypeDescriptor.GetAttributes()
-        {
-            object value = _staticAttributeCollection;
-            if (value == null)
-            {
-                CLSCompliantAttribute clsAttr = new CLSCompliantAttribute(true);
-                DefaultMemberAttribute defMemAttr = new DefaultMemberAttribute("Item");
-                Attribute[] attrs = {clsAttr, defMemAttr};
-                value = new AttributeCollection(attrs);
-            }
-            System.Threading.Interlocked.CompareExchange(ref _staticAttributeCollection, value, null);
-            return _staticAttributeCollection as AttributeCollection;
-        }
-
-        string ICustomTypeDescriptor.GetClassName()
-        {
-            return this.GetType().ToString();
-        }
-
-        string ICustomTypeDescriptor.GetComponentName()
-        {
-            return null;
-        }
-
-        TypeConverter ICustomTypeDescriptor.GetConverter()
-        {
-            return new CollectionConverter();
-        }
-
-        EventDescriptor ICustomTypeDescriptor.GetDefaultEvent()
-        {
-            return null;
-        }
-
-        PropertyDescriptor ICustomTypeDescriptor.GetDefaultProperty()
-        {
-            return null;
-        }
-
-        object ICustomTypeDescriptor.GetEditor(Type editorBaseType)
-        {
-            return null;
-        }
-
-        EventDescriptorCollection ICustomTypeDescriptor.GetEvents()
-        {
-            return EventDescriptorCollection.Empty;
-        }
-
-        EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes)
-        {
-            return EventDescriptorCollection.Empty;
-        }
-
-        PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties()
-        {
-            return PropertyDescriptorCollection.Empty;
-        }
-
-        PropertyDescriptorCollection ICustomTypeDescriptor.GetProperties(Attribute[] attributes)
-        {
-            return PropertyDescriptorCollection.Empty;
-        }
-
-        object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor pd)
-        {
-            throw new NotImplementedException();
         }
 
         public override string ToString()

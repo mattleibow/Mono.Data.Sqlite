@@ -64,7 +64,7 @@
   <ItemGroup>
     <ProjectReference Include="System.Transactions.csproj">
       <Project>{e706726a-a6b2-42f1-8502-c0f3ac04b0d5}</Project>
-      <Name>System.Transactions.Portable</Name>
+      <Name>System.Transactions</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

@@ -36,9 +36,6 @@ using System.Globalization;
 
 namespace System.Data.SqlTypes
 {
-#if NET_2_0
-    [SerializableAttribute]
-#endif
     public struct SqlDateTime : INullable, IComparable
     {
         #region Fields

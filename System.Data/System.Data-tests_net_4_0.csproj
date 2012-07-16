@@ -51,9 +51,6 @@
     <Compile Include="Test\System.Data.SqlTypes\SqlGuidTest.cs" />
     <Compile Include="Test\System.Data.SqlTypes\SqlDecimalTest.cs" />
     <Compile Include="Test\System.Data.SqlTypes\SqlStringTest.cs" />
-    <Compile Include="Test\System.Data.SqlTypes\SqlXmlTest.cs" />
-    <Compile Include="Test\System.Data.Common\DBDataPermissionAttributeTest.cs" />
-    <Compile Include="Test\System.Data.Common\DBDataPermissionTest.cs" />
     <Compile Include="Test\System.Data.Common\DbCommandBuilderTest.cs" />
     <Compile Include="Test\System.Data.Common\DbConnectionStringBuilderTest.cs" />
     <Compile Include="Test\System.Data.Common\DbTransactionTest.cs" />
@@ -82,9 +79,9 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="System.Data-net_4_0.csproj">
-      <Project>{155AEF28-C81F-405D-9072-9D52780E3E70}</Project>
-      <Name>System.Data-net_4_0</Name>
+    <ProjectReference Include="System.Data.csproj">
+      <Project>{28f2ef9e-4ae9-4041-8dd7-e5e203560745}</Project>
+      <Name>System.Data</Name>
     </ProjectReference>
   </ItemGroup>
 </Project>

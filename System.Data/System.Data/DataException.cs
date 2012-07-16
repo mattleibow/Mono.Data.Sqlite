@@ -33,7 +33,7 @@ using System.Globalization;
 
 namespace System.Data
 {
-    public class DataException : SystemException
+    public class DataException : Exception
     {
         public DataException()
             : base(Locale.GetText("A Data exception has occurred"))
