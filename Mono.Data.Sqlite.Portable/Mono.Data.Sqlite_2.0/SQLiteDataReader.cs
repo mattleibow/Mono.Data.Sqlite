@@ -65,7 +65,7 @@ namespace Mono.Data.Sqlite
     /// <summary>
     /// An array of rowid's for the active statement if CommandBehavior.KeyInfo is specified
     /// </summary>
-    private SqliteKeyReader _keyInfo;
+    private List<string> _columns;
 
     internal long _version; // Matches the version of the connection
 
@@ -99,8 +99,6 @@ namespace Mono.Data.Sqlite
     /// </summary>
     public override void Close()
     {
-      try
-      {
         if (_command != null)
         {
           try
@@ -145,15 +143,6 @@ namespace Mono.Data.Sqlite
         _command = null;
         _activeStatement = null;
         _fieldTypeArray = null;
-      }
-      finally
-      {
-        if (_keyInfo != null)
-        {
-          _keyInfo.Dispose();
-          _keyInfo = null;
-        }
-      }
     }
 
     /// <summary>
@@ -209,10 +198,8 @@ namespace Mono.Data.Sqlite
       get
       {
         CheckClosed();
-        if (_keyInfo == null)
-          return _fieldCount;
 
-        return _fieldCount + _keyInfo.Count;
+        return _fieldCount;
       }
     }
 
@@ -291,9 +278,6 @@ namespace Mono.Data.Sqlite
     /// <returns>bool</returns>
     public override bool GetBoolean(int i)
     {
-      if (i >= VisibleFieldCount && _keyInfo != null)
-        return _keyInfo.GetBoolean(i - VisibleFieldCount);
-
       VerifyType(i, DbType.Boolean);
       return Convert.ToBoolean(GetValue(i), CultureInfo.CurrentCulture);
     }
@@ -305,9 +289,6 @@ namespace Mono.Data.Sqlite
     /// <returns>byte</returns>
     public override byte GetByte(int i)
     {
-      if (i >= VisibleFieldCount && _keyInfo != null)
-        return _keyInfo.GetByte(i - VisibleFieldCount);
-
       VerifyType(i, DbType.Byte);
       return Convert.ToByte(_activeStatement._sql.GetInt32(_activeStatement, i));
     }
@@ -326,9 +307,6 @@ namespace Mono.Data.Sqlite
     /// </remarks>
     public override long GetBytes(int i, long fieldOffset, byte[] buffer, int bufferoffset, int length)
     {
-      if (i >= VisibleFieldCount && _keyInfo != null)
-        return _keyInfo.GetBytes(i - VisibleFieldCount, fieldOffset, buffer, bufferoffset, length);
-
       VerifyType(i, DbType.Binary);
       return _activeStatement._sql.GetBytes(_activeStatement, i, (int)fieldOffset, buffer, bufferoffset, length);
     }
@@ -340,9 +318,6 @@ namespace Mono.Data.Sqlite
     /// <returns>char</returns>
     public override char GetChar(int i)
     {
-      if (i >= VisibleFieldCount && _keyInfo != null)
-        return _keyInfo.GetChar(i - VisibleFieldCount);
-
       VerifyType(i, DbType.SByte);
       return Convert.ToChar(_activeStatement._sql.GetInt32(_activeStatement, i));
     }
@@ -361,9 +336,6 @@ namespace Mono.Data.Sqlite
     /// </remarks>
     public override long GetChars(int i, long fieldoffset, char[] buffer, int bufferoffset, int length)
     {
-      if (i >= VisibleFieldCount && _keyInfo != null)
-        return _keyInfo.GetChars(i - VisibleFieldCount, fieldoffset, buffer, bufferoffset, length);
-
       VerifyType(i, DbType.String);
       return _activeStatement._sql.GetChars(_activeStatement, i, (int)fieldoffset, buffer, bufferoffset, length);
     }
@@ -375,9 +347,6 @@ namespace Mono.Data.Sqlite
     /// <returns>string</returns>
     public override string GetDataTypeName(int i)
     {
-      if (i >= VisibleFieldCount && _keyInfo != null)
-        return _keyInfo.GetDataTypeName(i - VisibleFieldCount);
-
       SQLiteType typ = GetSQLiteType(i);
       if (typ.Type == DbType.Object) return SqliteConvert.SQLiteTypeToType(typ).Name;
       return _activeStatement._sql.ColumnType(_activeStatement, i, out typ.Affinity);
@@ -390,9 +359,6 @@ namespace Mono.Data.Sqlite
     /// <returns>DateTime</returns>
     public override DateTime GetDateTime(int i)
     {
-      if (i >= VisibleFieldCount && _keyInfo != null)
-        return _keyInfo.GetDateTime(i - VisibleFieldCount);
-
       VerifyType(i, DbType.DateTime);
       return _activeStatement._sql.GetDateTime(_activeStatement, i);
     }
@@ -404,9 +370,6 @@ namespace Mono.Data.Sqlite
     /// <returns>decimal</returns>
     public override decimal GetDecimal(int i)
     {
-      if (i >= VisibleFieldCount && _keyInfo != null)
-        return _keyInfo.GetDecimal(i - VisibleFieldCount);
-
       VerifyType(i, DbType.Decimal);
       return Decimal.Parse(_activeStatement._sql.GetText(_activeStatement, i), NumberStyles.AllowDecimalPoint | NumberStyles.AllowExponent  | NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture);
     }
@@ -418,9 +381,6 @@ namespace Mono.Data.Sqlite
     /// <returns>double</returns>
     public override double GetDouble(int i)
     {
-      if (i >= VisibleFieldCount && _keyInfo != null)
-        return _keyInfo.GetDouble(i - VisibleFieldCount);
-
       VerifyType(i, DbType.Double);
       return _activeStatement._sql.GetDouble(_activeStatement, i);
     }
@@ -432,9 +392,6 @@ namespace Mono.Data.Sqlite
     /// <returns>Type</returns>
     public override Type GetFieldType(int i)
     {
-      if (i >= VisibleFieldCount && _keyInfo != null)
-        return _keyInfo.GetFieldType(i - VisibleFieldCount);
-
       return SqliteConvert.SQLiteTypeToType(GetSQLiteType(i));
     }
 
@@ -445,9 +402,6 @@ namespace Mono.Data.Sqlite
     /// <returns>float</returns>
     public override float GetFloat(int i)
     {
-      if (i >= VisibleFieldCount && _keyInfo != null)
-        return _keyInfo.GetFloat(i - VisibleFieldCount);
-
       VerifyType(i, DbType.Single);
       return Convert.ToSingle(_activeStatement._sql.GetDouble(_activeStatement, i));
     }
@@ -459,9 +413,6 @@ namespace Mono.Data.Sqlite
     /// <returns>Guid</returns>
     public override Guid GetGuid(int i)
     {
-      if (i >= VisibleFieldCount && _keyInfo != null)
-        return _keyInfo.GetGuid(i - VisibleFieldCount);
-
       TypeAffinity affinity = VerifyType(i, DbType.Guid);
       if (affinity == TypeAffinity.Blob)
       {
@@ -480,9 +431,6 @@ namespace Mono.Data.Sqlite
     /// <returns>Int16</returns>
     public override Int16 GetInt16(int i)
     {
-      if (i >= VisibleFieldCount && _keyInfo != null)
-        return _keyInfo.GetInt16(i - VisibleFieldCount);
-
       VerifyType(i, DbType.Int16);
       return Convert.ToInt16(_activeStatement._sql.GetInt32(_activeStatement, i));
     }
@@ -494,9 +442,6 @@ namespace Mono.Data.Sqlite
     /// <returns>Int32</returns>
     public override Int32 GetInt32(int i)
     {
-      if (i >= VisibleFieldCount && _keyInfo != null)
-        return _keyInfo.GetInt32(i - VisibleFieldCount);
-
       VerifyType(i, DbType.Int32);
       return _activeStatement._sql.GetInt32(_activeStatement, i);
     }
@@ -508,9 +453,6 @@ namespace Mono.Data.Sqlite
     /// <returns>Int64</returns>
     public override Int64 GetInt64(int i)
     {
-      if (i >= VisibleFieldCount && _keyInfo != null)
-        return _keyInfo.GetInt64(i - VisibleFieldCount);
-
       VerifyType(i, DbType.Int64);
       return _activeStatement._sql.GetInt64(_activeStatement, i);
     }
@@ -522,9 +464,6 @@ namespace Mono.Data.Sqlite
     /// <returns>string</returns>
     public override string GetName(int i)
     {
-      if (i >= VisibleFieldCount && _keyInfo != null)
-        return _keyInfo.GetName(i - VisibleFieldCount);
-
       return _activeStatement._sql.ColumnName(_activeStatement, i);
     }
 
@@ -535,15 +474,10 @@ namespace Mono.Data.Sqlite
     /// <returns>The int i of the column</returns>
     public override int GetOrdinal(string name)
     {
-      CheckClosed();
-      int r = _activeStatement._sql.ColumnIndex(_activeStatement, name);
-      if (r == -1 && _keyInfo != null)
-      {
-        r = _keyInfo.GetOrdinal(name);
-        if (r > -1) r += VisibleFieldCount;
-      }
-
-      return r;
+            var index = _columns.IndexOf(name.ToUpperInvariant());
+            if (index == -1)
+                throw new ArgumentException("Column does not exist.");
+            return index;
     }
 
     /// <summary>
@@ -553,9 +487,6 @@ namespace Mono.Data.Sqlite
     /// <returns>string</returns>
     public override string GetString(int i)
     {
-      if (i >= VisibleFieldCount && _keyInfo != null)
-        return _keyInfo.GetString(i - VisibleFieldCount);
-
       VerifyType(i, DbType.String);
       return _activeStatement._sql.GetText(_activeStatement, i);
     }
@@ -567,9 +498,6 @@ namespace Mono.Data.Sqlite
     /// <returns>object</returns>
     public override object GetValue(int i)
     {
-      if (i >= VisibleFieldCount && _keyInfo != null)
-        return _keyInfo.GetValue(i - VisibleFieldCount);
-
       SQLiteType typ = GetSQLiteType(i);
 
       return _activeStatement._sql.GetValue(_activeStatement, i, typ);
@@ -620,9 +548,6 @@ namespace Mono.Data.Sqlite
     /// <returns>True or False</returns>
     public override bool IsDBNull(int i)
     {
-      if (i >= VisibleFieldCount && _keyInfo != null)
-        return _keyInfo.IsDBNull(i - VisibleFieldCount);
-
       return _activeStatement._sql.IsNull(_activeStatement, i);
     }
 
@@ -706,8 +631,15 @@ namespace Mono.Data.Sqlite
         _fieldCount = fieldCount;
         _fieldTypeArray = null;
 
-        if ((_commandBehavior & CommandBehavior.KeyInfo) != 0)
-          LoadKeyInfo();
+                var cols = new string[_fieldCount];
+
+                // load column names
+                for (int i = 0; i < _fieldCount; i++)
+                {
+                    cols[i] = _activeStatement._sql.ColumnName(_activeStatement, i).ToUpperInvariant();
+                }
+
+                _columns = new List<string>(cols);
 
         return true;
       }
@@ -761,9 +693,6 @@ namespace Mono.Data.Sqlite
         {
           if (_activeStatement._sql.Step(_activeStatement) == true)
           {
-            if (_keyInfo != null)
-              _keyInfo.Reset();
-
             return true;
           }
         }
@@ -800,14 +729,6 @@ namespace Mono.Data.Sqlite
     public override object this[int i]
     {
       get { return GetValue(i); }
-    }
-
-    private void LoadKeyInfo()
-    {
-      if (_keyInfo != null)
-        _keyInfo.Dispose();
-
-      _keyInfo = new SqliteKeyReader(_command.Connection, this, _activeStatement);
     }
   }
 }
