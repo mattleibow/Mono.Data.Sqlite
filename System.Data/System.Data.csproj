@@ -37,7 +37,6 @@
       <Link>Consts.cs</Link>
     </Compile>
     <Compile Include="Assembly\AssemblyInfo.cs" />
-    <Compile Include="System\DBNull.cs" />
     <Compile Include="Locale.cs" />
     <Compile Include="MonoTODOAttribute.cs" />
     <Compile Include="System.Data.Common\CatalogLocation.cs" />
@@ -155,6 +154,10 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\System.Portable\System.Portable.csproj">
+      <Project>{83c83d0e-a153-4585-ac3e-2e803f0fc569}</Project>
+      <Name>System.Portable</Name>
+    </ProjectReference>
     <ProjectReference Include="..\System.Transactions\System.Transactions.csproj">
       <Project>{e706726a-a6b2-42f1-8502-c0f3ac04b0d5}</Project>
       <Name>System.Transactions</Name>
