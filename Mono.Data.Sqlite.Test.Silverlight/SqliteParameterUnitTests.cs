@@ -24,7 +24,7 @@ namespace MonoTests.Mono.Data.Sqlite
         }
 
         [Test]
-        [Category("NotWorking")]
+        // TODO : [Category("NotWorking")]
         // fails randomly :)
         public void InsertRandomValuesWithParameter()
         {
@@ -81,7 +81,10 @@ namespace MonoTests.Mono.Data.Sqlite
                     object compareValue;
 #if NET_2_0
 					if (blobP.Value is byte[])
-						compareValue = System.Text.Encoding.UTF8.GetString ((byte[])blobP.Value);
+					{
+					    var value = (byte[])blobP.Value;
+					    compareValue = System.Text.Encoding.UTF8.GetString (value, 0, value.Length);
+					}
 					else
 #endif
                     compareValue = blobP.Value;

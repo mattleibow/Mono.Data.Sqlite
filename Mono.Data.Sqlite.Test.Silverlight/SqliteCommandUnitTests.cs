@@ -82,7 +82,7 @@ namespace MonoTests.Mono.Data.Sqlite
                         Assert.AreEqual(dr["I"], 123);
                         Assert.AreEqual(dr["B"], "123");
                     }
-                    Assert.IsTrue(dr.FieldCount > 0);
+                    Assert.True(dr.FieldCount > 0);
                 }
             }
         }
@@ -98,7 +98,7 @@ namespace MonoTests.Mono.Data.Sqlite
                 int insReturn = insCmd.ExecuteNonQuery();
                 int delReturn = delCmd.ExecuteNonQuery();
 
-                Assert.IsTrue(insReturn == delReturn);
+                Assert.True(insReturn == delReturn);
             }
         }
 
@@ -110,7 +110,7 @@ namespace MonoTests.Mono.Data.Sqlite
             {
                 _conn.Open();
                 int insReturn = insCmd.ExecuteNonQuery();
-                Assert.IsTrue(insReturn == 1);
+                Assert.True(insReturn == 1);
             }
         }
 
@@ -123,7 +123,7 @@ namespace MonoTests.Mono.Data.Sqlite
             {
                 _conn.Open();
                 insCmd.ExecuteNonQuery();
-                Assert.IsTrue(updCmd.ExecuteNonQuery() == 1);
+                Assert.True(updCmd.ExecuteNonQuery() == 1);
             }
         }
 

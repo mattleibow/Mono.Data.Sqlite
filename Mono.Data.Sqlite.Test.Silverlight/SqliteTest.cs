@@ -23,9 +23,12 @@ using Mono.Data.Sqlite;
 
 namespace Test.Mono.Data.Sqlite
 {
+    using NUnit.Framework;
+
+    [TestFixture]
     class SqliteTest
     {
-        [STAThread]
+        [Test]
         static void Main(string[] args)
         {
             Test(false, null);

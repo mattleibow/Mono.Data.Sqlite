@@ -44,7 +44,7 @@ namespace MonoTests.Mono.Data.Sqlite
         readonly static string _connectionString = "URI=file://" + _uri + ", version=3";
         SqliteConnection _conn = new SqliteConnection();
 
-        [TestFixtureSetUp]
+        [SetUp]
         public void FixtureSetUp()
         {
             if (!File.Exists(_uri) || new FileInfo(_uri).Length == 0)
@@ -77,7 +77,7 @@ namespace MonoTests.Mono.Data.Sqlite
                 reader = cmd.ExecuteReader();
                 try
                 {
-                    Assert.IsTrue(reader.Read());
+                    Assert.True(reader.Read());
                     Assert.IsNotNull(reader.GetFieldType(0));
                 }
                 finally
