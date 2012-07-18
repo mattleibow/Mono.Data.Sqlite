@@ -26,12 +26,7 @@ namespace System.Transactions
                 lock (_privateInstances)
                 {
                     Transaction instance;
-                    if (!_privateInstances.TryGetValue(Thread.CurrentThread.ManagedThreadId, out instance))
-                    {
-                        instance = new Transaction();
-                        _privateInstances.Add(Thread.CurrentThread.ManagedThreadId, instance);
-                    }
-
+                    _privateInstances.TryGetValue(Thread.CurrentThread.ManagedThreadId, out instance);
                     return instance;
                 }
             }
