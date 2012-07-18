@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{24CB6471-46C0-4456-99BF-472D550EB30A}</ProjectGuid>
+    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mono.Data.Sqlite</RootNamespace>
+    <AssemblyName>Mono.Data.Sqlite</AssemblyName>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <SilverlightApplication>false</SilverlightApplication>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+  </PropertyGroup>
+  <!-- This property group is only here to support building this project using the 
+       MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
+       to set the TargetFrameworkVersion to v3.5 -->
+  <PropertyGroup Condition="'$(MSBuildToolsVersion)' == '3.5'">
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT NET_1_1;NET_2_0;NET_3_0;NET_3_5;NET_4_0;SQLITE_STANDARD</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT NET_1_1;NET_2_0;NET_3_0;NET_3_5;NET_4_0;SQLITE_STANDARD</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="mscorlib" />
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core">
+      <HintPath>$(TargetFrameworkDirectory)System.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Windows.Browser" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Consts.cs">
+      <Link>Consts.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Data.Sqlite.Portable\Assembly\AssemblyInfo.cs">
+      <Link>Assembly\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Data.Sqlite.Portable\ICloneable.cs">
+      <Link>ICloneable.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Data.Sqlite.Portable\Locale.cs">
+      <Link>Locale.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Data.Sqlite.Portable\MonoPInvokeCallbackAttribute.cs">
+      <Link>MonoPInvokeCallbackAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Data.Sqlite.Portable\MonoTODOAttribute.cs">
+      <Link>MonoTODOAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLite3.cs">
+      <Link>SQLite3.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLite3_UTF16.cs">
+      <Link>SQLite3_UTF16.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteBase.cs">
+      <Link>SQLiteBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteCommand.cs">
+      <Link>SQLiteCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteCommandBuilder.cs">
+      <Link>SQLiteCommandBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteConnection.cs">
+      <Link>SQLiteConnection.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteConnectionPool.cs">
+      <Link>SQLiteConnectionPool.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteConnectionStringBuilder.cs">
+      <Link>SQLiteConnectionStringBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteConvert.cs">
+      <Link>SQLiteConvert.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteDataReader.cs">
+      <Link>SQLiteDataReader.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteEnlistment.cs">
+      <Link>SQLiteEnlistment.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteException.cs">
+      <Link>SQLiteException.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteFunction.cs">
+      <Link>SQLiteFunction.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteFunctionAttribute.cs">
+      <Link>SQLiteFunctionAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteMetaDataCollectionNames.cs">
+      <Link>SQLiteMetaDataCollectionNames.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteParameter.cs">
+      <Link>SQLiteParameter.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteParameterCollection.cs">
+      <Link>SQLiteParameterCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteStatement.cs">
+      <Link>SQLiteStatement.cs</Link>
+    </Compile>
+    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteTransaction.cs">
+      <Link>SQLiteTransaction.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Libraries\csharp-sqlite\Community.CsharpSqlite.Silverlight\Community.CsharpSqlite.Silverlight.csproj">
+      <Project>{a3ae849b-b668-4bc9-a75f-6e9b0a8f6779}</Project>
+      <Name>Community.CsharpSqlite.Silverlight</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Data\System.Data.csproj">
+      <Project>{28f2ef9e-4ae9-4041-8dd7-e5e203560745}</Project>
+      <Name>System.Data</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Silverlight\System.Silverlight.csproj">
+      <Project>{0cd24343-76e5-4b8e-826e-c9394ae3c06c}</Project>
+      <Name>System.Silverlight</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\System.Transactions\System.Transactions.csproj">
+      <Project>{e706726a-a6b2-42f1-8502-c0f3ac04b0d5}</Project>
+      <Name>System.Transactions</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
+        <SilverlightProjectProperties />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -17,6 +17,17 @@ namespace Mono.Data.Sqlite
   using System.Runtime.InteropServices;
   using System.IO;
 
+#if SILVERLIGHT
+    using SQLiteUpdateCallback = Community.CsharpSqlite.Sqlite3.dxUpdateCallback;
+    using SQLiteCommitCallback = Community.CsharpSqlite.Sqlite3.dxCommitCallback;
+    using SQLiteRollbackCallback = Community.CsharpSqlite.Sqlite3.dxRollbackCallback;
+    using UnsafeNativeMethods = Community.CsharpSqlite.Sqlite3;
+
+    using ObjectType = System.Object;
+#else
+    using ObjectType = System.IntPtr;
+#endif
+
   /// <summary>
   /// SQLite implentation of DbConnection.
   /// </summary>
@@ -186,7 +197,11 @@ namespace Mono.Data.Sqlite
     /// <summary>
     /// Temporary password storage, emptied after the database has been opened
     /// </summary>
+#if SILVERLIGHT
+    private string _password;
+#else
     private byte[] _password;
+#endif
 
     /// <summary>
     /// Default command timeout
@@ -281,6 +296,8 @@ namespace Mono.Data.Sqlite
     /// </summary>
     public override void Dispose()
     {
+        base.Dispose();
+
         Close();
     }
 
@@ -847,7 +864,11 @@ namespace Mono.Data.Sqlite
         string password = FindKey(opts, "Password", null);
 
         if (String.IsNullOrEmpty(password) == false)
+#if SILVERLIGHT
+          _sql.SetPassword(password);
+#else
           _sql.SetPassword(System.Text.UTF8Encoding.UTF8.GetBytes(password));
+#endif
         else if (_password != null)
           _sql.SetPassword(_password);
         _password = null;
@@ -970,6 +991,7 @@ namespace Mono.Data.Sqlite
       }
     }
 
+#if !SILVERLIGHT
     /// <summary>
     /// Change the password (or assign a password) to an open database.
     /// </summary>
@@ -982,6 +1004,7 @@ namespace Mono.Data.Sqlite
     {
       ChangePassword(String.IsNullOrEmpty(newPassword) ? null : System.Text.UTF8Encoding.UTF8.GetBytes(newPassword));
     }
+#endif
 
     /// <summary>
     /// Change the password (or assign a password) to an open database.
@@ -991,7 +1014,11 @@ namespace Mono.Data.Sqlite
     /// and if it already was password protected, the existing password must already have been supplied.
     /// </remarks>
     /// <param name="newPassword">The new password to assign to the database</param>
+#if SILVERLIGHT
+    public void ChangePassword(string newPassword)
+#else
     public void ChangePassword(byte[] newPassword)
+#endif
     {
       if (_connectionState != ConnectionState.Open)
         throw new InvalidOperationException("Database must be opened before changing the password.");
@@ -999,6 +1026,7 @@ namespace Mono.Data.Sqlite
       _sql.ChangePassword(newPassword);
     }
 
+#if !SILVERLIGHT
     /// <summary>
     /// Sets the password for a password-protected database.  A password-protected database is
     /// unusable for any operation until the password has been set.
@@ -1008,13 +1036,18 @@ namespace Mono.Data.Sqlite
     {
       SetPassword(String.IsNullOrEmpty(databasePassword) ? null : System.Text.UTF8Encoding.UTF8.GetBytes(databasePassword));
     }
+#endif
 
     /// <summary>
     /// Sets the password for a password-protected database.  A password-protected database is
     /// unusable for any operation until the password has been set.
     /// </summary>
     /// <param name="databasePassword">The password for the database</param>
+#if SILVERLIGHT
+    public void SetPassword(string databasePassword)
+#else
     public void SetPassword(byte[] databasePassword)
+#endif
     {
       if (_connectionState != ConnectionState.Closed)
         throw new InvalidOperationException("Password can only be set before the database is opened.");
@@ -1061,6 +1094,16 @@ namespace Mono.Data.Sqlite
       }
     }
 
+#if SILVERLIGHT
+    private void UpdateCallback(object puser, int type, string database, string table, Int64 rowid)
+    {
+        _updateHandler(this, new UpdateEventArgs(
+                                    database,
+                                    table,
+                                    (UpdateEventType) type,
+                                    rowid));
+    }
+#else
     private void UpdateCallback(IntPtr puser, int type, IntPtr database, IntPtr table, Int64 rowid)
     {
       _updateHandler(this, new UpdateEventArgs(
@@ -1069,6 +1112,7 @@ namespace Mono.Data.Sqlite
         (UpdateEventType)type,
         rowid));
     }
+#endif
 
     /// <summary>
     /// This event is raised whenever SQLite is committing a transaction.
@@ -1123,14 +1167,14 @@ namespace Mono.Data.Sqlite
     }
 
 
-    private int CommitCallback(IntPtr parg)
+    private int CommitCallback(ObjectType parg)
     {
       CommitEventArgs e = new CommitEventArgs();
       _commitHandler(this, e);
       return (e.AbortTransaction == true) ? 1 : 0;
     }
 
-    private void RollbackCallback(IntPtr parg)
+    private void RollbackCallback(ObjectType parg)
     {
       _rollbackHandler(this, EventArgs.Empty);
     }
@@ -1138,7 +1182,12 @@ namespace Mono.Data.Sqlite
     // http://www.sqlite.org/c3ref/config.html
     public static void SetConfig (SQLiteConfig config)
     {
-      int n = UnsafeNativeMethods.sqlite3_config (config);
+#if SILVERLIGHT
+        var op = (int)config;
+#else
+        var op = config;
+#endif
+        int n = UnsafeNativeMethods.sqlite3_config (op);
       if (n > 0) throw new SqliteException (n, null);
     }
   }
@@ -1162,6 +1211,7 @@ namespace Mono.Data.Sqlite
     Off = 2,
   }
 
+#if !SILVERLIGHT
 #if !PLATFORM_COMPACTFRAMEWORK
   [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 #endif
@@ -1174,6 +1224,7 @@ namespace Mono.Data.Sqlite
   [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 #endif
   internal delegate void SQLiteRollbackCallback(IntPtr puser);
+#endif
 
   /// <summary>
   /// Raised when a transaction is about to be committed.  To roll back a transaction, set the 

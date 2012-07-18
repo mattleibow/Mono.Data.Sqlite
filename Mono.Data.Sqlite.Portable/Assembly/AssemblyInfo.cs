@@ -48,5 +48,7 @@ using System.Security;
 [assembly: AssemblyFileVersion("1.0.61.0")]
 #endif
 
+#if !SILVERLIGHT
 // todo :: [assembly: AssemblyDelaySign (true)]
 [assembly: AssemblyKeyFile ("../mono.snk")]
+#endif

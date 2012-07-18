@@ -12,6 +12,33 @@ namespace Mono.Data.Sqlite
   using System.Runtime.InteropServices;
   using System.Collections.Generic;
 
+#if SILVERLIGHT
+    using SqliteConnectionHandle = Community.CsharpSqlite.Sqlite3.sqlite3;
+    using UnsafeNativeMethods = Community.CsharpSqlite.Sqlite3;
+    using Sqlite3Database = Community.CsharpSqlite.Sqlite3.sqlite3;
+
+    using Sqlite3Mem = Community.CsharpSqlite.Sqlite3.Mem;
+    using Sqlite3MemPtr = Community.CsharpSqlite.Sqlite3.Mem;
+    using SqliteStatementHandle = Community.CsharpSqlite.Sqlite3.Vdbe;
+
+    using SQLiteUpdateCallback = Community.CsharpSqlite.Sqlite3.dxUpdateCallback;
+    using SQLiteCommitCallback = Community.CsharpSqlite.Sqlite3.dxCommitCallback;
+    using SQLiteRollbackCallback = Community.CsharpSqlite.Sqlite3.dxRollbackCallback;
+
+    using SQLiteFinalCallback = Community.CsharpSqlite.Sqlite3.dxFinal;
+    using SQLiteCallback = Community.CsharpSqlite.Sqlite3.dxFunc;
+    using SQLiteStepCallback = Community.CsharpSqlite.Sqlite3.dxStep;
+    using SQLiteCollation = Community.CsharpSqlite.Sqlite3.dxCompare;
+
+    using SqliteContext = Community.CsharpSqlite.Sqlite3.sqlite3_context;
+#else
+    using Sqlite3Mem = System.Int64;
+    using Sqlite3MemPtr = System.IntPtr;
+    using Sqlite3Database = System.IntPtr;
+    using SqliteContext = System.IntPtr;
+    using SQLiteStepCallback = SQLiteCallback;
+#endif
+
   /// <summary>
   /// This internal class provides the foundation of SQLite support.  It defines all the abstract members needed to implement
   /// a SQLite data provider, and inherits from SqliteConvert which allows for simple translations of string to and from SQLite.
@@ -127,31 +154,36 @@ namespace Mono.Data.Sqlite
     internal abstract bool IsNull(SqliteStatement stmt, int index);
 
     internal abstract void CreateCollation(string strCollation, SQLiteCollation func, SQLiteCollation func16);
-    internal abstract void CreateFunction(string strFunction, int nArgs, bool needCollSeq, SQLiteCallback func, SQLiteCallback funcstep, SQLiteFinalCallback funcfinal);
-    internal abstract CollationSequence GetCollationSequence(SqliteFunction func, IntPtr context);
-    internal abstract int ContextCollateCompare(CollationEncodingEnum enc, IntPtr context, string s1, string s2);
-    internal abstract int ContextCollateCompare(CollationEncodingEnum enc, IntPtr context, char[] c1, char[] c2);
+    internal abstract void CreateFunction(string strFunction, int nArgs, bool needCollSeq, SQLiteCallback func, SQLiteStepCallback funcstep, SQLiteFinalCallback funcfinal);
+    internal abstract CollationSequence GetCollationSequence(SqliteFunction func, SqliteContext context);
+    internal abstract int ContextCollateCompare(CollationEncodingEnum enc, SqliteContext context, string s1, string s2);
+    internal abstract int ContextCollateCompare(CollationEncodingEnum enc, SqliteContext context, char[] c1, char[] c2);
 
-    internal abstract int AggregateCount(IntPtr context);
-    internal abstract IntPtr AggregateContext(IntPtr context);
+    internal abstract int AggregateCount(SqliteContext context);
+    internal abstract Sqlite3MemPtr AggregateContext(SqliteContext context);
 
-    internal abstract long GetParamValueBytes(IntPtr ptr, int nDataOffset, byte[] bDest, int nStart, int nLength);
-    internal abstract double GetParamValueDouble(IntPtr ptr);
-    internal abstract int GetParamValueInt32(IntPtr ptr);
-    internal abstract Int64 GetParamValueInt64(IntPtr ptr);
-    internal abstract string GetParamValueText(IntPtr ptr);
-    internal abstract TypeAffinity GetParamValueType(IntPtr ptr);
+    internal abstract long GetParamValueBytes(Sqlite3MemPtr ptr, int nDataOffset, byte[] bDest, int nStart, int nLength);
+    internal abstract double GetParamValueDouble(Sqlite3MemPtr ptr);
+    internal abstract int GetParamValueInt32(Sqlite3MemPtr ptr);
+    internal abstract Int64 GetParamValueInt64(Sqlite3MemPtr ptr);
+    internal abstract string GetParamValueText(Sqlite3MemPtr ptr);
+    internal abstract TypeAffinity GetParamValueType(Sqlite3MemPtr ptr);
 
-    internal abstract void ReturnBlob(IntPtr context, byte[] value);
-    internal abstract void ReturnDouble(IntPtr context, double value);
-    internal abstract void ReturnError(IntPtr context, string value);
-    internal abstract void ReturnInt32(IntPtr context, Int32 value);
-    internal abstract void ReturnInt64(IntPtr context, Int64 value);
-    internal abstract void ReturnNull(IntPtr context);
-    internal abstract void ReturnText(IntPtr context, string value);
+    internal abstract void ReturnBlob(SqliteContext context, byte[] value);
+    internal abstract void ReturnDouble(SqliteContext context, double value);
+    internal abstract void ReturnError(SqliteContext context, string value);
+    internal abstract void ReturnInt32(SqliteContext context, Int32 value);
+    internal abstract void ReturnInt64(SqliteContext context, Int64 value);
+    internal abstract void ReturnNull(SqliteContext context);
+    internal abstract void ReturnText(SqliteContext context, string value);
 
+#if SILVERLIGHT
+    internal abstract void SetPassword(string passwordBytes);
+    internal abstract void ChangePassword(string newPasswordBytes);
+#else
     internal abstract void SetPassword(byte[] passwordBytes);
     internal abstract void ChangePassword(byte[] newPasswordBytes);
+#endif
 
     internal abstract void SetUpdateHook(SQLiteUpdateCallback func);
     internal abstract void SetCommitHook(SQLiteCommitCallback func);
@@ -217,12 +249,16 @@ namespace Mono.Data.Sqlite
     {
       lock (_lock)
       {
-        IntPtr stmt = IntPtr.Zero;
-
+#if SILVERLIGHT
+          SqliteStatementHandle nullVal = null;
+#else
+          var nullVal = IntPtr.Zero;
+#endif
+          SqliteStatementHandle stmt = nullVal;
         do
         {
           stmt = UnsafeNativeMethods.sqlite3_next_stmt(db, stmt);
-          if (stmt != IntPtr.Zero)
+          if (stmt != nullVal)
           {
 #if !SQLITE_STANDARD
             UnsafeNativeMethods.sqlite3_reset_interop(stmt);
@@ -230,13 +266,18 @@ namespace Mono.Data.Sqlite
           UnsafeNativeMethods.sqlite3_reset(stmt);
 #endif
           }
-        } while (stmt != IntPtr.Zero);
+        } while (stmt != nullVal);
 
         // Not overly concerned with the return value from a rollback.
-        UnsafeNativeMethods.sqlite3_exec(db, ToUTF8("ROLLBACK"), IntPtr.Zero, IntPtr.Zero, out stmt);
+#if SILVERLIGHT
+        string msg = null;
+        UnsafeNativeMethods.sqlite3_exec(db, "ROLLBACK", null, null, ref msg);
+#else
+        var msg = IntPtr.Zero;
+        UnsafeNativeMethods.sqlite3_exec(db, ToUTF8("ROLLBACK"), IntPtr.Zero, IntPtr.Zero, out msg);
         // but free the error message if any!
-        if (stmt != IntPtr.Zero)
-          UnsafeNativeMethods.sqlite3_free (stmt);
+        if (msg != IntPtr.Zero) UnsafeNativeMethods.sqlite3_free (msg);
+#endif
       }
     }
   }
@@ -269,4 +310,37 @@ namespace Mono.Data.Sqlite
     MultiThread = 2,
     Serialized = 3,
   }
+    
+#if SILVERLIGHT
+    internal static class Disposers
+    {
+        internal static void Dispose(this SqliteStatementHandle statement)
+        {
+            try
+            {
+                SQLiteBase.FinalizeStatement(statement);
+            }
+            catch (SqliteException)
+            {
+            }
+        }
+
+        internal static void Dispose(this Sqlite3Database connection)
+        {
+            try
+            {
+                SQLiteBase.CloseConnection(connection);
+            }
+            catch (SqliteException)
+            {
+            }
+        }
+
+        internal static void Close(this Sqlite3Database connection)
+        {
+            connection.Dispose();
+        }
+    }
+#endif
+
 }

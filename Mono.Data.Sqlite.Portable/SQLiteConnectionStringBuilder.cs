@@ -102,7 +102,7 @@ namespace Mono.Data.Sqlite
         object value;
         TryGetValue("synchronous", out value);
         if (value is string)
-          return (SynchronizationModes)Convert.ChangeType(value, typeof(SynchronizationModes));
+          return (SynchronizationModes)Convert.ChangeType(value, typeof(SynchronizationModes), CultureInfo.InvariantCulture);
         else return (SynchronizationModes)value;
       }
       set
@@ -378,7 +378,7 @@ namespace Mono.Data.Sqlite
         object value;
         TryGetValue("datetimeformat", out value);
         if (value is string)
-          return (SQLiteDateFormats)Convert.ChangeType(value, typeof(SQLiteDateFormats));
+          return (SQLiteDateFormats)Convert.ChangeType(value, typeof(SQLiteDateFormats), CultureInfo.InvariantCulture);
         else return (SQLiteDateFormats)value;
       }
       set
@@ -398,7 +398,7 @@ namespace Mono.Data.Sqlite
         object value;
         TryGetValue("journal mode", out value);
         if (value is string)
-          return (SQLiteJournalModeEnum)Convert.ChangeType(value, typeof(SQLiteJournalModeEnum));
+          return (SQLiteJournalModeEnum)Convert.ChangeType(value, typeof(SQLiteJournalModeEnum), CultureInfo.InvariantCulture);
         else
           return (SQLiteJournalModeEnum)value;
       }
@@ -419,7 +419,7 @@ namespace Mono.Data.Sqlite
         object value;
         TryGetValue("default isolationlevel", out value);
         if (value is string)
-          return (IsolationLevel)Convert.ChangeType(value, typeof(IsolationLevel));
+          return (IsolationLevel)Convert.ChangeType(value, typeof(IsolationLevel), CultureInfo.InvariantCulture);
         else
           return (IsolationLevel)value;
       }
@@ -451,7 +451,7 @@ namespace Mono.Data.Sqlite
         if (pd.PropertyType == typeof(Boolean))
           value = SqliteConvert.ToBoolean(value);
         else
-          value = Convert.ChangeType(value, pd.PropertyType);
+          value = Convert.ChangeType(value, pd.PropertyType, CultureInfo.InvariantCulture);
       }
       else
       {

@@ -13,6 +13,28 @@ namespace Mono.Data.Sqlite
   using System.Runtime.InteropServices;
   using System.Globalization;
 
+#if SILVERLIGHT
+    using Sqlite3Mem = Community.CsharpSqlite.Sqlite3.Mem;
+    using Sqlite3MemPtr = Community.CsharpSqlite.Sqlite3.Mem;
+    using SqliteStatementHandle = Community.CsharpSqlite.Sqlite3.Vdbe;
+    
+    using SQLiteUpdateCallback = Community.CsharpSqlite.Sqlite3.dxUpdateCallback;
+    using SQLiteCommitCallback = Community.CsharpSqlite.Sqlite3.dxCommitCallback;
+    using SQLiteRollbackCallback = Community.CsharpSqlite.Sqlite3.dxRollbackCallback;
+
+    using SQLiteFinalCallback = Community.CsharpSqlite.Sqlite3.dxFinal;
+    using SQLiteCallback = Community.CsharpSqlite.Sqlite3.dxFunc;
+    using SQLiteStepCallback = Community.CsharpSqlite.Sqlite3.dxStep;
+    using SQLiteCollation = Community.CsharpSqlite.Sqlite3.dxCompare;
+
+    using SqliteContext = Community.CsharpSqlite.Sqlite3.sqlite3_context;
+#else
+    using Sqlite3Mem = System.Int64;
+    using Sqlite3MemPtr = System.IntPtr;
+    using SqliteContext = System.IntPtr;
+    using SQLiteStepCallback = SQLiteCallback;
+#endif
+
   /// <summary>
   /// This abstract class is designed to handle user-defined functions easily.  An instance of the derived class is made for each
   /// connection to the database.
@@ -45,7 +67,7 @@ namespace Mono.Data.Sqlite
     /// <summary>
     /// Internal array used to keep track of aggregate function context data
     /// </summary>
-    private Dictionary<long, AggregateData> _contextDataList;
+    private Dictionary<Sqlite3Mem, AggregateData> _contextDataList;
 
     /// <summary>
     /// Holds a reference to the callback function for user functions
@@ -54,7 +76,7 @@ namespace Mono.Data.Sqlite
     /// <summary>
     /// Holds a reference to the callbakc function for stepping in an aggregate function
     /// </summary>
-    private SQLiteCallback  _StepFunc;
+    private SQLiteStepCallback  _StepFunc;
     /// <summary>
     /// Holds a reference to the callback function for finalizing an aggregate function
     /// </summary>
@@ -69,7 +91,7 @@ namespace Mono.Data.Sqlite
     /// <summary>
     /// Current context of the current callback.  Only valid during a callback
     /// </summary>
-    internal IntPtr _context;
+    internal SqliteContext _context;
 
     /// <summary>
     /// This static list contains all the user-defined functions declared using the proper attributes.
@@ -81,7 +103,7 @@ namespace Mono.Data.Sqlite
     /// </summary>
     protected SqliteFunction()
     {
-      _contextDataList = new Dictionary<long, AggregateData>();
+      _contextDataList = new Dictionary<Sqlite3Mem, AggregateData>();
     }
 
     /// <summary>
@@ -169,45 +191,53 @@ namespace Mono.Data.Sqlite
     /// <param name="nArgs">The number of arguments</param>
     /// <param name="argsptr">A pointer to the array of arguments</param>
     /// <returns>An object array of the arguments once they've been converted to .NET values</returns>
+#if SILVERLIGHT
+    internal object[] ConvertParams(int nArgs, Sqlite3MemPtr[] argsptr)
+#else
     internal object[] ConvertParams(int nArgs, IntPtr argsptr)
+#endif
     {
       object[] parms = new object[nArgs];
 #if !PLATFORM_COMPACTFRAMEWORK
-      IntPtr[] argint = new IntPtr[nArgs];
+      Sqlite3MemPtr[] argint = new Sqlite3MemPtr[nArgs];
 #else
       int[] argint = new int[nArgs];
 #endif
+#if SILVERLIGHT
+      Array.Copy(argsptr, argint, nArgs);
+#else
       Marshal.Copy(argsptr, argint, 0, nArgs);
+#endif
 
       for (int n = 0; n < nArgs; n++)
       {
-        switch (_base.GetParamValueType((IntPtr)argint[n]))
+        switch (_base.GetParamValueType((Sqlite3MemPtr)argint[n]))
         {
           case TypeAffinity.Null:
             parms[n] = DBNull.Value;
             break;
           case TypeAffinity.Int64:
-            parms[n] = _base.GetParamValueInt64((IntPtr)argint[n]);
+            parms[n] = _base.GetParamValueInt64((Sqlite3MemPtr)argint[n]);
             break;
           case TypeAffinity.Double:
-            parms[n] = _base.GetParamValueDouble((IntPtr)argint[n]);
+            parms[n] = _base.GetParamValueDouble((Sqlite3MemPtr)argint[n]);
             break;
           case TypeAffinity.Text:
-            parms[n] = _base.GetParamValueText((IntPtr)argint[n]);
+            parms[n] = _base.GetParamValueText((Sqlite3MemPtr)argint[n]);
             break;
           case TypeAffinity.Blob:
             {
               int x;
               byte[] blob;
 
-              x = (int)_base.GetParamValueBytes((IntPtr)argint[n], 0, null, 0, 0);
+              x = (int)_base.GetParamValueBytes((Sqlite3MemPtr)argint[n], 0, null, 0, 0);
               blob = new byte[x];
-              _base.GetParamValueBytes((IntPtr)argint[n], 0, blob, 0, x);
+              _base.GetParamValueBytes((Sqlite3MemPtr)argint[n], 0, blob, 0, x);
               parms[n] = blob;
             }
             break;
           case TypeAffinity.DateTime: // Never happens here but what the heck, maybe it will one day.
-            parms[n] = _base.ToDateTime(_base.GetParamValueText((IntPtr)argint[n]));
+            parms[n] = _base.ToDateTime(_base.GetParamValueText((Sqlite3MemPtr)argint[n]));
             break;
         }
       }
@@ -219,7 +249,7 @@ namespace Mono.Data.Sqlite
     /// </summary>
     /// <param name="context">The context the return value applies to</param>
     /// <param name="returnValue">The parameter to return to SQLite</param>
-    void SetReturnValue(IntPtr context, object returnValue)
+    void SetReturnValue(SqliteContext context, object returnValue)
     {
       if (returnValue == null || returnValue == DBNull.Value)
       {
@@ -270,7 +300,11 @@ namespace Mono.Data.Sqlite
     /// <param name="context">A raw context pointer</param>
     /// <param name="nArgs">Number of arguments passed in</param>
     /// <param name="argsptr">A pointer to the array of arguments</param>
-    internal void ScalarCallback(IntPtr context, int nArgs, IntPtr argsptr)
+#if SILVERLIGHT
+    internal void ScalarCallback(SqliteContext context, int nArgs, Sqlite3Mem[] argsptr)
+#else
+    internal void ScalarCallback(SqliteContext context, int nArgs, IntPtr argsptr)
+#endif
     {
       _context = context;
       SetReturnValue(context, Invoke(ConvertParams(nArgs, argsptr)));
@@ -286,15 +320,29 @@ namespace Mono.Data.Sqlite
     /// <param name="ptr2">Pointer to the second string to compare</param>
     /// <returns>Returns -1 if the first string is less than the second.  0 if they are equal, or 1 if the first string is greater
     /// than the second.</returns>
+#if SILVERLIGHT
+    internal int CompareCallback(object ptr, int len1, string ptr1, int len2, string ptr2)
+    {
+        return Compare(ptr1, ptr2);
+    }
+#else
     internal int CompareCallback(IntPtr ptr, int len1, IntPtr ptr1, int len2, IntPtr ptr2)
     {
       return Compare(SqliteConvert.UTF8ToString(ptr1, len1), SqliteConvert.UTF8ToString(ptr2, len2));
     }
+#endif
 
+#if SILVERLIGHT
+     internal int CompareCallback16(object ptr, int len1, string ptr1, int len2, string ptr2)
+    {
+        return Compare(ptr1, ptr2);
+    }
+#else
     internal int CompareCallback16(IntPtr ptr, int len1, IntPtr ptr1, int len2, IntPtr ptr2)
     {
       return Compare(SQLite3_UTF16.UTF16ToString(ptr1, len1), SQLite3_UTF16.UTF16ToString(ptr2, len2));
     }
+#endif
 
     /// <summary>
     /// The internal aggregate Step function callback, which wraps the raw context pointer and calls the virtual Step() method.
@@ -307,12 +355,16 @@ namespace Mono.Data.Sqlite
     /// <param name="context">A raw context pointer</param>
     /// <param name="nArgs">Number of arguments passed in</param>
     /// <param name="argsptr">A pointer to the array of arguments</param>
-    internal void StepCallback(IntPtr context, int nArgs, IntPtr argsptr)
+#if SILVERLIGHT
+    internal void StepCallback(SqliteContext context, int nArgs, Sqlite3Mem[] argsptr)
+#else
+    internal void StepCallback(SqliteContext context, int nArgs, IntPtr argsptr)
+#endif
     {
-      long nAux;
+      Sqlite3Mem nAux;
       AggregateData data;
 
-      nAux = (long)_base.AggregateContext(context);
+      nAux = (Sqlite3Mem)_base.AggregateContext(context);
       if (_contextDataList.TryGetValue(nAux, out data) == false)
       {
         data = new AggregateData();
@@ -334,9 +386,9 @@ namespace Mono.Data.Sqlite
     /// An internal aggregate Final function callback, which wraps the context pointer and calls the virtual Final() method.
     /// </summary>
     /// <param name="context">A raw context pointer</param>
-    internal void FinalCallback(IntPtr context)
+    internal void FinalCallback(SqliteContext context)
     {
-      long n = (long)_base.AggregateContext(context);
+      Sqlite3Mem n = (Sqlite3Mem)_base.AggregateContext(context);
       object obj = null;
 
       if (_contextDataList.ContainsKey(n))
@@ -362,7 +414,7 @@ namespace Mono.Data.Sqlite
       {
         IDisposable disp;
 
-        foreach (KeyValuePair<long, AggregateData> kv in _contextDataList)
+        foreach (KeyValuePair<Sqlite3Mem, AggregateData> kv in _contextDataList)
         {
           disp = kv.Value._data as IDisposable;
           if (disp != null)
@@ -499,7 +551,7 @@ namespace Mono.Data.Sqlite
         f = (SqliteFunction)Activator.CreateInstance(pr._instanceType);
         f._base = sqlbase;
         f._InvokeFunc = (pr.FuncType == FunctionType.Scalar) ? new SQLiteCallback(f.ScalarCallback) : null;
-        f._StepFunc = (pr.FuncType == FunctionType.Aggregate) ? new SQLiteCallback(f.StepCallback) : null;
+        f._StepFunc = (pr.FuncType == FunctionType.Aggregate) ? new SQLiteStepCallback(f.StepCallback) : null;
         f._FinalFunc = (pr.FuncType == FunctionType.Aggregate) ? new SQLiteFinalCallback(f.FinalCallback) : null;
         f._CompareFunc = (pr.FuncType == FunctionType.Collation) ? new SQLiteCollation(f.CompareCallback) : null;
         f._CompareFunc16 = (pr.FuncType == FunctionType.Collation) ? new SQLiteCollation(f.CompareCallback16) : null;
@@ -560,6 +612,7 @@ namespace Mono.Data.Sqlite
     Collation = 2,
   }
 
+#if !SILVERLIGHT
   /// <summary>
   /// An internal callback delegate declaration.
   /// </summary>
@@ -592,6 +645,7 @@ namespace Mono.Data.Sqlite
   [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 #endif
   internal delegate int SQLiteCollation(IntPtr puser, int len1, IntPtr pv1, int len2, IntPtr pv2);
+#endif
 
   /// <summary>
   /// The type of collating sequence
