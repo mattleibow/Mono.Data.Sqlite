@@ -33,22 +33,23 @@ using System.Data;
 using System.IO;
 using Mono.Data.Sqlite;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestFixtureAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
-using SetUpAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestInitializeAttribute;
-using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using TestFixtureAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestClassAttribute;
+using SetUpAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.ClassInitializeAttribute;
+using TestAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestMethodAttribute;
 
 namespace MonoTests.Mono.Data.Sqlite
 {
     [TestFixture]
     public class SqliteDataReaderTest
     {
-        readonly static string _uri = "test.db";
+        readonly static string dbRootPath = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
+        readonly static string _uri = Path.Combine(dbRootPath, "test.db");
         readonly static string _connectionString = "URI=file://" + _uri + ", version=3";
-        SqliteConnection _conn = new SqliteConnection();
+        static SqliteConnection _conn = new SqliteConnection();
 
         [SetUp]
-        public void FixtureSetUp()
+        static public void FixtureSetUp(TestContext context)
         {
             //if (!File.Exists(_uri) || new FileInfo(_uri).Length == 0)
             {

@@ -8,17 +8,18 @@ using System.Data;
 using System.IO;
 using System.Text;
 using Mono.Data.Sqlite;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestFixtureAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
-using SetUpAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestInitializeAttribute;
-using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using TestFixtureAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestClassAttribute;
+using SetUpAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestInitializeAttribute;
+using TestAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestMethodAttribute;
 
 namespace MonoTests.Mono.Data.Sqlite
 {
     [TestFixture]
     public class SqliteExceptionUnitTests
     {
-        readonly static string _uri = "SqliteTest.db";
+        readonly static string dbRootPath = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
+        readonly static string _uri = Path.Combine(dbRootPath, "test.db");
         readonly static string _connectionString = "URI=file://" + _uri + ", version=3";
         static SqliteConnection _conn = new SqliteConnection(_connectionString);
 
@@ -27,19 +28,25 @@ namespace MonoTests.Mono.Data.Sqlite
         }
 
         [Test]
-#if NET_2_0
-		[ExpectedException(typeof(SqliteException))]
-#else
-        [ExpectedException(typeof(SqliteSyntaxException))]
-#endif
         public void WrongSyntax()
         {
             SqliteCommand insertCmd = new SqliteCommand("INSERT INTO t1 VALUES (,')", _conn);
             using (_conn)
             {
                 _conn.Open();
-                int res = insertCmd.ExecuteNonQuery();
-                Assert.AreEqual(res, 1);
+                try
+                {
+                    int res = insertCmd.ExecuteNonQuery();
+                    Assert.AreEqual(res, 1);
+                    Assert.Fail();
+                }
+                catch (SqliteException)
+                {
+                }
+                catch (Exception)
+                {
+                    Assert.Fail();
+                }
             }
         }
     }

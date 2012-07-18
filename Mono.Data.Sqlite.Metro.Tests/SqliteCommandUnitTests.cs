@@ -7,11 +7,12 @@ using System;
 using System.Data;
 using System.IO;
 using System.Text;
+using System.Linq;
 using Mono.Data.Sqlite;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestFixtureAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
-using SetUpAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestInitializeAttribute;
-using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using TestFixtureAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestClassAttribute;
+using SetUpAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.ClassInitializeAttribute;
+using TestAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestMethodAttribute;
 
 namespace MonoTests.Mono.Data.Sqlite
 {
@@ -19,7 +20,9 @@ namespace MonoTests.Mono.Data.Sqlite
     [TestFixture]
     public class SqliteCommandUnitTests
     {
-        readonly static string _uri = "SqliteTest.db";
+        readonly static string dbRootPath = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
+        readonly static string _uri = Path.Combine(dbRootPath, "SqliteTest.db");
+
         readonly static string _connectionString = "URI=file://" + _uri + ", version=3";
         static SqliteConnection _conn = new SqliteConnection(_connectionString);
         readonly static string stringvalue = "my keyboard is better than yours : äöüß";
@@ -29,19 +32,27 @@ namespace MonoTests.Mono.Data.Sqlite
         }
 
         [SetUp]
-        public void Create()
+        static public void Create(TestContext context)
         {
             System.Diagnostics.Debug.WriteLine("E Y A!");
             try
             {
-                //if (File.Exists(_uri))
-                //{
-                //    _conn.Dispose();
-                //    // We want to start with a fresh db for each full run
-                //    // The database is created on the first open()
-                //    File.Delete(_uri);
-
-                //}
+                try
+                {
+                    var file = Windows.Storage.ApplicationData.Current.LocalFolder.GetFileAsync(_uri).AsTask();
+                    file.Wait();
+                    _conn.Dispose();
+                    // We want to start with a fresh db for each full run
+                    // The database is created on the first open()
+                    file.Result.DeleteAsync().AsTask().Wait();
+                }
+                catch (AggregateException ex)
+                {
+                    if (!(ex.InnerExceptions.Single() is FileNotFoundException))
+                    {
+                        throw;
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -70,12 +81,14 @@ namespace MonoTests.Mono.Data.Sqlite
             finally
             {
                 _conn.Close();
+                System.Diagnostics.Debug.WriteLine("FINISHED SETUP");
             }
         }
 
         [Test]
         public void Select()
         {
+            System.Diagnostics.Debug.WriteLine(_connectionString);
             using (_conn)
             using (SqliteCommand simpleSelect = new SqliteCommand("SELECT * FROM t1;  ", _conn)) // check trailing spaces
             {
@@ -86,8 +99,8 @@ namespace MonoTests.Mono.Data.Sqlite
                     {
                         string test = dr[0].ToString();
                         Assert.AreEqual(dr["T"], stringvalue); // also checks case-insensitive column
-                        Assert.AreEqual(dr["F"], 123);
-                        Assert.AreEqual(dr["I"], 123);
+                        Assert.AreEqual(dr["F"], 123D);
+                        Assert.AreEqual(dr["I"], 123L);
                         Assert.AreEqual(dr["B"], "123");
                     }
                     Assert.IsTrue(dr.FieldCount > 0);
@@ -176,11 +189,6 @@ namespace MonoTests.Mono.Data.Sqlite
         }
 
         [Test]
-#if NET_2_0
-		[ExpectedException(typeof(SqliteException))]
-#else
-        [ExpectedException(typeof(SqliteSyntaxException))]
-#endif
         public void InsertWithFailingTransaction()
         {
             _conn.Open();
@@ -198,11 +206,18 @@ namespace MonoTests.Mono.Data.Sqlite
                     c3.ExecuteNonQuery();
                     c4.ExecuteNonQuery();
                     t.Commit();
+                    Assert.Fail();
                 }
-                catch (Exception e)
+                catch (SqliteException)
+                {
+                }
+                catch (Exception)
+                {
+                    Assert.Fail();
+                }
+                finally
                 {
                     t.Rollback();
-                    throw e;
                 }
             }
         }

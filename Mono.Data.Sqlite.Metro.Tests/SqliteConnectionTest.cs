@@ -32,36 +32,58 @@ using System;
 using System.Data;
 using Mono.Data.Sqlite;
 
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestFixtureAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestClassAttribute;
-using SetUpAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestInitializeAttribute;
-using TestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.TestMethodAttribute;
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+using TestFixtureAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestClassAttribute;
+using SetUpAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestInitializeAttribute;
+using TestAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestMethodAttribute;
+using System.IO;
 
 namespace MonoTests.Mono.Data.Sqlite
 {
     [TestFixture]
     public class SqliteConnectionTest
     {
-        readonly static string _uri = "test.db";
+        readonly static string dbRootPath = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
+        readonly static string _uri = Path.Combine(dbRootPath, "test.db");
         readonly static string _connectionString = "URI=file://" + _uri + ", version=3";
         SqliteConnection _conn = new SqliteConnection();
 
 #if NET_2_0
                 [Test]
-                [ExpectedException (typeof (ArgumentNullException))]
                 public void ConnectionStringTest_Null ()
                 {
+                    try
+                    {
                         _conn.ConnectionString = null;
+                        Assert.Fail();
+                    }
+                    catch (ArgumentNullException)
+                    {
+                    }
+                    catch (Exception)
+                    {
+                        Assert.Fail();
+                    }
                 }
 
                 [Test]
-                [ExpectedException (typeof (InvalidOperationException))]
                 public void ConnectionStringTest_MustBeClosed ()
                 {
                         _conn.ConnectionString = _connectionString;
                         try {
-                    		_conn.Open ();
-                    		_conn.ConnectionString = _connectionString;
+                            _conn.Open();
+                            try
+                            {
+                                _conn.ConnectionString = _connectionString;
+                                Assert.Fail();
+                            }
+                            catch (InvalidOperationException)
+                            {
+                            }
+                            catch (Exception)
+                            {
+                                Assert.Fail();
+                            }
                     	} finally {
                     		_conn.Close ();
                     	}
