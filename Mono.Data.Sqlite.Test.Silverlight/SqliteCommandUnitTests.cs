@@ -168,11 +168,6 @@ namespace MonoTests.Mono.Data.Sqlite
         }
 
         [Test]
-#if NET_2_0
-		[ExpectedException(typeof(SqliteException))]
-#else
-        [ExpectedException(typeof(SqliteSyntaxException))]
-#endif
         public void InsertWithFailingTransaction()
         {
             _conn.Open();
@@ -190,11 +185,18 @@ namespace MonoTests.Mono.Data.Sqlite
                     c3.ExecuteNonQuery();
                     c4.ExecuteNonQuery();
                     t.Commit();
+                    Assert.Fail();
                 }
-                catch (Exception e)
+                catch (SqliteException)
+                {
+                }
+                catch (Exception)
+                {
+                    Assert.Fail();
+                }
+                finally
                 {
                     t.Rollback();
-                    throw e;
                 }
             }
         }

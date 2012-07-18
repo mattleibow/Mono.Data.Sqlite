@@ -45,20 +45,40 @@ namespace MonoTests.Mono.Data.Sqlite
 
 #if NET_2_0
                 [Test]
-                [ExpectedException (typeof (ArgumentNullException))]
                 public void ConnectionStringTest_Null ()
                 {
+                    try
+                    {
                         _conn.ConnectionString = null;
+                        Assert.Fail();
+                    }
+                    catch (ArgumentNullException)
+                    {
+                    }
+                    catch (Exception)
+                    {
+                        Assert.Fail();
+                    }
                 }
 
                 [Test]
-                [ExpectedException (typeof (InvalidOperationException))]
                 public void ConnectionStringTest_MustBeClosed ()
                 {
                         _conn.ConnectionString = _connectionString;
                         try {
                     		_conn.Open ();
+                            try
+                            {
                     		_conn.ConnectionString = _connectionString;
+                                Assert.Fail();
+                            }
+                            catch (InvalidOperationException)
+                            {
+                            }
+                            catch (Exception)
+                            {
+                                Assert.Fail();
+                            }
                     	} finally {
                     		_conn.Close ();
                     	}
