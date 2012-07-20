@@ -7,8 +7,8 @@
     <ProjectGuid>{E706726A-A6B2-42F1-8502-C0F3AC04B0D5}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>System.Transactions.Portable</RootNamespace>
-    <AssemblyName>System.Transactions.Portable</AssemblyName>
+    <RootNamespace>System.Transactions</RootNamespace>
+    <AssemblyName>System.Transactions</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <TargetFrameworkProfile>Profile2</TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
