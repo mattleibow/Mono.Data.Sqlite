@@ -31,20 +31,26 @@
 using System;
 using System.Data;
 using Mono.Data.Sqlite;
+using System.IO;
 
-using NUnit.Framework;
+#if SILVERLIGHT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#endif
 
 namespace MonoTests.Mono.Data.Sqlite
 {
-    [TestFixture]
+    [TestClass]
     public class SqliteConnectionTest
     {
-        readonly static string _uri = "test.db";
+        readonly static string dbRootPath = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
+        readonly static string _uri = Path.Combine(dbRootPath, "test.db");
         readonly static string _connectionString = "URI=file://" + _uri + ", version=3";
         SqliteConnection _conn = new SqliteConnection();
 
 #if NET_2_0
-                [Test]
+                [TestMethod]
                 public void ConnectionStringTest_Null ()
                 {
                     try
@@ -61,15 +67,15 @@ namespace MonoTests.Mono.Data.Sqlite
                     }
                 }
 
-                [Test]
+                [TestMethod]
                 public void ConnectionStringTest_MustBeClosed ()
                 {
                         _conn.ConnectionString = _connectionString;
                         try {
-                    		_conn.Open ();
+                            _conn.Open();
                             try
                             {
-                    		_conn.ConnectionString = _connectionString;
+                                _conn.ConnectionString = _connectionString;
                                 Assert.Fail();
                             }
                             catch (InvalidOperationException)
@@ -85,7 +91,7 @@ namespace MonoTests.Mono.Data.Sqlite
                 }
 
 #else
-        [Test]
+        [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void ConnectionStringTest_Empty()
         {
@@ -93,7 +99,7 @@ namespace MonoTests.Mono.Data.Sqlite
             _conn.Open();
         }
 
-        [Test]
+        [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void ConnectionStringTest_NoURI()
         {
@@ -102,7 +108,7 @@ namespace MonoTests.Mono.Data.Sqlite
         }
 
         // In 2.0 _conn.Database always returns "main"
-        [Test]
+        [TestMethod]
         public void ConnectionStringTest_IgnoreSpacesAndTrim()
         {
             _conn.ConnectionString = "URI=file://xyz      , ,,, ,, version=3";
@@ -110,8 +116,8 @@ namespace MonoTests.Mono.Data.Sqlite
         }
 #endif
         // behavior has changed, I guess
-        //[Test]
-        [Ignore("opening a connection should not create db! though, leave for now")]
+        //[TestMethod]
+        // TODO [Ignore("opening a connection should not create db! though, leave for now")]
         public void OpenTest()
         {
             try
@@ -128,7 +134,7 @@ namespace MonoTests.Mono.Data.Sqlite
                     _conn.Open();
                     Assert.Fail("#1 should have failed on opening a non-existent db");
                 }
-                catch (ArgumentException e) { Console.WriteLine(e); }
+                catch (ArgumentException e) { /*System.Diagnostics.Debug.WriteLine(e);*/ }
 
             }
             finally

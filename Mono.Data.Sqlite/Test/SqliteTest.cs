@@ -21,31 +21,41 @@ using System;
 using System.Data;
 using Mono.Data.Sqlite;
 
+#if SILVERLIGHT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#endif
+
 namespace Test.Mono.Data.Sqlite
 {
-    using NUnit.Framework;
-
-    [TestFixture]
-    class SqliteTest
+    [TestClass]
+    public class SqliteTest
     {
-        [Test]
-        static void Main(string[] args)
+        [TestMethod]
+        public void TestFalseNull()
         {
             Test(false, null);
-            Console.WriteLine();
+        }
+
+        [TestMethod]
+        public void TestFalseIso()
+        {
             Test(false, "ISO-8859-1");
-            Console.WriteLine();
+        }
+
+        [TestMethod]
+        public void TestTrueNull()
+        {
             Test(true, null);
         }
 
-        static void Test(bool v3, string encoding)
+        public void Test(bool v3, string encoding)
         {
             if (!v3)
-                Console.WriteLine("Testing Version 2" + (encoding != null ? " with " + encoding + " encoding" : ""));
+                System.Diagnostics.Debug.WriteLine("Testing Version 2" + (encoding != null ? " with " + encoding + " encoding" : ""));
             else
-                Console.WriteLine("Testing Version 3");
-
-            System.IO.File.Delete("SqliteTest.db");
+                System.Diagnostics.Debug.WriteLine("Testing Version 3");
 
             SqliteConnection dbcon = new SqliteConnection();
 
@@ -54,8 +64,7 @@ namespace Test.Mono.Data.Sqlite
             // file is created.
 
             // "URI=file:some/path"
-            string connectionString =
-                "URI=file:SqliteTest.db";
+            string connectionString = "URI=file://SqliteTest" + Environment.TickCount + ".db";
             if (v3)
                 connectionString += ",Version=3";
             if (encoding != null)
@@ -75,7 +84,7 @@ namespace Test.Mono.Data.Sqlite
                 "INSERT INTO MONO_TEST  " +
                 "(NID, NDESC, NTIME) " +
                 "VALUES(1,'One (unicode test: \u05D0)', '2006-01-01')";
-            Console.WriteLine("Create & insert modified rows = 1: " + dbcmd.ExecuteNonQuery());
+            System.Diagnostics.Debug.WriteLine("Create & insert modified rows = 1: " + dbcmd.ExecuteNonQuery());
 
             dbcmd.CommandText =
                 "INSERT INTO MONO_TEST  " +
@@ -84,19 +93,19 @@ namespace Test.Mono.Data.Sqlite
             dbcmd.Parameters.Add(new SqliteParameter("NID", 2));
             dbcmd.Parameters.Add(new SqliteParameter(":NDESC", "Two (unicode test: \u05D1)"));
             dbcmd.Parameters.Add(new SqliteParameter(":NTIME", DateTime.Now));
-            Console.WriteLine("Insert modified rows with parameters = 1, 2: " + dbcmd.ExecuteNonQuery() + " , " + dbcmd.LastInsertRowID());
+            System.Diagnostics.Debug.WriteLine("Insert modified rows with parameters = 1, 2: " + dbcmd.ExecuteNonQuery() + " , " + dbcmd.LastInsertRowID());
 
             dbcmd.CommandText =
                 "INSERT INTO MONO_TEST  " +
                 "(NID, NDESC, NTIME) " +
                 "VALUES(3,'Three, quoted parameter test, and next is null; :NTIME', NULL)";
-            Console.WriteLine("Insert with null modified rows and ID = 1, 3: " + dbcmd.ExecuteNonQuery() + " , " + dbcmd.LastInsertRowID());
+            System.Diagnostics.Debug.WriteLine("Insert with null modified rows and ID = 1, 3: " + dbcmd.ExecuteNonQuery() + " , " + dbcmd.LastInsertRowID());
 
             dbcmd.CommandText =
                 "INSERT INTO MONO_TEST  " +
                 "(NID, NDESC, NTIME) " +
                 "VALUES(4,'Four with ANSI char: ü', NULL)";
-            Console.WriteLine("Insert with ANSI char ü = 1, 4: " + dbcmd.ExecuteNonQuery() + " , " + dbcmd.LastInsertRowID());
+            System.Diagnostics.Debug.WriteLine("Insert with ANSI char ü = 1, 4: " + dbcmd.ExecuteNonQuery() + " , " + dbcmd.LastInsertRowID());
 
             dbcmd.CommandText =
                 "INSERT INTO MONO_TEST  " +
@@ -104,7 +113,7 @@ namespace Test.Mono.Data.Sqlite
                 "VALUES(?,?,?)";
             dbcmd.Parameters.Clear();
             IDbDataParameter param1 = dbcmd.CreateParameter();
-            param1.DbType = DbType.DateTime;
+            param1.DbType = DbType.Int32;
             param1.Value = 5;
             dbcmd.Parameters.Add(param1);
             IDbDataParameter param2 = dbcmd.CreateParameter();
@@ -114,54 +123,39 @@ namespace Test.Mono.Data.Sqlite
             param3.DbType = DbType.DateTime;
             param3.Value = DateTime.Parse("2006-05-11 11:45:00");
             dbcmd.Parameters.Add(param3);
-            Console.WriteLine("Insert with unnamed parameters = 1, 5: " + dbcmd.ExecuteNonQuery() + " , " + dbcmd.LastInsertRowID());
+            System.Diagnostics.Debug.WriteLine("Insert with unnamed parameters = 1, 5: " + dbcmd.ExecuteNonQuery() + " , " + dbcmd.LastInsertRowID());
 
             dbcmd.CommandText =
                 "SELECT * FROM MONO_TEST";
-            SqliteDataReader reader;
-            reader = dbcmd.ExecuteReader();
-
-            Console.WriteLine("read and display data...");
-            while (reader.Read())
-                for (int i = 0; i < reader.FieldCount; i++)
-                    Console.WriteLine(" Col {0}: {1} (type: {2}, data type: {3})",
-                        i, reader[i] == null ? "(null)" : reader[i].ToString(), reader[i] == null ? "(null)" : reader[i].GetType().FullName, reader.GetDataTypeName(i));
-
+            using (var reader = dbcmd.ExecuteReader())
+            {
+                System.Diagnostics.Debug.WriteLine("read and display data...");
+                while (reader.Read())
+                    for (int i = 0; i < reader.FieldCount; i++)
+                        System.Diagnostics.Debug.WriteLine(
+                            " Col {0}: {1} (type: {2}, data type: {3})",
+                            i,
+                            reader[i] == null ? "(null)" : reader[i].ToString(),
+                            reader[i] == null ? "(null)" : reader[i].GetType().FullName,
+                            reader.GetDataTypeName(i));
+            }
             dbcmd.CommandText = "SELECT NDESC FROM MONO_TEST WHERE NID=2";
-            Console.WriteLine("read and display a scalar = 'Two': " + dbcmd.ExecuteScalar());
+            System.Diagnostics.Debug.WriteLine("read and display a scalar = 'Two': " + dbcmd.ExecuteScalar());
 
             dbcmd.CommandText = "SELECT count(*) FROM MONO_TEST";
-            Console.WriteLine("read and display a non-column scalar = 3: " + dbcmd.ExecuteScalar());
-
-            /*Console.WriteLine("read and display data using DataAdapter/DataTable...");
-            DataTable dt = new DataTable();
-            adapter.Fill(dt);
-            DataView dv = new DataView(dt);
-            foreach (DataRowView myRow in dv) {
-                foreach (DataColumn myColumn in myRow.Row.Table.Columns) {
-                    Console.WriteLine(" " + myRow[myColumn.ColumnName]);
-                }
-            }*/
+            System.Diagnostics.Debug.WriteLine("read and display a non-column scalar = 3: " + dbcmd.ExecuteScalar());
 
             try
             {
                 dbcmd.CommandText = "SELECT NDESC INVALID SYNTAX FROM MONO_TEST WHERE NID=2";
                 dbcmd.ExecuteNonQuery();
-                Console.WriteLine("Should not reach here.");
+                Assert.Fail("Should not reach here.");
             }
             catch (Exception e)
             {
-                Console.WriteLine("Testing a syntax error: " + e.GetType().Name + ": " + e.Message);
+                System.Diagnostics.Debug.WriteLine("Testing a syntax error: " + e.GetType().Name + ": " + e.Message);
             }
 
-            /*try {
-                dbcmd.CommandText = "SELECT 0/0 FROM MONO_TEST WHERE NID=2";
-                Console.WriteLine("Should not reach here: " + dbcmd.ExecuteScalar());
-            } catch (Exception e) {
-                Console.WriteLine("Testing an execution error: " + e.GetType().Name + ": " + e.Message);
-            }*/
-
-            reader.Close();
             dbcmd.Dispose();
             dbcon.Close();
         }
@@ -172,7 +166,7 @@ namespace Test.Mono.Data.Sqlite
         public static string LastInsertRowID(this SqliteCommand command)
         {
             using (var lastInsertRowId = new SqliteCommand("SELECT last_insert_rowid();", command.Connection, command.Transaction))
-                return (string)lastInsertRowId.ExecuteScalar();
+                return lastInsertRowId.ExecuteScalar().ToString();
         }
     }
 }

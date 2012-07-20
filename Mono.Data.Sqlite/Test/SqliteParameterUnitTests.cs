@@ -8,15 +8,16 @@ using System.Data;
 using System.IO;
 using System.Text;
 using Mono.Data.Sqlite;
+
+#if SILVERLIGHT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using TestFixtureAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestClassAttribute;
-using SetUpAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestInitializeAttribute;
-using TestAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestMethodAttribute;
-using CategoryAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestCategoryAttribute;
+#endif
 
 namespace MonoTests.Mono.Data.Sqlite
 {
-    [TestFixture]
+    [TestClass]
     public class SqliteParameterUnitTests
     {
         readonly static string dbRootPath = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
@@ -28,8 +29,8 @@ namespace MonoTests.Mono.Data.Sqlite
         {
         }
 
-        [Test]
-        [Category("NotWorking")]
+        [TestMethod]
+        // todo :: [TestCategory("NotWorking")]
         // fails randomly :)
         public void InsertRandomValuesWithParameter()
         {

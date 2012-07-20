@@ -46,6 +46,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Community.CsharpSqlite.Silverlight">
+      <HintPath>..\Libraries\Community.CsharpSqlite.Silverlight.dll</HintPath>
+    </Reference>
     <Reference Include="mscorlib" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
@@ -60,99 +63,43 @@
     <Compile Include="..\Consts.cs">
       <Link>Consts.cs</Link>
     </Compile>
-    <Compile Include="..\Mono.Data.Sqlite.Portable\Assembly\AssemblyInfo.cs">
-      <Link>Assembly\AssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Mono.Data.Sqlite.Portable\ICloneable.cs">
-      <Link>ICloneable.cs</Link>
-    </Compile>
-    <Compile Include="..\Mono.Data.Sqlite.Portable\Locale.cs">
-      <Link>Locale.cs</Link>
-    </Compile>
-    <Compile Include="..\Mono.Data.Sqlite.Portable\MonoPInvokeCallbackAttribute.cs">
-      <Link>MonoPInvokeCallbackAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\Mono.Data.Sqlite.Portable\MonoTODOAttribute.cs">
-      <Link>MonoTODOAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLite3.cs">
-      <Link>SQLite3.cs</Link>
-    </Compile>
-    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLite3_UTF16.cs">
-      <Link>SQLite3_UTF16.cs</Link>
-    </Compile>
-    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteBase.cs">
-      <Link>SQLiteBase.cs</Link>
-    </Compile>
-    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteCommand.cs">
-      <Link>SQLiteCommand.cs</Link>
-    </Compile>
-    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteCommandBuilder.cs">
-      <Link>SQLiteCommandBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteConnection.cs">
-      <Link>SQLiteConnection.cs</Link>
-    </Compile>
-    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteConnectionPool.cs">
-      <Link>SQLiteConnectionPool.cs</Link>
-    </Compile>
-    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteConnectionStringBuilder.cs">
-      <Link>SQLiteConnectionStringBuilder.cs</Link>
-    </Compile>
-    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteConvert.cs">
-      <Link>SQLiteConvert.cs</Link>
-    </Compile>
-    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteDataReader.cs">
-      <Link>SQLiteDataReader.cs</Link>
-    </Compile>
-    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteEnlistment.cs">
-      <Link>SQLiteEnlistment.cs</Link>
-    </Compile>
-    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteException.cs">
-      <Link>SQLiteException.cs</Link>
-    </Compile>
-    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteFunction.cs">
-      <Link>SQLiteFunction.cs</Link>
-    </Compile>
-    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteFunctionAttribute.cs">
-      <Link>SQLiteFunctionAttribute.cs</Link>
-    </Compile>
-    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteMetaDataCollectionNames.cs">
-      <Link>SQLiteMetaDataCollectionNames.cs</Link>
-    </Compile>
-    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteParameter.cs">
-      <Link>SQLiteParameter.cs</Link>
-    </Compile>
-    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteParameterCollection.cs">
-      <Link>SQLiteParameterCollection.cs</Link>
-    </Compile>
-    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteStatement.cs">
-      <Link>SQLiteStatement.cs</Link>
-    </Compile>
-    <Compile Include="..\Mono.Data.Sqlite.Portable\SQLiteTransaction.cs">
-      <Link>SQLiteTransaction.cs</Link>
-    </Compile>
+    <Compile Include="Assembly\AssemblyInfo.cs" />
+    <Compile Include="ICloneable.cs" />
+    <Compile Include="Locale.cs" />
+    <Compile Include="MonoPInvokeCallbackAttribute.cs" />
+    <Compile Include="MonoTODOAttribute.cs" />
+    <Compile Include="SQLite3.cs" />
+    <Compile Include="SQLite3_UTF16.cs" />
+    <Compile Include="SQLiteBase.cs" />
+    <Compile Include="SQLiteCommand.cs" />
+    <Compile Include="SQLiteCommandBuilder.cs" />
+    <Compile Include="SQLiteConnection.cs" />
+    <Compile Include="SQLiteConnectionPool.cs" />
+    <Compile Include="SQLiteConnectionStringBuilder.cs" />
+    <Compile Include="SQLiteConvert.cs" />
+    <Compile Include="SQLiteDataReader.cs" />
+    <Compile Include="SQLiteEnlistment.cs" />
+    <Compile Include="SQLiteException.cs" />
+    <Compile Include="SQLiteFunction.cs" />
+    <Compile Include="SQLiteFunctionAttribute.cs" />
+    <Compile Include="SQLiteMetaDataCollectionNames.cs" />
+    <Compile Include="SQLiteParameter.cs" />
+    <Compile Include="SQLiteParameterCollection.cs" />
+    <Compile Include="SQLiteStatement.cs" />
+    <Compile Include="SQLiteTransaction.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Libraries\csharp-sqlite\Community.CsharpSqlite.Silverlight\Community.CsharpSqlite.Silverlight.csproj">
-      <Project>{a3ae849b-b668-4bc9-a75f-6e9b0a8f6779}</Project>
-      <Name>Community.CsharpSqlite.Silverlight</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\System.Data\System.Data.csproj">
-      <Project>{28f2ef9e-4ae9-4041-8dd7-e5e203560745}</Project>
-      <Name>System.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\System.Silverlight\System.Silverlight.csproj">
-      <Project>{0cd24343-76e5-4b8e-826e-c9394ae3c06c}</Project>
-      <Name>System.Silverlight</Name>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\System.Data\System.Data.Silverlight.csproj">
+      <Project>{bfae3d32-98ad-49ab-be36-4fd51631c0b1}</Project>
+      <Name>System.Data.Silverlight</Name>
     </ProjectReference>
     <ProjectReference Include="..\System.Transactions\System.Transactions.csproj">
       <Project>{e706726a-a6b2-42f1-8502-c0f3ac04b0d5}</Project>
       <Name>System.Transactions</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>

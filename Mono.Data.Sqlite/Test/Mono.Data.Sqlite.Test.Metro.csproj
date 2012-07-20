@@ -121,6 +121,7 @@
     <Compile Include="SqliteExceptionUnitTests.cs" />
     <Compile Include="SqliteParameterUnitTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SqliteTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -141,25 +142,18 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="sqlite3.dll" />
-    <Content Include="test.sql">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Include="Mono.Data.Sqlite.Metro.Tests_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mono.Data.Sqlite.Portable\Mono.Data.Sqlite.Portable.csproj">
+    <ProjectReference Include="..\Mono.Data.Sqlite.Metro.csproj">
       <Project>{e0644c82-1c4f-4c7d-80c3-69439d7a7799}</Project>
-      <Name>Mono.Data.Sqlite.Portable</Name>
+      <Name>Mono.Data.Sqlite.Metro</Name>
     </ProjectReference>
-    <ProjectReference Include="..\System.Data\System.Data.csproj">
+    <ProjectReference Include="..\..\System.Data\System.Data.Metro.csproj">
       <Project>{28f2ef9e-4ae9-4041-8dd7-e5e203560745}</Project>
-      <Name>System.Data</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\System.Transactions\System.Transactions.csproj">
-      <Project>{e706726a-a6b2-42f1-8502-c0f3ac04b0d5}</Project>
-      <Name>System.Transactions</Name>
+      <Name>System.Data.Metro</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' ">

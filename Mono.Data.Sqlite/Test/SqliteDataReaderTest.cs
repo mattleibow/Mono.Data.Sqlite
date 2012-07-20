@@ -33,21 +33,26 @@ using System.Data;
 using System.IO;
 using Mono.Data.Sqlite;
 
-using NUnit.Framework;
+#if SILVERLIGHT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#endif
 
 namespace MonoTests.Mono.Data.Sqlite
 {
-    [TestFixture]
+    [TestClass]
     public class SqliteDataReaderTest
     {
-        readonly static string _uri = "test.db";
+        readonly static string dbRootPath = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
+        readonly static string _uri = Path.Combine(dbRootPath, "test.db");
         readonly static string _connectionString = "URI=file://" + _uri + ", version=3";
-        SqliteConnection _conn = new SqliteConnection();
+        static SqliteConnection _conn = new SqliteConnection();
 
-        [SetUp]
-        public void FixtureSetUp()
+        [ClassInitialize]
+        static public void FixtureSetUp(TestContext context)
         {
-            if (!File.Exists(_uri) || new FileInfo(_uri).Length == 0)
+            //if (!File.Exists(_uri) || new FileInfo(_uri).Length == 0)
             {
                 // ignore all tests
                 // Assert.Ignore("#000 ignoring all fixtures. No database present");
@@ -73,7 +78,7 @@ insert into test values (3, ""mono test 3"");
             }
         }
 
-        [Test]
+        [TestMethod]
         public void TypeOfNullInResultTest()
         {
             _conn.ConnectionString = _connectionString;
@@ -86,7 +91,7 @@ insert into test values (3, ""mono test 3"");
                 reader = cmd.ExecuteReader();
                 try
                 {
-                    Assert.True(reader.Read());
+                    Assert.IsTrue(reader.Read());
                     Assert.IsNotNull(reader.GetFieldType(0));
                 }
                 finally
@@ -98,7 +103,7 @@ insert into test values (3, ""mono test 3"");
             }
         }
 
-        [Test]
+        [TestMethod]
         public void TimestampTest()
         {
             _conn.ConnectionString = _connectionString;
@@ -149,7 +154,7 @@ insert into test values (3, ""mono test 3"");
             }
         }
 
-        [Test]
+        [TestMethod]
         public void CloseConnectionTest()
         {
             // When this test fails it may confuse nunit a bit, causing it to show strange
@@ -189,7 +194,7 @@ insert into test values (3, ""mono test 3"");
             }
         }
 
-        [Test]
+        [TestMethod]
         public void TestDataTypes()
         {
             _conn.ConnectionString = _connectionString;

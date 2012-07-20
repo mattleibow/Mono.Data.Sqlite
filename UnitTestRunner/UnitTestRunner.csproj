@@ -99,9 +99,9 @@
     <None Include="Properties\AppManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\System.Data\Test\System.Data.Test.Silverlight.csproj">
-      <Project>{602b2163-c4a3-459b-954a-147922d39cc5}</Project>
-      <Name>System.Data.Test.Silverlight</Name>
+    <ProjectReference Include="..\Mono.Data.Sqlite\Test\Mono.Data.Sqlite.Test.Silverlight.csproj">
+      <Project>{a3fe7c6e-8b59-4b06-a221-f45831d0e3a2}</Project>
+      <Name>Mono.Data.Sqlite.Test.Silverlight</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />

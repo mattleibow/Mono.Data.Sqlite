@@ -46,10 +46,16 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="mscorlib" />
-    <Reference Include="NUnitLite">
-      <HintPath>..\..\Mono.Data.Sqlite.Orm\Libraries\NUnitLite.dll</HintPath>
+    <Reference Include="Community.CsharpSqlite.Silverlight">
+      <HintPath>..\..\Libraries\Community.CsharpSqlite.Silverlight.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.Silverlight.Testing">
+      <HintPath>..\..\Libraries\Microsoft.Silverlight.Testing.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight">
+      <HintPath>..\..\Libraries\Microsoft.VisualStudio.QualityTools.UnitTesting.Silverlight.dll</HintPath>
+    </Reference>
+    <Reference Include="mscorlib" />
     <Reference Include="System.Windows" />
     <Reference Include="system" />
     <Reference Include="System.Core">
@@ -60,6 +66,10 @@
     <Reference Include="System.Windows.Browser" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\System.Transactions\Test\ExceptionAssert.cs">
+      <Link>ExceptionAssert.cs</Link>
+    </Compile>
+    <Compile Include="LocalFolder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SqliteCommandUnitTests.cs" />
     <Compile Include="SqliteConnectionTest.cs" />
@@ -69,19 +79,15 @@
     <Compile Include="SqliteTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Libraries\csharp-sqlite\Community.CsharpSqlite.Silverlight\Community.CsharpSqlite.Silverlight.csproj">
-      <Project>{a3ae849b-b668-4bc9-a75f-6e9b0a8f6779}</Project>
-      <Name>Community.CsharpSqlite.Silverlight</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mono.Data.Sqlite\Mono.Data.Sqlite.Silverlight.csproj">
+    <ProjectReference Include="..\Mono.Data.Sqlite.Silverlight.csproj">
       <Project>{24cb6471-46c0-4456-99bf-472d550eb30a}</Project>
       <Name>Mono.Data.Sqlite.Silverlight</Name>
     </ProjectReference>
-    <ProjectReference Include="..\System.Data\System.Data.csproj">
-      <Project>{28f2ef9e-4ae9-4041-8dd7-e5e203560745}</Project>
-      <Name>System.Data</Name>
+    <ProjectReference Include="..\..\System.Data\System.Data.Silverlight.csproj">
+      <Project>{bfae3d32-98ad-49ab-be36-4fd51631c0b1}</Project>
+      <Name>System.Data.Silverlight</Name>
     </ProjectReference>
-    <ProjectReference Include="..\System.Transactions\System.Transactions.csproj">
+    <ProjectReference Include="..\..\System.Transactions\System.Transactions.csproj">
       <Project>{e706726a-a6b2-42f1-8502-c0f3ac04b0d5}</Project>
       <Name>System.Transactions</Name>
     </ProjectReference>

@@ -8,14 +8,16 @@ using System.Data;
 using System.IO;
 using System.Text;
 using Mono.Data.Sqlite;
+
+#if SILVERLIGHT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using TestFixtureAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestClassAttribute;
-using SetUpAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestInitializeAttribute;
-using TestAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestMethodAttribute;
+#endif
 
 namespace MonoTests.Mono.Data.Sqlite
 {
-    [TestFixture]
+    [TestClass]
     public class SqliteExceptionUnitTests
     {
         readonly static string dbRootPath = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
@@ -27,7 +29,7 @@ namespace MonoTests.Mono.Data.Sqlite
         {
         }
 
-        [Test]
+        [TestMethod]
         public void WrongSyntax()
         {
             SqliteCommand insertCmd = new SqliteCommand("INSERT INTO t1 VALUES (,')", _conn);

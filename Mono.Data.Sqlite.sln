@@ -1,10 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Data.Sqlite.Metro", "Mono.Data.Sqlite.Portable\Mono.Data.Sqlite.Metro.csproj", "{E0644C82-1C4F-4C7D-80C3-69439D7A7799}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Data.Sqlite.Metro.Tests", "Mono.Data.Sqlite.Metro.Tests\Mono.Data.Sqlite.Metro.Tests.csproj", "{F8CBF723-174C-49DC-98ED-8947597621D4}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit Tests", "Unit Tests", "{2F30D776-D8AA-43AF-BBA0-5C061666D1D7}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Silverlight", "Silverlight", "{CC5C321F-717F-4A86-91AF-7821708C5812}"
@@ -16,12 +12,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit Tests", "Unit Tests", "{500D368B-B610-4CFF-B05E-8AE7DBB37FF6}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Unit Tests", "Unit Tests", "{48EE8CA5-0674-47A2-838E-2DBCECEB0693}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Data.Sqlite.Silverlight", "Mono.Data.Sqlite\Mono.Data.Sqlite.Silverlight.csproj", "{24CB6471-46C0-4456-99BF-472D550EB30A}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Data.Sqlite.Test.Silverlight", "Mono.Data.Sqlite.Test.Silverlight\Mono.Data.Sqlite.Test.Silverlight.csproj", "{A3FE7C6E-8B59-4B06-A221-F45831D0E3A2}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestRunner.Silverlight", "TestRunner.Silverlight\TestRunner.Silverlight.csproj", "{2E050EFF-0E23-4B0D-B322-24EAAD7C90DD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Transactions.Test.Metro", "System.Transactions\Test\System.Transactions.Test.Metro.csproj", "{EBAA0901-6AAE-4833-B69A-813C65ACA010}"
 EndProject
@@ -38,6 +28,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Data.Test.Silverlight", "System.Data\Test\System.Data.Test.Silverlight.csproj", "{602B2163-C4A3-459B-954A-147922D39CC5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "System.Data.Silverlight", "System.Data\System.Data.Silverlight.csproj", "{BFAE3D32-98AD-49AB-BE36-4FD51631C0B1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Data.Sqlite.Metro", "Mono.Data.Sqlite\Mono.Data.Sqlite.Metro.csproj", "{E0644C82-1C4F-4C7D-80C3-69439D7A7799}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Data.Sqlite.Test.Metro", "Mono.Data.Sqlite\Test\Mono.Data.Sqlite.Test.Metro.csproj", "{F8CBF723-174C-49DC-98ED-8947597621D4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Data.Sqlite.Silverlight", "Mono.Data.Sqlite\Mono.Data.Sqlite.Silverlight.csproj", "{24CB6471-46C0-4456-99BF-472D550EB30A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mono.Data.Sqlite.Test.Silverlight", "Mono.Data.Sqlite\Test\Mono.Data.Sqlite.Test.Silverlight.csproj", "{A3FE7C6E-8B59-4B06-A221-F45831D0E3A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -95,16 +93,6 @@ Global
 		{28F2EF9E-4AE9-4041-8DD7-E5E203560745}.Release|Any CPU.Build.0 = Release|Any CPU
 		{28F2EF9E-4AE9-4041-8DD7-E5E203560745}.Release|x64.ActiveCfg = Release|Any CPU
 		{28F2EF9E-4AE9-4041-8DD7-E5E203560745}.Release|x86.ActiveCfg = Release|Any CPU
-		{2E050EFF-0E23-4B0D-B322-24EAAD7C90DD}.Debug|ARM.ActiveCfg = Debug|Any CPU
-		{2E050EFF-0E23-4B0D-B322-24EAAD7C90DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2E050EFF-0E23-4B0D-B322-24EAAD7C90DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2E050EFF-0E23-4B0D-B322-24EAAD7C90DD}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{2E050EFF-0E23-4B0D-B322-24EAAD7C90DD}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{2E050EFF-0E23-4B0D-B322-24EAAD7C90DD}.Release|ARM.ActiveCfg = Release|Any CPU
-		{2E050EFF-0E23-4B0D-B322-24EAAD7C90DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2E050EFF-0E23-4B0D-B322-24EAAD7C90DD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2E050EFF-0E23-4B0D-B322-24EAAD7C90DD}.Release|x64.ActiveCfg = Release|Any CPU
-		{2E050EFF-0E23-4B0D-B322-24EAAD7C90DD}.Release|x86.ActiveCfg = Release|Any CPU
 		{44A50CEB-680B-4CC3-9856-7D8D85A160E1}.Debug|ARM.ActiveCfg = Debug|Any CPU
 		{44A50CEB-680B-4CC3-9856-7D8D85A160E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{44A50CEB-680B-4CC3-9856-7D8D85A160E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
@@ -231,7 +219,6 @@ Global
 		{013AC5EB-3460-44D1-977A-888067D8EC50} = {500D368B-B610-4CFF-B05E-8AE7DBB37FF6}
 		{24CB6471-46C0-4456-99BF-472D550EB30A} = {CC5C321F-717F-4A86-91AF-7821708C5812}
 		{28F2EF9E-4AE9-4041-8DD7-E5E203560745} = {21935BC1-3D35-4200-96EB-182C12F3C673}
-		{2E050EFF-0E23-4B0D-B322-24EAAD7C90DD} = {2F30D776-D8AA-43AF-BBA0-5C061666D1D7}
 		{2F30D776-D8AA-43AF-BBA0-5C061666D1D7} = {CC5C321F-717F-4A86-91AF-7821708C5812}
 		{44A50CEB-680B-4CC3-9856-7D8D85A160E1} = {500D368B-B610-4CFF-B05E-8AE7DBB37FF6}
 		{48EE8CA5-0674-47A2-838E-2DBCECEB0693} = {448DE826-0F52-47E7-B778-85C80CE5EA8A}

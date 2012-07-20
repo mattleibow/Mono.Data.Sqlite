@@ -9,15 +9,17 @@ using System.IO;
 using System.Text;
 using System.Linq;
 using Mono.Data.Sqlite;
+
+#if SILVERLIGHT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
-using TestFixtureAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestClassAttribute;
-using SetUpAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.ClassInitializeAttribute;
-using TestAttribute = Microsoft.VisualStudio.TestPlatform.UnitTestFramework.TestMethodAttribute;
+#endif
 
 namespace MonoTests.Mono.Data.Sqlite
 {
 
-    [TestFixture]
+    [TestClass]
     public class SqliteCommandUnitTests
     {
         readonly static string dbRootPath = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
@@ -31,10 +33,10 @@ namespace MonoTests.Mono.Data.Sqlite
         {
         }
 
-        [SetUp]
+        [ClassInitialize]
         static public void Create(TestContext context)
         {
-            System.Diagnostics.Debug.WriteLine("E Y A!");
+#if NETFX_CORE
             try
             {
                 try
@@ -58,34 +60,36 @@ namespace MonoTests.Mono.Data.Sqlite
             {
                 throw e;
             }
+#else
+            using (var store = System.IO.IsolatedStorage.IsolatedStorageFile.GetUserStoreForApplication())
+            {
+                store.Remove();
+            }
+#endif
 
             try
             {
                 using (SqliteCommand createCommand = new SqliteCommand("CREATE TABLE t1(t  TEXT,  f FLOAT, i INTEGER, b TEXT);", _conn))
                 using (SqliteCommand insertCommand = new SqliteCommand("INSERT INTO t1  (t, f, i, b ) VALUES('" + stringvalue + "',123,123,'123')", _conn))
                 {
-                    System.Diagnostics.Debug.WriteLine("Before");
                     _conn.Open();
-                    System.Diagnostics.Debug.WriteLine("AFTER");
                     createCommand.ExecuteNonQuery();
-                    System.Diagnostics.Debug.WriteLine("EXEC");
                     insertCommand.ExecuteNonQuery();
                 }
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine(e);
-                //Console.WriteLine(e);
+                //System.Diagnostics.Debug.WriteLine(e);
                 throw new AssertFailedException("Create table failed", e);
             }
             finally
             {
                 _conn.Close();
-                System.Diagnostics.Debug.WriteLine("FINISHED SETUP");
             }
         }
 
-        [Test]
+        [TestMethod]
         public void Select()
         {
             System.Diagnostics.Debug.WriteLine(_connectionString);
@@ -108,7 +112,7 @@ namespace MonoTests.Mono.Data.Sqlite
             }
         }
 
-        [Test]
+        [TestMethod]
         public void Delete()
         {
             using (_conn)
@@ -123,7 +127,7 @@ namespace MonoTests.Mono.Data.Sqlite
             }
         }
 
-        [Test]
+        [TestMethod]
         public void Insert()
         {
             using (_conn)
@@ -135,7 +139,7 @@ namespace MonoTests.Mono.Data.Sqlite
             }
         }
 
-        [Test]
+        [TestMethod]
         public void Update()
         {
             using (_conn)
@@ -149,7 +153,7 @@ namespace MonoTests.Mono.Data.Sqlite
         }
 
 
-        [Test]
+        [TestMethod]
         public void ScalarReturn()
         {
             // This should return the 1 line that got inserted in CreateTable() Test
@@ -161,7 +165,7 @@ namespace MonoTests.Mono.Data.Sqlite
             }
         }
 
-        [Test]
+        [TestMethod]
         public void InsertWithTransaction()
         {
             _conn.Open();
@@ -188,7 +192,7 @@ namespace MonoTests.Mono.Data.Sqlite
             }
         }
 
-        [Test]
+        [TestMethod]
         public void InsertWithFailingTransaction()
         {
             _conn.Open();

@@ -37,7 +37,8 @@ using System.Security;
 // by using the '*' as shown below:
 #if !MOBILE
   #if NET_4_0
-    [assembly: AssemblyVersion("4.0.0.0")]
+    [assembly: AssemblyVersion("2.0.0.0")]
+    // TODO :: [assembly: AssemblyVersion("4.0.0.0")]
   #else // NET_4_0
     [assembly: AssemblyVersion("2.0.0.0")]
   #endif // NET_4_0
@@ -49,6 +50,6 @@ using System.Security;
 #endif
 
 #if !SILVERLIGHT
-// todo :: [assembly: AssemblyDelaySign (true)]
-[assembly: AssemblyKeyFile ("../mono.snk")]
+[assembly: AssemblyDelaySign (true)]
+// [assembly: AssemblyKeyFile ("../mono.snk")]
 #endif
