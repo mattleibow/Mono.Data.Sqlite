@@ -31,14 +31,18 @@ using System;
 using System.Data;
 using System.Data.Common;
 
-using NUnit.Framework;
+#if SILVERLIGHT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#endif
 
 namespace MonoTests.System.Data.Common
 {
-	[TestFixture]
+	[TestClass]
 	public class DbTransactionTest
 	{
-		[Test] // bug #325397
+		[TestMethod] // bug #325397
 		public void DisposeTest ()
 		{
 			MockTransaction trans = new MockTransaction ();

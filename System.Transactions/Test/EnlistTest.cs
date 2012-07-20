@@ -9,17 +9,22 @@
 
 using System;
 using System.Transactions;
-using NUnit.Framework;
+
+#if SILVERLIGHT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#endif
 
 namespace MonoTests.System.Transactions {
 
-	[TestFixture]
+	[TestClass]
 	public class EnlistTest {
 
 		#region Vol1_Dur0
 
 		/* Single volatile resource, SPC happens */
-		[Test]
+		[TestMethod]
 		public void Vol1_Dur0 ()
 		{
 			IntResourceManager irm = new IntResourceManager (1);
@@ -32,7 +37,7 @@ namespace MonoTests.System.Transactions {
 			irm.CheckSPC ("irm");
 		}
 
-		[Test]
+		[TestMethod]
 		public void Vol1_Dur0_2PC ()
 		{
 			IntResourceManager irm = new IntResourceManager (1);
@@ -46,7 +51,7 @@ namespace MonoTests.System.Transactions {
 		}
 
 		/* Single volatile resource, SPC happens */
-		[Test]
+		[TestMethod]
 		public void Vol1_Dur0_Fail1 ()
 		{
 			IntResourceManager irm = new IntResourceManager (1);
@@ -61,34 +66,42 @@ namespace MonoTests.System.Transactions {
 			irm.Check ( 0, 0, 0, 1, 0, "irm" );
 		}
 
-		[Test]
-		[ExpectedException ( typeof ( TransactionAbortedException ) )]
+		[TestMethod]
 		public void Vol1_Dur0_Fail2 ()
 		{
-			IntResourceManager irm = new IntResourceManager (1);
+		    ExceptionAssert.Throws<TransactionAbortedException>(
+		        delegate
+		            {
+		                IntResourceManager irm = new IntResourceManager(1);
 
-			irm.FailPrepare = true;
+		                irm.FailPrepare = true;
 
-			using (TransactionScope scope = new TransactionScope ()) {
-				irm.Value = 2;
+		                using (TransactionScope scope = new TransactionScope())
+		                {
+		                    irm.Value = 2;
 
-				scope.Complete ();
-			}
+		                    scope.Complete();
+		                }
+		            });
 		}
 
-		[Test]
-		[ExpectedException ( typeof ( TransactionAbortedException ) )]
+		[TestMethod]
 		public void Vol1_Dur0_Fail3 ()
 		{
-			IntResourceManager irm = new IntResourceManager (1);
-			irm.UseSingle = true;
-			irm.FailSPC = true;
+		    ExceptionAssert.Throws<TransactionAbortedException>(
+		        delegate
+		            {
+		                IntResourceManager irm = new IntResourceManager(1);
+		                irm.UseSingle = true;
+		                irm.FailSPC = true;
 
-			using (TransactionScope scope = new TransactionScope ()) {
-				irm.Value = 2;
+		                using (TransactionScope scope = new TransactionScope())
+		                {
+		                    irm.Value = 2;
 
-				scope.Complete ();
-			}
+		                    scope.Complete();
+		                }
+		            });
 		}
 
 		#endregion
@@ -96,7 +109,7 @@ namespace MonoTests.System.Transactions {
 		#region Vol2_Dur0
 
 		/* >1 volatile, 2PC */
-		[Test]
+		[TestMethod]
 		public void Vol2_Dur0_SPC ()
 		{
 			IntResourceManager irm = new IntResourceManager (1);
@@ -118,7 +131,7 @@ namespace MonoTests.System.Transactions {
 
 		#region Vol0_Dur1
 		/* 1 durable */
-		[Test]
+		[TestMethod]
 		public void Vol0_Dur1 ()
 		{
 			IntResourceManager irm = new IntResourceManager (1);
@@ -137,8 +150,8 @@ namespace MonoTests.System.Transactions {
 		/* We support only 1 durable with 2PC
 		 * On .net, this becomes a distributed transaction
 		 */ 
-		[Test]
-		[Category ("NotWorking")]
+		[TestMethod]
+		[TestCategory ("NotWorking")]
 		public void Vol0_Dur1_2PC ()
 		{
 			IntResourceManager irm = new IntResourceManager (1);
@@ -155,7 +168,7 @@ namespace MonoTests.System.Transactions {
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void Vol0_Dur1_Fail ()
 		{
 			IntResourceManager irm = new IntResourceManager ( 1 );
@@ -184,7 +197,7 @@ namespace MonoTests.System.Transactions {
 
 		#region Vol2_Dur1
 		/* >1vol + 1 durable */
-		[Test]
+		[TestMethod]
 		public void Vol2_Dur1 ()
 		{
 			IntResourceManager [] irm = new IntResourceManager [4];
@@ -216,7 +229,7 @@ namespace MonoTests.System.Transactions {
 		/* >1vol + 1 durable
 		 * Durable fails SPC
 		 */
-		[Test]
+		[TestMethod]
 		public void Vol2_Dur1_Fail1 ()
 		{
 			IntResourceManager [] irm = new IntResourceManager [4];
@@ -254,8 +267,9 @@ namespace MonoTests.System.Transactions {
 		/* >1vol + 1 durable 
 		 * durable doesn't complete SPC
 		 */
-		[Test]
-		[Ignore ( "Correct this test, it should throw TimeOutException or something" )]
+        // todo Correct this test, it should throw TimeOutException or something
+		[TestMethod]
+		[Ignore (  )]
 		public void Vol2_Dur1_Fail2 ()
 		{
 			TransactionAbortedException exception = null;
@@ -299,8 +313,9 @@ namespace MonoTests.System.Transactions {
 		}
 
 		/* Same as Vol2_Dur1_Fail2, but with a volatile manager timming out */
-		[Test]
-		[Ignore ( "Correct this test, it should throw TimeOutException or something" )]
+        // todo Correct this test, it should throw TimeOutException or something
+        [TestMethod]
+		[Ignore (  )]
 		public void Vol2_Dur1_Fail2b()
 		{
 			TransactionAbortedException exception = null;
@@ -349,7 +364,7 @@ namespace MonoTests.System.Transactions {
 		/* >1vol + 1 durable
 		 * Volatile fails Prepare
 		 */
-		[Test]
+		[TestMethod]
 		public void Vol2_Dur1_Fail3 ()
 		{
 			IntResourceManager [] irm = new IntResourceManager [4];
@@ -393,7 +408,7 @@ namespace MonoTests.System.Transactions {
 			Assert.Fail ( "Expected TransactionAbortedException" );
 		}
 
-		[Test]
+		[TestMethod]
 		public void Vol2_Dur1_Fail4 ()
 		{
 			IntResourceManager [] irm = new IntResourceManager [2];
@@ -429,7 +444,7 @@ namespace MonoTests.System.Transactions {
 			Assert.Fail ( "Expected TransactionAbortedException" );
 		}
 
-		[Test]
+		[TestMethod]
 		public void Vol2_Dur1_Fail5 ()
 		{
 			CommittableTransaction ct = new CommittableTransaction ();
@@ -485,8 +500,8 @@ namespace MonoTests.System.Transactions {
 		 * > 1 durable, On .net this becomes a distributed transaction
 		 * We don't support this in mono yet. 
 		 */
-		[Test]
-		[Category ("NotWorking")]
+		[TestMethod]
+		[TestCategory ("NotWorking")]
 		public void Vol0_Dur2 ()
 		{
 			IntResourceManager [] irm = new IntResourceManager [2];
@@ -507,7 +522,7 @@ namespace MonoTests.System.Transactions {
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void TransactionDispose ()
 		{
 			CommittableTransaction ct = new CommittableTransaction ();
@@ -518,7 +533,7 @@ namespace MonoTests.System.Transactions {
 			irm.Check  (0, 0, 0, 0, "Dispose transaction");
 		}
 
-		[Test]
+		[TestMethod]
 		public void TransactionDispose2 ()
 		{
 			CommittableTransaction ct = new CommittableTransaction ();
@@ -537,7 +552,7 @@ namespace MonoTests.System.Transactions {
 			Assert.AreEqual (1, irm.Value);
 		}
 
-		[Test]
+		[TestMethod]
 		public void TransactionDispose3 ()
 		{
 			CommittableTransaction ct = new CommittableTransaction ();
@@ -556,7 +571,7 @@ namespace MonoTests.System.Transactions {
 			Assert.AreEqual (5, irm.Value);
 		}
 
-		[Test]
+		[TestMethod]
 		public void TransactionCompleted_Committed ()
 		{
 			bool called = false;
@@ -570,7 +585,7 @@ namespace MonoTests.System.Transactions {
 			Assert.IsTrue (called, "TransactionCompleted event handler not called!");
 		}
 
-		[Test]
+		[TestMethod]
 		public void TransactionCompleted_Rollback ()
 		{
 			bool called = false;

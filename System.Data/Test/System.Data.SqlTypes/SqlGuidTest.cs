@@ -32,13 +32,18 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using NUnit.Framework;
 using System;
 using System.Data.SqlTypes;
 
+#if SILVERLIGHT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#endif
+
 namespace MonoTests.System.Data.SqlTypes
 {
-	[TestFixture]
+	[TestClass]
         public class SqlGuidTest {
 
 		// 00000a01-0000-0000-0000-000000000000
@@ -51,7 +56,7 @@ namespace MonoTests.System.Data.SqlTypes
 		// 0000fafa-0000-0000-0000-000000000000
 		private SqlGuid Test4;
         	
-		[SetUp]
+		[TestInitialize]
                 public void GetReady() 
                 {
                 	byte [] b1 = new byte [16];
@@ -75,7 +80,7 @@ namespace MonoTests.System.Data.SqlTypes
                 }
 
                 // Test constructor
-		[Test]
+		[TestMethod]
                 public void Create()
                 {
 			// SqlGuid (Byte[])
@@ -102,14 +107,14 @@ namespace MonoTests.System.Data.SqlTypes
                 }
 
                 // Test public fields
-		[Test]
+		[TestMethod]
                 public void PublicFields()
                 {
                         Assert.IsTrue (SqlGuid.Null.IsNull, "#B01");
                 }
 
                 // Test properties
-		[Test]
+		[TestMethod]
                 public void Properties()
                 {
                 	Guid ResultGuid = new Guid ("00000f64-0000-0000-0000-000000000000");		       
@@ -119,7 +124,7 @@ namespace MonoTests.System.Data.SqlTypes
                 }
 
                 // PUBLIC METHODS
-		[Test]
+		[TestMethod]
                 public void CompareTo()
                 {
 			String TestString = "This is a test string";
@@ -141,7 +146,7 @@ namespace MonoTests.System.Data.SqlTypes
                         }
                 }
 
-		[Test]
+		[TestMethod]
                 public void EqualsMethods()
                 {
                         Assert.IsTrue (!Test1.Equals (Test2), "#E01");
@@ -154,7 +159,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.IsTrue (!SqlGuid.Equals (Test1, Test2).Value, "#E06");
                 }
 
-		[Test]
+		[TestMethod]
                 public void GetHashCodeTest()
                 {
                         Assert.AreEqual (Test1.GetHashCode (), Test1.GetHashCode (), "#F01");
@@ -162,14 +167,14 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.AreEqual (Test3.GetHashCode (), Test2.GetHashCode (), "#F02");
                 }
 
-		[Test]
+		[TestMethod]
                 public void GetTypeTest()
                 {
                         Assert.AreEqual ("System.Data.SqlTypes.SqlGuid", Test1.GetType ().ToString (), "#G01");
                         Assert.AreEqual ("System.Guid", Test3.Value.GetType ().ToString (), "#G02");
                 }
 
-		[Test]
+		[TestMethod]
                 public void Greaters()
                 {
                         // GreateThan ()
@@ -182,7 +187,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.IsTrue (SqlGuid.GreaterThanOrEqual (Test2, Test3).Value, "#H06");
                 }
 
-		[Test]
+		[TestMethod]
                 public void Lessers()
                 {
                         // LessThan()
@@ -197,7 +202,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.IsTrue (SqlGuid.LessThanOrEqual (Test4, SqlGuid.Null).IsNull, "#I07");
                 }
 
-		[Test]
+		[TestMethod]
                 public void NotEquals()
                 {
                         Assert.IsTrue (SqlGuid.NotEquals (Test1, Test2).Value, "#J01");
@@ -207,7 +212,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.IsTrue (SqlGuid.NotEquals (SqlGuid.Null, Test2).IsNull, "#J05");
                 }
 
-		[Test]
+		[TestMethod]
                 public void Parse()
                 {
                         try {
@@ -234,7 +239,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.AreEqual(new Guid("87654321-0000-0000-0000-000000000000"), SqlGuid.Parse ("87654321-0000-0000-0000-000000000000").Value, "#K07");
                 }
 
-		[Test]
+		[TestMethod]
                 public void Conversions()
                 {
 			// ToByteArray ()
@@ -259,7 +264,7 @@ namespace MonoTests.System.Data.SqlTypes
 
                 // OPERATORS
 
-		[Test]
+		[TestMethod]
                 public void ThanOrEqualOperators()
                 {
                         // == -operator
@@ -297,7 +302,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.IsTrue ((Test1 <= SqlGuid.Null).IsNull, "#M23");
                 }
 
-		[Test]
+		[TestMethod]
 		public void SqlBinaryToSqlGuid()
 		{
 			byte [] b = new byte [16];
@@ -308,14 +313,14 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (new Guid("0000c864-0000-0000-0000-000000000000"), ((SqlGuid)TestBinary).Value, "#N01");
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlGuidToGuid()
 		{
 			Assert.AreEqual (new Guid("00000a01-0000-0000-0000-000000000000"), (Guid)Test1, "#O01");
 			Assert.AreEqual (new Guid("00000f64-0000-0000-0000-000000000000"), (Guid)Test2, "#O02");
 		}		
 
-		[Test]
+		[TestMethod]
                 public void SqlStringToSqlGuid()
                 {
                         SqlString TestString = new SqlString ("Test string");
@@ -331,7 +336,7 @@ namespace MonoTests.System.Data.SqlTypes
                         }
                 }
 		
-		[Test]
+		[TestMethod]
 		public void GuidToSqlGuid()
 		{
 			Guid TestGuid = new Guid("0000c864-0000-0000-0000-000007650000");

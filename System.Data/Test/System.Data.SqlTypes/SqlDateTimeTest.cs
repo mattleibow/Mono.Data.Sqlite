@@ -32,15 +32,20 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using NUnit.Framework;
 using System;
 using System.Data.SqlTypes;
 using System.Threading;
 using System.Globalization;
 
+#if SILVERLIGHT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#endif
+
 namespace MonoTests.System.Data.SqlTypes
 {
-	[TestFixture]
+	[TestClass]
         public class SqlDateTimeTest {
 
 	        private long[] myTicks = {
@@ -57,17 +62,17 @@ namespace MonoTests.System.Data.SqlTypes
 		private SqlDateTime Test2;
 		private SqlDateTime Test3;
 
-		[SetUp]
+		[TestInitialize]
                 public void GetReady() 
 		{
-			Thread.CurrentThread.CurrentCulture = new CultureInfo ("en-US");
+            Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = "en-US";
 			Test1 = new SqlDateTime (2002, 10, 19, 9, 40, 0);
 			Test2 = new SqlDateTime (2003, 11, 20,10, 50, 1);
 			Test3 = new SqlDateTime (2003, 11, 20, 10, 50, 1);
 		}
 
                 // Test constructor
-		[Test]
+		[TestMethod]
                 public void Create()
                 {
 			// SqlDateTime (DateTime)
@@ -118,7 +123,7 @@ namespace MonoTests.System.Data.SqlTypes
                 }
 
                 // Test public fields
-		[Test]
+		[TestMethod]
                 public void PublicFields()
                 {
 			// MaxValue
@@ -151,7 +156,7 @@ namespace MonoTests.System.Data.SqlTypes
                 }
 
                 // Test properties
-                [Test]
+                [TestMethod]
 		public void Properties()
                 {
 			// DayTicks
@@ -185,7 +190,7 @@ namespace MonoTests.System.Data.SqlTypes
 
                 // PUBLIC METHODS
 
-		[Test]		
+		[TestMethod]		
                 public void CompareTo()
                 {
                         SqlString TestString = new SqlString ("This is a test");
@@ -203,7 +208,7 @@ namespace MonoTests.System.Data.SqlTypes
                         }
                 }
 
-		[Test]
+		[TestMethod]
                 public void EqualsMethods()
                 {
                         Assert.IsTrue (!Test1.Equals (Test2), "#E01");
@@ -215,7 +220,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.IsTrue (!SqlDateTime.Equals (Test1, Test2).Value, "#E06");
                 }
 
-		[Test]
+		[TestMethod]
                 public void GetHashCodeTest()
                 {
                         // FIXME: Better way to test HashCode
@@ -223,14 +228,14 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.IsTrue (Test2.GetHashCode () != Test1.GetHashCode (), "#F02");
                 }
 
-		[Test]
+		[TestMethod]
                 public void GetTypeTest()
                 {
                         Assert.AreEqual ("System.Data.SqlTypes.SqlDateTime", Test1.GetType ().ToString (), "#G01");
                         Assert.AreEqual ("System.DateTime", Test1.Value.GetType ().ToString (), "#G02");
                 }
 
-		[Test]
+		[TestMethod]
                 public void Greaters()
                 {
                         // GreateThan ()
@@ -244,7 +249,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.IsTrue (SqlDateTime.GreaterThanOrEqual (Test2, Test3).Value, "#H06");
                 }
 
-		[Test]
+		[TestMethod]
                 public void Lessers()
                 {
                         // LessThan()
@@ -259,7 +264,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.IsTrue (SqlDateTime.LessThanOrEqual (Test1, SqlDateTime.Null).IsNull, "#I07");
                 }
 
-		[Test]
+		[TestMethod]
                 public void NotEquals()
                 {
                         Assert.IsTrue (SqlDateTime.NotEquals (Test1, Test2).Value, "#J01");
@@ -268,7 +273,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.IsTrue (SqlDateTime.NotEquals (SqlDateTime.Null, Test2).IsNull, "#J04");
                 }
 
-		[Test]
+		[TestMethod]
                 public void Parse()
                 {
                         try {
@@ -307,7 +312,7 @@ namespace MonoTests.System.Data.SqlTypes
 			t1 = SqlDateTime.Parse ("02/25/2002 05:25:13");
 			Assert.AreEqual (myTicks[4], t1.Value.Ticks, "#K12");
                         t1 = SqlDateTime.Parse ("2002-02-25 04:25:13Z");
-                        t1 = TimeZone.CurrentTimeZone.ToUniversalTime(t1.Value);
+		                t1 = t1.Value.ToUniversalTime();
 			Assert.AreEqual (2002, t1.Value.Year, "#K13");
 			Assert.AreEqual (02, t1.Value.Month, "#K14");
 			Assert.AreEqual (25, t1.Value.Day, "#K15");
@@ -324,7 +329,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.AreEqual (t2.Value.Ticks, t1.Value.Ticks, "#K20");
 
 			t1 = SqlDateTime.Parse ("Mon, 25 Feb 2002 04:25:13 GMT");
-			t1 = TimeZone.CurrentTimeZone.ToUniversalTime(t1.Value);
+            t1 = t1.Value.ToUniversalTime();
 			Assert.AreEqual (2002, t1.Value.Year, "#K21");
 			Assert.AreEqual (02, t1.Value.Month, "#K22");
 			Assert.AreEqual (25, t1.Value.Day, "#K23");
@@ -357,8 +362,9 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (t2.Value.Ticks, t1.Value.Ticks, "#K32");
                 }
 
-		[Test]
-		[Ignore ("This test is locale dependent.")]
+        // todo "This test is locale dependent."
+        [TestMethod]
+		[Ignore ()]
 		public void ToStringTest()
 		{
 			//
@@ -374,7 +380,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
                 // OPERATORS
-		[Test]
+		[TestMethod]
                 public void ArithmeticOperators()
                 {
 			TimeSpan TestSpan = new TimeSpan (20, 1, 20, 20);
@@ -413,7 +419,7 @@ namespace MonoTests.System.Data.SqlTypes
                         }
                 }
 
-		[Test]
+		[TestMethod]
                 public void ThanOrEqualOperators()
                 {
                         // == -operator
@@ -450,7 +456,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.IsTrue ((Test1 <= SqlDateTime.Null).IsNull, "#N21");
                 }
 
-		[Test]
+		[TestMethod]
 		public void SqlDateTimeToDateTime()
 		{
 			Assert.AreEqual (2002, ((DateTime)Test1).Year, "O01");
@@ -462,7 +468,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.AreEqual (0, ((DateTime)Test1).Second, "O08");
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlStringToSqlDateTime()
 		{
 
@@ -484,7 +490,7 @@ namespace MonoTests.System.Data.SqlTypes
 			t1 = (SqlDateTime) new SqlString ("02/25/2002 05:25:13");
 			Assert.AreEqual (myTicks[4], t1.Value.Ticks, "#P07");
 			t1 = (SqlDateTime) new SqlString ("2002-02-25 04:25:13Z");
-			t1 = TimeZone.CurrentTimeZone.ToUniversalTime(t1.Value);
+			t1 = t1.Value.ToUniversalTime();
 			Assert.AreEqual (2002, t1.Value.Year, "#P08");
 			Assert.AreEqual (02, t1.Value.Month, "#P09");
 			Assert.AreEqual (25, t1.Value.Day, "#P10");
@@ -501,7 +507,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (t2.Value.Ticks, t1.Value.Ticks, "#P15");
 
 			t1 = (SqlDateTime) new SqlString ("Mon, 25 Feb 2002 04:25:13 GMT");
-			t1 = TimeZone.CurrentTimeZone.ToUniversalTime(t1.Value);
+            t1 = t1.Value.ToUniversalTime();
 			Assert.AreEqual (2002, t1.Value.Year, "#P16");
 			Assert.AreEqual (02, t1.Value.Month, "#P17");
 			Assert.AreEqual (25, t1.Value.Day, "#P18");
@@ -534,7 +540,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (t2.Value.Ticks, t1.Value.Ticks, "#P27");
 		}
 
-		[Test]
+		[TestMethod]
 		public void DateTimeToSqlDateTime()
 		{
 			DateTime DateTimeTest = new DateTime (2002, 10, 19, 11, 53, 4);
@@ -547,7 +553,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (4, Result.Value.Second, "#Q06");
 		}
 
-		[Test]
+		[TestMethod]
 		public void TicksRoundTrip ()
 		{
 			SqlDateTime d1 = new SqlDateTime (2007, 05, 04, 18, 02, 40, 398.25);
@@ -562,7 +568,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (d1, d2, "#R07");
 		}
 
-		[Test]
+		[TestMethod]
 		public void EffingBilisecond ()
 		{
 			SqlDateTime d1 = new SqlDateTime (2007, 05, 04, 18, 02, 40, 398252);

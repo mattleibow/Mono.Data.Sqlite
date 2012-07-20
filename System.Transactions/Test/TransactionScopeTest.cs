@@ -9,15 +9,20 @@
 //
 
 using System;
-using NUnit.Framework;
 using System.Transactions;
+
+#if SILVERLIGHT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#endif
 
 namespace MonoTests.System.Transactions
 {
-	[TestFixture]
+    [TestClass]
 	public class TransactionScopeTest
-	{
-		[Test]
+    {
+		[TestMethod]
 		public void TransactionScopeCommit ()
 		{
 			Assert.IsNull (Transaction.Current, "Ambient transaction exists (before)");
@@ -30,7 +35,7 @@ namespace MonoTests.System.Transactions
 			Assert.IsNull (Transaction.Current, "Ambient transaction exists (after)");
 		}
 
-		[Test]
+        [TestMethod]
 		public void TransactionScopeAbort ()
 		{
 			Assert.IsNull (Transaction.Current, "Ambient transaction exists");
@@ -47,39 +52,51 @@ namespace MonoTests.System.Transactions
 			Assert.IsNull (Transaction.Current, "Ambient transaction exists");
 		}
 
-		[Test]
-		[ExpectedException (typeof (InvalidOperationException))]
+        [TestMethod]
 		public void TransactionScopeCompleted1 ()
-		{
-			using (TransactionScope scope = new TransactionScope ()) {
-				scope.Complete ();
-				/* Can't access ambient transaction after scope.Complete */
-				TransactionStatus status = Transaction.Current.TransactionInformation.Status;
-			}
-		}
+        {
+            ExceptionAssert.Throws<InvalidOperationException>(
+                delegate
+                    {
+                        using (TransactionScope scope = new TransactionScope())
+                        {
+                            scope.Complete();
+                            /* Can't access ambient transaction after scope.Complete */
+                            TransactionStatus status = Transaction.Current.TransactionInformation.Status;
+                        }
+                    });
+        }
 
-		[Test]
-		[ExpectedException (typeof (InvalidOperationException))]
+        [TestMethod]
 		public void TransactionScopeCompleted2 ()
-		{
-			using (TransactionScope scope = new TransactionScope ()) {
-				scope.Complete ();
-				Transaction.Current = Transaction.Current;
-			}
+        {
+            ExceptionAssert.Throws<InvalidOperationException>(
+                delegate
+                {
+                    using (TransactionScope scope = new TransactionScope())
+                    {
+                        scope.Complete();
+                        Transaction.Current = Transaction.Current;
+                    }
+                });
 		}
 
-		[Test]
-		[ExpectedException (typeof (InvalidOperationException))]
+        [TestMethod]
 		public void TransactionScopeCompleted3 ()
-		{
-			using (TransactionScope scope = new TransactionScope ()) {
-				scope.Complete ();
-				scope.Complete ();
-			}
+        {
+            ExceptionAssert.Throws<InvalidOperationException>(
+                delegate
+                {
+                    using (TransactionScope scope = new TransactionScope())
+                    {
+                        scope.Complete();
+                        scope.Complete();
+                    }
+                });
 		}
 
 		#region NestedTransactionScope tests
-		[Test]
+		[TestMethod]
 		public void NestedTransactionScope1 ()
 		{
 			IntResourceManager irm = new IntResourceManager (1);
@@ -98,7 +115,7 @@ namespace MonoTests.System.Transactions
 			irm.Check ( 1, 1, 0, 0, "irm" );
 		}
 
-		[Test]
+		[TestMethod]
 		public void NestedTransactionScope2 ()
 		{
 			IntResourceManager irm = new IntResourceManager (1);
@@ -115,7 +132,7 @@ namespace MonoTests.System.Transactions
 			irm.Check ( 0, 0, 1, 0, "irm" );
 		}
 
-		[Test]
+		[TestMethod]
 		public void NestedTransactionScope3 ()
 		{
 			IntResourceManager irm = new IntResourceManager (1);
@@ -142,7 +159,7 @@ namespace MonoTests.System.Transactions
 			irm2.Check ( 1, 1, 0, 0, "irm2" );
 		}
 
-		[Test]
+		[TestMethod]
 		public void NestedTransactionScope4 ()
 		{
 			IntResourceManager irm = new IntResourceManager (1);
@@ -172,7 +189,7 @@ namespace MonoTests.System.Transactions
 			irm.Check ( 0, 0, 1, 0, "irm" );
 		}
 
-		[Test]
+		[TestMethod]
 		public void NestedTransactionScope5 ()
 		{
 			IntResourceManager irm = new IntResourceManager (1);
@@ -200,7 +217,7 @@ namespace MonoTests.System.Transactions
 			irm2.Check ( 0, 0, 1, 0, "irm2" );
 		}
 
-		[Test]
+		[TestMethod]
 		public void NestedTransactionScope6 ()
 		{
 			IntResourceManager irm = new IntResourceManager (1);
@@ -228,7 +245,7 @@ namespace MonoTests.System.Transactions
 			irm.Check ( 1, 1, 0, 0, "irm" );
 		}
 
-		[Test]
+		[TestMethod]
 		public void NestedTransactionScope7 ()
 		{
 			IntResourceManager irm = new IntResourceManager (1);
@@ -259,7 +276,7 @@ namespace MonoTests.System.Transactions
 			irm.Check ( 1, 1, 0, 0, "irm" );
 		}
 
-		[Test]
+		[TestMethod]
 		public void NestedTransactionScope8 ()
 		{
 			IntResourceManager irm = new IntResourceManager (1);
@@ -286,7 +303,7 @@ namespace MonoTests.System.Transactions
 			irm.Check ( 1, 1, 0, 0, "irm" );
 		}
 
-		[Test]
+		[TestMethod]
 		public void NestedTransactionScope8a ()
 		{
 			IntResourceManager irm = new IntResourceManager ( 1 );
@@ -311,7 +328,7 @@ namespace MonoTests.System.Transactions
 			irm.Check ( 0, 0, 0, 0, "irm" );
 		}
 
-		[Test]
+		[TestMethod]
 		public void NestedTransactionScope9 ()
 		{
 			IntResourceManager irm = new IntResourceManager (1);
@@ -347,36 +364,42 @@ namespace MonoTests.System.Transactions
 			irm.Check ( 2, 2, 0, 0, "irm" );
 		}
 
-		[Test]
-		[ExpectedException (typeof (TransactionAbortedException))]
+		[TestMethod]
 		public void NestedTransactionScope10 ()
-		{
-			IntResourceManager irm = new IntResourceManager (1);
-			bool failed = false;
+        {
+            ExceptionAssert.Throws<TransactionAbortedException>(
+                delegate
+                {
+                    IntResourceManager irm = new IntResourceManager(1);
+                    bool failed = false;
 
-			Assert.IsNull (Transaction.Current, "Ambient transaction exists (before)");
-			using (TransactionScope scope = new TransactionScope ()) {
-				irm.Value = 2;
+                    Assert.IsNull(Transaction.Current, "Ambient transaction exists (before)");
+                    using (TransactionScope scope = new TransactionScope())
+                    {
+                        irm.Value = 2;
 
-				using (TransactionScope scope2 = new TransactionScope ()) {
-					irm.Value = 4;
-					/* Not completing this, so the transaction will
-					 * get aborted 
-					scope2.Complete (); */
-				}
+                        using (TransactionScope scope2 = new TransactionScope())
+                        {
+                            irm.Value = 4;
+                            /* Not completing this, so the transaction will
+                             * get aborted 
+                            scope2.Complete (); */
+                        }
 
-				using (TransactionScope scope3 = new TransactionScope ()) {
-					/* Aborted transaction cannot be used for another
-					 * TransactionScope 
-					 */
-					//Assert.Fail ("Should not reach here.");
-					failed = true;
-				}
-			}
-			Assert.IsFalse ( failed, "Aborted Tx cannot be used for another TransactionScope" );
+                        using (TransactionScope scope3 = new TransactionScope())
+                        {
+                            /* Aborted transaction cannot be used for another
+                             * TransactionScope 
+                             */
+                            //Assert.Fail ("Should not reach here.");
+                            failed = true;
+                        }
+                    }
+                    Assert.IsFalse(failed, "Aborted Tx cannot be used for another TransactionScope");
+                });
 		}
 
-		[Test]
+		[TestMethod]
 		public void NestedTransactionScope12 ()
 		{
 			IntResourceManager irm = new IntResourceManager (1);
@@ -401,31 +424,36 @@ namespace MonoTests.System.Transactions
 			}
 		}
 
-		[Test]
-		[ExpectedException (typeof (TransactionAbortedException))]
+		[TestMethod]
 		public void NestedTransactionScope13 ()
 		{
-			IntResourceManager irm = new IntResourceManager ( 1 );
+		    ExceptionAssert.Throws<TransactionAbortedException>(
+		        delegate
+		            {
+		                IntResourceManager irm = new IntResourceManager(1);
 
-			Assert.IsNull ( Transaction.Current, "Ambient transaction exists (before)" );
-			using ( TransactionScope scope = new TransactionScope () ) {
-				irm.Value = 2;
+		                Assert.IsNull(Transaction.Current, "Ambient transaction exists (before)");
+		                using (TransactionScope scope = new TransactionScope())
+		                {
+		                    irm.Value = 2;
 
-				using ( TransactionScope scope2 = new TransactionScope () ) {
-					irm.Value = 4;
-					/* Not completing this, so the transaction will
-					 * get aborted 
-					scope2.Complete (); */
-				}
+		                    using (TransactionScope scope2 = new TransactionScope())
+		                    {
+		                        irm.Value = 4;
+		                        /* Not completing this, so the transaction will
+                                 * get aborted 
+                                scope2.Complete (); */
+		                    }
 
-				scope.Complete ();
-			}
+		                    scope.Complete();
+		                }
+		            });
 		}
 		#endregion
 
-		/* Tests using IntResourceManager */
+        #region Tests using IntResourceManager
 
-		[Test]
+        [TestMethod]
 		public void RMFail1 ()
 		{
 			IntResourceManager irm = new IntResourceManager (1);
@@ -453,7 +481,7 @@ namespace MonoTests.System.Transactions
 			Assert.IsNull (Transaction.Current, "Ambient transaction exists (after)");
 		}
 
-		[Test]
+		[TestMethod]
 		public void RMFail2 ()
 		{
 			IntResourceManager irm = new IntResourceManager (1);
@@ -487,9 +515,11 @@ namespace MonoTests.System.Transactions
 			Assert.Fail ("Expected TransactionAbortedException (TimeoutException)");
 		}
 
-		#region Explicit Transaction Tests
+        #endregion
 
-		[Test]
+        #region Explicit Transaction Tests
+
+        [TestMethod]
 		public void ExplicitTransactionCommit ()
 		{
 			Assert.IsNull (Transaction.Current, "Ambient transaction exists (before)");
@@ -507,7 +537,7 @@ namespace MonoTests.System.Transactions
 			Transaction.Current = oldTransaction;
 		}
 
-		[Test]
+		[TestMethod]
 		public void ExplicitTransactionRollback ()
 		{
 			Assert.IsNull (Transaction.Current, "Ambient transaction exists (before)");
@@ -526,7 +556,7 @@ namespace MonoTests.System.Transactions
 			Transaction.Current = oldTransaction;
 		}
 
-		[Test]
+		[TestMethod]
 		public void ExplicitTransaction1 ()
 		{
 			Assert.IsNull (Transaction.Current, "Ambient transaction exists (before)");
@@ -555,7 +585,7 @@ namespace MonoTests.System.Transactions
 			Transaction.Current = oldTransaction;
 		}
 
-		[Test]
+		[TestMethod]
 		public void ExplicitTransaction2 ()
 		{
 			Assert.IsNull (Transaction.Current, "Ambient transaction exists (before)");
@@ -589,7 +619,7 @@ namespace MonoTests.System.Transactions
 			Assert.Fail ("Commit on an aborted transaction should fail");
 		}
 
-		[Test]
+		[TestMethod]
 		public void ExplicitTransaction3 ()
 		{
 			Assert.IsNull (Transaction.Current, "Ambient transaction exists (before)");
@@ -617,7 +647,7 @@ namespace MonoTests.System.Transactions
 			Transaction.Current = oldTransaction;
 		}
 
-		[Test]
+		[TestMethod]
 		public void ExplicitTransaction4 ()
 		{
 			Assert.IsNull (Transaction.Current, "Ambient transaction exists (before)");
@@ -648,7 +678,7 @@ namespace MonoTests.System.Transactions
 			irm.Check ( 1, 1, 0, 0, "irm");
 		}
 
-		[Test]
+		[TestMethod]
 		public void ExplicitTransaction5 ()
 		{
 			Assert.IsNull (Transaction.Current, "Ambient transaction exists (before)");
@@ -677,36 +707,42 @@ namespace MonoTests.System.Transactions
 			irm.Check ( 0, 0, 1, 0, "irm");
 		}
 
-		[Test]
-		[ExpectedException (typeof (InvalidOperationException))]
+		[TestMethod]
 		public void ExplicitTransaction6 ()
 		{
-			CommittableTransaction ct = new CommittableTransaction ();
+		    ExceptionAssert.Throws<InvalidOperationException>(
+		        delegate
+		            {
+		                CommittableTransaction ct = new CommittableTransaction();
 
-			IntResourceManager irm = new IntResourceManager (1);
-			irm.Value = 2;
-			ct.Commit ();
+		                IntResourceManager irm = new IntResourceManager(1);
+		                irm.Value = 2;
+		                ct.Commit();
 
-			ct.Commit ();
+		                ct.Commit();
+		            });
 		}
 
-		[Test]
-		[ExpectedException (typeof (InvalidOperationException))]
+		[TestMethod]
 		public void ExplicitTransaction6a ()
 		{
-			CommittableTransaction ct = new CommittableTransaction ();
+		    ExceptionAssert.Throws<InvalidOperationException>(
+		        delegate
+		            {
+		                CommittableTransaction ct = new CommittableTransaction();
 
-			IntResourceManager irm = new IntResourceManager ( 1 );
-			irm.Value = 2;
-			ct.Commit ();
+		                IntResourceManager irm = new IntResourceManager(1);
+		                irm.Value = 2;
+		                ct.Commit();
 
-			/* Using a already committed transaction in a new 
-			 * TransactionScope
-			 */
-			TransactionScope scope = new TransactionScope ( ct );
+		                /* Using a already committed transaction in a new 
+                         * TransactionScope
+                         */
+		                TransactionScope scope = new TransactionScope(ct);
+		            });
 		}
 
-		[Test]
+		[TestMethod]
 		public void ExplicitTransaction6b ()
 		{
 			CommittableTransaction ct = new CommittableTransaction ();
@@ -733,7 +769,7 @@ namespace MonoTests.System.Transactions
 			Assert.Fail ( "Commit should've failed" );
 		}
 
-		[Test]
+		[TestMethod]
 		public void ExplicitTransaction6c ()
 		{
 			CommittableTransaction ct = new CommittableTransaction ();
@@ -760,7 +796,7 @@ namespace MonoTests.System.Transactions
 			Assert.Fail ("Commit should've failed");
 		}
 
-		[Test]
+		[TestMethod]
 		public void ExplicitTransaction6d ()
 		{
 			CommittableTransaction ct = new CommittableTransaction ();
@@ -786,7 +822,7 @@ namespace MonoTests.System.Transactions
 			Assert.Fail ( "Commit should've failed" );
 		}
 
-		[Test]
+		[TestMethod]
 		public void ExplicitTransaction6e ()
 		{
 			CommittableTransaction ct = new CommittableTransaction ();
@@ -812,20 +848,23 @@ namespace MonoTests.System.Transactions
 			Assert.Fail ( "Commit should've failed" );
 		}
 
-		[Test]
-		[ExpectedException (typeof (TransactionException))]
+		[TestMethod]
 		public void ExplicitTransaction7 ()
 		{
-			CommittableTransaction ct = new CommittableTransaction ();
+		    ExceptionAssert.Throws<TransactionException>(
+		        delegate
+		            {
+		                CommittableTransaction ct = new CommittableTransaction();
 
-			IntResourceManager irm = new IntResourceManager (1);
-			irm.Value = 2;
-			ct.Commit ();
-			/* Cannot accept any new work now, so TransactionException */
-			ct.Rollback ();
+		                IntResourceManager irm = new IntResourceManager(1);
+		                irm.Value = 2;
+		                ct.Commit();
+		                /* Cannot accept any new work now, so TransactionException */
+		                ct.Rollback();
+		            });
 		}
 
-		[Test]
+		[TestMethod]
 		public void ExplicitTransaction8 ()
 		{
 			CommittableTransaction ct = new CommittableTransaction ();
@@ -844,7 +883,7 @@ namespace MonoTests.System.Transactions
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void ExplicitTransaction8a ()
 		{
 			CommittableTransaction ct = new CommittableTransaction ();
@@ -865,18 +904,21 @@ namespace MonoTests.System.Transactions
 			}
 		}
 
-		[Test]
-		[ExpectedException (typeof (InvalidOperationException))]
+		[TestMethod]
 		public void ExplicitTransaction9 ()
 		{
-			CommittableTransaction ct = new CommittableTransaction ();
+		    ExceptionAssert.Throws<InvalidOperationException>(
+		        delegate
+		            {
+		                CommittableTransaction ct = new CommittableTransaction();
 
-			IntResourceManager irm = new IntResourceManager ( 1 );
-			ct.BeginCommit ( null, null );
-			ct.BeginCommit ( null, null );
+		                IntResourceManager irm = new IntResourceManager(1);
+		                ct.BeginCommit(null, null);
+		                ct.BeginCommit(null, null);
+		            });
 		}
 
-		[Test]
+		[TestMethod]
 		public void ExplicitTransaction10 ()
 		{
 			CommittableTransaction ct = new CommittableTransaction ();
@@ -901,7 +943,7 @@ namespace MonoTests.System.Transactions
 			Assert.Fail ("Expected TransactionAbortedException");
 		}
 
-		[Test]
+		[TestMethod]
 		public void ExplicitTransaction10a ()
 		{
 			CommittableTransaction ct = new CommittableTransaction ();
@@ -929,7 +971,7 @@ namespace MonoTests.System.Transactions
 			Assert.Fail ();
 		}
 
-		[Test]
+		[TestMethod]
 		public void ExplicitTransaction10b ()
 		{
 			CommittableTransaction ct = new CommittableTransaction ();
@@ -957,19 +999,22 @@ namespace MonoTests.System.Transactions
 			Assert.Fail ();
 		}
 
-		[Test]
-		[ExpectedException ( typeof (ArgumentException))]
+		[TestMethod]
 		public void ExplicitTransaction12 ()
 		{
-			CommittableTransaction ct = new CommittableTransaction ();
+		    ExceptionAssert.Throws<ArgumentException>(
+		        delegate
+		            {
+		                CommittableTransaction ct = new CommittableTransaction();
 
-			IntResourceManager irm = new IntResourceManager ( 1 );
-			irm.FailPrepare = true;
-			ct.BeginCommit ( null, null );
-			ct.EndCommit ( null );
+		                IntResourceManager irm = new IntResourceManager(1);
+		                irm.FailPrepare = true;
+		                ct.BeginCommit(null, null);
+		                ct.EndCommit(null);
+		            });
 		}
 
-		[Test]
+		[TestMethod]
 		public void ExplicitTransaction13 ()
 		{
 			CommittableTransaction ct = new CommittableTransaction ();
@@ -995,7 +1040,7 @@ namespace MonoTests.System.Transactions
 			Assert.Fail ("Should not be reached");
 		}
 
-		[Test]
+		[TestMethod]
 		public void ExplicitTransaction14 ()
 		{
 			CommittableTransaction ct = new CommittableTransaction ();
@@ -1018,7 +1063,7 @@ namespace MonoTests.System.Transactions
 			Assert.Fail ( "Should not be reached" );
 		}
 
-		[Test]
+		[TestMethod]
 		public void ExplicitTransaction15 ()
 		{
 			CommittableTransaction ct = new CommittableTransaction ();
@@ -1044,7 +1089,7 @@ namespace MonoTests.System.Transactions
 			Assert.Fail ( "Should not be reached" );
 		}
 
-		[Test]
+		[TestMethod]
 		public void ExplicitTransaction16 ()
 		{
 			CommittableTransaction ct = new CommittableTransaction ();
@@ -1075,7 +1120,7 @@ namespace MonoTests.System.Transactions
 		}
 
 		#endregion
-	}
+    }
 
 }
 

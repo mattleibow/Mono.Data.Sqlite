@@ -43,26 +43,30 @@ using System.Data.Common;
 using System.Reflection;
 using System.Text;
 
-using NUnit.Framework;
+#if SILVERLIGHT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#endif
 
 #endregion
 
 namespace MonoTests.System.Data.Common
 {
-	[TestFixture]
+	[TestClass]
 	public class DbConnectionStringBuilderTest
 	{
 		private DbConnectionStringBuilder builder = null;
 		private const string SERVER = "SERVER";
 		private const string SERVER_VALUE = "localhost";
 
-		[SetUp]
+		[TestInitialize]
 		public void SetUp ()
 		{
 			builder = new DbConnectionStringBuilder ();
 		}
 
-		[Test]
+		[TestMethod]
 		public void Add ()
 		{
 			builder.Add ("driverid", "420");
@@ -84,7 +88,7 @@ namespace MonoTests.System.Data.Common
 			Assert.IsTrue (builder.ContainsKey ("Dsn"), "#E2");
 		}
 
-		[Test]
+		[TestMethod]
 		public void Add_Keyword_Invalid ()
 		{
 			string [] invalid_keywords = new string [] {
@@ -116,7 +120,7 @@ namespace MonoTests.System.Data.Common
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void Add_Keyword_Null ()
 		{
 			try {
@@ -130,7 +134,7 @@ namespace MonoTests.System.Data.Common
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void ConnectionString ()
 		{
 			DbConnectionStringBuilder sb;
@@ -165,7 +169,7 @@ namespace MonoTests.System.Data.Common
 			Assert.AreEqual (0, sb.Keys.Count, "#D4");
 		}
 
-		[Test]
+		[TestMethod]
 		public void ConnectionString_Value_Empty ()
 		{
 			DbConnectionStringBuilder [] sbs = new DbConnectionStringBuilder [] {
@@ -182,7 +186,7 @@ namespace MonoTests.System.Data.Common
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void Clear ()
 		{
 			DbConnectionStringBuilder [] sbs = new DbConnectionStringBuilder [] {
@@ -206,7 +210,7 @@ namespace MonoTests.System.Data.Common
 			}
 		}
 
-                [Test]
+                [TestMethod]
                 public void AddDuplicateTest ()
                 {
                         builder.Add (SERVER, SERVER_VALUE);
@@ -216,7 +220,7 @@ namespace MonoTests.System.Data.Common
                                          "Duplicates addition does not change the value!");
                 }
 
-		[Test]
+		[TestMethod]
 		public void Indexer ()
 		{
 			builder ["abc Def"] = "xa 34";
@@ -279,7 +283,7 @@ namespace MonoTests.System.Data.Common
 			Assert.AreEqual ("abc Def=xa 34;na;=de\rfg;val={;xyz};name= ", builder.ConnectionString, "#F2");
 		}
 
-		[Test]
+		[TestMethod]
 		public void Indexer_Keyword_Invalid ()
 		{
 			string [] invalid_keywords = new string [] {
@@ -326,7 +330,7 @@ namespace MonoTests.System.Data.Common
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void Indexer_Keyword_NotSupported ()
 		{
 			try {
@@ -342,7 +346,7 @@ namespace MonoTests.System.Data.Common
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void Indexer_Keyword_Null ()
 		{
 			try {
@@ -376,7 +380,7 @@ namespace MonoTests.System.Data.Common
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void Indexer_Value_Null ()
 		{
 			builder ["DriverID"] = null;
@@ -402,7 +406,7 @@ namespace MonoTests.System.Data.Common
 			Assert.AreEqual (string.Empty, builder.ConnectionString, "#B3");
 		}
 
-		[Test]
+		[TestMethod]
 		public void Remove ()
 		{
 			Assert.IsFalse (builder.Remove ("Dsn"), "#A1");
@@ -480,7 +484,7 @@ namespace MonoTests.System.Data.Common
 			Assert.IsFalse (builder.Remove ("Driver"), "#D3");
 		}
 
-		[Test]
+		[TestMethod]
 		public void Remove_Keyword_Null ()
 		{
 			try {
@@ -494,7 +498,7 @@ namespace MonoTests.System.Data.Common
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void ContainsKey ()
 		{
 			builder ["SourceType"] = "DBC";
@@ -545,7 +549,7 @@ namespace MonoTests.System.Data.Common
 			Assert.IsFalse (builder.ContainsKey (string.Empty), "#A9");
 		}
 
-		[Test]
+		[TestMethod]
 		public void ContainsKey_Keyword_Null ()
 		{
 			builder ["SourceType"] = "DBC";
@@ -560,7 +564,7 @@ namespace MonoTests.System.Data.Common
 			}
 		}
 
-                [Test]
+                [TestMethod]
                 public void EquivalentToTest ()
                 {
                         builder.Add (SERVER, SERVER_VALUE);
@@ -575,7 +579,7 @@ namespace MonoTests.System.Data.Common
                         Assert.IsFalse (value, "builder comparision does not work for not equivalent strings!");
                 }
 
-		[Test] // AppendKeyValuePair (StringBuilder, String, String)
+		[TestMethod] // AppendKeyValuePair (StringBuilder, String, String)
 		public void AppendKeyValuePair1 ()
 		{
 			StringBuilder sb = new StringBuilder ();
@@ -691,7 +695,7 @@ namespace MonoTests.System.Data.Common
 			Assert.AreEqual ("Datab==ase=\"Adven=ture\"", sb.ToString (), "#F1");
 		}
 
-		[Test] // AppendKeyValuePair (StringBuilder, String, String)
+		[TestMethod] // AppendKeyValuePair (StringBuilder, String, String)
 		public void AppendKeyValuePair1_Builder_Null ()
 		{
 			try {
@@ -707,7 +711,7 @@ namespace MonoTests.System.Data.Common
 			}
 		}
 
-		[Test] // AppendKeyValuePair (StringBuilder, String, String)
+		[TestMethod] // AppendKeyValuePair (StringBuilder, String, String)
 		public void AppendKeyValuePair1_Keyword_Empty ()
 		{
 			StringBuilder sb = new StringBuilder ();
@@ -725,7 +729,7 @@ namespace MonoTests.System.Data.Common
 			}
 		}
 
-		[Test] // AppendKeyValuePair (StringBuilder, String, String)
+		[TestMethod] // AppendKeyValuePair (StringBuilder, String, String)
 		public void AppendKeyValuePair1_Keyword_Null ()
 		{
 			StringBuilder sb = new StringBuilder ();
@@ -741,7 +745,7 @@ namespace MonoTests.System.Data.Common
 			}
 		}
 
-		[Test] // AppendKeyValuePair (StringBuilder, String, String, Boolean)
+		[TestMethod] // AppendKeyValuePair (StringBuilder, String, String, Boolean)
 		public void AppendKeyValuePair2_UseOdbcRules_False ()
 		{
 			StringBuilder sb = new StringBuilder ();
@@ -1026,7 +1030,7 @@ namespace MonoTests.System.Data.Common
 			Assert.AreEqual ("Datab==ase=\"Adven=ture\"", sb.ToString (), "#F1");
 		}
 
-		[Test] // AppendKeyValuePair (StringBuilder, String, String, Boolean)
+		[TestMethod] // AppendKeyValuePair (StringBuilder, String, String, Boolean)
 		public void AppendKeyValuePair2_UseOdbcRules_True ()
 		{
 			StringBuilder sb = new StringBuilder ();
@@ -1571,7 +1575,7 @@ namespace MonoTests.System.Data.Common
 			Assert.AreEqual ("Datab=ase=Adven=ture", sb.ToString (), "#F1");
 		}
 
-		[Test] // AppendKeyValuePair (StringBuilder, String, String, Boolean)
+		[TestMethod] // AppendKeyValuePair (StringBuilder, String, String, Boolean)
 		public void AppendKeyValuePair2_Builder_Null ()
 		{
 			try {
@@ -1599,7 +1603,7 @@ namespace MonoTests.System.Data.Common
 			}
 		}
 
-		[Test] // AppendKeyValuePair (StringBuilder, String, String, Boolean)
+		[TestMethod] // AppendKeyValuePair (StringBuilder, String, String, Boolean)
 		public void AppendKeyValuePair2_Keyword_Empty ()
 		{
 			StringBuilder sb = new StringBuilder ();
@@ -1630,7 +1634,7 @@ namespace MonoTests.System.Data.Common
 			}
 		}
 
-		[Test] // AppendKeyValuePair (StringBuilder, String, String, Boolean)
+		[TestMethod] // AppendKeyValuePair (StringBuilder, String, String, Boolean)
 		public void AppendKeyValuePair2_Keyword_Null ()
 		{
 			StringBuilder sb = new StringBuilder ();
@@ -1657,7 +1661,7 @@ namespace MonoTests.System.Data.Common
 			}
 		}
 
-                [Test]
+                [TestMethod]
                 public void ToStringTest ()
                 {
                         builder.Add (SERVER, SERVER_VALUE);
@@ -1667,7 +1671,7 @@ namespace MonoTests.System.Data.Common
                                          "ToString shoud return ConnectionString!");
                 }
 
-                [Test]
+                [TestMethod]
                 public void ItemTest ()
                 {
                         builder.Add (SERVER, SERVER_VALUE);
@@ -1676,7 +1680,7 @@ namespace MonoTests.System.Data.Common
                                          "Item indexor does not retrun correct value!");
                 }
 
-                [Test]
+                [TestMethod]
                 public void ICollectionCopyToTest ()
                 {
                         KeyValuePair<string, object> [] dict = new KeyValuePair<string, object> [2];
@@ -1692,18 +1696,21 @@ namespace MonoTests.System.Data.Common
                         Assert.AreEqual (SERVER_VALUE + "1", dict [j].Value, "not equal");
                 }
 
-                [Test]
-                [ExpectedException (typeof (ArgumentException))]
+                [TestMethod]
                 public void NegICollectionCopyToTest ()
                 {
-                        KeyValuePair<string, object> [] dict = new KeyValuePair<string, object> [1];
-                        builder.Add (SERVER, SERVER_VALUE);
-                        builder.Add (SERVER + "1", SERVER_VALUE + "1");
-			((ICollection) builder).CopyTo (dict, 0);
-                        Assert.Fail ("Exception Destination Array not enough is not thrown!");
+                    ExceptionAssert.Throws<ArgumentException>(
+                        delegate
+                            {
+                                KeyValuePair<string, object>[] dict = new KeyValuePair<string, object>[1];
+                                builder.Add(SERVER, SERVER_VALUE);
+                                builder.Add(SERVER + "1", SERVER_VALUE + "1");
+                                ((ICollection) builder).CopyTo(dict, 0);
+                                Assert.Fail("Exception Destination Array not enough is not thrown!");
+                            });
                 }
 
-		[Test]
+		[TestMethod]
 		public void TryGetValueTest ()
 		{
 			object value = null;
@@ -1774,7 +1781,7 @@ namespace MonoTests.System.Data.Common
 			Assert.IsNull (value, "#I2");
 		}
 
-		[Test]
+		[TestMethod]
 		public void TryGetValue_Keyword_Null ()
 		{
 			object value = null;
@@ -1789,7 +1796,7 @@ namespace MonoTests.System.Data.Common
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void EmbeddedCharTest1 ()
 		{
 			// Notice how the keywords show up in the connection string
@@ -1901,7 +1908,7 @@ namespace MonoTests.System.Data.Common
 				sb.ConnectionString, "cs#18");
 		}
 
-		[Test]
+		[TestMethod]
 		public void EmbeddedCharTest2 ()
 		{
 			DbConnectionStringBuilder sb;
@@ -1967,7 +1974,7 @@ namespace MonoTests.System.Data.Common
 				sb.ConnectionString, "#F4");
 		}
 
-		[Test]
+		[TestMethod]
 		public void EmbeddedCharTest3 ()
 		{
 			string dataSource = "(DESCRIPTION=(ADDRESS=(PROTOCOL=TCP)(HOST=192.168.1.101)" + 
@@ -2005,7 +2012,7 @@ namespace MonoTests.System.Data.Common
 				"(SERVICE_NAME=TESTDB)))", sb.ConnectionString, "#C4");
 		}
 
-		[Test]
+		[TestMethod]
 		public void EmbeddedCharTest4 ()
 		{
 			DbConnectionStringBuilder sb;
@@ -2032,7 +2039,7 @@ namespace MonoTests.System.Data.Common
 				sb.ConnectionString, "#C");
 		}
 
-		[Test]
+		[TestMethod]
 		public void EmbeddedCharTest5 ()
 		{
 			string connectionString = "A={abcdef2};B=some{us;C=test}db;D=12\"3;E=\"45;6\";F=AB==C;G{A'}\";F={1='\"2};G==C=B==C;Z=ABC";
@@ -2078,7 +2085,7 @@ namespace MonoTests.System.Data.Common
 			Assert.AreEqual ("=C=B==C", sb ["g"], "#C10");
 		}
 
-		[Test]
+		[TestMethod]
 		public void EmbeddedCharTest6 ()
 		{
 			string [][] shared_tests = new string [][] {
@@ -2279,7 +2286,7 @@ namespace MonoTests.System.Data.Common
 			AssertValueTest (odbc_tests, non_odbc_tests, false, "#H:");
 		}
 
-		[Test]
+		[TestMethod]
 		public void EmbeddedChar_ConnectionString_Invalid ()
 		{
 			string [] tests = new string [] {

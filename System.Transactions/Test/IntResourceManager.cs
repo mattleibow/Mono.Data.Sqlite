@@ -8,10 +8,13 @@
 //
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Transactions;
-using NUnit.Framework;
+
+#if SILVERLIGHT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#endif
 
 namespace MonoTests.System.Transactions
 {
@@ -59,8 +62,8 @@ namespace MonoTests.System.Transactions
                     return;
                 }
                 /* FIXME: Do what in this case? */
-                if (transaction != null)
-                    Console.WriteLine ("WARNING: Setting value more than once");
+                //if (transaction != null)
+                //    Assert.Fail ("WARNING: Setting value more than once");
 
                 if (transaction != Transaction.Current) {
                     transaction = Transaction.Current;

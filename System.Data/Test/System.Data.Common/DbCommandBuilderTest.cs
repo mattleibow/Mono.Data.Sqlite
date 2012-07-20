@@ -31,14 +31,18 @@ using System.Data;
 using System.Data.Common;
 using System.Globalization;
 
-using NUnit.Framework;
+#if SILVERLIGHT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#endif
 
 namespace MonoTests.System.Data.Common
 {
-	[TestFixture]
+	[TestClass]
 	public class DbCommandBuilderTest
 	{
-		[Test]
+		[TestMethod]
 		public void CatalogLocationTest ()
 		{
 			MyCommandBuilder cb = new MyCommandBuilder ();
@@ -47,7 +51,7 @@ namespace MonoTests.System.Data.Common
 			Assert.AreEqual (CatalogLocation.End, cb.CatalogLocation, "#2");
 		}
 
-		[Test]
+		[TestMethod]
 		public void CatalogLocation_Value_Invalid ()
 		{
 			MyCommandBuilder cb = new MyCommandBuilder ();
@@ -67,7 +71,7 @@ namespace MonoTests.System.Data.Common
 			Assert.AreEqual (CatalogLocation.End, cb.CatalogLocation, "#8");
 		}
 
-		[Test]
+		[TestMethod]
 		public void CatalogSeparator ()
 		{
 			MyCommandBuilder cb = new MyCommandBuilder ();
@@ -84,7 +88,7 @@ namespace MonoTests.System.Data.Common
 			Assert.AreEqual (" ", cb.CatalogSeparator, "#6");
 		}
 
-		[Test]
+		[TestMethod]
 		public void ConflictOptionTest ()
 		{
 			MyCommandBuilder cb = new MyCommandBuilder ();
@@ -93,7 +97,7 @@ namespace MonoTests.System.Data.Common
 			Assert.AreEqual (ConflictOption.CompareRowVersion, cb.ConflictOption, "#2");
 		}
 
-		[Test]
+		[TestMethod]
 		public void ConflictOption_Value_Invalid ()
 		{
 			MyCommandBuilder cb = new MyCommandBuilder ();
@@ -113,7 +117,7 @@ namespace MonoTests.System.Data.Common
 			Assert.AreEqual (ConflictOption.CompareRowVersion, cb.ConflictOption, "#8");
 		}
 
-		[Test] // QuoteIdentifier (String)
+		[TestMethod] // QuoteIdentifier (String)
 		public void QuoteIdentifier ()
 		{
 			MyCommandBuilder cb = new MyCommandBuilder ();
@@ -136,7 +140,7 @@ namespace MonoTests.System.Data.Common
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void QuotePrefix ()
 		{
 			MyCommandBuilder cb = new MyCommandBuilder ();
@@ -153,7 +157,7 @@ namespace MonoTests.System.Data.Common
 			Assert.AreEqual (" ", cb.QuotePrefix, "#6");
 		}
 
-		[Test]
+		[TestMethod]
 		public void QuoteSuffix ()
 		{
 			MyCommandBuilder cb = new MyCommandBuilder ();
@@ -170,7 +174,7 @@ namespace MonoTests.System.Data.Common
 			Assert.AreEqual (" ", cb.QuoteSuffix, "#6");
 		}
 
-		[Test]
+		[TestMethod]
 		public void SchemaSeparator ()
 		{
 			MyCommandBuilder cb = new MyCommandBuilder ();

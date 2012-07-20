@@ -32,26 +32,31 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using NUnit.Framework;
 using System;
 using System.Data.SqlTypes;
 using System.Threading;
 using System.Globalization;
 
+#if SILVERLIGHT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#endif
+
 namespace MonoTests.System.Data.SqlTypes
 {
-	[TestFixture]
+	[TestClass]
         public class SqlSingleTest
 	{
 
-		[SetUp]
-                public void GetReady() 
+		[TestInitialize]
+        public void GetReady() 
 		{
-			Thread.CurrentThread.CurrentCulture = new CultureInfo ("en-US");
+            Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = "en-US";
 		}
 
                 // Test constructor
-		[Test]
+		[TestMethod]
                 public void Create()
                 {
                         SqlSingle Test= new SqlSingle ((float)34.87);
@@ -65,7 +70,7 @@ namespace MonoTests.System.Data.SqlTypes
                 }
 
                 // Test public fields
-		[Test]
+		[TestMethod]
                 public void PublicFields()
                 {
                         Assert.AreEqual (3.40282346638528859E+38f, 
@@ -77,7 +82,7 @@ namespace MonoTests.System.Data.SqlTypes
                 }
 
                 // Test properties
-		[Test]
+		[TestMethod]
                 public void Properties()
                 {
                         SqlSingle Test = new SqlSingle (5443e12f);
@@ -90,7 +95,7 @@ namespace MonoTests.System.Data.SqlTypes
 
                 // PUBLIC METHODS
 
-		[Test]
+		[TestMethod]
                 public void ArithmeticMethods()
                 {
                         SqlSingle Test0 = new SqlSingle (0);
@@ -150,7 +155,7 @@ namespace MonoTests.System.Data.SqlTypes
                         }                      
                 }
 
-		[Test]
+		[TestMethod]
                 public void CompareTo()
                 {
                         SqlSingle Test1 = new SqlSingle (4E+30);
@@ -172,7 +177,7 @@ namespace MonoTests.System.Data.SqlTypes
                         }
                 }
 
-		[Test]
+		[TestMethod]
                 public void EqualsMethods()
                 {
                         SqlSingle Test0 = new SqlSingle (0);
@@ -190,7 +195,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.IsTrue (!SqlSingle.Equals (Test1, Test2).Value, "#F06");
                 }
 
-		[Test]
+		[TestMethod]
                 public void GetHashCodeTest()
                 {
                         SqlSingle Test15 = new SqlSingle (15);
@@ -199,7 +204,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.AreEqual (Test15.GetHashCode (), Test15.GetHashCode (), "#G01");
                 }
 
-		[Test]
+		[TestMethod]
                 public void GetTypeTest()
                 {
                         SqlSingle Test = new SqlSingle (84);
@@ -208,7 +213,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.AreEqual ("System.Single", Test.Value.GetType ().ToString (), "#H02");
                 }
 
-		[Test]
+		[TestMethod]
                 public void Greaters()
                 {
                         SqlSingle Test1 = new SqlSingle (1e10);
@@ -226,7 +231,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.IsTrue (SqlSingle.GreaterThanOrEqual (Test1, Test11).Value, "#I06");
                 }
 
-		[Test]
+		[TestMethod]
                 public void Lessers()
                 {
                         SqlSingle Test1 = new SqlSingle(1.8e10);
@@ -245,7 +250,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.IsTrue (SqlSingle.LessThanOrEqual (Test11, SqlSingle.Null).IsNull, "#J07");
                 }
 
-		[Test]
+		[TestMethod]
                 public void NotEquals()
                 {
                         SqlSingle Test1 = new SqlSingle (12800000000001);
@@ -261,7 +266,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.IsTrue (SqlSingle.NotEquals (SqlSingle.Null, Test22).IsNull, "#K07");
                 }
 
-		[Test]
+		[TestMethod]
                 public void Parse()
                 {
                         try {
@@ -288,7 +293,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.AreEqual((float)150, SqlSingle.Parse ("150").Value, "#L07");
                 }
 
-		[Test]
+		[TestMethod]
                 public void Conversions()
                 {
                         SqlSingle Test0 = new SqlSingle (0);
@@ -382,7 +387,7 @@ namespace MonoTests.System.Data.SqlTypes
 
                 // OPERATORS
 
-		[Test]
+		[TestMethod]
                 public void ArithmeticOperators()
                 {
                         SqlSingle Test0 = new SqlSingle (0);
@@ -439,7 +444,7 @@ namespace MonoTests.System.Data.SqlTypes
                         }
                 }
 
-		[Test]
+		[TestMethod]
                 public void ThanOrEqualOperators()
                 {
                         SqlSingle Test1 = new SqlSingle (1.0E+14f);
@@ -483,7 +488,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.IsTrue ((Test1 <= SqlSingle.Null).IsNull, "#O23");
                 }
 
-		[Test]
+		[TestMethod]
                 public void UnaryNegation()
                 {
                         SqlSingle Test = new SqlSingle (2000000001);
@@ -496,7 +501,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.AreEqual ((float)3000, Result.Value, "#P02");
                 }
 
-		[Test]
+		[TestMethod]
                 public void SqlBooleanToSqlSingle()
                 {
                         SqlBoolean TestBoolean = new SqlBoolean (true);
@@ -510,7 +515,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.IsTrue (Result.IsNull, "#Q02");
                 }
 
-		[Test]
+		[TestMethod]
 		public void SqlDoubleToSqlSingle()
 	        {
                         SqlDouble Test = new SqlDouble (12e12);
@@ -518,7 +523,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (12e12f, TestSqlSingle.Value, "R01");
 		}
 
-		[Test]
+		[TestMethod]
                 public void SqlSingleToSingle()
                 {
                         SqlSingle Test = new SqlSingle (12e12);
@@ -526,7 +531,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.AreEqual (12e12f, Result, "#S01");
                 }
 
-		[Test]
+		[TestMethod]
                 public void SqlStringToSqlSingle()
                 {
                         SqlString TestString = new SqlString ("Test string");
@@ -542,14 +547,14 @@ namespace MonoTests.System.Data.SqlTypes
                         }
                 }
 
-		[Test]
+		[TestMethod]
                 public void ByteToSqlSingle()
                 {
                         short TestShort = 14;
                         Assert.AreEqual ((float)14, ((SqlSingle)TestShort).Value, "#U01");
                 }
                 
-		[Test]
+		[TestMethod]
                 public void SqlDecimalToSqlSingle()
                 {
                         SqlDecimal TestDecimal64 = new SqlDecimal (64);
@@ -558,7 +563,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.AreEqual (SqlSingle.Null, ((SqlSingle)SqlDecimal.Null), "#V02");
                 }
 
-		[Test]
+		[TestMethod]
                 public void SqlIntToSqlSingle()
                 {
                         SqlInt16 Test64 = new SqlInt16 (64);
@@ -569,14 +574,14 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.AreEqual ((float)64000, ((SqlSingle)Test64000).Value, "#W03");
                 }
 
-		[Test]
+		[TestMethod]
                 public void SqlMoneyToSqlSingle()
                 {
                         SqlMoney TestMoney64 = new SqlMoney(64);
                         Assert.AreEqual ((float)64, ((SqlSingle)TestMoney64).Value, "#X01");
                 }
 
-		[Test]
+		[TestMethod]
                 public void SingleToSqlSingle()
                 {
                         Single TestSingle64 = 64;

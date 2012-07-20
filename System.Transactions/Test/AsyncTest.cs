@@ -9,17 +9,22 @@
 
 using System;
 using System.Transactions;
-using NUnit.Framework;
 using System.Threading;
+
+#if SILVERLIGHT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#endif
 
 namespace  MonoTests.System.Transactions {
 
-	[TestFixture]
+	[TestClass]
 	// https://bugzilla.novell.com/show_bug.cgi?id=463999
-	[Category ("NotWorking")]
+    // todo not working
 	public class AsyncTest {
 
-		[SetUp]
+		[TestInitialize]
 		public void Setup ()
 		{
 			delayedException = null;
@@ -29,47 +34,53 @@ namespace  MonoTests.System.Transactions {
 			Transaction.Current = null;
 		}
 
-		[TearDown]
+		[TestCleanup]
 		public void TearDown ()
 		{
 			Transaction.Current = null;
 		}
 
-		[Test]
-		[ExpectedException ( typeof ( InvalidOperationException ) )]
+		[TestMethod]
 		public void AsyncFail1 ()
 		{
-			IntResourceManager irm = new IntResourceManager ( 1 );
+            ExceptionAssert.Throws<InvalidOperationException>(
+		        delegate
+		            {
+		                IntResourceManager irm = new IntResourceManager(1);
 
-			CommittableTransaction ct = new CommittableTransaction ();
-			/* Set ambient Tx */
-			Transaction.Current = ct;
+		                CommittableTransaction ct = new CommittableTransaction();
+		                /* Set ambient Tx */
+		                Transaction.Current = ct;
 
-			/* Enlist */
-			irm.Value = 2;
+		                /* Enlist */
+		                irm.Value = 2;
 
-			IAsyncResult ar = ct.BeginCommit ( null, null );
-			IAsyncResult ar2 = ct.BeginCommit ( null, null );
+		                IAsyncResult ar = ct.BeginCommit(null, null);
+		                IAsyncResult ar2 = ct.BeginCommit(null, null);
+		            });
 		}
 
 
-		[Test]
-		[ExpectedException (typeof (TransactionAbortedException))]
+		[TestMethod]
 		public void AsyncFail2 ()
 		{
-			IntResourceManager irm = new IntResourceManager ( 1 );
+		    ExceptionAssert.Throws<TransactionAbortedException>(
+		        delegate
+		            {
+		                IntResourceManager irm = new IntResourceManager(1);
 
-			CommittableTransaction ct = new CommittableTransaction ();
-			/* Set ambient Tx */
-			Transaction.Current = ct;
+		                CommittableTransaction ct = new CommittableTransaction();
+		                /* Set ambient Tx */
+		                Transaction.Current = ct;
 
-			/* Enlist */
-			irm.Value = 2;
-			irm.FailPrepare = true;
+		                /* Enlist */
+		                irm.Value = 2;
+		                irm.FailPrepare = true;
 
-			IAsyncResult ar = ct.BeginCommit ( null, null );
+		                IAsyncResult ar = ct.BeginCommit(null, null);
 
-			ct.EndCommit ( ar );
+		                ct.EndCommit(ar);
+		            });
 		}
 
 		AsyncCallback callback = null;
@@ -93,7 +104,7 @@ namespace  MonoTests.System.Transactions {
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void AsyncFail3 ()
 		{
 			delayedException = null;
@@ -109,7 +120,7 @@ namespace  MonoTests.System.Transactions {
 
 			callback = new AsyncCallback (CommitCallback);
 			IAsyncResult ar = ct.BeginCommit ( callback, 5 );
-			mr.WaitOne (new TimeSpan (0, 0, 60), true);
+			mr.WaitOne (new TimeSpan (0, 0, 60));
 
 			Assert.IsTrue ( called, "callback not called" );
 			Assert.AreEqual ( 5, state, "state not preserved" );
@@ -118,7 +129,7 @@ namespace  MonoTests.System.Transactions {
 				Assert.Fail ( "Expected TransactionAbortedException, got {0}", delayedException.GetType () );
 		}
 
-		[Test]
+		[TestMethod]
 		public void Async1 ()
 		{
 			IntResourceManager irm = new IntResourceManager ( 1 );
@@ -131,7 +142,7 @@ namespace  MonoTests.System.Transactions {
 
 			callback = new AsyncCallback (CommitCallback);
 			IAsyncResult ar = ct.BeginCommit ( callback, 5);
-			mr.WaitOne (new TimeSpan (0, 2, 0), true);
+			mr.WaitOne (new TimeSpan (0, 2, 0));
 
 			Assert.IsTrue (called, "callback not called" );
 			Assert.AreEqual ( 5, state, "State not received back");
@@ -140,7 +151,7 @@ namespace  MonoTests.System.Transactions {
 				throw new Exception ("", delayedException );
 		}
 
-		[Test]
+		[TestMethod]
 		public void Async2 ()
 		{
 			IntResourceManager irm = new IntResourceManager ( 1 );
@@ -164,7 +175,7 @@ namespace  MonoTests.System.Transactions {
 			Assert.Fail ( "EndCommit should've thrown an exception" );
 		}
 
-		[Test]
+		[TestMethod]
 		public void Async3 ()
 		{
 			IntResourceManager irm = new IntResourceManager ( 1 );
@@ -182,7 +193,7 @@ namespace  MonoTests.System.Transactions {
 			irm.Check ( 1, 1, 0, 0, "irm" );
 		}
 
-		[Test]
+		[TestMethod]
 		public void Async4 ()
 		{
 			IntResourceManager irm = new IntResourceManager ( 1 );
@@ -201,7 +212,7 @@ namespace  MonoTests.System.Transactions {
 			irm.Check ( 1, 1, 0, 0, "irm" );
 		}
 
-		[Test]
+		[TestMethod]
 		public void Async5 ()
 		{
 			IntResourceManager irm = new IntResourceManager ( 1 );

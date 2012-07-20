@@ -37,21 +37,26 @@ using System.Data.SqlTypes;
 #if NET_2_0
 using System.IO;
 #endif
-using NUnit.Framework;
+
+#if SILVERLIGHT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#endif
 
 namespace MonoTests.System.Data.SqlTypes
 {
-	[TestFixture]
+	[TestClass]
 	public class SqlInt32Test
 	{
-		[Test]
+		[TestMethod]
 		public void Create ()
 		{
 			SqlInt32 foo = new SqlInt32 (5);
 			Assert.AreEqual ((int)foo, 5, "Test explicit cast to int");
 		}
 
-		[Test]
+		[TestMethod]
 		public void Add () 
 		{
 			int a = 5;
@@ -69,7 +74,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (z.Value, a + b, "Addition function does not work correctly");
 		}
 
-		[Test]
+		[TestMethod]
 		public void BitwiseAnd () 
 		{
 			int a = 5;
@@ -83,7 +88,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (z.Value, a & b, "Bitwise And function does not work correctly");
 		}
 
-		[Test]
+		[TestMethod]
 		public void BitwiseOr () 
 		{
 			int a = 5;
@@ -97,7 +102,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (z.Value, a | b, "Bitwise Or function does not work correctly");
 		}
 
-		[Test]
+		[TestMethod]
 		public void Divide () 
 		{
 			int a = 5;
@@ -111,7 +116,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (z.Value, a / b, "Division function does not work correctly");
 		}
 		
-		[Test]
+		[TestMethod]
 		public void Equals ()
 		{
 			SqlInt32 x;
@@ -141,7 +146,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (SqlInt32.Equals (x, y), SqlBoolean.False, "Equality function didn't return false when they were not equal.");
 		}
 
-		[Test]
+		[TestMethod]
 		public void GreaterThan ()
 		{
 			SqlInt32 x;
@@ -171,7 +176,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (SqlInt32.GreaterThan (x,y), SqlBoolean.False, "Greater than function didn't return false when x < y.");
 		}
 
-		[Test]
+		[TestMethod]
 		public void GreaterThanOrEqual ()
 		{
 			SqlInt32 x;
@@ -207,7 +212,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (SqlInt32.GreaterThanOrEqual (x,y), SqlBoolean.True, "Greater than or equal function didn't return true when x == y.");
 		}
 
-		[Test]
+		[TestMethod]
 		public void LessThan ()
 		{
 			SqlInt32 x;
@@ -237,7 +242,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (SqlInt32.LessThan (x,y), SqlBoolean.True, "Less than function didn't return true when x < y.");
 		}
 
-		[Test]
+		[TestMethod]
 		public void LessThanOrEqual ()
 		{
 			SqlInt32 x;
@@ -273,7 +278,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (SqlInt32.LessThanOrEqual (x,y), SqlBoolean.True, "Less than or equal function didn't return true when x == y.");
 		}
 
-		[Test]
+		[TestMethod]
 		public void Mod ()
 		{
 			int a = 5;
@@ -288,7 +293,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 #if NET_2_0
-		[Test]
+		[TestMethod]
 		public void Modulus ()
 		{
 			int a = 50;
@@ -302,7 +307,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 #endif
 
-		[Test]
+		[TestMethod]
 		public void Multiply ()
 		{
 			int a = 5;
@@ -316,7 +321,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (z.Value, a * b, "Multiplication function does not work correctly");
 		}
 
-		[Test]
+		[TestMethod]
 		public void NotEquals ()
 		{
 			SqlInt32 x;
@@ -337,7 +342,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (SqlInt32.NotEquals (x, y), SqlBoolean.True, "Not Equals function does not return true when x != y.");
 		}
 
-		[Test]
+		[TestMethod]
 		public void OnesComplement ()
 		{
 			int a = 5;
@@ -349,14 +354,14 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (z.Value, ~a, "Ones Complement function does not work correctly");
 		}
 
-		[Test]
+		[TestMethod]
 		public void IsNullProperty ()
 		{
 			SqlInt32 n = SqlInt32.Null;
 			Assert.IsTrue (n.IsNull, "Null is not defined correctly");
 		}
 
-		[Test]
+		[TestMethod]
 		public void Subtract () 
 		{
 			int a = 7;
@@ -370,7 +375,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (z.Value, a - b, "Subtraction function does not work correctly");
 		}
 
-		[Test]
+		[TestMethod]
 		public void ConversionMethods ()
 		{
 			SqlInt32 x;
@@ -444,7 +449,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (x.ToSqlSingle ().Value, (float)27, "SqlInt32 (27) -> SqlSingle does not yield a value of 27");
 		}
 
-		[Test]
+		[TestMethod]
 		public void Xor ()
 		{
 			int a = 5;

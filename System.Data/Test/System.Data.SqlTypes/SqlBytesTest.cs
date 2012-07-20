@@ -29,26 +29,31 @@
 
 #if NET_2_0
 
-using NUnit.Framework;
 using System;
 using System.IO;
 using System.Data.SqlTypes;
 using System.Threading;
 using System.Globalization;
 
+#if SILVERLIGHT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#endif
+
 namespace MonoTests.System.Data.SqlTypes
 {
-	[TestFixture]
+	[TestClass]
         public class SqlBytesTest
 	{
-		[SetUp]
+		[TestInitialize]
 		public void SetUp ()
 		{
-			Thread.CurrentThread.CurrentCulture = new CultureInfo ("en-US");
+			Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = "en-US";
 		}
 
 		// Test constructor
-		[Test]
+		[TestMethod]
 		public void SqlBytesItem ()
 		{
 			SqlBytes bytes = new SqlBytes ();
@@ -82,7 +87,7 @@ namespace MonoTests.System.Data.SqlTypes
 				Assert.AreEqual (typeof (ArgumentOutOfRangeException), ex.GetType (), "Should throw ArgumentOutOfRangeException");
 			}
 		}
-		[Test]
+		[TestMethod]
 		public void SqlBytesLength ()
 		{
 			byte [] b = null;
@@ -104,7 +109,7 @@ namespace MonoTests.System.Data.SqlTypes
 			bytes = new SqlBytes (b);
 			Assert.AreEqual (bytes.Length, 10, "#3 Should be 10");
 		}
-		[Test]
+		[TestMethod]
 		public void SqlBytesMaxLength ()
 		{
 			byte [] b = null;
@@ -116,14 +121,14 @@ namespace MonoTests.System.Data.SqlTypes
 			bytes = new SqlBytes (b);
 			Assert.AreEqual (bytes.MaxLength, 10, "#3 Should return 10");
 		}
-		[Test]
+		[TestMethod]
 		public void SqlBytesNull ()
 		{
 			byte [] b = null;
 			SqlBytes bytes = SqlBytes.Null;
 			Assert.AreEqual (bytes.IsNull, true, "#1 Should return true");
 		}
-		[Test]
+		[TestMethod]
 		public void SqlBytesStorage ()
 		{
 			byte [] b = null;
@@ -144,7 +149,7 @@ namespace MonoTests.System.Data.SqlTypes
 			b = new byte [10];
 			bytes = new SqlBytes (b);
 			Assert.AreEqual (bytes.Storage, StorageState.Buffer, "#3 Should be StorageState.Buffer");
-			FileStream fs = null;
+            MemoryStream fs = null;
 			bytes = new SqlBytes (fs);
 			try {
 				Assert.AreEqual (bytes.Storage, StorageState.Buffer, "#4 Should throw SqlNullValueException");
@@ -153,7 +158,7 @@ namespace MonoTests.System.Data.SqlTypes
 				Assert.AreEqual (typeof (SqlNullValueException), ex.GetType (), "Should throw SqlNullValueException");
 			}
 		}
-		[Test]
+		[TestMethod]
 		public void SqlBytesValue ()
 		{
 			byte [] b1 = new byte [10];
@@ -164,7 +169,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (b1 [0], 0, "#2 Should be same");
 			Assert.AreEqual (b2 [0], 10, "#3 Should be same");
 		}
-		[Test]
+		[TestMethod]
 		public void SqlBytesSetLength ()
 		{
 			byte [] b1 = new byte [10];
@@ -192,7 +197,7 @@ namespace MonoTests.System.Data.SqlTypes
 			bytes.SetLength (2);
 			Assert.AreEqual (bytes.Length, 2, "#2 Should be same");
 		}
-		[Test]
+		[TestMethod]
 		public void SqlBytesSetNull ()
 		{
 			byte [] b1 = new byte [10];
@@ -209,7 +214,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		/* Read tests */
-		[Test]
+		[TestMethod]
 		public void Read_SuccessTest1 ()
 		{
 			byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
@@ -220,78 +225,96 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (bytes.Value [5], b2 [5], "#1 Should be equal");
 		}
 		
-		[Test]
-		[ExpectedException (typeof (ArgumentNullException))]
+		[TestMethod]
 		public void Read_NullBufferTest ()
-		{			
-			byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
-			SqlBytes bytes = new SqlBytes (b1);			
-			byte [] b2 = null;
+		{
+            ExceptionAssert.Throws<ArgumentNullException>(
+		        delegate
+		            {
+		                byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
+		                SqlBytes bytes = new SqlBytes (b1);			
+		                byte [] b2 = null;
 			
-			bytes.Read (0, b2, 0, 10);
-			Assert.Fail ("#2 Should throw ArgumentNullException");
+		                bytes.Read (0, b2, 0, 10);
+		                Assert.Fail ("#2 Should throw ArgumentNullException");
+		            });
 		}
 		
-		[Test]
-		[ExpectedException (typeof (ArgumentOutOfRangeException))]
+		[TestMethod]
 		public void Read_InvalidCountTest1 ()
-		{			
-			byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
-			SqlBytes bytes = new SqlBytes (b1);			
-			byte [] b2 = new byte [5]; 
+		{
+            ExceptionAssert.Throws<ArgumentOutOfRangeException>(
+		        delegate
+		            {
+		                byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
+		                SqlBytes bytes = new SqlBytes (b1);			
+		                byte [] b2 = new byte [5]; 
 			
-			bytes.Read (0, b2, 0, 10);
-			Assert.Fail ("#3 Should throw ArgumentOutOfRangeException");
+		                bytes.Read (0, b2, 0, 10);
+		                Assert.Fail ("#3 Should throw ArgumentOutOfRangeException");
+		            });
 		}
 		
-		[Test]
-		[ExpectedException (typeof (ArgumentOutOfRangeException))]
+		[TestMethod]
 		public void Read_NegativeOffsetTest ()
-		{			
-			byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
-			SqlBytes bytes = new SqlBytes (b1);			
-			byte [] b2 = new byte [5];
+		{
+            ExceptionAssert.Throws<ArgumentOutOfRangeException>(
+		        delegate
+		            {
+		                byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
+		                SqlBytes bytes = new SqlBytes (b1);			
+		                byte [] b2 = new byte [5];
 			
-			bytes.Read (-1, b2, 0, 4);
-			Assert.Fail ("#4 Should throw ArgumentOutOfRangeException");
+		                bytes.Read (-1, b2, 0, 4);
+		                Assert.Fail ("#4 Should throw ArgumentOutOfRangeException");
+		            });
 		}
 		
-		[Test]
-		[ExpectedException (typeof (ArgumentOutOfRangeException))]
+		[TestMethod]
 		public void Read_NegativeOffsetInBufferTest ()
-		{			
-			byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
-			SqlBytes bytes = new SqlBytes (b1);			
-			byte [] b2 = new byte [5];
+		{
+            ExceptionAssert.Throws<ArgumentOutOfRangeException>(
+		        delegate
+		            {
+		                byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
+		                SqlBytes bytes = new SqlBytes (b1);			
+		                byte [] b2 = new byte [5];
 			
-			bytes.Read (0, b2, -1, 4);
-			Assert.Fail ("#5 Should throw ArgumentOutOfRangeException");
+		                bytes.Read (0, b2, -1, 4);
+		                Assert.Fail ("#5 Should throw ArgumentOutOfRangeException");
+		            });
 		}
 
-		[Test]
-		[ExpectedException (typeof (ArgumentOutOfRangeException))]
+		[TestMethod]
 		public void Read_InvalidOffsetInBufferTest ()
-		{			
-			byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
-			SqlBytes bytes = new SqlBytes (b1);			
-			byte [] b2 = new byte [5];
+		{
+            ExceptionAssert.Throws<ArgumentOutOfRangeException>(
+		        delegate
+		            {
+		                byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
+		                SqlBytes bytes = new SqlBytes (b1);			
+		                byte [] b2 = new byte [5];
 			
-			bytes.Read (0, b2, 8, 4);
-			Assert.Fail ("#6 Should throw ArgumentOutOfRangeException");
+		                bytes.Read (0, b2, 8, 4);
+		                Assert.Fail ("#6 Should throw ArgumentOutOfRangeException");
+		            });
 		}
 		
-		[Test]
-		[ExpectedException (typeof (SqlNullValueException))]
+		[TestMethod]
 		public void Read_NullInstanceValueTest ()
-		{			
-			byte [] b2 = new byte [5];
-			SqlBytes bytes = new SqlBytes ();
+		{
+            ExceptionAssert.Throws<SqlNullValueException>(
+		        delegate
+		            {
+		                byte [] b2 = new byte [5];
+		                SqlBytes bytes = new SqlBytes ();
 			
-			bytes.Read (0, b2, 8, 4);
-			Assert.Fail ("#7 Should throw SqlNullValueException");
+		                bytes.Read (0, b2, 8, 4);
+		                Assert.Fail ("#7 Should throw SqlNullValueException");
+		            });
 		}
 		
-		[Test]
+		[TestMethod]
 		public void Read_SuccessTest2 ()
 		{
 			byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };			
@@ -303,43 +326,52 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (bytes.Value [9], b2 [4], "#9 Should be same");
 		}
 		
-		[Test]
-		[ExpectedException (typeof (ArgumentNullException))]
+		[TestMethod]
 		public void Read_NullBufferAndInstanceValueTest ()
-		{			
-			byte [] b2 = null;
-			SqlBytes bytes = new SqlBytes ();
+		{
+            ExceptionAssert.Throws<ArgumentNullException>(
+		        delegate
+		            {
+		                byte [] b2 = null;
+		                SqlBytes bytes = new SqlBytes ();
 			
-			bytes.Read (0, b2, 8, 4);
-			Assert.Fail ("#10 Should throw ArgumentNullException");
+		                bytes.Read (0, b2, 8, 4);
+		                Assert.Fail ("#10 Should throw ArgumentNullException");
+		            });
 		}
 		
-		[Test]
-		[ExpectedException (typeof (ArgumentOutOfRangeException))]
+		[TestMethod]
 		public void Read_NegativeCountTest ()
-		{			
-			byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
-			SqlBytes bytes = new SqlBytes (b1);			
-			byte [] b2 = new byte [5];
+		{
+            ExceptionAssert.Throws<ArgumentOutOfRangeException>(
+		        delegate
+		            {
+		                byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
+		                SqlBytes bytes = new SqlBytes (b1);			
+		                byte [] b2 = new byte [5];
 			
-			bytes.Read (0, b2, 0, -1);
-			Assert.Fail ("#11 Should throw ArgumentOutOfRangeException");
+		                bytes.Read (0, b2, 0, -1);
+		                Assert.Fail ("#11 Should throw ArgumentOutOfRangeException");
+		            });
 		}
 		
-		[Test]
-		[ExpectedException (typeof (ArgumentOutOfRangeException))]
+		[TestMethod]
 		public void Read_InvalidCountTest2 ()
-		{			
-			byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
-			SqlBytes bytes = new SqlBytes (b1);			
-			byte [] b2 = new byte [5]; 
+		{
+            ExceptionAssert.Throws<ArgumentOutOfRangeException>(
+		        delegate
+		            {
+		                byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
+		                SqlBytes bytes = new SqlBytes (b1);			
+		                byte [] b2 = new byte [5]; 
 			
-			bytes.Read (0, b2, 3, 4);
-			Assert.Fail ("#12 Should throw ArgumentOutOfRangeException");
+		                bytes.Read (0, b2, 3, 4);
+		                Assert.Fail ("#12 Should throw ArgumentOutOfRangeException");
+		            });
 		}
 		
 		/* Write Tests */
-		[Test]
+		[TestMethod]
 		public void Write_SuccessTest1 ()
 		{
 			byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
@@ -350,113 +382,140 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (bytes.Value [0], b1 [0], "#1 Should be same");
 		}
 		
-		[Test]
-		[ExpectedException (typeof (ArgumentOutOfRangeException))]
+		[TestMethod]
 		public void Write_NegativeOffsetTest ()
 		{
-			byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
-			byte [] b2 = new byte [10];
-			SqlBytes bytes = new SqlBytes (b2);
+            ExceptionAssert.Throws<ArgumentOutOfRangeException>(
+		        delegate
+		            {
+		                byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
+		                byte [] b2 = new byte [10];
+		                SqlBytes bytes = new SqlBytes (b2);
 			
-			bytes.Write (-1, b1, 0, (int) b1.Length);
-			Assert.Fail ("#2 Should throw ArgumentOutOfRangeException");
+		                bytes.Write (-1, b1, 0, (int) b1.Length);
+		                Assert.Fail ("#2 Should throw ArgumentOutOfRangeException");
+		            });
 		}
 		
-		[Test]
-		[ExpectedException (typeof (SqlTypeException))]
+		[TestMethod]
 		public void Write_InvalidOffsetTest ()
 		{
-			byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
-			byte [] b2 = new byte [10];
-			SqlBytes bytes = new SqlBytes (b2);
+            ExceptionAssert.Throws<SqlTypeException>(
+		        delegate
+		            {
+		                byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
+		                byte [] b2 = new byte [10];
+		                SqlBytes bytes = new SqlBytes (b2);
 			
-			bytes.Write (bytes.Length+5, b1, 0, (int) b1.Length);
-			Assert.Fail ("#3 Should throw SqlTypeException");
+		                bytes.Write (bytes.Length+5, b1, 0, (int) b1.Length);
+		                Assert.Fail ("#3 Should throw SqlTypeException");
+		            });
 		}
 		
-		[Test]
-		[ExpectedException (typeof (ArgumentOutOfRangeException))]
+		[TestMethod]
 		public void Write_NegativeOffsetInBufferTest ()
 		{
-			byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
-			byte [] b2 = new byte [10];
-			SqlBytes bytes = new SqlBytes (b2);
+            ExceptionAssert.Throws<ArgumentOutOfRangeException>(
+		        delegate
+		            {
+		                byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
+		                byte [] b2 = new byte [10];
+		                SqlBytes bytes = new SqlBytes (b2);
 			
-			bytes.Write (0, b1, -1, (int) b1.Length);
-			Assert.Fail ("#4 Should throw ArgumentOutOfRangeException");
+		                bytes.Write (0, b1, -1, (int) b1.Length);
+		                Assert.Fail ("#4 Should throw ArgumentOutOfRangeException");
+		            });
 		}
 		
-		[Test]
-		[ExpectedException (typeof (ArgumentOutOfRangeException))]
+		[TestMethod]
 		public void Write_InvalidOffsetInBufferTest ()
 		{
-			byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
-			byte [] b2 = new byte [10];
-			SqlBytes bytes = new SqlBytes (b2);
+            ExceptionAssert.Throws<ArgumentOutOfRangeException>(
+		        delegate
+		            {
+		                byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
+		                byte [] b2 = new byte [10];
+		                SqlBytes bytes = new SqlBytes (b2);
 			
-			bytes.Write (0, b1, b1.Length+5, (int) b1.Length);
-			Assert.Fail ("#5 Should throw ArgumentOutOfRangeException");
+		                bytes.Write (0, b1, b1.Length+5, (int) b1.Length);
+		                Assert.Fail ("#5 Should throw ArgumentOutOfRangeException");
+		            });
 		}
 		
-		[Test]
-		[ExpectedException (typeof (ArgumentOutOfRangeException))]
+		[TestMethod]
 		public void Write_InvalidCountTest1 ()
 		{
-			byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
-			byte [] b2 = new byte [10];
-			SqlBytes bytes = new SqlBytes (b2);
+            ExceptionAssert.Throws<ArgumentOutOfRangeException>(
+		        delegate
+		            {
+		                byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
+		                byte [] b2 = new byte [10];
+		                SqlBytes bytes = new SqlBytes (b2);
 			
-			bytes.Write (0, b1, 0, (int) b1.Length+5);
-			Assert.Fail ("#6 Should throw ArgumentOutOfRangeException");
+		                bytes.Write (0, b1, 0, (int) b1.Length+5);
+		                Assert.Fail ("#6 Should throw ArgumentOutOfRangeException");
+		            });
 		}
 		
-		[Test]
-		[ExpectedException (typeof (SqlTypeException))]
+		[TestMethod]
 		public void Write_InvalidCountTest2 ()
 		{
-			byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
-			byte [] b2 = new byte [10];
-			SqlBytes bytes = new SqlBytes (b2);
+            ExceptionAssert.Throws<SqlTypeException>(
+		        delegate
+		            {
+		                byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
+		                byte [] b2 = new byte [10];
+		                SqlBytes bytes = new SqlBytes (b2);
 			
-			bytes.Write (8, b1, 0, (int) b1.Length);
-			Assert.Fail ("#7 Should throw SqlTypeException");
+		                bytes.Write (8, b1, 0, (int) b1.Length);
+		                Assert.Fail ("#7 Should throw SqlTypeException");
+		            });
 		}
 		
-		[Test]
-		[ExpectedException (typeof (ArgumentNullException))]
+		[TestMethod]
 		public void Write_NullBufferTest ()
 		{
-			byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
-			byte [] b2 = null;
-			SqlBytes bytes = new SqlBytes (b1);
+            ExceptionAssert.Throws<ArgumentNullException>(
+		        delegate
+		            {
+		                byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
+		                byte [] b2 = null;
+		                SqlBytes bytes = new SqlBytes (b1);
 			
-			bytes.Write (0, b2, 0, 10);
-			Assert.Fail ("#8 Should throw ArgumentNullException");
+		                bytes.Write (0, b2, 0, 10);
+		                Assert.Fail ("#8 Should throw ArgumentNullException");
+		            });
 		}
 		
-		[Test]
-		[ExpectedException (typeof (SqlTypeException))]
+		[TestMethod]
 		public void Write_NullInstanceValueTest ()
 		{
-			byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
-			SqlBytes bytes = new SqlBytes();
+            ExceptionAssert.Throws<SqlTypeException>(
+		        delegate
+		            {
+		                byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
+		                SqlBytes bytes = new SqlBytes();
 			
-			bytes.Write (0, b1, 0, 10);
-			Assert.Fail ("#9 Should throw SqlTypeException");
+		                bytes.Write (0, b1, 0, 10);
+		                Assert.Fail ("#9 Should throw SqlTypeException");
+		            });
 		}
 		
-		[Test]
-		[ExpectedException (typeof (ArgumentNullException))]
+		[TestMethod]
 		public void Write_NullBufferAndInstanceValueTest ()
 		{
-			byte [] b1 = null;
-			SqlBytes bytes = new SqlBytes();
+            ExceptionAssert.Throws<ArgumentNullException>(
+		        delegate
+		            {
+		                byte [] b1 = null;
+		                SqlBytes bytes = new SqlBytes();
 			
-			bytes.Write (0, b1, 0, 10);
-			Assert.Fail ("#9 Should throw ArgumentNullException");
+		                bytes.Write (0, b1, 0, 10);
+		                Assert.Fail ("#9 Should throw ArgumentNullException");
+		            });
 		}
 		
-		[Test]
+		[TestMethod]
 		public void Write_SuccessTest2 ()
 		{
 			byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
@@ -468,16 +527,19 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (bytes.Value [17], b1 [9], "#10 Should be same");
 		}
 		
-		[Test]
-		[ExpectedException (typeof (ArgumentOutOfRangeException))]
+		[TestMethod]
 		public void Write_NegativeCountTest ()
 		{
-			byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
-			byte [] b2 = new byte [10];
-			SqlBytes bytes = new SqlBytes (b2);
+            ExceptionAssert.Throws<ArgumentOutOfRangeException>(
+		        delegate
+		            {
+		                byte [] b1 = { 33, 34, 35, 36, 37, 38, 39, 40, 41, 42 };
+		                byte [] b2 = new byte [10];
+		                SqlBytes bytes = new SqlBytes (b2);
 			
-			bytes.Write (0, b1, 0, -1);
-			Assert.Fail ("#11 Should throw ArgumentOutOfRangeException");
+		                bytes.Write (0, b1, 0, -1);
+		                Assert.Fail ("#11 Should throw ArgumentOutOfRangeException");
+		            });
 		}
 	}
 }

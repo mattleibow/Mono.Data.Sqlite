@@ -30,30 +30,35 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using NUnit.Framework;
 using System;
 using System.Data.SqlTypes;
 using System.Threading;
 using System.Globalization;
 
+#if SILVERLIGHT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#endif
+
 namespace MonoTests.System.Data.SqlTypes
 {
 
-	[TestFixture]
+	[TestClass]
         public class SqlBooleanTest {
 		private SqlBoolean SqlTrue;
 		private SqlBoolean SqlFalse;
 
-		[SetUp]
+		[TestInitialize]
 		public void GetReady() {
 			
-			Thread.CurrentThread.CurrentCulture = new CultureInfo ("en-US");
+			Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = "en-US";
 			SqlTrue = new SqlBoolean(true);
 			SqlFalse = new SqlBoolean(false);
 
 		}
 
-		[Test]
+		[TestMethod]
 		public void Create ()
 		{
 			SqlBoolean SqlTrue2 = new SqlBoolean(1);
@@ -71,7 +76,7 @@ namespace MonoTests.System.Data.SqlTypes
 		//
 
 		// And
-		[Test]
+		[TestMethod]
 		public void And() {
 
 			SqlBoolean SqlTrue2 = new SqlBoolean(true);
@@ -102,7 +107,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// NotEquals
-		[Test]
+		[TestMethod]
 		public void NotEquals() {
 
 			SqlBoolean SqlTrue2 = new SqlBoolean(true);
@@ -137,7 +142,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// OnesComplement
-		[Test]
+		[TestMethod]
 		public void OnesComplement() {
 
 			SqlBoolean SqlFalse2 = SqlBoolean.OnesComplement(SqlTrue);
@@ -149,7 +154,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// Or
-		[Test]
+		[TestMethod]
 		public void Or() {
 
 			SqlBoolean SqlTrue2 = new SqlBoolean(true);
@@ -179,7 +184,7 @@ namespace MonoTests.System.Data.SqlTypes
 
 
 		//  Parse
-		[Test]
+		[TestMethod]
 		public void Parse() {
 
 			String error = "Parse method does not work correctly ";
@@ -196,7 +201,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// Xor
-		[Test]
+		[TestMethod]
 		public void Xor() {
 
 			SqlBoolean SqlTrue2 = new SqlBoolean(true);
@@ -221,7 +226,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// static Equals
-		[Test]
+		[TestMethod]
 		public void StaticEquals() {
 
 			SqlBoolean SqlTrue2 = new SqlBoolean(true);
@@ -248,7 +253,7 @@ namespace MonoTests.System.Data.SqlTypes
 		//
 
 		// CompareTo
-		[Test]
+		[TestMethod]
 		public void CompareTo() {
 
 			String error = "CompareTo method does not work correctly";
@@ -261,7 +266,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// Equals
-		[Test]
+		[TestMethod]
 		public void Equals() {
 
 			SqlBoolean SqlTrue2 = new SqlBoolean(true);
@@ -283,7 +288,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.IsFalse (SqlBoolean.Null.Equals (SqlFalse), "null != false");
 		}
 
-		[Test]
+		[TestMethod]
 		public void GetHashCodeTest() {
 
 			Assert.AreEqual (1, SqlTrue.GetHashCode(), "GetHashCode method does not work correctly");
@@ -293,14 +298,14 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// GetType
-		[Test]
+		[TestMethod]
 		public void GetTypeTest() {
 
 			Assert.AreEqual ("System.Data.SqlTypes.SqlBoolean", SqlTrue.GetType().ToString(), "GetType method does not work correctly");
 		}
 
 		// ToSqlByte
-		[Test]
+		[TestMethod]
 		public void ToSqlByte() {
 
 			SqlByte SqlTestByte;
@@ -316,7 +321,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// ToSqlDecimal
-		[Test]
+		[TestMethod]
 		public void ToSqlDecimal() {
 
 			SqlDecimal SqlTestDecimal;
@@ -331,7 +336,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// ToSqlDouble
-		[Test]
+		[TestMethod]
 		public void ToSqlDouble() {
 
 			SqlDouble SqlTestDouble;
@@ -345,7 +350,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// ToSqlInt16
-		[Test]
+		[TestMethod]
 		public void ToSqlInt16() {
 
 			SqlInt16 SqlTestInt16;
@@ -360,7 +365,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// ToSqlInt32
-		[Test]
+		[TestMethod]
 		public void ToSqlInt32() {
 
 			SqlInt32 SqlTestInt32;
@@ -375,7 +380,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// ToSqlInt64
-		[Test]
+		[TestMethod]
 		public void ToSqlInt64() {
 
 			SqlInt64 SqlTestInt64;
@@ -391,7 +396,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// ToSqlMoney
-		[Test]
+		[TestMethod]
 		public void ToSqlMoney() {
 
 			SqlMoney SqlTestMoney;
@@ -406,7 +411,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// ToSqlSingle
-		[Test]
+		[TestMethod]
 		public void ToSqlsingle() {
 
 			SqlSingle SqlTestSingle;
@@ -421,7 +426,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// ToSqlString
-		[Test]
+		[TestMethod]
 		public void ToSqlString() {
 
 			SqlString SqlTestString;
@@ -436,7 +441,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// ToString
-		[Test]
+		[TestMethod]
 		public void ToStringTest() {
 
 			SqlString TestString;
@@ -458,7 +463,7 @@ namespace MonoTests.System.Data.SqlTypes
 		// OPERATORS
 
 		// BitwixeAnd operator
-		[Test]
+		[TestMethod]
 		public void BitwiseAndOperator() {
 
 			SqlBoolean SqlTrue2 = new SqlBoolean(true);
@@ -482,7 +487,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// BitwixeOr operator
-		[Test]
+		[TestMethod]
 		public void BitwiseOrOperator() {
 
 			SqlBoolean SqlTrue2 = new SqlBoolean(true);
@@ -506,7 +511,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// Equality operator
-		[Test]
+		[TestMethod]
 		public void EqualityOperator() {
 
 			SqlBoolean SqlTrue2 = new SqlBoolean(true);
@@ -534,7 +539,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// ExlusiveOr operator
-		[Test]
+		[TestMethod]
 		public void ExlusiveOrOperator() {
 
 			SqlBoolean SqlTrue2 = new SqlBoolean(true);
@@ -557,7 +562,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// false operator
-		[Test]
+		[TestMethod]
 		public void FalseOperator() {
 
 			String error = "false operator does not work correctly ";
@@ -568,7 +573,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// Inequality operator
-		[Test]
+		[TestMethod]
 		public void InequalityOperator() {
 
 			SqlBoolean SqlTrue2 = new SqlBoolean(true);
@@ -588,7 +593,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// Logical Not operator
-		[Test]
+		[TestMethod]
 		public void LogicalNotOperator() {
 
 			String error = "Logical Not operator does not work correctly" ;
@@ -599,7 +604,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// OnesComplement operator
-		[Test]
+		[TestMethod]
 		public void OnesComplementOperator() {
 
 			String error = "Ones complement operator does not work correctly" ;
@@ -615,7 +620,7 @@ namespace MonoTests.System.Data.SqlTypes
 
 
 		// true operator
-		[Test]
+		[TestMethod]
 		public void TrueOperator() {
 
 			String error = "true operator does not work correctly ";
@@ -626,7 +631,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// SqlBoolean to Boolean
-		[Test]
+		[TestMethod]
 		public void SqlBooleanToBoolean() {
 
 			String error = "SqlBooleanToBoolean operator does not work correctly ";
@@ -639,7 +644,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// SqlByte to SqlBoolean
-		[Test]
+		[TestMethod]
 		public void SqlByteToSqlBoolean() {
 
 			SqlByte SqlTestByte;
@@ -661,7 +666,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// SqlDecimal to SqlBoolean
-		[Test]
+		[TestMethod]
 		public void SqlDecimalToSqlBoolean() {
 
 			SqlDecimal SqlTest;
@@ -683,7 +688,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// SqlDouble to SqlBoolean
-		[Test]
+		[TestMethod]
 		public void SqlDoubleToSqlBoolean() {
 
 			SqlDouble SqlTest;
@@ -705,7 +710,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// SqlIn16 to SqlBoolean
-		[Test]
+		[TestMethod]
 		public void SqlInt16ToSqlBoolean() {
 
 			SqlInt16 SqlTest;
@@ -727,7 +732,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// SqlInt32 to SqlBoolean
-		[Test]
+		[TestMethod]
 		public void SqlInt32ToSqlBoolean() {
 
 			SqlInt32 SqlTest;
@@ -748,7 +753,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// SqlInt64 to SqlBoolean
-		[Test]
+		[TestMethod]
 		public void SqlInt64ToSqlBoolean() {
 
 			SqlInt64 SqlTest;
@@ -770,7 +775,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// SqlMoney to SqlBoolean
-		[Test]
+		[TestMethod]
 		public void SqlMoneyToSqlBoolean() {
 
 			SqlMoney SqlTest;
@@ -792,7 +797,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// SqlSingle to SqlBoolean
-		[Test]
+		[TestMethod]
 		public void SqlSingleToSqlBoolean() {
 
 			SqlSingle SqlTest;
@@ -818,7 +823,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// SqlString to SqlBoolean
-		[Test]
+		[TestMethod]
 		public void SqlStringToSqlBoolean() {
 
 			SqlString SqlTest;
@@ -844,7 +849,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// Boolean to SqlBoolean
-		[Test]
+		[TestMethod]
 		public void BooleanToSqlBoolean() {
 
 			SqlBoolean SqlTestBoolean;
@@ -874,7 +879,7 @@ namespace MonoTests.System.Data.SqlTypes
 		// PROPERTIES
 
 		// ByteValue property
-		[Test]
+		[TestMethod]
 		public void ByteValueProperty() {
 
 			String error = "ByteValue property does not work correctly ";
@@ -885,7 +890,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// IsFalse property
-		[Test]
+		[TestMethod]
 		public void IsFalseProperty() {
 
 			String error = "IsFalse property does not work correctly ";
@@ -896,7 +901,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// IsNull property
-		[Test]
+		[TestMethod]
 		public void IsNullProperty() {
 
 			String error = "IsNull property does not work correctly ";
@@ -908,7 +913,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// IsTrue property
-		[Test]
+		[TestMethod]
 		public void IsTrueProperty() {
 
 			String error = "IsTrue property does not work correctly ";
@@ -919,7 +924,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// Value property
-		[Test]
+		[TestMethod]
 		public void ValueProperty() {
 
 			String error = "Value property does not work correctly ";
@@ -935,34 +940,34 @@ namespace MonoTests.System.Data.SqlTypes
 		////
 		// FIELDS
 
-		[Test]
+		[TestMethod]
 		public void FalseField() {
 
 			Assert.IsTrue (!SqlBoolean.False.Value, "False field does not work correctly");
 
 		}
 
-		[Test]
+		[TestMethod]
 		public void NullField() {
 
 			Assert.IsTrue (SqlBoolean.Null.IsNull, "Null field does not work correctly");
 
 		}
 
-		[Test]
+		[TestMethod]
 		public void OneField() {
 
 			Assert.AreEqual ((byte)1, SqlBoolean.One.ByteValue, "One field does not work correctly");
 		}
 
-		[Test]
+		[TestMethod]
 		public void TrueField() {
 
 			Assert.IsTrue (SqlBoolean.True.Value, "True field does not work correctly");
 
 		}
 
-		[Test]
+		[TestMethod]
 		public void ZeroField() {
 
 			Assert.AreEqual ((byte)0, SqlBoolean.Zero.ByteValue, "Zero field does not work correctly");
@@ -970,7 +975,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 #if NET_2_0
 
-		[Test]
+		[TestMethod]
 		public void GreaterThanTest ()
 		{
 			SqlBoolean x = new SqlBoolean (-1);
@@ -978,21 +983,21 @@ namespace MonoTests.System.Data.SqlTypes
 			SqlBoolean z = new SqlBoolean ();
 			SqlBoolean z1 = new SqlBoolean (0);
 
-			NUnit.Framework.Assert.IsFalse ((x > y).Value, "#A01");
-			NUnit.Framework.Assert.AreEqual (x > z, SqlBoolean.Null, "#A02");
-			NUnit.Framework.Assert.IsTrue ((x > z1).Value, "#A03");
-			NUnit.Framework.Assert.AreEqual (y > z, SqlBoolean.Null, "#A04");
-			NUnit.Framework.Assert.IsFalse ((y > x).Value, "#A05");
-			NUnit.Framework.Assert.IsTrue ((y > z1).Value, "#A06");
-			NUnit.Framework.Assert.AreEqual (z > z1, SqlBoolean.Null, "#A07");
-			NUnit.Framework.Assert.AreEqual (z > x, SqlBoolean.Null, "#A08");
-			NUnit.Framework.Assert.AreEqual (z > y, SqlBoolean.Null, "#A09");
-			NUnit.Framework.Assert.AreEqual (z1 > z, SqlBoolean.Null, "#A10");
-			NUnit.Framework.Assert.IsFalse ((z1 > x).Value, "#A11");
-			NUnit.Framework.Assert.IsFalse ((z1 > y).Value, "#A12");
+			Assert.IsFalse ((x > y).Value, "#A01");
+			Assert.AreEqual (x > z, SqlBoolean.Null, "#A02");
+			Assert.IsTrue ((x > z1).Value, "#A03");
+			Assert.AreEqual (y > z, SqlBoolean.Null, "#A04");
+			Assert.IsFalse ((y > x).Value, "#A05");
+			Assert.IsTrue ((y > z1).Value, "#A06");
+			Assert.AreEqual (z > z1, SqlBoolean.Null, "#A07");
+			Assert.AreEqual (z > x, SqlBoolean.Null, "#A08");
+			Assert.AreEqual (z > y, SqlBoolean.Null, "#A09");
+			Assert.AreEqual (z1 > z, SqlBoolean.Null, "#A10");
+			Assert.IsFalse ((z1 > x).Value, "#A11");
+			Assert.IsFalse ((z1 > y).Value, "#A12");
 		}
 
-		[Test]
+		[TestMethod]
 		public void GreaterThanOrEqualTest ()
 		{
 			SqlBoolean x = new SqlBoolean (-1);
@@ -1000,21 +1005,21 @@ namespace MonoTests.System.Data.SqlTypes
 			SqlBoolean z = new SqlBoolean ();
 			SqlBoolean z1 = new SqlBoolean (0);
 
-			NUnit.Framework.Assert.IsTrue ((x >= y).Value, "#A01");
-			NUnit.Framework.Assert.AreEqual (x >= z, SqlBoolean.Null, "#A02");
-			NUnit.Framework.Assert.IsTrue ((x >= z1).Value, "#A03");
-			NUnit.Framework.Assert.AreEqual (y >= z, SqlBoolean.Null, "#A04");
-			NUnit.Framework.Assert.IsTrue ((y >= x).Value, "#A05");
-			NUnit.Framework.Assert.IsTrue ((y >= z1).Value, "#A06");
-			NUnit.Framework.Assert.AreEqual (z >= z1, SqlBoolean.Null, "#A07");
-			NUnit.Framework.Assert.AreEqual (z >= x, SqlBoolean.Null, "#A08");
-			NUnit.Framework.Assert.AreEqual (z >= y, SqlBoolean.Null, "#A09");
-			NUnit.Framework.Assert.AreEqual (z1 >= z, SqlBoolean.Null, "#A10");
-			NUnit.Framework.Assert.IsFalse ((z1 >= x).Value, "#A11");
-			NUnit.Framework.Assert.IsFalse ((z1 >= y).Value, "#A12");
+			Assert.IsTrue ((x >= y).Value, "#A01");
+			Assert.AreEqual (x >= z, SqlBoolean.Null, "#A02");
+			Assert.IsTrue ((x >= z1).Value, "#A03");
+			Assert.AreEqual (y >= z, SqlBoolean.Null, "#A04");
+			Assert.IsTrue ((y >= x).Value, "#A05");
+			Assert.IsTrue ((y >= z1).Value, "#A06");
+			Assert.AreEqual (z >= z1, SqlBoolean.Null, "#A07");
+			Assert.AreEqual (z >= x, SqlBoolean.Null, "#A08");
+			Assert.AreEqual (z >= y, SqlBoolean.Null, "#A09");
+			Assert.AreEqual (z1 >= z, SqlBoolean.Null, "#A10");
+			Assert.IsFalse ((z1 >= x).Value, "#A11");
+			Assert.IsFalse ((z1 >= y).Value, "#A12");
 		}
 
-		[Test]
+		[TestMethod]
 		public void LessThanTest ()
 		{
 			SqlBoolean x = new SqlBoolean (-1);
@@ -1022,21 +1027,21 @@ namespace MonoTests.System.Data.SqlTypes
 			SqlBoolean z = new SqlBoolean ();
 			SqlBoolean z1 = new SqlBoolean (0);
 
-			NUnit.Framework.Assert.IsFalse ((x < y).Value, "#A01");
-			NUnit.Framework.Assert.AreEqual (x < z, SqlBoolean.Null, "#A02");
-			NUnit.Framework.Assert.IsFalse ((x < z1).Value, "#A03");
-			NUnit.Framework.Assert.AreEqual (y < z, SqlBoolean.Null, "#A04");
-			NUnit.Framework.Assert.IsFalse ((y < x).Value, "#A05");
-			NUnit.Framework.Assert.IsFalse ((y < z1).Value, "#A06");
-			NUnit.Framework.Assert.AreEqual (z < z1, SqlBoolean.Null, "#A07");
-			NUnit.Framework.Assert.AreEqual (z < x, SqlBoolean.Null, "#A08");
-			NUnit.Framework.Assert.AreEqual (z < y, SqlBoolean.Null, "#A09");
-			NUnit.Framework.Assert.AreEqual (z1 < z, SqlBoolean.Null, "#A10");
-			NUnit.Framework.Assert.IsTrue ((z1 < x).Value, "#A11");
-			NUnit.Framework.Assert.IsTrue ((z1 < y).Value, "#A12");
+			Assert.IsFalse ((x < y).Value, "#A01");
+			Assert.AreEqual (x < z, SqlBoolean.Null, "#A02");
+			Assert.IsFalse ((x < z1).Value, "#A03");
+			Assert.AreEqual (y < z, SqlBoolean.Null, "#A04");
+			Assert.IsFalse ((y < x).Value, "#A05");
+			Assert.IsFalse ((y < z1).Value, "#A06");
+			Assert.AreEqual (z < z1, SqlBoolean.Null, "#A07");
+			Assert.AreEqual (z < x, SqlBoolean.Null, "#A08");
+			Assert.AreEqual (z < y, SqlBoolean.Null, "#A09");
+			Assert.AreEqual (z1 < z, SqlBoolean.Null, "#A10");
+			Assert.IsTrue ((z1 < x).Value, "#A11");
+			Assert.IsTrue ((z1 < y).Value, "#A12");
 		}
 
-		[Test]
+		[TestMethod]
 		public void LessThanOrEqualTest ()
 		{
 			SqlBoolean x = new SqlBoolean (-1);
@@ -1044,18 +1049,18 @@ namespace MonoTests.System.Data.SqlTypes
 			SqlBoolean z = new SqlBoolean ();
 			SqlBoolean z1 = new SqlBoolean (0);
 
-			NUnit.Framework.Assert.IsTrue ((x <= y).Value, "#A01");
-			NUnit.Framework.Assert.AreEqual (x <= z, SqlBoolean.Null, "#A02");
-			NUnit.Framework.Assert.IsFalse ((x <= z1).Value, "#A03");
-			NUnit.Framework.Assert.AreEqual (y <= z, SqlBoolean.Null, "#A04");
-			NUnit.Framework.Assert.IsTrue ((y <= x).Value, "#A05");
-			NUnit.Framework.Assert.IsFalse ((y <= z1).Value, "#A06");
-			NUnit.Framework.Assert.AreEqual (z <= z1, SqlBoolean.Null, "#A07");
-			NUnit.Framework.Assert.AreEqual (z <= x, SqlBoolean.Null, "#A08");
-			NUnit.Framework.Assert.AreEqual (z <= y, SqlBoolean.Null, "#A09");
-			NUnit.Framework.Assert.AreEqual (z1 <= z, SqlBoolean.Null, "#A10");
-			NUnit.Framework.Assert.IsTrue ((z1 <= x).Value, "#A11");
-			NUnit.Framework.Assert.IsTrue ((z1 <= y).Value, "#A12");
+			Assert.IsTrue ((x <= y).Value, "#A01");
+			Assert.AreEqual (x <= z, SqlBoolean.Null, "#A02");
+			Assert.IsFalse ((x <= z1).Value, "#A03");
+			Assert.AreEqual (y <= z, SqlBoolean.Null, "#A04");
+			Assert.IsTrue ((y <= x).Value, "#A05");
+			Assert.IsFalse ((y <= z1).Value, "#A06");
+			Assert.AreEqual (z <= z1, SqlBoolean.Null, "#A07");
+			Assert.AreEqual (z <= x, SqlBoolean.Null, "#A08");
+			Assert.AreEqual (z <= y, SqlBoolean.Null, "#A09");
+			Assert.AreEqual (z1 <= z, SqlBoolean.Null, "#A10");
+			Assert.IsTrue ((z1 <= x).Value, "#A11");
+			Assert.IsTrue ((z1 <= y).Value, "#A12");
 		}
 #endif
 	}

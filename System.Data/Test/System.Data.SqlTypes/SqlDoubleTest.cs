@@ -38,30 +38,26 @@ using System.Globalization;
 using System.IO;
 #endif
 using System.Threading;
-using NUnit.Framework;
+
+#if SILVERLIGHT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#endif
 
 namespace MonoTests.System.Data.SqlTypes
 {
-	[TestFixture]
+	[TestClass]
 	public class SqlDoubleTest
 	{
-		private CultureInfo originalCulture;
-
-		[SetUp]
+		[TestInitialize]
 		public void SetUp ()
 		{
-			originalCulture = Thread.CurrentThread.CurrentCulture;
-			Thread.CurrentThread.CurrentCulture = new CultureInfo ("en-US");
-		}
-
-		[TearDown]
-		public void TearDown ()
-		{
-			Thread.CurrentThread.CurrentCulture = originalCulture;
+            Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = "en-US";
 		}
 
 		// Test constructor
-		[Test]
+		[TestMethod]
 		public void Create ()
 		{
 			SqlDouble Test = new SqlDouble ((double) 34.87);
@@ -72,7 +68,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// Test public fields
-		[Test]
+		[TestMethod]
 		public void PublicFields ()
 		{
 			Assert.AreEqual (1.7976931348623157e+308, SqlDouble.MaxValue.Value, "#B01");
@@ -82,7 +78,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// Test properties
-		[Test]
+		[TestMethod]
 		public void Properties ()
 		{
 			SqlDouble Test5443 = new SqlDouble (5443e12);
@@ -95,7 +91,7 @@ namespace MonoTests.System.Data.SqlTypes
 
 		// PUBLIC METHODS
 
-		[Test]
+		[TestMethod]
 		public void ArithmeticMethods ()
 		{
 			SqlDouble Test0 = new SqlDouble (0);
@@ -150,7 +146,7 @@ namespace MonoTests.System.Data.SqlTypes
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void CompareTo ()
 		{
 			SqlDouble Test1 = new SqlDouble (4e64);
@@ -172,7 +168,7 @@ namespace MonoTests.System.Data.SqlTypes
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void EqualsMethods ()
 		{
 			SqlDouble Test0 = new SqlDouble (0);
@@ -190,7 +186,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.IsTrue (!SqlDouble.Equals (Test1, Test2).Value, "#F06");
 		}
 
-		[Test]
+		[TestMethod]
 		public void GetHashCodeTest ()
 		{
 			SqlDouble Test15 = new SqlDouble (15);
@@ -199,7 +195,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (Test15.GetHashCode (), Test15.GetHashCode (), "#G01");
 		}
 
-		[Test]
+		[TestMethod]
 		public void GetTypeTest ()
 		{
 			SqlDouble Test = new SqlDouble (84);
@@ -207,7 +203,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual ("System.Double", Test.Value.GetType ().ToString (), "#H02");
 		}
 
-		[Test]
+		[TestMethod]
 		public void Greaters ()
 		{
 			SqlDouble Test1 = new SqlDouble (1e100);
@@ -225,7 +221,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.IsTrue (SqlDouble.GreaterThanOrEqual (Test1, Test11).Value, "#I06");
 		}
 
-		[Test]
+		[TestMethod]
 		public void Lessers ()
 		{
 			SqlDouble Test1 = new SqlDouble (1.8e100);
@@ -244,7 +240,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.IsTrue (SqlDouble.LessThanOrEqual (Test11, SqlDouble.Null).IsNull, "#J07");
 		}
 
-		[Test]
+		[TestMethod]
 		public void NotEquals ()
 		{
 			SqlDouble Test1 = new SqlDouble (1280000000001);
@@ -260,7 +256,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.IsTrue (SqlDouble.NotEquals (SqlDouble.Null, Test22).IsNull, "#K07");
 		}
 
-		[Test]
+		[TestMethod]
 		public void Parse ()
 		{
 			try {
@@ -287,7 +283,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual ((double) 150, SqlDouble.Parse ("150").Value, "#L07");
 		}
 
-		[Test]
+		[TestMethod]
 		public void Conversions ()
 		{
 			SqlDouble Test0 = new SqlDouble (0);
@@ -391,7 +387,7 @@ namespace MonoTests.System.Data.SqlTypes
 
 		// OPERATORS
 
-		[Test]
+		[TestMethod]
 		public void ArithmeticOperators ()
 		{
 			SqlDouble Test0 = new SqlDouble (0);
@@ -442,7 +438,7 @@ namespace MonoTests.System.Data.SqlTypes
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void ThanOrEqualOperators ()
 		{
 			SqlDouble Test1 = new SqlDouble (1E+164);
@@ -486,7 +482,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.IsTrue ((Test1 <= SqlDouble.Null).IsNull, "#O23");
 		}
 
-		[Test]
+		[TestMethod]
 		public void UnaryNegation ()
 		{
 			SqlDouble Test = new SqlDouble (2000000001);
@@ -499,7 +495,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual ((double) 3000, Result.Value, "#P02");
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlBooleanToSqlDouble ()
 		{
 			SqlBoolean TestBoolean = new SqlBoolean (true);
@@ -513,7 +509,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.IsTrue (Result.IsNull, "#Q02");
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlDoubleToDouble ()
 		{
 			SqlDouble Test = new SqlDouble (12e12);
@@ -521,7 +517,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (12e12, Result, "#R01");
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlStringToSqlDouble ()
 		{
 			SqlString TestString = new SqlString ("Test string");
@@ -537,7 +533,7 @@ namespace MonoTests.System.Data.SqlTypes
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void DoubleToSqlDouble ()
 		{
 			double Test1 = 5e64;
@@ -545,14 +541,14 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (5e64, Result.Value, "#T01");
 		}
 
-		[Test]
+		[TestMethod]
 		public void ByteToSqlDouble ()
 		{
 			short TestShort = 14;
 			Assert.AreEqual ((double) 14, ((SqlDouble) TestShort).Value, "#U01");
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlDecimalToSqlDouble ()
 		{
 			SqlDecimal TestDecimal64 = new SqlDecimal (64);
@@ -561,7 +557,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (SqlDouble.Null, ((SqlDouble) SqlDecimal.Null), "#V02");
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlIntToSqlDouble ()
 		{
 			SqlInt16 Test64 = new SqlInt16 (64);
@@ -572,14 +568,14 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual ((double) 64000, ((SqlDouble) Test64000).Value, "#W03");
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlMoneyToSqlDouble ()
 		{
 			SqlMoney TestMoney64 = new SqlMoney (64);
 			Assert.AreEqual ((double) 64, ((SqlDouble) TestMoney64).Value, "#X01");
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlSingleToSqlDouble ()
 		{
 			SqlSingle TestSingle64 = new SqlSingle (64);

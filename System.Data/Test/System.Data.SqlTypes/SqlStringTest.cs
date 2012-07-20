@@ -37,36 +37,33 @@ using System.Globalization;
 using System.IO;
 #endif
 using System.Threading;
-using NUnit.Framework;
+
+#if SILVERLIGHT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#endif
 
 namespace MonoTests.System.Data.SqlTypes
 {
-	[TestFixture]
+	[TestClass]
 	public class SqlStringTest
 	{
 		private SqlString Test1;
 		private SqlString Test2;
 		private SqlString Test3;
-		private CultureInfo originalCulture;
 
-		[SetUp]
+		[TestInitialize]
 		public void GetReady()
 		{
-			originalCulture = Thread.CurrentThread.CurrentCulture;
-			Thread.CurrentThread.CurrentCulture = new CultureInfo ("en-AU");
+            Windows.Globalization.ApplicationLanguages.PrimaryLanguageOverride = "en-AU";
 			Test1 = new SqlString ("First TestString");
 			Test2 = new SqlString ("This is just a test SqlString");
 			Test3 = new SqlString ("This is just a test SqlString");
 		}
 
-		[TearDown]
-		public void TearDown ()
-		{
-			Thread.CurrentThread.CurrentCulture = originalCulture;
-		}
-
 		// Test constructor
-		[Test]
+		[TestMethod]
 		public void Create()
 		{
 			// SqlString (String)
@@ -96,22 +93,28 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.IsTrue (!TestString.IsNull, "#A09");
 		}
 
-		[Test]
-		[ExpectedException(typeof (ArgumentOutOfRangeException))]
+		[TestMethod]
 		public void CtorArgumentOutOfRangeException1 ()
 		{
-			SqlString TestString = new SqlString ("en-GB", SqlCompareOptions.BinarySort, new byte [2] {113, 100}, 2, 1);
+		    ExceptionAssert.Throws<ArgumentOutOfRangeException>(
+		        delegate
+		            {
+		                SqlString TestString = new SqlString("en-GB", SqlCompareOptions.BinarySort, new byte[2] {113, 100}, 2, 1);
+		            });
 		}
 
-		[Test]
-		[ExpectedException(typeof (ArgumentOutOfRangeException))]
+		[TestMethod]
 		public void CtorArgumentOutOfRangeException2 ()
 		{
-			SqlString TestString = new SqlString ("en-GB", SqlCompareOptions.BinarySort, new byte [2] {113, 100}, 0, 4);
+		    ExceptionAssert.Throws<ArgumentOutOfRangeException>(
+		        delegate
+		            {
+		                SqlString TestString = new SqlString("en-GB", SqlCompareOptions.BinarySort, new byte[2] {113, 100}, 0, 4);
+		            });
 		}
 
 		// Test public fields
-		[Test]
+		[TestMethod]
 		public void PublicFields()
 		{
 			// BinarySort
@@ -134,7 +137,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// Test properties
-		[Test]
+		[TestMethod]
 		public void Properties()
 		{
 			// CompareInfo
@@ -160,24 +163,30 @@ namespace MonoTests.System.Data.SqlTypes
 
 		// PUBLIC METHODS
 
-		[Test]
-		[ExpectedException(typeof(ArgumentException))]
+		[TestMethod]
 		public void CompareToArgumentException ()
 		{
-			SqlByte Test = new SqlByte (1);
-			Test1.CompareTo (Test);
+		    ExceptionAssert.Throws<ArgumentException>(
+		        delegate
+		            {
+		                SqlByte Test = new SqlByte(1);
+		                Test1.CompareTo(Test);
+		            });
 		}
 
-		[Test]
-		[ExpectedException(typeof(SqlTypeException))]
+		[TestMethod]
 		public void CompareToSqlTypeException ()
 		{
-			SqlString T1 = new SqlString ("test", "en-GB", SqlCompareOptions.IgnoreCase);
-			SqlString T2 = new SqlString ("TEST", "en-GB", SqlCompareOptions.None);
-			T1.CompareTo (T2);
+		    ExceptionAssert.Throws<SqlTypeException>(
+		        delegate
+		            {
+		                SqlString T1 = new SqlString("test", "en-GB", SqlCompareOptions.IgnoreCase);
+		                SqlString T2 = new SqlString("TEST", "en-GB", SqlCompareOptions.None);
+		                T1.CompareTo(T2);
+		            });
 		}
 
-		[Test]
+		[TestMethod]
 #if TARGET_JVM
 		[Ignore ("The option CompareOptions.IgnoreWidth is not supported")]
 #endif
@@ -225,7 +234,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.IsTrue (T1.CompareTo (T2) > 0, "#D15");
 		}
 
-		[Test]
+		[TestMethod]
 		public void EqualsMethods()
 		{
 			Assert.IsTrue (!Test1.Equals (Test2), "#E01");
@@ -238,7 +247,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.IsTrue (!SqlString.Equals (Test1, Test2).Value, "#E06");
 		}
 
-		[Test]
+		[TestMethod]
 		public void GetHashCodeTest()
 		{
 			// FIXME: Better way to test HashCode
@@ -248,7 +257,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.IsTrue (Test2.GetHashCode () == Test2.GetHashCode (), "#F03");
 		}
 
-		[Test]
+		[TestMethod]
 		public void GetTypeTest()
 		{
 			Assert.AreEqual ("System.Data.SqlTypes.SqlString", 
@@ -257,7 +266,7 @@ namespace MonoTests.System.Data.SqlTypes
 				Test1.Value.GetType ().ToString (), "#G02");
 		}
 
-		[Test]
+		[TestMethod]
 #if TARGET_JVM
 		[Ignore ("The option CompareOptions.IgnoreWidth is not supported")]
 #endif
@@ -274,7 +283,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.IsTrue (SqlString.GreaterThanOrEqual (Test2, Test3).Value, "#H06");
 		}
 
-		[Test]
+		[TestMethod]
 #if TARGET_JVM
 		[Ignore ("The option CompareOptions.IgnoreWidth is not supported")]
 #endif
@@ -292,7 +301,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.IsTrue (SqlString.LessThanOrEqual (Test2, SqlString.Null).IsNull, "#I07");
 		}
 
-		[Test]
+		[TestMethod]
 		public void NotEquals()
 		{
 			Assert.IsTrue (SqlString.NotEquals (Test1, Test2).Value, "#J01");
@@ -302,7 +311,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.IsTrue (SqlString.NotEquals (SqlString.Null, Test3).IsNull, "#J05");
 		}
 
-		[Test]
+		[TestMethod]
 		public void Concat()
 		{
 			Test1 = new SqlString ("First TestString");
@@ -316,14 +325,14 @@ namespace MonoTests.System.Data.SqlTypes
 				SqlString.Concat (Test1, SqlString.Null), "#K02");
 		}
 
-		[Test]
+		[TestMethod]
 		public void Clone()
 		{
 			SqlString TestSqlString = Test1.Clone ();
 			Assert.AreEqual (Test1, TestSqlString, "#L01");
 		}
 
-		[Test]
+		[TestMethod]
 		public void CompareOptionsFromSqlCompareOptions()
 		{
 			Assert.AreEqual (CompareOptions.IgnoreCase,
@@ -341,7 +350,7 @@ namespace MonoTests.System.Data.SqlTypes
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void UnicodeBytes()
 		{
 			Assert.AreEqual ((byte)70, Test1.GetUnicodeBytes () [0], "#N03");
@@ -364,105 +373,144 @@ namespace MonoTests.System.Data.SqlTypes
 			}
 		}
 
-		[Test]
-		[ExpectedException(typeof (FormatException))]
+		[TestMethod]
 		public void ConversionBoolFormatException1 ()
 		{
-			bool test = Test1.ToSqlBoolean ().Value;
+		    ExceptionAssert.Throws<FormatException>(
+		        delegate
+		            {
+		                bool test = Test1.ToSqlBoolean().Value;
+		            });
 		}
 
-		[Test]
-		[ExpectedException(typeof (FormatException))]
+		[TestMethod]
 		public void ConversionByteFormatException ()
 		{
-			byte test = Test1.ToSqlByte ().Value;
+		    ExceptionAssert.Throws<FormatException>(
+		        delegate
+		            {
+		                byte test = Test1.ToSqlByte().Value;
+		            });
 		}
 
-		[Test]
-		[ExpectedException(typeof (FormatException))]
+		[TestMethod]
 		public void ConversionDecimalFormatException1 ()
 		{
-			Decimal d = Test1.ToSqlDecimal ().Value;
+		    ExceptionAssert.Throws<FormatException>(
+		        delegate
+		            {
+		                Decimal d = Test1.ToSqlDecimal().Value;
+		            });
 		}
 
-		[Test]
-		[ExpectedException(typeof (FormatException))]
+		[TestMethod]
 		public void ConversionDecimalFormatException2 ()
 		{
-			SqlString String9E300 = new SqlString ("9E+300");
-			SqlDecimal test = String9E300.ToSqlDecimal ();
+		    ExceptionAssert.Throws<FormatException>(
+		        delegate
+		            {
+		                SqlString String9E300 = new SqlString("9E+300");
+		                SqlDecimal test = String9E300.ToSqlDecimal();
+		            });
 		}
 
-		[Test]
-		[ExpectedException(typeof (FormatException))]
+		[TestMethod]
 		public void ConversionGuidFormatException ()
 		{
-			SqlString String9E300 = new SqlString ("9E+300");
-			SqlGuid test = String9E300.ToSqlGuid ();
+		    ExceptionAssert.Throws<FormatException>(
+		        delegate
+		            {
+		                SqlString String9E300 = new SqlString("9E+300");
+		                SqlGuid test = String9E300.ToSqlGuid();
+		            });
 		}
 
-		[Test]
-		[ExpectedException(typeof (FormatException))]
+		[TestMethod]
 		public void ConversionInt16FormatException ()
 		{
-			SqlString String9E300 = new SqlString ("9E+300");
-			SqlInt16 test = String9E300.ToSqlInt16().Value;
+		    ExceptionAssert.Throws<FormatException>(
+		        delegate
+		            {
+		                SqlString String9E300 = new SqlString("9E+300");
+		                SqlInt16 test = String9E300.ToSqlInt16().Value;
+		            });
 		}
 
-		[Test]
-		[ExpectedException(typeof (FormatException))]
+		[TestMethod]
 		public void ConversionInt32FormatException1 ()
 		{
-			SqlString String9E300 = new SqlString ("9E+300");
-			SqlInt32 test = String9E300.ToSqlInt32 ().Value;
+		    ExceptionAssert.Throws<FormatException>(
+		        delegate
+		            {
+		                SqlString String9E300 = new SqlString("9E+300");
+		                SqlInt32 test = String9E300.ToSqlInt32().Value;
+		            });
 		}
 
-		[Test]
-		[ExpectedException(typeof (FormatException))]
+		[TestMethod]
 		public void ConversionInt32FormatException2 ()
 		{
-			SqlInt32 test = Test1.ToSqlInt32 ().Value;
+		    ExceptionAssert.Throws<FormatException>(
+		        delegate
+		            {
+		                SqlInt32 test = Test1.ToSqlInt32().Value;
+		            });
 		}
 
-		[Test]
-		[ExpectedException(typeof (FormatException))]
+		[TestMethod]
 		public void ConversionInt64FormatException ()
 		{
-			SqlString String9E300 = new SqlString ("9E+300");
-			SqlInt64 test = String9E300.ToSqlInt64 ().Value;
+		    ExceptionAssert.Throws<FormatException>(
+		        delegate
+		            {
+		                SqlString String9E300 = new SqlString("9E+300");
+		                SqlInt64 test = String9E300.ToSqlInt64().Value;
+		            });
 		}
 
-		[Test]
-		[ExpectedException(typeof (FormatException))]
+		[TestMethod]
 		public void ConversionIntMoneyFormatException2 ()
 		{
-			SqlString String9E300 = new SqlString ("9E+300");
-			SqlMoney test = String9E300.ToSqlMoney ().Value;
+		    ExceptionAssert.Throws<FormatException>(
+		        delegate
+		            {
+		                SqlString String9E300 = new SqlString("9E+300");
+		                SqlMoney test = String9E300.ToSqlMoney().Value;
+		            });
 		}
 
-		[Test]
-		[ExpectedException(typeof(OverflowException))]
+		[TestMethod]
 		public void ConversionByteOverflowException ()
 		{
-			SqlByte b = (new SqlString ("2500")).ToSqlByte ();
+		    ExceptionAssert.Throws<OverflowException>(
+		        delegate
+		            {
+		                SqlByte b = (new SqlString("2500")).ToSqlByte();
+		            });
 		}
 
-		[Test]
-		[ExpectedException(typeof(OverflowException))]
+		[TestMethod]
 		public void ConversionDoubleOverflowException ()
 		{
-			SqlDouble test = (new SqlString ("4e400")).ToSqlDouble ();
+		    ExceptionAssert.Throws<OverflowException>(
+		        delegate
+		            {
+		                SqlDouble test = (new SqlString("4e400")).ToSqlDouble();
+		            });
 		}
 
-		[Test]
-		[ExpectedException(typeof(OverflowException))]
+		[TestMethod]
 		public void ConversionSingleOverflowException ()
 		{
-			SqlString String9E300 = new SqlString ("9E+300");
-			SqlSingle test = String9E300.ToSqlSingle().Value;
+		    ExceptionAssert.Throws<OverflowException>(
+		        delegate
+		            {
+		                SqlString String9E300 = new SqlString("9E+300");
+		                SqlSingle test = String9E300.ToSqlSingle().Value;
+		            });
 		}
 
-		[Test]
+		[TestMethod]
 		public void Conversions()
 		{
 			SqlString String250 = new SqlString ("250");
@@ -513,7 +561,7 @@ namespace MonoTests.System.Data.SqlTypes
 
 		// OPERATORS
 
-		[Test]
+		[TestMethod]
 		public void ArithmeticOperators()
 		{
 			SqlString TestString = new SqlString ("...Testing...");
@@ -523,7 +571,7 @@ namespace MonoTests.System.Data.SqlTypes
 				Test1 + SqlString.Null, "#P02");
 		}
 
-		[Test]
+		[TestMethod]
 #if TARGET_JVM
 		[Ignore ("The option CompareOptions.IgnoreWidth is not supported")]
 #endif
@@ -565,7 +613,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.IsTrue ((Test1 <= SqlString.Null).IsNull, "#Q23");
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlBooleanToSqlString()
 		{
 			SqlBoolean TestBoolean = new SqlBoolean (true);
@@ -582,7 +630,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.IsTrue (Result.IsNull, "#R03");
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlByteToBoolean()
 		{
 			SqlByte TestByte = new SqlByte (250);
@@ -595,28 +643,28 @@ namespace MonoTests.System.Data.SqlTypes
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlDateTimeToSqlString()
 		{
 			SqlDateTime TestTime = new SqlDateTime(2002, 10, 22, 9, 52, 30);
 			Assert.AreEqual ("22/10/2002 9:52:30 AM", ((SqlString)TestTime).Value, "#T01");
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlDecimalToSqlString()
 		{
 			SqlDecimal TestDecimal = new SqlDecimal (1000.2345);
 			Assert.AreEqual ("1000.2345000000000", ((SqlString)TestDecimal).Value, "#U01");
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlDoubleToSqlString()
 		{
 			SqlDouble TestDouble = new SqlDouble (64E+64);
 			Assert.AreEqual ("6.4E+65", ((SqlString)TestDouble).Value, "#V01");
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlGuidToSqlString()
 		{
 			byte [] b = new byte [16];
@@ -634,7 +682,7 @@ namespace MonoTests.System.Data.SqlTypes
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlInt16ToSqlString()
 		{
 			SqlInt16 TestInt = new SqlInt16(20012);
@@ -647,7 +695,7 @@ namespace MonoTests.System.Data.SqlTypes
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlInt32ToSqlString()
 		{
 			SqlInt32 TestInt = new SqlInt32(-12456);
@@ -660,34 +708,34 @@ namespace MonoTests.System.Data.SqlTypes
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlInt64ToSqlString()
 		{
 			SqlInt64 TestInt = new SqlInt64(10101010);
 			Assert.AreEqual ("10101010", ((SqlString)TestInt).Value, "#Z01");
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlMoneyToSqlString()
 		{
 			SqlMoney TestMoney = new SqlMoney (646464.6464);
 			Assert.AreEqual ("646464.6464", ((SqlString)TestMoney).Value, "#AA01");
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlSingleToSqlString()
 		{
 			SqlSingle TestSingle = new SqlSingle (3E+20);
 			Assert.AreEqual ("3E+20", ((SqlString)TestSingle).Value, "#AB01");
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlStringToString()
 		{
 			Assert.AreEqual ("First TestString",(String)Test1, "#AC01");
 		}
 
-		[Test]
+		[TestMethod]
 		public void StringToSqlString()
 		{
 			String TestString = "Test String";
@@ -695,7 +743,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 #if NET_2_0
-		[Test]
+		[TestMethod]
 		public void AddSqlString()
 		{
 			Assert.AreEqual ("First TestStringThis is just a test SqlString", (String)(SqlString.Add(Test1, Test2)), "#AE01");

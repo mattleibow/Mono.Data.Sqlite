@@ -32,20 +32,25 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using NUnit.Framework;
 using System;
 using System.Data.SqlTypes;
 
+#if SILVERLIGHT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#endif
+
 namespace MonoTests.System.Data.SqlTypes
 {
-	[TestFixture]
+	[TestClass]
         public class SqlBinaryTest {
 	
 		SqlBinary Test1;
 		SqlBinary Test2;
 		SqlBinary Test3;
 
-		[SetUp]
+		[TestInitialize]
 		public void GetReady() 
 		{
                         byte [] b1 = new Byte [2];
@@ -66,7 +71,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// Test constructor
-		[Test]
+		[TestMethod]
 		public void Create()
 		{
 			byte [] b = new byte [3];                        
@@ -75,14 +80,14 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// Test public fields
-		[Test]
+		[TestMethod]
 		public void PublicFields()
 		{
 			Assert.IsTrue (SqlBinary.Null.IsNull, "#B01");
 		}
 
 		// Test properties
-		[Test]
+		[TestMethod]
 		public void Properties()
 		{
 			byte [] b = new byte [2];
@@ -137,7 +142,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// Methods 
-		[Test]
+		[TestMethod]
 		public void ComparisonMethods()
 		{
 			// GreaterThan
@@ -171,7 +176,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.IsTrue (SqlBinary.NotEquals (Test2, Test1).Value, "#D18");
 		}
 
-		[Test]
+		[TestMethod]
 		public void CompareTo()
 		{
                         SqlString TestString = new SqlString ("This is a test");
@@ -188,20 +193,20 @@ namespace MonoTests.System.Data.SqlTypes
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void GetHashCodeTest()
 		{
 			Assert.AreEqual (Test1.GetHashCode (), Test1.GetHashCode (), "#F01");
 			Assert.IsTrue (Test2.GetHashCode () !=  Test1.GetHashCode (), "#F02");
 		}
 
-		[Test]
+		[TestMethod]
 		public void GetTypeTest()
 		{
 			Assert.AreEqual ("System.Data.SqlTypes.SqlBinary", Test1.GetType().ToString(), "#G01");
 		}
 
-		[Test]
+		[TestMethod]
 		public void Concat()
 		{			
 			SqlBinary TestBinary;
@@ -214,7 +219,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.AreEqual ((byte)15, TestBinary [1], "#H03");
 		}
 
-		[Test]
+		[TestMethod]
 		public void ToSqlGuid()
 		{
                         SqlBinary TestBinary = new SqlBinary (new byte [16]);
@@ -222,7 +227,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.IsTrue (!TestGuid.IsNull, "#I01");
 		}
 
-		[Test]
+		[TestMethod]
 		public void ToStringTest()
 		{
                         Assert.AreEqual ("SqlBinary(3)", Test2.ToString (), "#J01");
@@ -230,7 +235,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// OPERATORS
-		[Test]
+		[TestMethod]
 		public void AdditionOperator()
 		{
 			SqlBinary TestBinary = Test1 + Test2;
@@ -238,7 +243,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.AreEqual ((byte)15, TestBinary [1], "#K02");
 		}
 
-		[Test]
+		[TestMethod]
 		public void ComparisonOperators()
 		{
 			// Equality
@@ -266,14 +271,14 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.IsTrue ((Test3 <= Test1).Value, "#L12");
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlBinaryToByteArray() 
 		{
 			byte [] TestByteArray = (Byte[])Test1;
 			Assert.AreEqual ((byte)240, TestByteArray[0], "#M01");
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlGuidToSqlBinary()
 		{
                         byte [] TestByteArray = new Byte [16];
@@ -285,7 +290,7 @@ namespace MonoTests.System.Data.SqlTypes
                         Assert.AreEqual ((byte)15, TestBinary [0], "#N01");
 		}
 
-		[Test]
+		[TestMethod]
 		public void ByteArrayToSqlBinary()
 		{
                         byte [] TestByteArray = new Byte [2];

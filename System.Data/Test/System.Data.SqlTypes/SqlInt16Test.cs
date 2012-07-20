@@ -31,7 +31,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using NUnit.Framework;
 using System;
 using System.Data.SqlTypes;
 #if TARGET_JVM
@@ -41,13 +40,19 @@ using DivideByZeroException = System.ArithmeticException;
 using System.IO;
 #endif
 
+#if SILVERLIGHT
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#else
+using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#endif
+
 namespace MonoTests.System.Data.SqlTypes
 {
-	[TestFixture]
+	[TestClass]
 	public class SqlInt16Test
 	{
 		// Test constructor
-		[Test]
+		[TestMethod]
 		public void Create ()
 		{
 			SqlInt16 TestShort = new SqlInt16 (29);
@@ -58,7 +63,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// Test public fields
-		[Test]
+		[TestMethod]
 		public void PublicFields ()
 		{
 			Assert.AreEqual ((SqlInt16) 32767, SqlInt16.MaxValue, "Test#1");
@@ -68,7 +73,7 @@ namespace MonoTests.System.Data.SqlTypes
 		}
 
 		// Test properties
-		[Test]
+		[TestMethod]
 		public void Properties ()
 		{
 			SqlInt16 Test5443 = new SqlInt16 (5443);
@@ -80,7 +85,7 @@ namespace MonoTests.System.Data.SqlTypes
 
 		// PUBLIC METHODS
 
-		[Test]
+		[TestMethod]
 		public void ArithmeticMethods ()
 		{
 			SqlInt16 Test64 = new SqlInt16 (64);
@@ -143,7 +148,7 @@ namespace MonoTests.System.Data.SqlTypes
 #endif
 		}
 
-		[Test]
+		[TestMethod]
 		public void BitwiseMethods ()
 		{
 			short MaxValue = SqlInt16.MaxValue.Value;
@@ -163,7 +168,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual ((short) MaxValue, SqlInt16.BitwiseOr (TestIntMax, TestInt2).Value, "Test#6");
 		}
 
-		[Test]
+		[TestMethod]
 		public void CompareTo ()
 		{
 			SqlInt16 TestInt4000 = new SqlInt16 (4000);
@@ -185,7 +190,7 @@ namespace MonoTests.System.Data.SqlTypes
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void EqualsMethod ()
 		{
 			SqlInt16 Test0 = new SqlInt16 (0);
@@ -199,7 +204,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.IsTrue (Test180.Equals (Test180II), "Test#4");
 		}
 
-		[Test]
+		[TestMethod]
 		public void StaticEqualsMethod ()
 		{
 			SqlInt16 Test34 = new SqlInt16 (34);
@@ -211,7 +216,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.IsTrue (!SqlInt16.Equals (Test15, Test34II).Value, "Test#3");
 		}
 
-		[Test]
+		[TestMethod]
 		public void GetHashCodeTest ()
 		{
 			SqlInt16 Test15 = new SqlInt16 (15);
@@ -220,14 +225,14 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (Test15.GetHashCode (), Test15.GetHashCode (), "Test#1");
 		}
 
-		[Test]
+		[TestMethod]
 		public void GetTypeTest ()
 		{
 			SqlInt16 Test = new SqlInt16 (84);
 			Assert.AreEqual ("System.Data.SqlTypes.SqlInt16", Test.GetType ().ToString (), "Test#1");
 		}
 
-		[Test]
+		[TestMethod]
 		public void Greaters ()
 		{
 			SqlInt16 Test10 = new SqlInt16 (10);
@@ -245,7 +250,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.IsTrue (SqlInt16.GreaterThanOrEqual (Test10II, Test10).Value, "Test#6");
 		}
 
-		[Test]
+		[TestMethod]
 		public void Lessers ()
 		{
 			SqlInt16 Test10 = new SqlInt16 (10);
@@ -264,7 +269,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.IsTrue (SqlInt16.LessThanOrEqual (Test10II, SqlInt16.Null).IsNull, "Test#7");
 		}
 
-		[Test]
+		[TestMethod]
 		public void NotEquals ()
 		{
 			SqlInt16 Test12 = new SqlInt16 (12);
@@ -280,7 +285,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.IsTrue (SqlInt16.NotEquals (SqlInt16.Null, Test128II).IsNull, "Test#7");
 		}
 
-		[Test]
+		[TestMethod]
 		public void OnesComplement ()
 		{
 			SqlInt16 Test12 = new SqlInt16 (12);
@@ -290,7 +295,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual ((SqlInt16) (-129), SqlInt16.OnesComplement (Test128), "Test#2");
 		}
 
-		[Test]
+		[TestMethod]
 		public void Parse ()
 		{
 			try {
@@ -318,7 +323,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual ((short) 150, SqlInt16.Parse ("150").Value, "Test#7");
 		}
 
-		[Test]
+		[TestMethod]
 		public void Conversions ()
 		{
 			SqlInt16 Test12 = new SqlInt16 (12);
@@ -384,7 +389,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual ("288", Test288.ToString (), "TestJ#3");
 		}
 
-		[Test]
+		[TestMethod]
 		public void Xor ()
 		{
 			SqlInt16 Test14 = new SqlInt16 (14);
@@ -402,7 +407,7 @@ namespace MonoTests.System.Data.SqlTypes
 
 		// OPERATORS
 
-		[Test]
+		[TestMethod]
 		public void ArithmeticOperators ()
 		{
 			SqlInt16 Test24 = new SqlInt16 (24);
@@ -456,7 +461,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual ((SqlInt16) 0, new SqlInt16 (100) % new SqlInt16 (10), "TestE#1");
 		}
 
-		[Test]
+		[TestMethod]
 		public void BitwiseOperators ()
 		{
 			SqlInt16 Test2 = new SqlInt16 (2);
@@ -478,7 +483,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual ((SqlInt16) 6, (Test2 ^ Test4), "TestC#2");
 		}
 
-		[Test]
+		[TestMethod]
 		public void ThanOrEqualOperators ()
 		{
 			SqlInt16 Test165 = new SqlInt16 (165);
@@ -522,7 +527,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.IsTrue ((Test165 <= SqlInt16.Null).IsNull, "TestF#4");
 		}
 
-		[Test]
+		[TestMethod]
 		public void OnesComplementOperator ()
 		{
 			SqlInt16 Test12 = new SqlInt16 (12);
@@ -533,7 +538,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual (SqlInt16.Null, ~SqlInt16.Null, "Test#3");
 		}
 
-		[Test]
+		[TestMethod]
 		public void UnaryNegation ()
 		{
 			SqlInt16 Test = new SqlInt16 (2000);
@@ -546,7 +551,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual ((short) 3000, Result.Value, "Test#2");
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlBooleanToSqlInt16 ()
 		{
 			SqlBoolean TestBoolean = new SqlBoolean (true);
@@ -560,7 +565,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.IsTrue (Result.IsNull, "Test#2");
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlDecimalToSqlInt16 ()
 		{
 			SqlDecimal TestDecimal64 = new SqlDecimal (64);
@@ -577,7 +582,7 @@ namespace MonoTests.System.Data.SqlTypes
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlDoubleToSqlInt16 ()
 		{
 			SqlDouble TestDouble64 = new SqlDouble (64);
@@ -594,7 +599,7 @@ namespace MonoTests.System.Data.SqlTypes
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlIntToInt16 ()
 		{
 			SqlInt16 Test = new SqlInt16 (12);
@@ -602,7 +607,7 @@ namespace MonoTests.System.Data.SqlTypes
 			Assert.AreEqual ((short) 12, Result, "Test#1");
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlInt32ToSqlInt16 ()
 		{
 			SqlInt32 Test64 = new SqlInt32 (64);
@@ -618,7 +623,7 @@ namespace MonoTests.System.Data.SqlTypes
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlInt64ToSqlInt16 ()
 		{
 			SqlInt64 Test64 = new SqlInt64 (64);
@@ -634,7 +639,7 @@ namespace MonoTests.System.Data.SqlTypes
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlMoneyToSqlInt16 ()
 		{
 			SqlMoney TestMoney64 = new SqlMoney (64);
@@ -650,7 +655,7 @@ namespace MonoTests.System.Data.SqlTypes
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlSingleToSqlInt16 ()
 		{
 			SqlSingle TestSingle64 = new SqlSingle (64);
@@ -666,7 +671,7 @@ namespace MonoTests.System.Data.SqlTypes
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void SqlStringToSqlInt16 ()
 		{
 			SqlString TestString = new SqlString ("Test string");
@@ -690,7 +695,7 @@ namespace MonoTests.System.Data.SqlTypes
 			}
 		}
 
-		[Test]
+		[TestMethod]
 		public void ByteToSqlInt16 ()
 		{
 			short TestShort = 14;
