@@ -38,7 +38,7 @@ namespace System
     [AttributeUsage(AttributeTargets.All, AllowMultiple = true)]
     internal class MonoTODOAttribute : Attribute
     {
-        private string comment;
+        private readonly string comment;
 
         public MonoTODOAttribute()
         {
@@ -51,7 +51,7 @@ namespace System
 
         public string Comment
         {
-            get { return comment; }
+            get { return this.comment; }
         }
     }
 

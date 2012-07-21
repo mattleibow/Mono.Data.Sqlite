@@ -8,13 +8,14 @@
 //
 
 
+
 #if NET_2_0
 
 namespace System.Transactions
 {
     public class TransactionEventArgs : EventArgs
     {
-        private Transaction transaction;
+        private readonly Transaction transaction;
 
         public TransactionEventArgs()
         {
@@ -28,7 +29,7 @@ namespace System.Transactions
 
         public Transaction Transaction
         {
-            get { return transaction; }
+            get { return this.transaction; }
         }
     }
 }

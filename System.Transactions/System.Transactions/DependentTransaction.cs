@@ -8,6 +8,7 @@
 //
 
 
+
 #if NET_2_0
 
 namespace System.Transactions
@@ -15,20 +16,20 @@ namespace System.Transactions
     [MonoTODO("Not supported yet")]
     public sealed class DependentTransaction : Transaction
     {
-//		Transaction parent;
-//		DependentCloneOption option;
+        //		Transaction parent;
+        //		DependentCloneOption option;
         private bool completed;
 
         internal DependentTransaction(Transaction parent,
                                       DependentCloneOption option)
         {
-//			this.parent = parent;
-//			this.option = option;
+            //			this.parent = parent;
+            //			this.option = option;
         }
 
         internal bool Completed
         {
-            get { return completed; }
+            get { return this.completed; }
         }
 
         [MonoTODO]

@@ -8,6 +8,7 @@
 //
 
 
+
 #if NET_2_0
 
 namespace System.Transactions
@@ -25,14 +26,14 @@ namespace System.Transactions
 
         public IsolationLevel IsolationLevel
         {
-            get { return level; }
-            set { level = value; }
+            get { return this.level; }
+            set { this.level = value; }
         }
 
         public TimeSpan Timeout
         {
-            get { return timeout; }
-            set { timeout = value; }
+            get { return this.timeout; }
+            set { this.timeout = value; }
         }
 
         public static bool operator ==(TransactionOptions o1,
@@ -52,13 +53,15 @@ namespace System.Transactions
         public override bool Equals(object obj)
         {
             if (! (obj is TransactionOptions))
+            {
                 return false;
+            }
             return this == (TransactionOptions) obj;
         }
 
         public override int GetHashCode()
         {
-            return (int) level ^ timeout.GetHashCode();
+            return (int) this.level ^ this.timeout.GetHashCode();
         }
     }
 }

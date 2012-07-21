@@ -10,9 +10,6 @@
 #if NET_2_0
 
 // Well, am not interested in implementing DTC support...
-using System;
-using System.Runtime.InteropServices;
-
 namespace System.Transactions
 {
     //[ComImport]

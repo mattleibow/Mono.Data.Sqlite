@@ -17,20 +17,20 @@ namespace System.Transactions
 {
     public sealed class TransactionScope : IDisposable
     {
-        private static TransactionOptions defaultOptions =
+        private static readonly TransactionOptions defaultOptions =
             new TransactionOptions(0, TransactionManager.DefaultTimeout);
 
-        private Transaction transaction;
+        private bool completed;
+        private bool disposed;
+        private bool isRoot;
+        private int nested;
+
         private Transaction oldTransaction;
         private TransactionScope parentScope;
         private TimeSpan timeout;
+        private Transaction transaction;
 
         /* Num of non-disposed nested scopes */
-        private int nested;
-
-        private bool disposed;
-        private bool completed;
-        private bool isRoot;
 
         public TransactionScope()
             : this(TransactionScopeOption.Required,
@@ -53,8 +53,8 @@ namespace System.Transactions
         public TransactionScope(Transaction transaction,
                                 TimeSpan timeout, DTCOption opt)
         {
-            Initialize(TransactionScopeOption.Required,
-                       transaction, defaultOptions, opt, timeout);
+            this.Initialize(TransactionScopeOption.Required,
+                            transaction, defaultOptions, opt, timeout);
         }
 
         public TransactionScope(TransactionScopeOption option)
@@ -66,8 +66,8 @@ namespace System.Transactions
         public TransactionScope(TransactionScopeOption option,
                                 TimeSpan timeout)
         {
-            Initialize(option, null, defaultOptions,
-                       DTCOption.None, timeout);
+            this.Initialize(option, null, defaultOptions,
+                            DTCOption.None, timeout);
         }
 
         public TransactionScope(TransactionScopeOption scopeOption,
@@ -81,37 +81,123 @@ namespace System.Transactions
                                 TransactionOptions options,
                                 DTCOption opt)
         {
-            Initialize(scopeOption, null, options, opt,
-                       TransactionManager.DefaultTimeout);
+            this.Initialize(scopeOption, null, options, opt,
+                            TransactionManager.DefaultTimeout);
         }
+
+        internal bool IsComplete
+        {
+            get { return this.completed; }
+        }
+
+        internal TimeSpan Timeout
+        {
+            get { return this.timeout; }
+        }
+
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            if (this.disposed)
+            {
+                return;
+            }
+
+            this.disposed = true;
+
+            if (this.parentScope != null)
+            {
+                this.parentScope.nested --;
+            }
+
+            if (this.nested > 0)
+            {
+                this.transaction.Rollback();
+                throw new InvalidOperationException("TransactionScope nested incorrectly");
+            }
+
+            if (Transaction.CurrentInternal != this.transaction)
+            {
+                if (this.transaction != null)
+                {
+                    this.transaction.Rollback();
+                }
+                if (Transaction.CurrentInternal != null)
+                {
+                    Transaction.CurrentInternal.Rollback();
+                }
+
+                throw new InvalidOperationException("Transaction.Current has changed inside of the TransactionScope");
+            }
+
+            if (Transaction.CurrentInternal == this.oldTransaction && this.oldTransaction != null)
+            {
+                this.oldTransaction.Scope = this.parentScope;
+            }
+
+            Transaction.CurrentInternal = this.oldTransaction;
+
+            if (this.transaction == null)
+            {
+                /* scope was not in a transaction, (Suppress) */
+                return;
+            }
+
+            this.transaction.Scope = null;
+
+            if (!this.IsComplete)
+            {
+                this.transaction.Rollback();
+                return;
+            }
+
+            if (!this.isRoot)
+            {
+                /* Non-root scope has completed+ended */
+                return;
+            }
+
+            this.transaction.CommitInternal();
+        }
+
+        #endregion
 
         private void Initialize(TransactionScopeOption scopeOption,
                                 Transaction tx, TransactionOptions options,
                                 DTCOption interop, TimeSpan timeout)
         {
-            completed = false;
-            isRoot = false;
-            nested = 0;
+            this.completed = false;
+            this.isRoot = false;
+            this.nested = 0;
             this.timeout = timeout;
 
-            oldTransaction = Transaction.CurrentInternal;
+            this.oldTransaction = Transaction.CurrentInternal;
 
-            Transaction.CurrentInternal = transaction = InitTransaction(tx, scopeOption);
-            if (transaction != null)
-                transaction.InitScope(this);
-            if (parentScope != null)
-                parentScope.nested ++;
+            Transaction.CurrentInternal = this.transaction = this.InitTransaction(tx, scopeOption);
+            if (this.transaction != null)
+            {
+                this.transaction.InitScope(this);
+            }
+            if (this.parentScope != null)
+            {
+                this.parentScope.nested ++;
+            }
         }
 
         private Transaction InitTransaction(Transaction tx, TransactionScopeOption scopeOption)
         {
             if (tx != null)
+            {
                 return tx;
+            }
 
             if (scopeOption == TransactionScopeOption.Suppress)
             {
                 if (Transaction.CurrentInternal != null)
-                    parentScope = Transaction.CurrentInternal.Scope;
+                {
+                    this.parentScope = Transaction.CurrentInternal.Scope;
+                }
                 return null;
             }
 
@@ -119,88 +205,32 @@ namespace System.Transactions
             {
                 if (Transaction.CurrentInternal == null)
                 {
-                    isRoot = true;
+                    this.isRoot = true;
                     return new Transaction();
                 }
 
-                parentScope = Transaction.CurrentInternal.Scope;
+                this.parentScope = Transaction.CurrentInternal.Scope;
                 return Transaction.CurrentInternal;
             }
 
             /* RequiresNew */
             if (Transaction.CurrentInternal != null)
-                parentScope = Transaction.CurrentInternal.Scope;
-            isRoot = true;
+            {
+                this.parentScope = Transaction.CurrentInternal.Scope;
+            }
+            this.isRoot = true;
             return new Transaction();
         }
 
         public void Complete()
         {
-            if (completed)
+            if (this.completed)
+            {
                 throw new InvalidOperationException(
                     "The current TransactionScope is already complete. You should dispose the TransactionScope.");
-
-            completed = true;
-        }
-
-        internal bool IsComplete
-        {
-            get { return completed; }
-        }
-
-        internal TimeSpan Timeout
-        {
-            get { return timeout; }
-        }
-
-        public void Dispose()
-        {
-            if (disposed)
-                return;
-
-            disposed = true;
-
-            if (parentScope != null)
-                parentScope.nested --;
-
-            if (nested > 0)
-            {
-                transaction.Rollback();
-                throw new InvalidOperationException("TransactionScope nested incorrectly");
             }
 
-            if (Transaction.CurrentInternal != transaction)
-            {
-                if (transaction != null)
-                    transaction.Rollback();
-                if (Transaction.CurrentInternal != null)
-                    Transaction.CurrentInternal.Rollback();
-
-                throw new InvalidOperationException("Transaction.Current has changed inside of the TransactionScope");
-            }
-
-            if (Transaction.CurrentInternal == oldTransaction && oldTransaction != null)
-                oldTransaction.Scope = parentScope;
-
-            Transaction.CurrentInternal = oldTransaction;
-
-            if (transaction == null)
-                /* scope was not in a transaction, (Suppress) */
-                return;
-
-            transaction.Scope = null;
-
-            if (!IsComplete)
-            {
-                transaction.Rollback();
-                return;
-            }
-
-            if (!isRoot)
-                /* Non-root scope has completed+ended */
-                return;
-
-            transaction.CommitInternal();
+            this.completed = true;
         }
     }
 }

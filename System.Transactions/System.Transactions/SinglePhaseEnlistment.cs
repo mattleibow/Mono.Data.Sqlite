@@ -10,15 +10,16 @@
 //
 
 
+
 #if NET_2_0
 
 namespace System.Transactions
 {
     public class SinglePhaseEnlistment : Enlistment
     {
-//		bool committed;
-        private Transaction tx;
-        private ISinglePhaseNotification enlisted;
+        //		bool committed;
+        private readonly ISinglePhaseNotification enlisted;
+        private readonly Transaction tx;
 
         internal SinglePhaseEnlistment(Transaction tx, ISinglePhaseNotification enlisted)
         {
@@ -28,19 +29,19 @@ namespace System.Transactions
 
         public void Aborted()
         {
-            Aborted(null);
+            this.Aborted(null);
         }
 
         public void Aborted(Exception e)
         {
-            tx.Rollback(e, enlisted);
+            this.tx.Rollback(e, this.enlisted);
         }
 
         [MonoTODO]
         public void Committed()
         {
             /* FIXME */
-//			committed = true;
+            //			committed = true;
         }
 
         [MonoTODO("Not implemented")]

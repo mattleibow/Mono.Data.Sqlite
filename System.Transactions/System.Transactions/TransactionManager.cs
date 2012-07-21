@@ -10,18 +10,19 @@
 //
 
 
+
 #if NET_2_0
 
 namespace System.Transactions
 {
     public static class TransactionManager
     {
+        private static readonly TimeSpan defaultTimeout = new TimeSpan(0, 1, 0); /* 60 secs */
+        private static readonly TimeSpan maxTimeout = new TimeSpan(0, 10, 0); /* 10 mins */
+
         static TransactionManager()
         {
         }
-
-        private static TimeSpan defaultTimeout = new TimeSpan(0, 1, 0); /* 60 secs */
-        private static TimeSpan maxTimeout = new TimeSpan(0, 10, 0); /* 10 mins */
 
         public static TimeSpan DefaultTimeout
         {
