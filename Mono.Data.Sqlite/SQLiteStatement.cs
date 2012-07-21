@@ -187,13 +187,13 @@ namespace Mono.Data.Sqlite
           break;
         case DbType.Int64:
         case DbType.UInt64:
+        case DbType.UInt32:
           _sql.Bind_Int64(this, index, Convert.ToInt64(obj, CultureInfo.CurrentCulture));
           break;
         case DbType.Boolean:
         case DbType.Int16:
         case DbType.Int32:
         case DbType.UInt16:
-        case DbType.UInt32:
         case DbType.SByte:
         case DbType.Byte:
           _sql.Bind_Int32(this, index, Convert.ToInt32(obj, CultureInfo.CurrentCulture));
