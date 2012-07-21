@@ -100,7 +100,11 @@ namespace Mono.Data.Sqlite
       {
         if (_usePool)
         {
+#if SILVERLIGHT
           SQLiteBase.ResetConnection(_sql);
+#else
+          SQLiteBase.ResetConnection(_sql, _sql);
+#endif
           SqliteConnectionPool.Add(_fileName, _sql, _poolVersion);
         }
         else
@@ -392,11 +396,13 @@ namespace Mono.Data.Sqlite
         strRemain = UTF8ToString(ptr, len);
 
 #if SILVERLIGHT
+        var hdl = stmt;
         if (stmt != null)
 #else
+        var hdl = new SqliteStatementHandle(_sql, stmt);
         if (stmt != IntPtr.Zero) 
 #endif
-            cmd = new SqliteStatement(this, stmt, strSql.Substring(0, strSql.Length - strRemain.Length), previous);
+            cmd = new SqliteStatement(this, hdl, strSql.Substring(0, strSql.Length - strRemain.Length), previous);
 
         return cmd;
 #if !SILVERLIGHT

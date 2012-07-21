@@ -231,30 +231,54 @@ namespace Mono.Data.Sqlite
       }
     }
 
+#if SILVERLIGHT
     internal static void CloseConnection(SqliteConnectionHandle db)
+#else
+    internal static void CloseConnection(SqliteConnectionHandle hdl, IntPtr db)
+#endif
     {
+#if SILVERLIGHT
       lock (_lock)
       {
+#else
+      var nullConn = IntPtr.Zero;
+      if ((hdl == null) || (db == nullConn)) return;
+      lock (hdl)
+      {
+#endif
 #if !SQLITE_STANDARD
         int n = UnsafeNativeMethods.sqlite3_close_interop(db);
 #else
+#if SILVERLIGHT
       ResetConnection(db);
+#else
+      ResetConnection(hdl, db);
+#endif
       int n = UnsafeNativeMethods.sqlite3_close(db);
 #endif
         if (n > 0) throw new SqliteException(n, SQLiteLastError(db));
       }
     }
 
+#if SILVERLIGHT
     internal static void ResetConnection(SqliteConnectionHandle db)
     {
       lock (_lock)
+#else
+    internal static void ResetConnection(SqliteConnectionHandle hdl, IntPtr db)
+    {
+      var nullConn = IntPtr.Zero;
+      if ((hdl == null) || (db == nullConn)) return;
+      if (hdl.IsClosed || hdl.IsInvalid) return;
+      lock (hdl)
+#endif
       {
 #if SILVERLIGHT
           SqliteStatementHandle nullVal = null;
 #else
           var nullVal = IntPtr.Zero;
 #endif
-          SqliteStatementHandle stmt = nullVal;
+          var stmt = nullVal;
         do
         {
           stmt = UnsafeNativeMethods.sqlite3_next_stmt(db, stmt);
@@ -279,6 +303,9 @@ namespace Mono.Data.Sqlite
         if (msg != IntPtr.Zero) UnsafeNativeMethods.sqlite3_free (msg);
 #endif
       }
+#if !SILVERLIGHT
+      GC.KeepAlive(hdl);
+#endif
     }
   }
 

@@ -10,6 +10,7 @@ namespace Mono.Data.Sqlite
   using System;
   using System.Security;
   using System.Runtime.InteropServices;
+  using System.Threading;
 
   internal static class UnsafeNativeMethods
   {
@@ -800,10 +801,18 @@ namespace Mono.Data.Sqlite
     {
       try
       {
-        SQLiteBase.CloseConnection(this);
+        IntPtr localHandle = Interlocked.Exchange(ref handle, IntPtr.Zero);
+
+        if (localHandle != IntPtr.Zero)
+            SQLiteBase.CloseConnection(this, localHandle);
       }
       catch (SqliteException)
       {
+      }
+      finally
+      {
+        handle = IntPtr.Zero;
+        SetHandleAsInvalid();
       }
       return true;
     }
@@ -819,17 +828,13 @@ namespace Mono.Data.Sqlite
   {
     public static implicit operator IntPtr(SqliteStatementHandle stmt)
     {
-      return stmt.handle;
+      return (stmt != null) ? stmt.handle : IntPtr.Zero;
     }
 
-    public static implicit operator SqliteStatementHandle(IntPtr stmt)
-    {
-      return new SqliteStatementHandle(stmt);
-    }
-
-    private SqliteStatementHandle(IntPtr stmt)
+    internal SqliteStatementHandle(SqliteConnectionHandle cnn, IntPtr stmt)
       : this()
     {
+      this._cnn = cnn;
       SetHandle(stmt);
     }
 
@@ -842,10 +847,18 @@ namespace Mono.Data.Sqlite
     {
       try
       {
+       lock (_cnn)
+       {
         SQLiteBase.FinalizeStatement(this);
+        IntPtr localHandle = Interlocked.Exchange(ref handle, IntPtr.Zero);
+       }
       }
       catch (SqliteException)
       {
+      }
+      finally
+      {
+        SetHandleAsInvalid();
       }
       return true;
     }
@@ -854,5 +867,7 @@ namespace Mono.Data.Sqlite
     {
       get { return (handle == IntPtr.Zero); }
     }
+
+    private readonly SqliteConnectionHandle _cnn;
   }
 }
