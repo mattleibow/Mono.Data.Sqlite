@@ -30,26 +30,24 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+
 #if NET_2_0 || TARGET_JVM
-using System.Collections;
-using System.Collections.Generic;
 
 namespace System.Data.Common
 {
+    using System.Collections.Generic;
+
     public abstract class DbParameter : IDbDataParameter, IDataParameter
     {
         #region Constructors
 
         internal static Dictionary<DbType, Type> dbTypeMapping;
 
-        protected DbParameter()
-        {
-        }
-
         #endregion // Constructors
 
         #region Properties
 
+        public abstract bool SourceColumnNullMapping { get; set; }
         public abstract DbType DbType { get; set; }
 
         public abstract ParameterDirection Direction { get; set; }
@@ -76,13 +74,9 @@ namespace System.Data.Common
 
         public abstract string SourceColumn { get; set; }
 
-        public abstract bool SourceColumnNullMapping { get; set; }
-
         #endregion // Properties
 
         #region Methods
-
-        public abstract void ResetDbType();
 
         internal virtual object FrameworkDbType
         {
@@ -99,8 +93,10 @@ namespace System.Data.Common
         // LAMESPEC: Implementors should populate the dbTypeMapping accordingly
         internal virtual Type SystemType
         {
-            get { return (Type) dbTypeMapping[DbType]; }
+            get { return dbTypeMapping[this.DbType]; }
         }
+
+        public abstract void ResetDbType();
 
         #endregion // Methods
     }

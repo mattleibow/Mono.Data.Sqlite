@@ -31,17 +31,14 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Globalization;
-
 namespace System.Data.SqlTypes
 {
     public struct SqlSingle : INullable, IComparable
     {
         #region Fields
 
-        private float value;
-        private bool notNull;
+        private readonly float value;
+        private readonly bool notNull;
 
         public static readonly SqlSingle MaxValue = new SqlSingle(3.40282346638528859E+38f);
         public static readonly SqlSingle MinValue = new SqlSingle(-3.40282346638528859E+38f);
@@ -55,13 +52,13 @@ namespace System.Data.SqlTypes
         public SqlSingle(double value)
         {
             this.value = (float) value;
-            notNull = true;
+            this.notNull = true;
         }
 
         public SqlSingle(float value)
         {
             this.value = value;
-            notNull = true;
+            this.notNull = true;
         }
 
         #endregion
@@ -70,7 +67,7 @@ namespace System.Data.SqlTypes
 
         public bool IsNull
         {
-            get { return !notNull; }
+            get { return !this.notNull; }
         }
 
         public float Value
@@ -78,9 +75,13 @@ namespace System.Data.SqlTypes
             get
             {
                 if (this.IsNull)
+                {
                     throw new SqlNullValueException();
+                }
                 else
-                    return value;
+                {
+                    return this.value;
+                }
             }
         }
 
@@ -96,26 +97,34 @@ namespace System.Data.SqlTypes
         public int CompareTo(object value)
         {
             if (value == null)
+            {
                 return 1;
+            }
             else if (!(value is SqlSingle))
+            {
                 throw new ArgumentException(Locale.GetText("Value is not a System.Data.SqlTypes.SqlSingle"));
+            }
 
-            return CompareSqlSingle((SqlSingle) value);
+            return this.CompareSqlSingle((SqlSingle) value);
         }
 
 #if NET_2_0
         public int CompareTo(SqlSingle value)
         {
-            return CompareSqlSingle(value);
+            return this.CompareSqlSingle(value);
         }
 #endif
 
         private int CompareSqlSingle(SqlSingle value)
         {
             if (value.IsNull)
+            {
                 return 1;
+            }
             else
+            {
                 return this.value.CompareTo(value.Value);
+            }
         }
 
         public static SqlSingle Divide(SqlSingle x, SqlSingle y)
@@ -126,13 +135,21 @@ namespace System.Data.SqlTypes
         public override bool Equals(object value)
         {
             if (!(value is SqlSingle))
+            {
                 return false;
+            }
             else if (this.IsNull)
+            {
                 return ((SqlSingle) value).IsNull;
+            }
             else if (((SqlSingle) value).IsNull)
+            {
                 return false;
+            }
             else
+            {
                 return (bool) (this == (SqlSingle) value);
+            }
         }
 
         public static SqlBoolean Equals(SqlSingle x, SqlSingle y)
@@ -142,7 +159,7 @@ namespace System.Data.SqlTypes
 
         public override int GetHashCode()
         {
-            long LongValue = (long) value;
+            var LongValue = (long) this.value;
             return (int) (LongValue ^ (LongValue >> 32));
         }
 
@@ -203,7 +220,7 @@ namespace System.Data.SqlTypes
 
         public SqlDouble ToSqlDouble()
         {
-            return ((SqlDouble) this);
+            return (this);
         }
 
         public SqlInt16 ToSqlInt16()
@@ -233,29 +250,35 @@ namespace System.Data.SqlTypes
 
         public override string ToString()
         {
-            if (!notNull)
+            if (!this.notNull)
+            {
                 return "Null";
-            return value.ToString();
+            }
+            return this.value.ToString();
         }
 
         public static SqlSingle operator +(SqlSingle x, SqlSingle y)
         {
-            float f = (float) (x.Value + y.Value);
+            float f = (x.Value + y.Value);
 
             if (Single.IsInfinity(f))
+            {
                 throw new OverflowException();
+            }
 
             return new SqlSingle(f);
         }
 
         public static SqlSingle operator /(SqlSingle x, SqlSingle y)
         {
-            float f = (float) (x.Value/y.Value);
+            float f = (x.Value/y.Value);
 
             if (Single.IsInfinity(f))
             {
                 if (y.Value == 0d)
+                {
                     throw new DivideByZeroException();
+                }
             }
 
             return new SqlSingle(x.Value/y.Value);
@@ -264,61 +287,77 @@ namespace System.Data.SqlTypes
         public static SqlBoolean operator ==(SqlSingle x, SqlSingle y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             return new SqlBoolean(x.Value == y.Value);
         }
 
         public static SqlBoolean operator >(SqlSingle x, SqlSingle y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             return new SqlBoolean(x.Value > y.Value);
         }
 
         public static SqlBoolean operator >=(SqlSingle x, SqlSingle y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             return new SqlBoolean(x.Value >= y.Value);
         }
 
         public static SqlBoolean operator !=(SqlSingle x, SqlSingle y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             return new SqlBoolean(!(x.Value == y.Value));
         }
 
         public static SqlBoolean operator <(SqlSingle x, SqlSingle y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             return new SqlBoolean(x.Value < y.Value);
         }
 
         public static SqlBoolean operator <=(SqlSingle x, SqlSingle y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             return new SqlBoolean(x.Value <= y.Value);
         }
 
         public static SqlSingle operator *(SqlSingle x, SqlSingle y)
         {
-            float f = (float) (x.Value*y.Value);
+            float f = (x.Value*y.Value);
 
             if (Single.IsInfinity(f))
+            {
                 throw new OverflowException();
+            }
 
             return new SqlSingle(f);
         }
 
         public static SqlSingle operator -(SqlSingle x, SqlSingle y)
         {
-            float f = (float) (x.Value - y.Value);
+            float f = (x.Value - y.Value);
 
             if (Single.IsInfinity(f))
+            {
                 throw new OverflowException();
+            }
 
             return new SqlSingle(f);
         }
@@ -333,21 +372,27 @@ namespace System.Data.SqlTypes
             checked
             {
                 if (x.IsNull)
+                {
                     return Null;
+                }
 
-                return new SqlSingle((float) x.ByteValue);
+                return new SqlSingle(x.ByteValue);
             }
         }
 
         public static explicit operator SqlSingle(SqlDouble x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
 
-            float f = (float) x.Value;
+            var f = (float) x.Value;
 
             if (Single.IsInfinity(f))
+            {
                 throw new OverflowException();
+            }
 
             return new SqlSingle(f);
         }
@@ -362,9 +407,11 @@ namespace System.Data.SqlTypes
             checked
             {
                 if (x.IsNull)
+                {
                     return Null;
+                }
 
-                return SqlSingle.Parse(x.Value);
+                return Parse(x.Value);
             }
         }
 
@@ -376,49 +423,73 @@ namespace System.Data.SqlTypes
         public static implicit operator SqlSingle(SqlByte x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
             else
-                return new SqlSingle((float) x.Value);
+            {
+                return new SqlSingle(x.Value);
+            }
         }
 
         public static implicit operator SqlSingle(SqlDecimal x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
             else
+            {
                 return new SqlSingle((float) x.Value);
+            }
         }
 
         public static implicit operator SqlSingle(SqlInt16 x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
             else
-                return new SqlSingle((float) x.Value);
+            {
+                return new SqlSingle(x.Value);
+            }
         }
 
         public static implicit operator SqlSingle(SqlInt32 x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
             else
-                return new SqlSingle((float) x.Value);
+            {
+                return new SqlSingle(x.Value);
+            }
         }
 
         public static implicit operator SqlSingle(SqlInt64 x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
             else
-                return new SqlSingle((float) x.Value);
+            {
+                return new SqlSingle(x.Value);
+            }
         }
 
         public static implicit operator SqlSingle(SqlMoney x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
             else
+            {
                 return new SqlSingle((float) x.Value);
+            }
         }
 
         #endregion

@@ -1,5 +1,3 @@
-using System;
-
 namespace System.Data.Common
 {
     internal class DbTypes

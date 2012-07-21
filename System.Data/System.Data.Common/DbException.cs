@@ -27,14 +27,10 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System.Runtime.InteropServices;
-
 namespace System.Data.Common
 {
     public abstract class DbException : Exception
     {
-        public virtual int ErrorCode { get; private set; }
-
         protected DbException()
         {
         }
@@ -52,7 +48,9 @@ namespace System.Data.Common
         protected DbException(string message, int errorCode)
             : base(message)
         {
-            ErrorCode = errorCode;
+            this.ErrorCode = errorCode;
         }
+
+        public virtual int ErrorCode { get; private set; }
     }
 }

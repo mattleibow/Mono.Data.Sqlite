@@ -28,13 +28,10 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections;
-using System.Globalization;
-    using System.Collections.Generic;
-
 namespace System.Data
 {
+    using System.Collections.Generic;
+
     public class TypedDataSetGeneratorException : DataException
     {
         private readonly List<object> errorList;
@@ -49,7 +46,7 @@ namespace System.Data
         public TypedDataSetGeneratorException(List<object> list)
             : base(Locale.GetText("System error."))
         {
-            errorList = list;
+            this.errorList = list;
         }
 
 #if NET_2_0
@@ -67,7 +64,7 @@ namespace System.Data
 
         public List<object> ErrorList
         {
-            get { return errorList; }
+            get { return this.errorList; }
         }
 
         #region Methods

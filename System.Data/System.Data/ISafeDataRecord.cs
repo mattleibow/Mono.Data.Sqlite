@@ -5,8 +5,6 @@
 //   Boris Kirzner (borisk@mainsoft.com)
 //
 
-using System;
-
 namespace System.Data
 {
     internal interface ISafeDataRecord : IDataRecord

@@ -32,17 +32,14 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Globalization;
-
 namespace System.Data.SqlTypes
 {
     public struct SqlByte : INullable, IComparable
     {
         #region Fields
 
-        private byte value;
-        private bool notNull;
+        private readonly byte value;
+        private readonly bool notNull;
 
         public static readonly SqlByte MaxValue = new SqlByte(0xff);
         public static readonly SqlByte MinValue = new SqlByte(0);
@@ -56,7 +53,7 @@ namespace System.Data.SqlTypes
         public SqlByte(byte value)
         {
             this.value = value;
-            notNull = true;
+            this.notNull = true;
         }
 
         #endregion
@@ -65,7 +62,7 @@ namespace System.Data.SqlTypes
 
         public bool IsNull
         {
-            get { return !notNull; }
+            get { return !this.notNull; }
         }
 
         public byte Value
@@ -73,9 +70,13 @@ namespace System.Data.SqlTypes
             get
             {
                 if (this.IsNull)
+                {
                     throw new SqlNullValueException();
+                }
                 else
-                    return value;
+                {
+                    return this.value;
+                }
             }
         }
 
@@ -101,11 +102,15 @@ namespace System.Data.SqlTypes
         public int CompareTo(object value)
         {
             if (value == null)
+            {
                 return 1;
+            }
             if (!(value is SqlByte))
+            {
                 throw new ArgumentException(Locale.GetText("Value is not a System.Data.SqlTypes.SqlByte"));
+            }
 
-            return CompareTo((SqlByte) value);
+            return this.CompareTo((SqlByte) value);
         }
 
 #if NET_2_0
@@ -114,9 +119,13 @@ namespace System.Data.SqlTypes
             int CompareTo(SqlByte value)
         {
             if (value.IsNull)
+            {
                 return 1;
+            }
             else
+            {
                 return this.value.CompareTo(value.Value);
+            }
         }
 
         public static SqlByte Divide(SqlByte x, SqlByte y)
@@ -127,13 +136,21 @@ namespace System.Data.SqlTypes
         public override bool Equals(object value)
         {
             if (!(value is SqlByte))
+            {
                 return false;
+            }
             else if (this.IsNull)
+            {
                 return ((SqlByte) value).IsNull;
+            }
             else if (((SqlByte) value).IsNull)
+            {
                 return false;
+            }
             else
+            {
                 return (bool) (this == (SqlByte) value);
+            }
         }
 
         public static SqlBoolean Equals(SqlByte x, SqlByte y)
@@ -143,7 +160,7 @@ namespace System.Data.SqlTypes
 
         public override int GetHashCode()
         {
-            return (int) value;
+            return this.value;
         }
 
         public static SqlBoolean GreaterThan(SqlByte x, SqlByte y)
@@ -215,37 +232,37 @@ namespace System.Data.SqlTypes
 
         public SqlDecimal ToSqlDecimal()
         {
-            return ((SqlDecimal) this);
+            return (this);
         }
 
         public SqlDouble ToSqlDouble()
         {
-            return ((SqlDouble) this);
+            return (this);
         }
 
         public SqlInt16 ToSqlInt16()
         {
-            return ((SqlInt16) this);
+            return (this);
         }
 
         public SqlInt32 ToSqlInt32()
         {
-            return ((SqlInt32) this);
+            return (this);
         }
 
         public SqlInt64 ToSqlInt64()
         {
-            return ((SqlInt64) this);
+            return (this);
         }
 
         public SqlMoney ToSqlMoney()
         {
-            return ((SqlMoney) this);
+            return (this);
         }
 
         public SqlSingle ToSqlSingle()
         {
-            return ((SqlSingle) this);
+            return (this);
         }
 
         public SqlString ToSqlString()
@@ -256,9 +273,13 @@ namespace System.Data.SqlTypes
         public override string ToString()
         {
             if (this.IsNull)
+            {
                 return "Null";
+            }
             else
-                return value.ToString();
+            {
+                return this.value.ToString();
+            }
         }
 
         public static SqlByte Xor(SqlByte x, SqlByte y)
@@ -295,9 +316,13 @@ namespace System.Data.SqlTypes
         public static SqlBoolean operator ==(SqlByte x, SqlByte y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             else
+            {
                 return new SqlBoolean(x.Value == y.Value);
+            }
         }
 
         public static SqlByte operator ^(SqlByte x, SqlByte y)
@@ -308,41 +333,61 @@ namespace System.Data.SqlTypes
         public static SqlBoolean operator >(SqlByte x, SqlByte y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             else
+            {
                 return new SqlBoolean(x.Value > y.Value);
+            }
         }
 
         public static SqlBoolean operator >=(SqlByte x, SqlByte y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             else
+            {
                 return new SqlBoolean(x.Value >= y.Value);
+            }
         }
 
         public static SqlBoolean operator !=(SqlByte x, SqlByte y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             else
+            {
                 return new SqlBoolean(!(x.Value == y.Value));
+            }
         }
 
         public static SqlBoolean operator <(SqlByte x, SqlByte y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             else
+            {
                 return new SqlBoolean(x.Value < y.Value);
+            }
         }
 
         public static SqlBoolean operator <=(SqlByte x, SqlByte y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             else
+            {
                 return new SqlBoolean(x.Value <= y.Value);
+            }
         }
 
         public static SqlByte operator %(SqlByte x, SqlByte y)
@@ -374,9 +419,13 @@ namespace System.Data.SqlTypes
         public static explicit operator SqlByte(SqlBoolean x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
             else
+            {
                 return new SqlByte(x.ByteValue);
+            }
         }
 
         public static explicit operator byte(SqlByte x)
@@ -389,16 +438,22 @@ namespace System.Data.SqlTypes
             checked
             {
                 if (x.IsNull)
+                {
                     return Null;
+                }
                 else
+                {
                     return new SqlByte((byte) x.Value);
+                }
             }
         }
 
         public static explicit operator SqlByte(SqlDouble x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
             else
             {
                 checked
@@ -413,9 +468,13 @@ namespace System.Data.SqlTypes
             checked
             {
                 if (x.IsNull)
+                {
                     return Null;
+                }
                 else
+                {
                     return new SqlByte((byte) x.Value);
+                }
             }
         }
 
@@ -424,16 +483,22 @@ namespace System.Data.SqlTypes
             checked
             {
                 if (x.IsNull)
+                {
                     return Null;
+                }
                 else
+                {
                     return new SqlByte((byte) x.Value);
+                }
             }
         }
 
         public static explicit operator SqlByte(SqlInt64 x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
             else
             {
                 checked
@@ -448,16 +513,22 @@ namespace System.Data.SqlTypes
             checked
             {
                 if (x.IsNull)
+                {
                     return Null;
+                }
                 else
+                {
                     return new SqlByte((byte) x.Value);
+                }
             }
         }
 
         public static explicit operator SqlByte(SqlSingle x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
             else
             {
                 checked
@@ -472,7 +543,7 @@ namespace System.Data.SqlTypes
         {
             checked
             {
-                return SqlByte.Parse(x.Value);
+                return Parse(x.Value);
             }
         }
 

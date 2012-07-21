@@ -30,15 +30,16 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System.Collections;
-
 namespace System.Data
 {
+    using System.Collections;
+
     /// <summary>
     /// Contains a collection of ColumnMapping objects, and is implemented by the DataColumnMappingCollection, which is used in common by .NET data providers.
     /// </summary>
     public interface IColumnMappingCollection : IList, ICollection, IEnumerable
     {
+        object this[string index] { get; set; }
         IColumnMapping Add(string sourceColumnName, string dataSetColumnName);
 
         bool Contains(string sourceColumnName);
@@ -48,7 +49,5 @@ namespace System.Data
         int IndexOf(string sourceColumnName);
 
         void RemoveAt(string sourceColumnName);
-
-        object this[string index] { get; set; }
     }
 }

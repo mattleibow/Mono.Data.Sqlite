@@ -30,8 +30,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-
 namespace System.Data
 {
     /// <summary>
@@ -39,12 +37,11 @@ namespace System.Data
     /// </summary>
     public interface IDbTransaction : IDisposable
     {
-        void Commit();
-
-        void Rollback();
-
         IDbConnection Connection { get; }
 
         IsolationLevel IsolationLevel { get; }
+        void Commit();
+
+        void Rollback();
     }
 }

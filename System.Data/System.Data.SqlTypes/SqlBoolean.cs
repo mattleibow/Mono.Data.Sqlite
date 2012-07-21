@@ -33,9 +33,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Globalization;
-
 namespace System.Data.SqlTypes
 {
     /// <summary>
@@ -46,10 +43,10 @@ namespace System.Data.SqlTypes
     {
         #region Fields
 
-        private byte value;
+        private readonly byte value;
 
         // default is false
-        private bool notNull;
+        private readonly bool notNull;
 
         public static readonly SqlBoolean False = new SqlBoolean(false);
         public static readonly SqlBoolean Null;
@@ -64,13 +61,13 @@ namespace System.Data.SqlTypes
         public SqlBoolean(bool value)
         {
             this.value = (byte) (value ? 1 : 0);
-            notNull = true;
+            this.notNull = true;
         }
 
         public SqlBoolean(int value)
         {
             this.value = (byte) (value != 0 ? 1 : 0);
-            notNull = true;
+            this.notNull = true;
         }
 
         #endregion // Constructors
@@ -82,9 +79,13 @@ namespace System.Data.SqlTypes
             get
             {
                 if (this.IsNull)
+                {
                     throw new SqlNullValueException(Locale.GetText("The property is set to null."));
+                }
                 else
-                    return value;
+                {
+                    return this.value;
+                }
             }
         }
 
@@ -93,15 +94,19 @@ namespace System.Data.SqlTypes
             get
             {
                 if (this.IsNull)
+                {
                     return false;
+                }
                 else
-                    return (value == 0);
+                {
+                    return (this.value == 0);
+                }
             }
         }
 
         public bool IsNull
         {
-            get { return !notNull; }
+            get { return !this.notNull; }
         }
 
         public bool IsTrue
@@ -109,9 +114,13 @@ namespace System.Data.SqlTypes
             get
             {
                 if (this.IsNull)
+                {
                     return false;
+                }
                 else
-                    return (value != 0);
+                {
+                    return (this.value != 0);
+                }
             }
         }
 
@@ -120,9 +129,13 @@ namespace System.Data.SqlTypes
             get
             {
                 if (this.IsNull)
+                {
                     throw new SqlNullValueException(Locale.GetText("The property is set to null."));
+                }
                 else
+                {
                     return this.IsTrue;
+                }
             }
         }
 
@@ -136,11 +149,15 @@ namespace System.Data.SqlTypes
         public int CompareTo(object value)
         {
             if (value == null)
+            {
                 return 1;
+            }
             if (!(value is SqlBoolean))
+            {
                 throw new ArgumentException(Locale.GetText("Value is not a System.Data.SqlTypes.SqlBoolean"));
+            }
 
-            return CompareTo((SqlBoolean) value);
+            return this.CompareTo((SqlBoolean) value);
         }
 
 #if NET_2_0
@@ -149,21 +166,33 @@ namespace System.Data.SqlTypes
             int CompareTo(SqlBoolean value)
         {
             if (value.IsNull)
+            {
                 return 1;
+            }
             else
+            {
                 return this.value.CompareTo(value.ByteValue);
+            }
         }
 
         public override bool Equals(object value)
         {
             if (!(value is SqlBoolean))
+            {
                 return false;
+            }
             if (this.IsNull)
+            {
                 return ((SqlBoolean) value).IsNull;
+            }
             else if (((SqlBoolean) value).IsNull)
+            {
                 return false;
+            }
             else
+            {
                 return (bool) (this == (SqlBoolean) value);
+            }
         }
 
         public static SqlBoolean Equals(SqlBoolean x, SqlBoolean y)
@@ -197,9 +226,13 @@ namespace System.Data.SqlTypes
         {
             int hash;
             if (this.IsTrue)
+            {
                 hash = 1;
+            }
             else
+            {
                 hash = 0;
+            }
 
             return hash;
         }
@@ -233,7 +266,7 @@ namespace System.Data.SqlTypes
 
         public SqlByte ToSqlByte()
         {
-            return new SqlByte(value);
+            return new SqlByte(this.value);
         }
 
         // **************************************************
@@ -278,21 +311,33 @@ namespace System.Data.SqlTypes
         public SqlString ToSqlString()
         {
             if (this.IsNull)
+            {
                 return new SqlString("Null");
+            }
             if (this.IsTrue)
+            {
                 return new SqlString("True");
+            }
             else
+            {
                 return new SqlString("False");
+            }
         }
 
         public override string ToString()
         {
             if (this.IsNull)
+            {
                 return "Null";
+            }
             if (this.IsTrue)
+            {
                 return "True";
+            }
             else
+            {
                 return "False";
+            }
         }
 
         // Bitwise exclusive-OR (XOR)
@@ -321,9 +366,13 @@ namespace System.Data.SqlTypes
         public static SqlBoolean operator ==(SqlBoolean x, SqlBoolean y)
         {
             if (x.IsNull || y.IsNull)
-                return SqlBoolean.Null;
+            {
+                return Null;
+            }
             else
+            {
                 return new SqlBoolean(x.Value == y.Value);
+            }
         }
 
         // Bitwize exclusive-OR (XOR)
@@ -342,18 +391,26 @@ namespace System.Data.SqlTypes
         public static SqlBoolean operator !=(SqlBoolean x, SqlBoolean y)
         {
             if (x.IsNull || y.IsNull)
-                return SqlBoolean.Null;
+            {
+                return Null;
+            }
             else
+            {
                 return new SqlBoolean(x.Value != y.Value);
+            }
         }
 
         // Logical NOT
         public static SqlBoolean operator !(SqlBoolean x)
         {
             if (x.IsNull)
-                return SqlBoolean.Null;
+            {
+                return Null;
+            }
             else
+            {
                 return new SqlBoolean(!x.Value);
+            }
         }
 
         // One's Complement
@@ -361,9 +418,13 @@ namespace System.Data.SqlTypes
         {
             SqlBoolean b;
             if (x.IsTrue)
+            {
                 b = new SqlBoolean(false);
+            }
             else
+            {
                 b = new SqlBoolean(true);
+            }
 
             return b;
         }
@@ -372,7 +433,9 @@ namespace System.Data.SqlTypes
         public static SqlBoolean operator >(SqlBoolean x, SqlBoolean y)
         {
             if (x.IsNull || y.IsNull)
-                return SqlBoolean.Null;
+            {
+                return Null;
+            }
 
             return new SqlBoolean(Compare(x, y) > 0);
         }
@@ -380,7 +443,9 @@ namespace System.Data.SqlTypes
         public static SqlBoolean operator >=(SqlBoolean x, SqlBoolean y)
         {
             if (x.IsNull || y.IsNull)
-                return SqlBoolean.Null;
+            {
+                return Null;
+            }
 
             return new SqlBoolean(Compare(x, y) >= 0);
         }
@@ -388,7 +453,9 @@ namespace System.Data.SqlTypes
         public static SqlBoolean operator <(SqlBoolean x, SqlBoolean y)
         {
             if (x.IsNull || y.IsNull)
-                return SqlBoolean.Null;
+            {
+                return Null;
+            }
 
             return new SqlBoolean(Compare(x, y) < 0);
         }
@@ -396,7 +463,9 @@ namespace System.Data.SqlTypes
         public static SqlBoolean operator <=(SqlBoolean x, SqlBoolean y)
         {
             if (x.IsNull || y.IsNull)
-                return SqlBoolean.Null;
+            {
+                return Null;
+            }
 
             return new SqlBoolean(Compare(x, y) <= 0);
         }
@@ -425,9 +494,13 @@ namespace System.Data.SqlTypes
             checked
             {
                 if (x.IsNull)
+                {
                     return Null;
+                }
                 else
-                    return new SqlBoolean((int) x.Value);
+                {
+                    return new SqlBoolean(x.Value);
+                }
             }
         }
 
@@ -437,9 +510,13 @@ namespace System.Data.SqlTypes
             checked
             {
                 if (x.IsNull)
+                {
                     return Null;
+                }
                 else
+                {
                     return new SqlBoolean((int) x.Value);
+                }
             }
         }
 
@@ -449,9 +526,13 @@ namespace System.Data.SqlTypes
             // FIXME
             //checked {
             if (x.IsNull)
+            {
                 return Null;
+            }
             else
+            {
                 return new SqlBoolean((int) x.Value);
+            }
             //}
         }
 
@@ -461,9 +542,13 @@ namespace System.Data.SqlTypes
             checked
             {
                 if (x.IsNull)
+                {
                     return Null;
+                }
                 else
-                    return new SqlBoolean((int) x.Value);
+                {
+                    return new SqlBoolean(x.Value);
+                }
             }
         }
 
@@ -473,9 +558,13 @@ namespace System.Data.SqlTypes
             checked
             {
                 if (x.IsNull)
+                {
                     return Null;
+                }
                 else
+                {
                     return new SqlBoolean(x.Value);
+                }
             }
         }
 
@@ -485,9 +574,13 @@ namespace System.Data.SqlTypes
             checked
             {
                 if (x.IsNull)
+                {
                     return Null;
+                }
                 else
+                {
                     return new SqlBoolean((int) x.Value);
+                }
             }
         }
 
@@ -497,9 +590,13 @@ namespace System.Data.SqlTypes
             checked
             {
                 if (x.IsNull)
+                {
                     return Null;
+                }
                 else
+                {
                     return new SqlBoolean((int) x.Value);
+                }
             }
         }
 
@@ -509,9 +606,13 @@ namespace System.Data.SqlTypes
             // FIXME
             //checked {
             if (x.IsNull)
+            {
                 return Null;
+            }
             else
+            {
                 return new SqlBoolean((int) x.Value);
+            }
             //}
         }
 
@@ -521,8 +622,10 @@ namespace System.Data.SqlTypes
             checked
             {
                 if (x.IsNull)
+                {
                     return Null;
-                return SqlBoolean.Parse(x.Value);
+                }
+                return Parse(x.Value);
             }
         }
 
@@ -540,11 +643,17 @@ namespace System.Data.SqlTypes
         private static int Compare(SqlBoolean x, SqlBoolean y)
         {
             if (x == y)
+            {
                 return 0;
+            }
             if (x.IsTrue && y.IsFalse)
+            {
                 return 1;
+            }
             if (x.IsFalse && y.IsTrue)
+            {
                 return -1;
+            }
             return 0;
         }
 #endif

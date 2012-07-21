@@ -30,22 +30,20 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#if NET_2_0
 
-using System;
-using System.Globalization;
-using System.IO;
+#if NET_2_0
 
 namespace System.Data.SqlTypes
 {
+    using System.IO;
+
     public sealed class SqlBytes : INullable
     {
         #region Fields
 
-        private bool notNull;
+        private readonly StorageState storage = StorageState.UnmanagedBuffer;
         private byte[] buffer;
-        private StorageState storage = StorageState.UnmanagedBuffer;
-        private Stream stream = null;
+        private bool notNull;
 
         #endregion
 
@@ -53,22 +51,22 @@ namespace System.Data.SqlTypes
 
         public SqlBytes()
         {
-            buffer = null;
-            notNull = false;
+            this.buffer = null;
+            this.notNull = false;
         }
 
         public SqlBytes(byte[] buffer)
         {
             if (buffer == null)
             {
-                notNull = false;
+                this.notNull = false;
                 buffer = null;
             }
             else
             {
-                notNull = true;
+                this.notNull = true;
                 this.buffer = buffer;
-                storage = StorageState.Buffer;
+                this.storage = StorageState.Buffer;
             }
         }
 
@@ -76,14 +74,14 @@ namespace System.Data.SqlTypes
         {
             if (value.IsNull)
             {
-                notNull = false;
-                buffer = null;
+                this.notNull = false;
+                this.buffer = null;
             }
             else
             {
-                notNull = true;
-                buffer = value.Value;
-                storage = StorageState.Buffer;
+                this.notNull = true;
+                this.buffer = value.Value;
+                this.storage = StorageState.Buffer;
             }
         }
 
@@ -91,17 +89,17 @@ namespace System.Data.SqlTypes
         {
             if (s == null)
             {
-                notNull = false;
-                buffer = null;
+                this.notNull = false;
+                this.buffer = null;
             }
             else
             {
-                notNull = true;
-                int len = (int) s.Length;
-                buffer = new byte[len];
-                s.Read(buffer, 0, len);
-                storage = StorageState.Stream;
-                stream = s;
+                this.notNull = true;
+                var len = (int) s.Length;
+                this.buffer = new byte[len];
+                s.Read(this.buffer, 0, len);
+                this.storage = StorageState.Stream;
+                this.Stream = s;
             }
         }
 
@@ -111,28 +109,29 @@ namespace System.Data.SqlTypes
 
         public byte[] Buffer
         {
-            get { return buffer; }
-        }
-
-        public bool IsNull
-        {
-            get { return !notNull; }
+            get { return this.buffer; }
         }
 
         public byte this[long offset]
         {
             set
             {
-                if (notNull && offset >= 0 && offset < buffer.Length)
-                    buffer[offset] = value;
+                if (this.notNull && offset >= 0 && offset < this.buffer.Length)
+                {
+                    this.buffer[offset] = value;
+                }
             }
             get
             {
-                if (buffer == null)
+                if (this.buffer == null)
+                {
                     throw new SqlNullValueException("Data is Null");
-                if (offset < 0 || offset >= buffer.Length)
+                }
+                if (offset < 0 || offset >= this.buffer.Length)
+                {
                     throw new ArgumentOutOfRangeException("Parameter name: offset");
-                return buffer[offset];
+                }
+                return this.buffer[offset];
             }
         }
 
@@ -140,11 +139,15 @@ namespace System.Data.SqlTypes
         {
             get
             {
-                if (!notNull || buffer == null)
+                if (!this.notNull || this.buffer == null)
+                {
                     throw new SqlNullValueException("Data is Null");
-                if (buffer.Length < 0)
+                }
+                if (this.buffer.Length < 0)
+                {
                     return -1;
-                return buffer.Length;
+                }
+                return this.buffer.Length;
             }
         }
 
@@ -152,9 +155,11 @@ namespace System.Data.SqlTypes
         {
             get
             {
-                if (!notNull || buffer == null || storage == StorageState.Stream)
+                if (!this.notNull || this.buffer == null || this.storage == StorageState.Stream)
+                {
                     return -1;
-                return buffer.Length;
+                }
+                return this.buffer.Length;
             }
         }
 
@@ -167,26 +172,31 @@ namespace System.Data.SqlTypes
         {
             get
             {
-                if (storage == StorageState.UnmanagedBuffer)
+                if (this.storage == StorageState.UnmanagedBuffer)
+                {
                     throw new SqlNullValueException("Data is Null");
-                return storage;
+                }
+                return this.storage;
             }
         }
 
-        public Stream Stream
-        {
-            set { stream = value; }
-            get { return stream; }
-        }
+        public Stream Stream { set; get; }
 
         public byte[] Value
         {
             get
             {
-                if (buffer == null)
-                    return buffer;
-                return (byte[]) buffer.Clone();
+                if (this.buffer == null)
+                {
+                    return this.buffer;
+                }
+                return (byte[]) this.buffer.Clone();
             }
+        }
+
+        public bool IsNull
+        {
+            get { return !this.notNull; }
         }
 
         #endregion
@@ -195,64 +205,88 @@ namespace System.Data.SqlTypes
 
         public void SetLength(long value)
         {
-            if (buffer == null)
+            if (this.buffer == null)
+            {
                 throw new SqlTypeException("There is no buffer. Read or write operation failed.");
-            if (value < 0 || value > buffer.Length)
+            }
+            if (value < 0 || value > this.buffer.Length)
+            {
                 throw new ArgumentOutOfRangeException("Specified argument was out of the range of valid values.");
-            Array.Resize(ref buffer, (int) value);
+            }
+            Array.Resize(ref this.buffer, (int) value);
         }
 
         public void SetNull()
         {
-            buffer = null;
-            notNull = false;
+            this.buffer = null;
+            this.notNull = false;
         }
 
         public static explicit operator SqlBytes(SqlBinary value)
         {
             if (value.IsNull)
+            {
                 return Null;
+            }
             else
+            {
                 return new SqlBytes(value.Value);
+            }
         }
 
         public static explicit operator SqlBinary(SqlBytes value)
         {
             if (value.IsNull)
+            {
                 return SqlBinary.Null;
+            }
             else
+            {
                 return new SqlBinary(value.Value);
+            }
         }
 
         public SqlBinary ToSqlBinary()
         {
-            return new SqlBinary(buffer);
+            return new SqlBinary(this.buffer);
         }
 
         public long Read(long offset, byte[] buffer, int offsetInBuffer, int count)
         {
             if (buffer == null)
+            {
                 throw new ArgumentNullException("buffer");
+            }
 
-            if (IsNull)
+            if (this.IsNull)
+            {
                 throw new SqlNullValueException("There is no buffer. Read or write failed");
+            }
 
-            if (count > MaxLength || count > buffer.Length ||
+            if (count > this.MaxLength || count > buffer.Length ||
                 count < 0 || ((offsetInBuffer + count) > buffer.Length))
+            {
                 throw new ArgumentOutOfRangeException("count");
+            }
 
-            if (offset < 0 || offset > MaxLength)
+            if (offset < 0 || offset > this.MaxLength)
+            {
                 throw new ArgumentOutOfRangeException("offset");
+            }
 
             if (offsetInBuffer < 0 || offsetInBuffer > buffer.Length)
+            {
                 throw new ArgumentOutOfRangeException("offsetInBuffer");
+            }
 
             /* Final count of what will be copied */
             long actualCount = count;
-            if (count + offset > Length)
-                actualCount = Length - offset;
+            if (count + offset > this.Length)
+            {
+                actualCount = this.Length - offset;
+            }
 
-            Array.Copy(this.buffer, (int)offset, buffer, offsetInBuffer, (int)actualCount);
+            Array.Copy(this.buffer, (int) offset, buffer, offsetInBuffer, (int) actualCount);
 
             return actualCount;
         }
@@ -260,31 +294,45 @@ namespace System.Data.SqlTypes
         public void Write(long offset, byte[] buffer, int offsetInBuffer, int count)
         {
             if (buffer == null)
+            {
                 throw new ArgumentNullException("buffer");
+            }
 
-            if (IsNull)
+            if (this.IsNull)
+            {
                 throw new SqlTypeException("There is no buffer. Read or write operation failed.");
+            }
 
             if (offset < 0)
+            {
                 throw new ArgumentOutOfRangeException("offset");
+            }
 
             if (offsetInBuffer < 0 || offsetInBuffer > buffer.Length
-                || offsetInBuffer > Length
-                || offsetInBuffer + count > Length
+                || offsetInBuffer > this.Length
+                || offsetInBuffer + count > this.Length
                 || offsetInBuffer + count > buffer.Length)
+            {
                 throw new ArgumentOutOfRangeException("offsetInBuffer");
+            }
 
-            if (count < 0 || count > MaxLength)
+            if (count < 0 || count > this.MaxLength)
+            {
                 throw new ArgumentOutOfRangeException("count");
+            }
 
-            if (offset > MaxLength || offset + count > MaxLength)
+            if (offset > this.MaxLength || offset + count > this.MaxLength)
+            {
                 throw new SqlTypeException("The buffer is insufficient. Read or write operation failed.");
+            }
 
-            if (count + offset > Length &&
-                count + offset <= MaxLength)
-                SetLength(count);
+            if (count + offset > this.Length &&
+                count + offset <= this.MaxLength)
+            {
+                this.SetLength(count);
+            }
 
-            Array.Copy(buffer, offsetInBuffer, this.buffer, (int)offset, count);
+            Array.Copy(buffer, offsetInBuffer, this.buffer, (int) offset, count);
         }
 
         #endregion

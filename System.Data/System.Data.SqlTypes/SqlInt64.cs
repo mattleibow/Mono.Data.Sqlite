@@ -31,17 +31,14 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Globalization;
-
 namespace System.Data.SqlTypes
 {
     public struct SqlInt64 : INullable, IComparable
     {
         #region Fields
 
-        private long value;
-        private bool notNull;
+        private readonly long value;
+        private readonly bool notNull;
 
         public static readonly SqlInt64 MaxValue = new SqlInt64(9223372036854775807);
         public static readonly SqlInt64 MinValue = new SqlInt64(-9223372036854775808);
@@ -56,7 +53,7 @@ namespace System.Data.SqlTypes
         public SqlInt64(long value)
         {
             this.value = value;
-            notNull = true;
+            this.notNull = true;
         }
 
         #endregion
@@ -65,7 +62,7 @@ namespace System.Data.SqlTypes
 
         public bool IsNull
         {
-            get { return !notNull; }
+            get { return !this.notNull; }
         }
 
         public long Value
@@ -73,9 +70,13 @@ namespace System.Data.SqlTypes
             get
             {
                 if (this.IsNull)
+                {
                     throw new SqlNullValueException();
+                }
                 else
-                    return value;
+                {
+                    return this.value;
+                }
             }
         }
 
@@ -101,25 +102,33 @@ namespace System.Data.SqlTypes
         public int CompareTo(object value)
         {
             if (value == null)
+            {
                 return 1;
+            }
             else if (!(value is SqlInt64))
+            {
                 throw new ArgumentException(Locale.GetText("Value is not a System.Data.SqlTypes.SqlInt64"));
-            return CompareSqlInt64((SqlInt64) value);
+            }
+            return this.CompareSqlInt64((SqlInt64) value);
         }
 
 #if NET_2_0
         public int CompareTo(SqlInt64 value)
         {
-            return CompareSqlInt64((SqlInt64) value);
+            return this.CompareSqlInt64(value);
         }
 #endif
 
         private int CompareSqlInt64(SqlInt64 value)
         {
             if (value.IsNull)
+            {
                 return 1;
+            }
             else
+            {
                 return this.value.CompareTo(value.Value);
+            }
         }
 
         public static SqlInt64 Divide(SqlInt64 x, SqlInt64 y)
@@ -130,13 +139,21 @@ namespace System.Data.SqlTypes
         public override bool Equals(object value)
         {
             if (!(value is SqlInt64))
+            {
                 return false;
+            }
             else if (this.IsNull)
+            {
                 return ((SqlInt64) value).IsNull;
+            }
             else if (((SqlInt64) value).IsNull)
+            {
                 return false;
+            }
             else
+            {
                 return (bool) (this == (SqlInt64) value);
+            }
         }
 
         public static SqlBoolean Equals(SqlInt64 x, SqlInt64 y)
@@ -146,7 +163,7 @@ namespace System.Data.SqlTypes
 
         public override int GetHashCode()
         {
-            return (int) (value & 0xffffffff) ^ (int) (value >> 32);
+            return (int) (this.value & 0xffffffff) ^ (int) (this.value >> 32);
         }
 
         public static SqlBoolean GreaterThan(SqlInt64 x, SqlInt64 y)
@@ -194,7 +211,9 @@ namespace System.Data.SqlTypes
         public static SqlInt64 OnesComplement(SqlInt64 x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
 
             return ~x;
         }
@@ -225,12 +244,12 @@ namespace System.Data.SqlTypes
 
         public SqlDecimal ToSqlDecimal()
         {
-            return ((SqlDecimal) this);
+            return (this);
         }
 
         public SqlDouble ToSqlDouble()
         {
-            return ((SqlDouble) this);
+            return (this);
         }
 
         public SqlInt16 ToSqlInt16()
@@ -245,12 +264,12 @@ namespace System.Data.SqlTypes
 
         public SqlMoney ToSqlMoney()
         {
-            return ((SqlMoney) this);
+            return (this);
         }
 
         public SqlSingle ToSqlSingle()
         {
-            return ((SqlSingle) this);
+            return (this);
         }
 
         public SqlString ToSqlString()
@@ -261,9 +280,11 @@ namespace System.Data.SqlTypes
         public override string ToString()
         {
             if (this.IsNull)
+            {
                 return "Null";
+            }
 
-            return value.ToString();
+            return this.value.ToString();
         }
 
         public static SqlInt64 Xor(SqlInt64 x, SqlInt64 y)
@@ -300,9 +321,13 @@ namespace System.Data.SqlTypes
         public static SqlBoolean operator ==(SqlInt64 x, SqlInt64 y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             else
+            {
                 return new SqlBoolean(x.Value == y.Value);
+            }
         }
 
         public static SqlInt64 operator ^(SqlInt64 x, SqlInt64 y)
@@ -313,41 +338,61 @@ namespace System.Data.SqlTypes
         public static SqlBoolean operator >(SqlInt64 x, SqlInt64 y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             else
+            {
                 return new SqlBoolean(x.Value > y.Value);
+            }
         }
 
         public static SqlBoolean operator >=(SqlInt64 x, SqlInt64 y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             else
+            {
                 return new SqlBoolean(x.Value >= y.Value);
+            }
         }
 
         public static SqlBoolean operator !=(SqlInt64 x, SqlInt64 y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             else
+            {
                 return new SqlBoolean(!(x.Value == y.Value));
+            }
         }
 
         public static SqlBoolean operator <(SqlInt64 x, SqlInt64 y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             else
+            {
                 return new SqlBoolean(x.Value < y.Value);
+            }
         }
 
         public static SqlBoolean operator <=(SqlInt64 x, SqlInt64 y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             else
+            {
                 return new SqlBoolean(x.Value <= y.Value);
+            }
         }
 
         public static SqlInt64 operator %(SqlInt64 x, SqlInt64 y)
@@ -366,7 +411,9 @@ namespace System.Data.SqlTypes
         public static SqlInt64 operator ~(SqlInt64 x)
         {
             if (x.IsNull)
-                return SqlInt64.Null;
+            {
+                return Null;
+            }
 
             return new SqlInt64(~(x.Value));
         }
@@ -387,9 +434,13 @@ namespace System.Data.SqlTypes
         public static explicit operator SqlInt64(SqlBoolean x)
         {
             if (x.IsNull)
-                return SqlInt64.Null;
+            {
+                return Null;
+            }
             else
-                return new SqlInt64((long) x.ByteValue);
+            {
+                return new SqlInt64(x.ByteValue);
+            }
         }
 
         public static explicit operator SqlInt64(SqlDecimal x)
@@ -397,16 +448,22 @@ namespace System.Data.SqlTypes
             checked
             {
                 if (x.IsNull)
-                    return SqlInt64.Null;
+                {
+                    return Null;
+                }
                 else
+                {
                     return new SqlInt64((long) x.Value);
+                }
             }
         }
 
         public static explicit operator SqlInt64(SqlDouble x)
         {
             if (x.IsNull)
-                return SqlInt64.Null;
+            {
+                return Null;
+            }
             else
             {
                 checked
@@ -426,16 +483,22 @@ namespace System.Data.SqlTypes
             checked
             {
                 if (x.IsNull)
-                    return SqlInt64.Null;
+                {
+                    return Null;
+                }
                 else
+                {
                     return new SqlInt64((long) Math.Round(x.Value));
+                }
             }
         }
 
         public static explicit operator SqlInt64(SqlSingle x)
         {
             if (x.IsNull)
-                return SqlInt64.Null;
+            {
+                return Null;
+            }
             else
             {
                 checked
@@ -449,7 +512,7 @@ namespace System.Data.SqlTypes
         {
             checked
             {
-                return SqlInt64.Parse(x.Value);
+                return Parse(x.Value);
             }
         }
 
@@ -461,25 +524,37 @@ namespace System.Data.SqlTypes
         public static implicit operator SqlInt64(SqlByte x)
         {
             if (x.IsNull)
-                return SqlInt64.Null;
+            {
+                return Null;
+            }
             else
-                return new SqlInt64((long) x.Value);
+            {
+                return new SqlInt64(x.Value);
+            }
         }
 
         public static implicit operator SqlInt64(SqlInt16 x)
         {
             if (x.IsNull)
-                return SqlInt64.Null;
+            {
+                return Null;
+            }
             else
-                return new SqlInt64((long) x.Value);
+            {
+                return new SqlInt64(x.Value);
+            }
         }
 
         public static implicit operator SqlInt64(SqlInt32 x)
         {
             if (x.IsNull)
-                return SqlInt64.Null;
+            {
+                return Null;
+            }
             else
-                return new SqlInt64((long) x.Value);
+            {
+                return new SqlInt64(x.Value);
+            }
         }
 
         #endregion

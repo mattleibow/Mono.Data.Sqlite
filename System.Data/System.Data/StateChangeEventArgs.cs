@@ -33,16 +33,14 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-
 namespace System.Data
 {
     public sealed class StateChangeEventArgs : EventArgs
     {
         #region Fields
 
-        private ConnectionState originalState;
-        private ConnectionState currentState;
+        private readonly ConnectionState currentState;
+        private readonly ConnectionState originalState;
 
         #endregion // Fields
 
@@ -60,12 +58,12 @@ namespace System.Data
 
         public ConnectionState CurrentState
         {
-            get { return currentState; }
+            get { return this.currentState; }
         }
 
         public ConnectionState OriginalState
         {
-            get { return originalState; }
+            get { return this.originalState; }
         }
 
         #endregion // Properties

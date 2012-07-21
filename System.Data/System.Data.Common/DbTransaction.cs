@@ -28,6 +28,7 @@
 //
 
 
+
 #if NET_2_0 || TARGET_JVM
 
 namespace System.Data.Common
@@ -36,24 +37,20 @@ namespace System.Data.Common
     {
         #region Constructors
 
-        protected DbTransaction()
-        {
-        }
-
         #endregion // Constructors
 
         #region Properties
 
         public DbConnection Connection
         {
-            get { return DbConnection; }
+            get { return this.DbConnection; }
         }
 
         protected abstract DbConnection DbConnection { get; }
 
         IDbConnection IDbTransaction.Connection
         {
-            get { return (IDbConnection) Connection; }
+            get { return this.Connection; }
         }
 
         public abstract IsolationLevel IsolationLevel { get; }
@@ -68,7 +65,7 @@ namespace System.Data.Common
 
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
         }
 
         protected virtual void Dispose(bool disposing)

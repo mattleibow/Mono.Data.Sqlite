@@ -31,17 +31,14 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Globalization;
-
 namespace System.Data.SqlTypes
 {
     public struct SqlInt16 : INullable, IComparable
     {
         #region Fields
 
-        private short value;
-        private bool notNull;
+        private readonly short value;
+        private readonly bool notNull;
 
         public static readonly SqlInt16 MaxValue = new SqlInt16(32767);
         public static readonly SqlInt16 MinValue = new SqlInt16(-32768);
@@ -55,7 +52,7 @@ namespace System.Data.SqlTypes
         public SqlInt16(short value)
         {
             this.value = value;
-            notNull = true;
+            this.notNull = true;
             ;
         }
 
@@ -65,7 +62,7 @@ namespace System.Data.SqlTypes
 
         public bool IsNull
         {
-            get { return !notNull; }
+            get { return !this.notNull; }
         }
 
         public short Value
@@ -73,9 +70,13 @@ namespace System.Data.SqlTypes
             get
             {
                 if (this.IsNull)
+                {
                     throw new SqlNullValueException();
+                }
                 else
-                    return value;
+                {
+                    return this.value;
+                }
             }
         }
 
@@ -101,25 +102,33 @@ namespace System.Data.SqlTypes
         public int CompareTo(object value)
         {
             if (value == null)
+            {
                 return 1;
+            }
             else if (!(value is SqlInt16))
+            {
                 throw new ArgumentException(Locale.GetText("Value is not a System.Data.SqlTypes.SqlInt16"));
-            return CompareSqlInt16((SqlInt16) value);
+            }
+            return this.CompareSqlInt16((SqlInt16) value);
         }
 
 #if NET_2_0
         public int CompareTo(SqlInt16 value)
         {
-            return CompareSqlInt16(value);
+            return this.CompareSqlInt16(value);
         }
 #endif
 
         private int CompareSqlInt16(SqlInt16 value)
         {
-            if (((SqlInt16) value).IsNull)
+            if ((value).IsNull)
+            {
                 return 1;
+            }
             else
+            {
                 return this.value.CompareTo(value.Value);
+            }
         }
 
         public static SqlInt16 Divide(SqlInt16 x, SqlInt16 y)
@@ -130,13 +139,21 @@ namespace System.Data.SqlTypes
         public override bool Equals(object value)
         {
             if (!(value is SqlInt16))
+            {
                 return false;
+            }
             else if (this.IsNull)
+            {
                 return ((SqlInt16) value).IsNull;
+            }
             else if (((SqlInt16) value).IsNull)
+            {
                 return false;
+            }
             else
+            {
                 return (bool) (this == (SqlInt16) value);
+            }
         }
 
         public static SqlBoolean Equals(SqlInt16 x, SqlInt16 y)
@@ -146,7 +163,7 @@ namespace System.Data.SqlTypes
 
         public override int GetHashCode()
         {
-            return (int) value;
+            return this.value;
         }
 
         public static SqlBoolean GreaterThan(SqlInt16 x, SqlInt16 y)
@@ -194,7 +211,9 @@ namespace System.Data.SqlTypes
         public static SqlInt16 OnesComplement(SqlInt16 x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
 
             return ~x;
         }
@@ -224,32 +243,32 @@ namespace System.Data.SqlTypes
 
         public SqlDecimal ToSqlDecimal()
         {
-            return ((SqlDecimal) this);
+            return (this);
         }
 
         public SqlDouble ToSqlDouble()
         {
-            return ((SqlDouble) this);
+            return (this);
         }
 
         public SqlInt32 ToSqlInt32()
         {
-            return ((SqlInt32) this);
+            return (this);
         }
 
         public SqlInt64 ToSqlInt64()
         {
-            return ((SqlInt64) this);
+            return (this);
         }
 
         public SqlMoney ToSqlMoney()
         {
-            return ((SqlMoney) this);
+            return (this);
         }
 
         public SqlSingle ToSqlSingle()
         {
-            return ((SqlSingle) this);
+            return (this);
         }
 
         public SqlString ToSqlString()
@@ -260,9 +279,13 @@ namespace System.Data.SqlTypes
         public override string ToString()
         {
             if (this.IsNull)
+            {
                 return "Null";
+            }
             else
-                return value.ToString();
+            {
+                return this.value.ToString();
+            }
         }
 
         public static SqlInt16 Xor(SqlInt16 x, SqlInt16 y)
@@ -299,9 +322,13 @@ namespace System.Data.SqlTypes
         public static SqlBoolean operator ==(SqlInt16 x, SqlInt16 y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             else
+            {
                 return new SqlBoolean(x.Value == y.Value);
+            }
         }
 
         public static SqlInt16 operator ^(SqlInt16 x, SqlInt16 y)
@@ -312,41 +339,61 @@ namespace System.Data.SqlTypes
         public static SqlBoolean operator >(SqlInt16 x, SqlInt16 y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             else
+            {
                 return new SqlBoolean(x.Value > y.Value);
+            }
         }
 
         public static SqlBoolean operator >=(SqlInt16 x, SqlInt16 y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             else
+            {
                 return new SqlBoolean(x.Value >= y.Value);
+            }
         }
 
         public static SqlBoolean operator !=(SqlInt16 x, SqlInt16 y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             else
+            {
                 return new SqlBoolean(!(x.Value == y.Value));
+            }
         }
 
         public static SqlBoolean operator <(SqlInt16 x, SqlInt16 y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             else
+            {
                 return new SqlBoolean(x.Value < y.Value);
+            }
         }
 
         public static SqlBoolean operator <=(SqlInt16 x, SqlInt16 y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             else
+            {
                 return new SqlBoolean(x.Value <= y.Value);
+            }
         }
 
         public static SqlInt16 operator %(SqlInt16 x, SqlInt16 y)
@@ -365,7 +412,9 @@ namespace System.Data.SqlTypes
         public static SqlInt16 operator ~(SqlInt16 x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
 
             return new SqlInt16((short) (~x.Value));
         }
@@ -389,9 +438,13 @@ namespace System.Data.SqlTypes
         public static explicit operator SqlInt16(SqlBoolean x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
             else
-                return new SqlInt16((short) x.ByteValue);
+            {
+                return new SqlInt16(x.ByteValue);
+            }
         }
 
         public static explicit operator SqlInt16(SqlDecimal x)
@@ -399,18 +452,26 @@ namespace System.Data.SqlTypes
             checked
             {
                 if (x.IsNull)
+                {
                     return Null;
+                }
                 else
+                {
                     return new SqlInt16((short) x.Value);
+                }
             }
         }
 
         public static explicit operator SqlInt16(SqlDouble x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
             else
+            {
                 return new SqlInt16(checked ((short) x.Value));
+            }
         }
 
         public static explicit operator short(SqlInt16 x)
@@ -423,16 +484,22 @@ namespace System.Data.SqlTypes
             checked
             {
                 if (x.IsNull)
+                {
                     return Null;
+                }
                 else
+                {
                     return new SqlInt16((short) x.Value);
+                }
             }
         }
 
         public static explicit operator SqlInt16(SqlInt64 x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
             else
             {
                 checked
@@ -447,9 +514,13 @@ namespace System.Data.SqlTypes
             checked
             {
                 if (x.IsNull)
+                {
                     return Null;
+                }
                 else
+                {
                     return new SqlInt16((short) Math.Round(x.Value));
+                }
             }
         }
 
@@ -457,7 +528,9 @@ namespace System.Data.SqlTypes
         public static explicit operator SqlInt16(SqlSingle x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
             else
             {
                 checked
@@ -470,9 +543,11 @@ namespace System.Data.SqlTypes
         public static explicit operator SqlInt16(SqlString x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
 
-            return SqlInt16.Parse(x.Value);
+            return Parse(x.Value);
         }
 
         public static implicit operator SqlInt16(short x)
@@ -482,7 +557,7 @@ namespace System.Data.SqlTypes
 
         public static implicit operator SqlInt16(SqlByte x)
         {
-            return new SqlInt16((short) x.Value);
+            return new SqlInt16(x.Value);
         }
 
         #endregion

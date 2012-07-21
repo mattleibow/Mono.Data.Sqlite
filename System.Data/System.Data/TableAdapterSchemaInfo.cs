@@ -28,14 +28,13 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+
 #if NET_2_0
-using System;
-using System.Collections;
-using System.Data;
-using System.Data.Common;
 
 namespace System.Data
 {
+    using System.Data.Common;
+
     internal enum GenerateMethodsType
     {
         None,
@@ -54,8 +53,8 @@ namespace System.Data
     internal class DbSourceMethodInfo
     {
         public GenerateMethodsType MethodType;
-        public string Name;
         public string Modifier;
+        public string Name;
         public string QueryType;
         public string ScalarCallRetval;
     }

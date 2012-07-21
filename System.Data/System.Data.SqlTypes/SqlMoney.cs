@@ -31,17 +31,16 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Globalization;
-
 namespace System.Data.SqlTypes
 {
+    using System.Globalization;
+
     public struct SqlMoney : INullable, IComparable
     {
         #region Fields
 
-        private decimal value;
-        private bool notNull;
+        private readonly decimal value;
+        private readonly bool notNull;
 
         public static readonly SqlMoney MaxValue = new SqlMoney(922337203685477.5807m);
         public static readonly SqlMoney MinValue = new SqlMoney(-922337203685477.5808m);
@@ -64,9 +63,11 @@ namespace System.Data.SqlTypes
         public SqlMoney(decimal value)
         {
             if (value > 922337203685477.5807m || value < -922337203685477.5808m)
+            {
                 throw new OverflowException();
+            }
             this.value = Decimal.Round(value, 4);
-            notNull = true;
+            this.notNull = true;
         }
 
         public SqlMoney(double value) : this((decimal) value)
@@ -87,7 +88,7 @@ namespace System.Data.SqlTypes
 
         public bool IsNull
         {
-            get { return !notNull; }
+            get { return !this.notNull; }
         }
 
         public decimal Value
@@ -95,9 +96,13 @@ namespace System.Data.SqlTypes
             get
             {
                 if (this.IsNull)
+                {
                     throw new SqlNullValueException();
+                }
                 else
-                    return value;
+                {
+                    return this.value;
+                }
             }
         }
 
@@ -113,24 +118,32 @@ namespace System.Data.SqlTypes
         public int CompareTo(object value)
         {
             if (value == null)
+            {
                 return 1;
+            }
             else if (!(value is SqlMoney))
+            {
                 throw new ArgumentException(Locale.GetText("Value is not a System.Data.SqlTypes.SqlMoney"));
-            return CompareSqlMoney((SqlMoney) value);
+            }
+            return this.CompareSqlMoney((SqlMoney) value);
         }
 
         private int CompareSqlMoney(SqlMoney value)
         {
             if (value.IsNull)
+            {
                 return 1;
+            }
             else
+            {
                 return this.value.CompareTo(value.Value);
+            }
         }
 
 #if NET_2_0
         public int CompareTo(SqlMoney value)
         {
-            return CompareSqlMoney(value);
+            return this.CompareSqlMoney(value);
         }
 #endif
 
@@ -142,13 +155,21 @@ namespace System.Data.SqlTypes
         public override bool Equals(object value)
         {
             if (!(value is SqlMoney))
+            {
                 return false;
+            }
             if (this.IsNull)
+            {
                 return ((SqlMoney) value).IsNull;
+            }
             else if (((SqlMoney) value).IsNull)
+            {
                 return false;
+            }
             else
+            {
                 return (bool) (this == (SqlMoney) value);
+            }
         }
 
         public static SqlBoolean Equals(SqlMoney x, SqlMoney y)
@@ -158,7 +179,7 @@ namespace System.Data.SqlTypes
 
         public override int GetHashCode()
         {
-            return (int) value;
+            return (int) this.value;
         }
 
         public static SqlBoolean GreaterThan(SqlMoney x, SqlMoney y)
@@ -195,8 +216,10 @@ namespace System.Data.SqlTypes
         {
             decimal d = Decimal.Parse(s);
 
-            if (d > SqlMoney.MaxValue.Value || d < SqlMoney.MinValue.Value)
+            if (d > MaxValue.Value || d < MinValue.Value)
+            {
                 throw new OverflowException();
+            }
 
             return new SqlMoney(d);
         }
@@ -208,22 +231,22 @@ namespace System.Data.SqlTypes
 
         public decimal ToDecimal()
         {
-            return value;
+            return this.value;
         }
 
         public double ToDouble()
         {
-            return (double) value;
+            return (double) this.value;
         }
 
         public int ToInt32()
         {
-            return (int) Math.Round(value);
+            return (int) Math.Round(this.value);
         }
 
         public long ToInt64()
         {
-            return (long) Math.Round(value);
+            return (long) Math.Round(this.value);
         }
 
         public SqlBoolean ToSqlBoolean()
@@ -238,12 +261,12 @@ namespace System.Data.SqlTypes
 
         public SqlDecimal ToSqlDecimal()
         {
-            return ((SqlDecimal) this);
+            return (this);
         }
 
         public SqlDouble ToSqlDouble()
         {
-            return ((SqlDouble) this);
+            return (this);
         }
 
         public SqlInt16 ToSqlInt16()
@@ -263,7 +286,7 @@ namespace System.Data.SqlTypes
 
         public SqlSingle ToSqlSingle()
         {
-            return ((SqlSingle) this);
+            return (this);
         }
 
         public SqlString ToSqlString()
@@ -273,10 +296,14 @@ namespace System.Data.SqlTypes
 
         public override string ToString()
         {
-            if (!notNull)
+            if (!this.notNull)
+            {
                 return "Null";
+            }
             else
-                return value.ToString("N", MoneyFormat);
+            {
+                return this.value.ToString("N", MoneyFormat);
+            }
         }
 
         public static SqlMoney operator +(SqlMoney x, SqlMoney y)
@@ -298,47 +325,69 @@ namespace System.Data.SqlTypes
         public static SqlBoolean operator ==(SqlMoney x, SqlMoney y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             else
+            {
                 return new SqlBoolean(x.Value == y.Value);
+            }
         }
 
         public static SqlBoolean operator >(SqlMoney x, SqlMoney y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             else
+            {
                 return new SqlBoolean(x.Value > y.Value);
+            }
         }
 
         public static SqlBoolean operator >=(SqlMoney x, SqlMoney y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             else
+            {
                 return new SqlBoolean(x.Value >= y.Value);
+            }
         }
 
         public static SqlBoolean operator !=(SqlMoney x, SqlMoney y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             else
+            {
                 return new SqlBoolean(!(x.Value == y.Value));
+            }
         }
 
         public static SqlBoolean operator <(SqlMoney x, SqlMoney y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             else
+            {
                 return new SqlBoolean(x.Value < y.Value);
+            }
         }
 
         public static SqlBoolean operator <=(SqlMoney x, SqlMoney y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             return new SqlBoolean(x.Value <= y.Value);
         }
 
@@ -366,7 +415,9 @@ namespace System.Data.SqlTypes
         public static explicit operator SqlMoney(SqlBoolean x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
             else
             {
                 checked
@@ -379,7 +430,9 @@ namespace System.Data.SqlTypes
         public static explicit operator SqlMoney(SqlDecimal x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
             else
             {
                 checked
@@ -392,7 +445,9 @@ namespace System.Data.SqlTypes
         public static explicit operator SqlMoney(SqlDouble x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
             else
             {
                 checked
@@ -410,7 +465,9 @@ namespace System.Data.SqlTypes
         public static explicit operator SqlMoney(SqlSingle x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
             else
             {
                 checked
@@ -424,7 +481,7 @@ namespace System.Data.SqlTypes
         {
             checked
             {
-                return SqlMoney.Parse(x.Value);
+                return Parse(x.Value);
             }
         }
 
@@ -448,33 +505,49 @@ namespace System.Data.SqlTypes
         public static implicit operator SqlMoney(SqlByte x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
             else
+            {
                 return new SqlMoney((decimal) x.Value);
+            }
         }
 
         public static implicit operator SqlMoney(SqlInt16 x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
             else
+            {
                 return new SqlMoney((decimal) x.Value);
+            }
         }
 
         public static implicit operator SqlMoney(SqlInt32 x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
             else
+            {
                 return new SqlMoney(x.Value);
+            }
         }
 
         public static implicit operator SqlMoney(SqlInt64 x)
         {
             if (x.IsNull)
+            {
                 return Null;
+            }
             else
+            {
                 return new SqlMoney(x.Value);
+            }
         }
 
         #endregion

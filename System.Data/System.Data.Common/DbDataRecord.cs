@@ -30,19 +30,10 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System.Collections;
-using System.ComponentModel;
-using System.Data;
-using System.Runtime.CompilerServices;
-
 namespace System.Data.Common
 {
     public abstract class DbDataRecord : IDataRecord
     {
-        protected DbDataRecord()
-        {
-        }
-
         public abstract int FieldCount { get; }
         public abstract object this[string name] { get; }
         public abstract object this[int i] { get; }
@@ -74,7 +65,7 @@ namespace System.Data.Common
 
         public IDataReader GetData(int i)
         {
-            return (IDataReader) GetValue(i);
+            return (IDataReader) this.GetValue(i);
         }
     }
 
@@ -106,17 +97,17 @@ namespace System.Data.Common
 
         public override int FieldCount
         {
-            get { return fieldCount; }
+            get { return this.fieldCount; }
         }
 
         public override object this[string name]
         {
-            get { return this[GetOrdinal(name)]; }
+            get { return this[this.GetOrdinal(name)]; }
         }
 
         public override object this[int i]
         {
-            get { return GetValue(i); }
+            get { return this.GetValue(i); }
         }
 
         #endregion
@@ -125,19 +116,21 @@ namespace System.Data.Common
 
         public override bool GetBoolean(int i)
         {
-            return (bool) GetValue(i);
+            return (bool) this.GetValue(i);
         }
 
         public override byte GetByte(int i)
         {
-            return (byte) GetValue(i);
+            return (byte) this.GetValue(i);
         }
 
         public override long GetBytes(int i, long dataIndex, byte[] buffer, int bufferIndex, int length)
         {
-            object value = GetValue(i);
+            object value = this.GetValue(i);
             if (!(value is byte[]))
-                throw new InvalidCastException("Type is " + value.GetType().ToString());
+            {
+                throw new InvalidCastException("Type is " + value.GetType());
+            }
 
             if (buffer == null)
             {
@@ -154,20 +147,26 @@ namespace System.Data.Common
 
         public override char GetChar(int i)
         {
-            return (char) GetValue(i);
+            return (char) this.GetValue(i);
         }
 
         public override long GetChars(int i, long dataIndex, char[] buffer, int bufferIndex, int length)
         {
-            object value = GetValue(i);
+            object value = this.GetValue(i);
             char[] valueBuffer;
 
             if (value is char[])
+            {
                 valueBuffer = (char[]) value;
+            }
             else if (value is string)
+            {
                 valueBuffer = ((string) value).ToCharArray();
+            }
             else
-                throw new InvalidCastException("Type is " + value.GetType().ToString());
+            {
+                throw new InvalidCastException("Type is " + value.GetType());
+            }
 
             if (buffer == null)
             {
@@ -184,12 +183,12 @@ namespace System.Data.Common
 
         public override string GetDataTypeName(int i)
         {
-            return schema[i].DataTypeName;
+            return this.schema[i].DataTypeName;
         }
 
         public override DateTime GetDateTime(int i)
         {
-            return (DateTime) GetValue(i);
+            return (DateTime) this.GetValue(i);
         }
 
 #if NET_2_0
@@ -202,83 +201,93 @@ namespace System.Data.Common
 
         public override decimal GetDecimal(int i)
         {
-            return (decimal) GetValue(i);
+            return (decimal) this.GetValue(i);
         }
 
         public override double GetDouble(int i)
         {
-            return (double) GetValue(i);
+            return (double) this.GetValue(i);
         }
 
         public override Type GetFieldType(int i)
         {
-            return schema[i].FieldType;
+            return this.schema[i].FieldType;
         }
 
         public override float GetFloat(int i)
         {
-            return (float) GetValue(i);
+            return (float) this.GetValue(i);
         }
 
         public override Guid GetGuid(int i)
         {
-            return (Guid) GetValue(i);
+            return (Guid) this.GetValue(i);
         }
 
         public override short GetInt16(int i)
         {
-            return (short) GetValue(i);
+            return (short) this.GetValue(i);
         }
 
         public override int GetInt32(int i)
         {
-            return (int) GetValue(i);
+            return (int) this.GetValue(i);
         }
 
         public override long GetInt64(int i)
         {
-            return (long) GetValue(i);
+            return (long) this.GetValue(i);
         }
 
         public override string GetName(int i)
         {
-            return schema[i].ColumnName;
+            return this.schema[i].ColumnName;
         }
 
         public override int GetOrdinal(string name)
         {
-            for (int i = 0; i < FieldCount; i++)
-                if (schema[i].ColumnName == name)
+            for (int i = 0; i < this.FieldCount; i++)
+            {
+                if (this.schema[i].ColumnName == name)
+                {
                     return i;
+                }
+            }
             return -1;
         }
 
         public override string GetString(int i)
         {
-            return (string) GetValue(i);
+            return (string) this.GetValue(i);
         }
 
         public override object GetValue(int i)
         {
-            if (i < 0 || i > fieldCount)
+            if (i < 0 || i > this.fieldCount)
+            {
                 throw new IndexOutOfRangeException();
-            return values[i];
+            }
+            return this.values[i];
         }
 
         public override int GetValues(object[] values)
         {
             if (values == null)
+            {
                 throw new ArgumentNullException("values");
+            }
 
             int count = values.Length > this.values.Length ? this.values.Length : values.Length;
             for (int i = 0; i < count; i++)
+            {
                 values[i] = this.values[i];
+            }
             return count;
         }
 
         public override bool IsDBNull(int i)
         {
-            return GetValue(i) == DBNull.Value;
+            return this.GetValue(i) == DBNull.Value;
         }
 
         #endregion // Methods

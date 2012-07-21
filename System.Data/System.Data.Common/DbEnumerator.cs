@@ -30,19 +30,16 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Data;
-
 namespace System.Data.Common
 {
+    using System.Collections;
+
     public class DbEnumerator : IEnumerator
     {
         #region Fields
 
-        private readonly IDataReader reader;
         private readonly bool closeReader;
+        private readonly IDataReader reader;
         private readonly SchemaInfo[] schema;
         private readonly object[] values;
 
@@ -71,8 +68,8 @@ namespace System.Data.Common
         {
             get
             {
-                reader.GetValues(values);
-                return new DbDataRecordImpl(schema, values);
+                this.reader.GetValues(this.values);
+                return new DbDataRecordImpl(this.schema, this.values);
             }
         }
 
@@ -80,14 +77,32 @@ namespace System.Data.Common
 
         #region Methods
 
+        public bool MoveNext()
+        {
+            if (this.reader.Read())
+            {
+                return true;
+            }
+            if (this.closeReader)
+            {
+                this.reader.Close();
+            }
+            return false;
+        }
+
+        public void Reset()
+        {
+            throw new NotSupportedException();
+        }
+
         private static SchemaInfo[] LoadSchema(IDataReader reader)
         {
             int fieldCount = reader.FieldCount;
-            SchemaInfo[] schema = new SchemaInfo[fieldCount];
+            var schema = new SchemaInfo[fieldCount];
 
             for (int i = 0; i < fieldCount; i++)
             {
-                SchemaInfo columnSchema = new SchemaInfo();
+                var columnSchema = new SchemaInfo();
 
                 columnSchema.ColumnName = reader.GetName(i);
                 columnSchema.ColumnOrdinal = i;
@@ -98,20 +113,6 @@ namespace System.Data.Common
             }
 
             return schema;
-        }
-
-        public bool MoveNext()
-        {
-            if (reader.Read())
-                return true;
-            if (closeReader)
-                reader.Close();
-            return false;
-        }
-
-        public void Reset()
-        {
-            throw new NotSupportedException();
         }
 
         #endregion // Methods

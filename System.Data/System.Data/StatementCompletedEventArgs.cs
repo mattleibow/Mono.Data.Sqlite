@@ -31,6 +31,7 @@
 //
 
 
+
 #if NET_2_0
 
 namespace System.Data
@@ -39,7 +40,7 @@ namespace System.Data
     {
         #region Fields
 
-        private int recordCount;
+        private readonly int recordCount;
 
         #endregion // Fields
 
@@ -56,7 +57,7 @@ namespace System.Data
 
         public int RecordCount
         {
-            get { return recordCount; }
+            get { return this.recordCount; }
         }
 
         #endregion // Properties

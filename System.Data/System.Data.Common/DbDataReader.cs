@@ -30,21 +30,16 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#if NET_2_0 || TARGET_JVM
 
-using System.Collections;
-using System.ComponentModel;
-using System.Data;
+#if NET_2_0 || TARGET_JVM
 
 namespace System.Data.Common
 {
+    using System.Collections;
+
     public abstract class DbDataReader : IDataReader, IDataRecord, IDisposable, IEnumerable
     {
         #region Constructors
-
-        protected DbDataReader()
-        {
-        }
 
         #endregion // Constructors
 
@@ -61,7 +56,7 @@ namespace System.Data.Common
 #if NET_2_0
         public virtual int VisibleFieldCount
         {
-            get { return FieldCount; }
+            get { return this.FieldCount; }
         }
 #endif
 
@@ -78,13 +73,15 @@ namespace System.Data.Common
 
         public void Dispose()
         {
-            Dispose(true);
+            this.Dispose(true);
         }
 
         protected virtual void Dispose(bool disposing)
         {
             if (disposing)
-                Close();
+            {
+                this.Close();
+            }
         }
 
         public DbDataReader GetData(int ordinal)
@@ -110,17 +107,17 @@ namespace System.Data.Common
 
         public virtual Type GetProviderSpecificFieldType(int ordinal)
         {
-            return GetFieldType(ordinal);
+            return this.GetFieldType(ordinal);
         }
 
         public virtual object GetProviderSpecificValue(int ordinal)
         {
-            return GetValue(ordinal);
+            return this.GetValue(ordinal);
         }
 
         public virtual int GetProviderSpecificValues(object[] values)
         {
-            return GetValues(values);
+            return this.GetValues(values);
         }
 
         protected virtual DbDataReader GetDbDataReader(int ordinal)

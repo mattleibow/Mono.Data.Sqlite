@@ -30,60 +30,42 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#if NET_2_0 || TARGET_JVM
 
-using System.ComponentModel;
-using System.Data;
-using System.Globalization;
-using System.Text;
+#if NET_2_0 || TARGET_JVM
 
 namespace System.Data.Common
 {
+    using System.ComponentModel;
+    using System.Globalization;
+
     public abstract class DbCommandBuilder : IDisposable
     {
-        private bool _setAllValues;
-
-        private CatalogLocation _catalogLocation = CatalogLocation.Start;
-        private ConflictOption _conflictOption = ConflictOption.CompareAllSearchableValues;
-
-        private string _tableName;
-        private string _catalogSeparator;
-        private string _quotePrefix;
-        private string _quoteSuffix;
-        private string _schemaSeparator;
-
         private static readonly string SEPARATOR_DEFAULT = ".";
         // Used to construct WHERE clauses
         private static readonly string clause1 = "({0} = 1 AND {1} IS NULL)";
         private static readonly string clause2 = "({0} = {1})";
+        private CatalogLocation _catalogLocation = CatalogLocation.Start;
+        private string _catalogSeparator;
+        private ConflictOption _conflictOption = ConflictOption.CompareAllSearchableValues;
+        private string _quotePrefix;
+        private string _quoteSuffix;
+        private string _schemaSeparator;
+        private string _tableName;
 
         private string QuotedTableName
         {
-            get { return GetQuotedString(_tableName); }
-        }
-
-        private string GetQuotedString(string value)
-        {
-            if (value == String.Empty || value == null)
-                return value;
-
-            string prefix = QuotePrefix;
-            string suffix = QuoteSuffix;
-
-            if (prefix.Length == 0 && suffix.Length == 0)
-                return value;
-            return String.Format("{0}{1}{2}", prefix, value, suffix);
+            get { return this.GetQuotedString(this._tableName); }
         }
 
         [DefaultValue(CatalogLocation.Start)]
         public virtual CatalogLocation CatalogLocation
         {
-            get { return _catalogLocation; }
+            get { return this._catalogLocation; }
             set
             {
                 CheckEnumValue(typeof (CatalogLocation),
                                (int) value);
-                _catalogLocation = value;
+                this._catalogLocation = value;
             }
         }
 
@@ -92,22 +74,24 @@ namespace System.Data.Common
         {
             get
             {
-                if (_catalogSeparator == null || _catalogSeparator.Length == 0)
+                if (this._catalogSeparator == null || this._catalogSeparator.Length == 0)
+                {
                     return SEPARATOR_DEFAULT;
-                return _catalogSeparator;
+                }
+                return this._catalogSeparator;
             }
-            set { _catalogSeparator = value; }
+            set { this._catalogSeparator = value; }
         }
 
         [DefaultValue(ConflictOption.CompareAllSearchableValues)]
         public virtual ConflictOption ConflictOption
         {
-            get { return _conflictOption; }
+            get { return this._conflictOption; }
             set
             {
                 CheckEnumValue(typeof (ConflictOption),
                                (int) value);
-                _conflictOption = value;
+                this._conflictOption = value;
             }
         }
 
@@ -116,11 +100,13 @@ namespace System.Data.Common
         {
             get
             {
-                if (_quotePrefix == null)
+                if (this._quotePrefix == null)
+                {
                     return string.Empty;
-                return _quotePrefix;
+                }
+                return this._quotePrefix;
             }
-            set { _quotePrefix = value; }
+            set { this._quotePrefix = value; }
         }
 
         [DefaultValue("")]
@@ -128,11 +114,13 @@ namespace System.Data.Common
         {
             get
             {
-                if (_quoteSuffix == null)
+                if (this._quoteSuffix == null)
+                {
                     return string.Empty;
-                return _quoteSuffix;
+                }
+                return this._quoteSuffix;
             }
-            set { _quoteSuffix = value; }
+            set { this._quoteSuffix = value; }
         }
 
         [DefaultValue(".")]
@@ -140,23 +128,41 @@ namespace System.Data.Common
         {
             get
             {
-                if (_schemaSeparator == null || _schemaSeparator.Length == 0)
+                if (this._schemaSeparator == null || this._schemaSeparator.Length == 0)
+                {
                     return SEPARATOR_DEFAULT;
-                return _schemaSeparator;
+                }
+                return this._schemaSeparator;
             }
-            set { _schemaSeparator = value; }
+            set { this._schemaSeparator = value; }
         }
 
         [DefaultValue(false)]
-        public bool SetAllValues
-        {
-            get { return _setAllValues; }
-            set { _setAllValues = value; }
-        }
+        public bool SetAllValues { get; set; }
+
+        #region IDisposable Members
 
         public virtual void Dispose()
         {
+        }
 
+        #endregion
+
+        private string GetQuotedString(string value)
+        {
+            if (value == String.Empty || value == null)
+            {
+                return value;
+            }
+
+            string prefix = this.QuotePrefix;
+            string suffix = this.QuoteSuffix;
+
+            if (prefix.Length == 0 && suffix.Length == 0)
+            {
+                return value;
+            }
+            return String.Format("{0}{1}{2}", prefix, value, suffix);
         }
 
         public virtual string QuoteIdentifier(string unquotedIdentifier)
@@ -184,7 +190,7 @@ namespace System.Data.Common
 
         public virtual void RefreshSchema()
         {
-            _tableName = String.Empty;
+            this._tableName = String.Empty;
         }
 
         protected abstract string GetParameterName(int parameterOrdinal);
@@ -194,7 +200,9 @@ namespace System.Data.Common
         private static void CheckEnumValue(Type type, int value)
         {
             if (Enum.IsDefined(type, value))
+            {
                 return;
+            }
 
             string typename = type.Name;
             string msg = string.Format(CultureInfo.CurrentCulture,

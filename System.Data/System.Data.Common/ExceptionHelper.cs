@@ -5,16 +5,15 @@
 //   Boris Kirzner (borisk@mainsoft.com)
 //
 
-using System;
-using System.Globalization;
-
 namespace System.Data.Common
 {
+    using System.Globalization;
+
     internal sealed class ExceptionHelper
     {
         internal static ArgumentException InvalidSizeValue(int value)
         {
-            string[] args = new string[] {value.ToString()};
+            var args = new[] {value.ToString()};
             return
                 new ArgumentException(
                     GetExceptionMessage(
@@ -24,7 +23,9 @@ namespace System.Data.Common
         internal static void CheckEnumValue(Type enumType, object value)
         {
             if (!Enum.IsDefined(enumType, value))
+            {
                 throw InvalidEnumValueException(enumType.Name, value);
+            }
         }
 
         internal static ArgumentException InvalidEnumValueException(String enumeration, object value)
@@ -41,14 +42,14 @@ namespace System.Data.Common
 
         internal static ArgumentOutOfRangeException InvalidParameterDirection(ParameterDirection value)
         {
-            object[] args = new object[] {"ParameterDirection", value.ToString()};
+            var args = new object[] {"ParameterDirection", value.ToString()};
             return
                 new ArgumentOutOfRangeException(GetExceptionMessage("Invalid direction '{0}' for '{1}' parameter.", args));
         }
 
         internal static InvalidOperationException NoStoredProcedureExists(string procedureName)
         {
-            object[] args = new object[1] {procedureName};
+            var args = new object[1] {procedureName};
             return new InvalidOperationException(GetExceptionMessage("The stored procedure '{0}' doesn't exist.", args));
         }
 
@@ -67,19 +68,19 @@ namespace System.Data.Common
 
         internal static ArgumentOutOfRangeException InvalidOleDbType(int value)
         {
-            string[] args = new string[] {value.ToString()};
+            var args = new[] {value.ToString()};
             return new ArgumentOutOfRangeException(GetExceptionMessage("Invalid OleDbType enumeration value: {0}", args));
         }
 
         internal static ArgumentException InvalidDbType(int value)
         {
-            string[] args = new string[] {value.ToString()};
+            var args = new[] {value.ToString()};
             return new ArgumentException(GetExceptionMessage("No mapping exists from DbType {0} to a known {1}.", args));
         }
 
         internal static InvalidOperationException DeriveParametersNotSupported(Type type, CommandType commandType)
         {
-            string[] args = new string[] {type.ToString(), commandType.ToString()};
+            var args = new[] {type.ToString(), commandType.ToString()};
             return
                 new InvalidOperationException(
                     GetExceptionMessage(
@@ -88,14 +89,14 @@ namespace System.Data.Common
 
         internal static InvalidOperationException ReaderClosed(string mehodName)
         {
-            string[] args = new string[] {mehodName};
+            var args = new[] {mehodName};
             return
                 new InvalidOperationException(GetExceptionMessage("Invalid attempt to {0} when reader is closed.", args));
         }
 
         internal static ArgumentOutOfRangeException InvalidSqlDbType(int value)
         {
-            string[] args = new string[] {value.ToString()};
+            var args = new[] {value.ToString()};
             return
                 new ArgumentOutOfRangeException(GetExceptionMessage("{0}: Invalid SqlDbType enumeration value: {1}.",
                                                                     args));
@@ -103,7 +104,7 @@ namespace System.Data.Common
 
         internal static ArgumentException UnknownDataType(string type1, string type2)
         {
-            string[] args = new string[] {type1, type2};
+            var args = new[] {type1, type2};
             return new ArgumentException(GetExceptionMessage("No mapping exists from DbType {0} to a known {1}.", args));
         }
 
@@ -126,7 +127,7 @@ namespace System.Data.Common
         internal static InvalidOperationException ParametersNotInitialized(int parameterPosition, string parameterName,
                                                                            string parameterType)
         {
-            object[] args = new object[] {parameterPosition, parameterName, parameterType};
+            var args = new object[] {parameterPosition, parameterName, parameterType};
             return
                 new InvalidOperationException(
                     GetExceptionMessage("Parameter {0}: '{1}', the property DbType is uninitialized: OleDbType.{2}.",
@@ -135,7 +136,7 @@ namespace System.Data.Common
 
         internal static InvalidOperationException WrongParameterSize(string provider)
         {
-            string[] args = new string[] {provider};
+            var args = new[] {provider};
             return
                 new InvalidOperationException(
                     GetExceptionMessage(
@@ -145,7 +146,7 @@ namespace System.Data.Common
 
         internal static InvalidOperationException ConnectionNotOpened(string operationName, string connectionState)
         {
-            object[] args = new object[] {operationName, connectionState};
+            var args = new object[] {operationName, connectionState};
             return
                 new InvalidOperationException(
                     GetExceptionMessage(
@@ -154,7 +155,7 @@ namespace System.Data.Common
 
         internal static InvalidOperationException ConnectionNotInitialized(string methodName)
         {
-            object[] args = new object[] {methodName};
+            var args = new object[] {methodName};
             return
                 new InvalidOperationException(GetExceptionMessage("{0}: Connection property has not been initialized.",
                                                                   args));
@@ -162,7 +163,7 @@ namespace System.Data.Common
 
         internal static InvalidOperationException OpenConnectionRequired(string methodName, object connectionState)
         {
-            object[] args = new object[] {methodName, connectionState};
+            var args = new[] {methodName, connectionState};
             return
                 new InvalidOperationException(
                     GetExceptionMessage(
@@ -179,7 +180,7 @@ namespace System.Data.Common
 
         internal static InvalidOperationException ConnectionAlreadyOpen(object connectionState)
         {
-            object[] args = new object[] {connectionState};
+            var args = new[] {connectionState};
             return
                 new InvalidOperationException(GetExceptionMessage("The connection is already Open (state={0}).", args));
         }
@@ -198,14 +199,14 @@ namespace System.Data.Common
 
         internal static InvalidOperationException ConnectionIsBusy(object commandType, object connectionState)
         {
-            object[] args = new object[] {commandType.ToString(), connectionState.ToString()};
+            var args = new object[] {commandType.ToString(), connectionState.ToString()};
             return new InvalidOperationException(GetExceptionMessage("The {0} is currently busy {1}.", args));
         }
 
         internal static InvalidOperationException NotAllowedWhileConnectionOpen(string propertyName,
                                                                                 object connectionState)
         {
-            object[] args = new object[] {propertyName, connectionState};
+            var args = new[] {propertyName, connectionState};
             return
                 new InvalidOperationException(
                     GetExceptionMessage("Not allowed to change the '{0}' property while the connection (state={1}).",
@@ -222,15 +223,15 @@ namespace System.Data.Common
 
         internal static ArgumentException InvalidValueForKey(string key)
         {
-            string[] args = new string[] {key};
+            var args = new[] {key};
             return new ArgumentException(String.Format("Invalid value for key {0}", args));
         }
 
         internal static InvalidOperationException ParameterSizeNotInitialized(int parameterIndex, string parameterName,
                                                                               string parameterType, int parameterSize)
         {
-            object[] args = new object[]
-                {parameterIndex.ToString(), parameterName, parameterType, parameterSize.ToString()};
+            var args = new object[]
+                           {parameterIndex.ToString(), parameterName, parameterType, parameterSize.ToString()};
             return
                 new InvalidOperationException(
                     GetExceptionMessage(
@@ -239,13 +240,13 @@ namespace System.Data.Common
 
         internal static ArgumentException InvalidUpdateStatus(UpdateStatus status)
         {
-            object[] args = new object[] {status};
+            var args = new object[] {status};
             return new ArgumentException(GetExceptionMessage("Invalid UpdateStatus: {0}", args));
         }
 
         internal static InvalidOperationException UpdateRequiresCommand(string command)
         {
-            object[] args = new object[] {command};
+            var args = new object[] {command};
             return
                 new InvalidOperationException(
                     GetExceptionMessage("Auto SQL generation during {0} requires a valid SelectCommand.", args));
@@ -260,7 +261,7 @@ namespace System.Data.Common
 
         internal static ArgumentNullException CollectionNoNullsAllowed(object collection, object objectsType)
         {
-            object[] args = new object[] {collection.GetType().ToString(), objectsType.ToString()};
+            var args = new object[] {collection.GetType().ToString(), objectsType.ToString()};
             return
                 new ArgumentNullException(GetExceptionMessage("The {0} only accepts non-null {1} type objects.", args));
         }
@@ -268,8 +269,8 @@ namespace System.Data.Common
         internal static ArgumentException CollectionAlreadyContains(object objectType, string propertyName,
                                                                     object propertyValue, object collection)
         {
-            object[] args = new object[]
-                {objectType.ToString(), propertyName, propertyValue, collection.GetType().ToString()};
+            var args = new[]
+                           {objectType.ToString(), propertyName, propertyValue, collection.GetType().ToString()};
             return
                 new ArgumentException(GetExceptionMessage("The {0} with {1} '{2}' is already contained by this {3}.",
                                                           args));

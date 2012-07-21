@@ -27,9 +27,8 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#if NET_2_0
 
-using System;
+#if NET_2_0
 
 namespace System.Data.Common
 {
@@ -38,7 +37,7 @@ namespace System.Data.Common
     {
         #region Fields
 
-        private bool isProviderSpecificTypeProperty;
+        private readonly bool isProviderSpecificTypeProperty;
 
         #endregion // Fields
 

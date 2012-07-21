@@ -26,15 +26,13 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#if NET_2_0
 
-using System;
-using System.Data;
-using System.Data.Common;
-using System.Globalization;
+#if NET_2_0
 
 namespace System.Data.Common
 {
+    using System.Globalization;
+
     internal sealed class DbConnectionStringBuilderHelper
     {
         #region Methods
@@ -47,15 +45,21 @@ namespace System.Data.Common
         public static bool ConvertToBoolean(object value)
         {
             if (value == null)
+            {
                 throw new ArgumentNullException("null value cannot be converted" +
                                                 " to boolean");
+            }
             string upper = value.ToString().ToUpper().Trim();
             if (upper == "YES" || upper == "TRUE")
+            {
                 return true;
+            }
             if (upper == "NO" || upper == "FALSE")
+            {
                 return false;
+            }
             throw new ArgumentException(String.Format("Invalid boolean value: {0}",
-                                                      value.ToString()));
+                                                      value));
         }
 
         #endregion // Methods

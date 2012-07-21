@@ -30,96 +30,39 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-
 namespace System.Data.Common
 {
     internal class SchemaInfo
     {
         #region Fields
 
-        private string columnName;
-        private string tableName;
-        private string dataTypeName;
-        private bool allowDBNull;
-        private bool isReadOnly;
-        private int ordinal;
-        private int size;
-        private byte precision;
-        private byte scale;
-        private Type fieldType;
-
         #endregion // Fields
 
         #region Constructors
-
-        public SchemaInfo()
-        {
-        }
 
         #endregion // Constructors
 
         #region Properties
 
-        public bool AllowDBNull
-        {
-            get { return allowDBNull; }
-            set { allowDBNull = value; }
-        }
+        public bool AllowDBNull { get; set; }
 
-        public string ColumnName
-        {
-            get { return columnName; }
-            set { columnName = value; }
-        }
+        public string ColumnName { get; set; }
 
-        public int ColumnOrdinal
-        {
-            get { return ordinal; }
-            set { ordinal = value; }
-        }
+        public int ColumnOrdinal { get; set; }
 
-        public int ColumnSize
-        {
-            get { return size; }
-            set { size = value; }
-        }
+        public int ColumnSize { get; set; }
 
-        public String DataTypeName
-        {
-            get { return dataTypeName; }
-            set { dataTypeName = value; }
-        }
+        public String DataTypeName { get; set; }
 
-        public Type FieldType
-        {
-            get { return fieldType; }
-            set { fieldType = value; }
-        }
+        public Type FieldType { get; set; }
 
-        public byte NumericPrecision
-        {
-            get { return precision; }
-            set { precision = value; }
-        }
+        public byte NumericPrecision { get; set; }
 
-        public byte NumericScale
-        {
-            get { return scale; }
-            set { scale = value; }
-        }
+        public byte NumericScale { get; set; }
 
-        public string TableName
-        {
-            get { return tableName; }
-            set { tableName = value; }
-        }
+        public string TableName { get; set; }
 
-        public bool IsReadOnly
-        {
-            get { return isReadOnly; }
-            set { isReadOnly = value; }
-        }
+        public bool IsReadOnly { get; set; }
 
         #endregion // Properties
     }

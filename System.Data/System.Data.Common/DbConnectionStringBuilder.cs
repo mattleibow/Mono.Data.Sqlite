@@ -27,19 +27,17 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+
 #if NET_2_0
-using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Data;
-using System.Data.Common;
-using System.Reflection;
-using System.Text;
 
 namespace System.Data.Common
 {
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.ComponentModel;
+    using System.Text;
+
     public class DbConnectionStringBuilder : IDictionary, ICollection, IEnumerable
     {
         #region Fields
@@ -58,7 +56,7 @@ namespace System.Data.Common
         public DbConnectionStringBuilder(bool useOdbcRules)
         {
             this.useOdbcRules = useOdbcRules;
-            _dictionary = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+            this._dictionary = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         }
 
         #endregion // Constructors
@@ -76,32 +74,99 @@ namespace System.Data.Common
         {
             get
             {
-                IDictionary<string, object> dictionary = (IDictionary<string, object>) _dictionary;
-                StringBuilder sb = new StringBuilder();
-                foreach (string key in Keys)
+                IDictionary<string, object> dictionary = this._dictionary;
+                var sb = new StringBuilder();
+                foreach (string key in this.Keys)
                 {
                     object value = null;
                     if (!dictionary.TryGetValue(key, out value))
+                    {
                         continue;
+                    }
                     string val = value.ToString();
-                    AppendKeyValuePair(sb, key, val, useOdbcRules);
+                    AppendKeyValuePair(sb, key, val, this.useOdbcRules);
                 }
                 return sb.ToString();
             }
             set
             {
-                Clear();
+                this.Clear();
                 if (value == null)
+                {
                     return;
+                }
                 if (value.Trim().Length == 0)
+                {
                     return;
-                ParseConnectionString(value);
+                }
+                this.ParseConnectionString(value);
+            }
+        }
+
+        public virtual object this[string keyword]
+        {
+            get
+            {
+                if (this.ContainsKey(keyword))
+                {
+                    return this._dictionary[keyword];
+                }
+                else
+                {
+                    throw new ArgumentException(string.Format(
+                        "Keyword '{0}' does not exist",
+                        keyword));
+                }
+            }
+            set
+            {
+                if (value == null)
+                {
+                    this.Remove(keyword);
+                    return;
+                }
+
+                if (keyword == null)
+                {
+                    throw new ArgumentNullException("keyword");
+                }
+
+                if (keyword.Length == 0)
+                {
+                    throw CreateInvalidKeywordException(keyword);
+                }
+
+                for (int i = 0; i < keyword.Length; i++)
+                {
+                    char c = keyword[i];
+                    if (i == 0 && (Char.IsWhiteSpace(c) || c == ';'))
+                    {
+                        throw CreateInvalidKeywordException(keyword);
+                    }
+                    if (i == (keyword.Length - 1) && Char.IsWhiteSpace(c))
+                    {
+                        throw CreateInvalidKeywordException(keyword);
+                    }
+                    if (Char.IsControl(c))
+                    {
+                        throw CreateInvalidKeywordException(keyword);
+                    }
+                }
+
+                if (this.ContainsKey(keyword))
+                {
+                    this._dictionary[keyword] = value;
+                }
+                else
+                {
+                    this._dictionary.Add(keyword, value);
+                }
             }
         }
 
         public virtual int Count
         {
-            get { return _dictionary.Count; }
+            get { return this._dictionary.Count; }
         }
 
         public virtual bool IsFixedSize
@@ -114,56 +179,13 @@ namespace System.Data.Common
             get { throw new NotImplementedException(); }
         }
 
-        public virtual object this[string keyword]
-        {
-            get
-            {
-                if (ContainsKey(keyword))
-                    return _dictionary[keyword];
-                else
-                    throw new ArgumentException(string.Format(
-                        "Keyword '{0}' does not exist",
-                        keyword));
-            }
-            set
-            {
-                if (value == null)
-                {
-                    Remove(keyword);
-                    return;
-                }
-
-                if (keyword == null)
-                    throw new ArgumentNullException("keyword");
-
-                if (keyword.Length == 0)
-                    throw CreateInvalidKeywordException(keyword);
-
-                for (int i = 0; i < keyword.Length; i++)
-                {
-                    char c = keyword[i];
-                    if (i == 0 && (Char.IsWhiteSpace(c) || c == ';'))
-                        throw CreateInvalidKeywordException(keyword);
-                    if (i == (keyword.Length - 1) && Char.IsWhiteSpace(c))
-                        throw CreateInvalidKeywordException(keyword);
-                    if (Char.IsControl(c))
-                        throw CreateInvalidKeywordException(keyword);
-                }
-
-                if (ContainsKey(keyword))
-                    _dictionary[keyword] = value;
-                else
-                    _dictionary.Add(keyword, value);
-            }
-        }
-
         public virtual ICollection Keys
         {
             get
             {
-                string[] keys = new string[_dictionary.Keys.Count];
-                ((ICollection<string>) _dictionary.Keys).CopyTo(keys, 0);
-                ReadOnlyCollection<string> keyColl = new ReadOnlyCollection<string>(keys);
+                var keys = new string[this._dictionary.Keys.Count];
+                (this._dictionary.Keys).CopyTo(keys, 0);
+                var keyColl = new ReadOnlyCollection<string>(keys);
                 return keyColl;
             }
         }
@@ -188,9 +210,9 @@ namespace System.Data.Common
         {
             get
             {
-                object[] values = new object[_dictionary.Values.Count];
-                ((ICollection<object>) _dictionary.Values).CopyTo(values, 0);
-                ReadOnlyCollection<object> valuesColl = new ReadOnlyCollection<object>(values);
+                var values = new object[this._dictionary.Values.Count];
+                (this._dictionary.Values).CopyTo(values, 0);
+                var valuesColl = new ReadOnlyCollection<object>(values);
                 return valuesColl;
             }
         }
@@ -198,6 +220,51 @@ namespace System.Data.Common
         #endregion // Properties
 
         #region Methods
+
+        public virtual void Clear()
+        {
+            this._dictionary.Clear();
+        }
+
+        void ICollection.CopyTo(Array array, int index)
+        {
+            if (array == null)
+            {
+                throw new ArgumentNullException("array");
+            }
+            var arr = array as KeyValuePair<string, object>[];
+            if (arr == null)
+            {
+                throw new ArgumentException(
+                    "Target array type is not compatible with the type of items in the collection");
+            }
+            ((ICollection<KeyValuePair<string, object>>) this._dictionary).CopyTo(arr, index);
+        }
+
+        void IDictionary.Add(object keyword, object value)
+        {
+            this.Add((string) keyword, value);
+        }
+
+        bool IDictionary.Contains(object keyword)
+        {
+            return this.ContainsKey((string) keyword);
+        }
+
+        IDictionaryEnumerator IDictionary.GetEnumerator()
+        {
+            return this._dictionary.GetEnumerator();
+        }
+
+        void IDictionary.Remove(object keyword)
+        {
+            this.Remove((string) keyword);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this._dictionary.GetEnumerator();
+        }
 
         public void Add(string keyword, object value)
         {
@@ -208,22 +275,36 @@ namespace System.Data.Common
                                               bool useOdbcRules)
         {
             if (builder == null)
+            {
                 throw new ArgumentNullException("builder");
+            }
             if (keyword == null)
+            {
                 throw new ArgumentNullException("keyword");
+            }
             if (keyword.Length == 0)
+            {
                 throw new ArgumentException("Empty keyword is not valid.");
+            }
 
             if (builder.Length > 0)
+            {
                 builder.Append(';');
+            }
             if (!useOdbcRules)
+            {
                 builder.Append(keyword.Replace("=", "=="));
+            }
             else
+            {
                 builder.Append(keyword);
+            }
             builder.Append('=');
 
             if (string.IsNullOrEmpty(value))
+            {
                 return;
+            }
 
             if (!useOdbcRules)
             {
@@ -255,7 +336,9 @@ namespace System.Data.Common
                     builder.Append('\"');
                 }
                 else
+                {
                     builder.Append(value);
+                }
             }
             else
             {
@@ -270,9 +353,13 @@ namespace System.Data.Common
                 {
                     int peek = 0;
                     if (i == (len - 1))
+                    {
                         peek = -1;
+                    }
                     else
+                    {
                         peek = value[i + 1];
+                    }
 
                     char c = value[i];
                     switch (c)
@@ -290,7 +377,9 @@ namespace System.Data.Common
                             {
                                 braces--;
                                 if (peek != -1)
+                                {
                                     needBraces = true;
+                                }
                             }
                             break;
                         case ';':
@@ -349,16 +438,13 @@ namespace System.Data.Common
             AppendKeyValuePair(builder, keyword, value, false);
         }
 
-        public virtual void Clear()
-        {
-            _dictionary.Clear();
-        }
-
         public virtual bool ContainsKey(string keyword)
         {
             if (keyword == null)
+            {
                 throw new ArgumentNullException("keyword");
-            return _dictionary.ContainsKey(keyword);
+            }
+            return this._dictionary.ContainsKey(keyword);
         }
 
         public virtual bool EquivalentTo(DbConnectionStringBuilder connectionStringBuilder)
@@ -366,11 +452,13 @@ namespace System.Data.Common
             bool ret = true;
             try
             {
-                if (Count != connectionStringBuilder.Count)
+                if (this.Count != connectionStringBuilder.Count)
+                {
                     ret = false;
+                }
                 else
                 {
-                    foreach (string key in Keys)
+                    foreach (string key in this.Keys)
                     {
                         if (!this[key].Equals(connectionStringBuilder[key]))
                         {
@@ -402,8 +490,10 @@ namespace System.Data.Common
         public virtual bool Remove(string keyword)
         {
             if (keyword == null)
+            {
                 throw new ArgumentNullException("keyword");
-            return _dictionary.Remove(keyword);
+            }
+            return this._dictionary.Remove(keyword);
         }
 
         public virtual bool ShouldSerialize(string keyword)
@@ -411,55 +501,23 @@ namespace System.Data.Common
             throw new NotImplementedException();
         }
 
-        void ICollection.CopyTo(Array array, int index)
-        {
-            if (array == null)
-                throw new ArgumentNullException("array");
-            KeyValuePair<string, object>[] arr = array as KeyValuePair<string, object>[];
-            if (arr == null)
-                throw new ArgumentException(
-                    "Target array type is not compatible with the type of items in the collection");
-            ((ICollection<KeyValuePair<string, object>>) _dictionary).CopyTo(arr, index);
-        }
-
-        void IDictionary.Add(object keyword, object value)
-        {
-            this.Add((string) keyword, value);
-        }
-
-        bool IDictionary.Contains(object keyword)
-        {
-            return ContainsKey((string) keyword);
-        }
-
-        IDictionaryEnumerator IDictionary.GetEnumerator()
-        {
-            return (IDictionaryEnumerator) _dictionary.GetEnumerator();
-        }
-
-        void IDictionary.Remove(object keyword)
-        {
-            Remove((string) keyword);
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return (IEnumerator) _dictionary.GetEnumerator();
-        }
-
         public override string ToString()
         {
-            return ConnectionString;
+            return this.ConnectionString;
         }
 
         public virtual bool TryGetValue(string keyword, out object value)
         {
             // FIXME : not sure, difference between this [keyword] and this method
-            bool found = ContainsKey(keyword);
+            bool found = this.ContainsKey(keyword);
             if (found)
+            {
                 value = this[keyword];
+            }
             else
+            {
                 value = null;
+            }
             return found;
         }
 
@@ -482,17 +540,23 @@ namespace System.Data.Common
             foreach (char c in value)
             {
                 if (char.IsWhiteSpace(c))
+                {
                     return true;
+                }
             }
             return false;
         }
 
         private void ParseConnectionString(string connectionString)
         {
-            if (useOdbcRules)
-                ParseConnectionStringOdbc(connectionString);
+            if (this.useOdbcRules)
+            {
+                this.ParseConnectionStringOdbc(connectionString);
+            }
             else
-                ParseConnectionStringNonOdbc(connectionString);
+            {
+                this.ParseConnectionStringNonOdbc(connectionString);
+            }
         }
 
         private void ParseConnectionStringOdbc(string connectionString)
@@ -504,7 +568,7 @@ namespace System.Data.Common
 
             string name = String.Empty;
             string val = String.Empty;
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             int len = connectionString.Length;
 
             for (int i = 0; i < len; i++)
@@ -522,7 +586,9 @@ namespace System.Data.Common
                         }
 
                         if (sb.Length == 0)
+                        {
                             inBraces = true;
+                        }
                         sb.Append(c);
                         break;
                     case '}':
@@ -547,7 +613,9 @@ namespace System.Data.Common
                         {
                             int next = NextNonWhitespaceChar(connectionString, i);
                             if (next != -1 && ((char) next) != ';')
+                            {
                                 throw CreateConnectionStringInvalidException(next);
+                            }
                             sb.Append(c);
                             inBraces = false;
                         }
@@ -566,7 +634,9 @@ namespace System.Data.Common
                             this[name] = val;
                         }
                         else if (sb.Length > 0)
+                        {
                             throw CreateConnectionStringInvalidException(c);
+                        }
                         inName = true;
                         name = String.Empty;
                         sb.Length = 0;
@@ -580,13 +650,17 @@ namespace System.Data.Common
 
                         name = sb.ToString();
                         if (name.Length == 0)
+                        {
                             throw CreateConnectionStringInvalidException(c);
+                        }
                         sb.Length = 0;
                         inName = false;
                         break;
                     default:
                         if (inDQuote || inQuote || inBraces)
+                        {
                             sb.Append(c);
+                        }
                         else if (char.IsWhiteSpace(c))
                         {
                             // ignore leading whitespace
@@ -594,19 +668,27 @@ namespace System.Data.Common
                             {
                                 int nextChar = SkipTrailingWhitespace(connectionString, i);
                                 if (nextChar == -1)
+                                {
                                     sb.Append(c);
+                                }
                                 else
+                                {
                                     i = nextChar;
+                                }
                             }
                         }
                         else
+                        {
                             sb.Append(c);
+                        }
                         break;
                 }
             }
 
             if ((inName && sb.Length > 0) || inDQuote || inQuote || inBraces)
+            {
                 throw CreateConnectionStringInvalidException(len - 1);
+            }
 
             if (name.Length > 0 && sb.Length > 0)
             {
@@ -624,7 +706,7 @@ namespace System.Data.Common
 
             string name = String.Empty;
             string val = String.Empty;
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
             int len = connectionString.Length;
 
             for (int i = 0; i < len; i++)
@@ -642,11 +724,15 @@ namespace System.Data.Common
                         }
 
                         if (inDQuote)
+                        {
                             sb.Append(c);
+                        }
                         else if (inQuote)
                         {
                             if (peek == -1)
+                            {
                                 inQuote = false;
+                            }
                             else if (peek.Equals(c))
                             {
                                 sb.Append(c);
@@ -656,7 +742,9 @@ namespace System.Data.Common
                             {
                                 int next = NextNonWhitespaceChar(connectionString, i);
                                 if (next != -1 && ((char) next) != ';')
+                                {
                                     throw CreateConnectionStringInvalidException(next);
+                                }
                                 inQuote = false;
                             }
 
@@ -671,9 +759,13 @@ namespace System.Data.Common
                             }
                         }
                         else if (sb.Length == 0)
+                        {
                             inQuote = true;
+                        }
                         else
+                        {
                             sb.Append(c);
+                        }
                         break;
                     case '"':
                         if (inName)
@@ -683,11 +775,15 @@ namespace System.Data.Common
                         }
 
                         if (inQuote)
+                        {
                             sb.Append(c);
+                        }
                         else if (inDQuote)
                         {
                             if (peek == -1)
+                            {
                                 inDQuote = false;
+                            }
                             else if (peek.Equals(c))
                             {
                                 sb.Append(c);
@@ -697,14 +793,20 @@ namespace System.Data.Common
                             {
                                 int next = NextNonWhitespaceChar(connectionString, i);
                                 if (next != -1 && ((char) next) != ';')
+                                {
                                     throw CreateConnectionStringInvalidException(next);
+                                }
                                 inDQuote = false;
                             }
                         }
                         else if (sb.Length == 0)
+                        {
                             inDQuote = true;
+                        }
                         else
+                        {
                             sb.Append(c);
+                        }
                         break;
                     case ';':
                         if (inName)
@@ -714,7 +816,9 @@ namespace System.Data.Common
                         }
 
                         if (inDQuote || inQuote)
+                        {
                             sb.Append(c);
+                        }
                         else
                         {
                             if (name.Length > 0 && sb.Length > 0)
@@ -724,7 +828,9 @@ namespace System.Data.Common
                                 this[name] = val;
                             }
                             else if (sb.Length > 0)
+                            {
                                 throw CreateConnectionStringInvalidException(c);
+                            }
                             inName = true;
                             name = String.Empty;
                             sb.Length = 0;
@@ -732,7 +838,9 @@ namespace System.Data.Common
                         break;
                     case '=':
                         if (inDQuote || inQuote || !inName)
+                        {
                             sb.Append(c);
+                        }
                         else if (peek != -1 && peek.Equals(c))
                         {
                             sb.Append(c);
@@ -742,14 +850,18 @@ namespace System.Data.Common
                         {
                             name = sb.ToString();
                             if (name.Length == 0)
+                            {
                                 throw CreateConnectionStringInvalidException(c);
+                            }
                             sb.Length = 0;
                             inName = false;
                         }
                         break;
                     default:
                         if (inDQuote || inQuote)
+                        {
                             sb.Append(c);
+                        }
                         else if (char.IsWhiteSpace(c))
                         {
                             // ignore leading whitespace
@@ -757,19 +869,27 @@ namespace System.Data.Common
                             {
                                 int nextChar = SkipTrailingWhitespace(connectionString, i);
                                 if (nextChar == -1)
+                                {
                                     sb.Append(c);
+                                }
                                 else
+                                {
                                     i = nextChar;
+                                }
                             }
                         }
                         else
+                        {
                             sb.Append(c);
+                        }
                         break;
                 }
             }
 
             if ((inName && sb.Length > 0) || inDQuote || inQuote)
+            {
                 throw CreateConnectionStringInvalidException(len - 1);
+            }
 
             if (name.Length > 0 && sb.Length > 0)
             {
@@ -786,9 +906,13 @@ namespace System.Data.Common
             {
                 char c = value[i];
                 if (c == ';')
+                {
                     return (i - 1);
+                }
                 if (!char.IsWhiteSpace(c))
+                {
                     return -1;
+                }
             }
             return len - 1;
         }
@@ -800,7 +924,9 @@ namespace System.Data.Common
             {
                 char c = value[i];
                 if (!char.IsWhiteSpace(c))
-                    return (int) c;
+                {
+                    return c;
+                }
             }
             return -1;
         }

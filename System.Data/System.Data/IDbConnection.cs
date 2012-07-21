@@ -30,8 +30,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-
 namespace System.Data
 {
     /// <summary>
@@ -39,6 +37,13 @@ namespace System.Data
     /// </summary>
     public interface IDbConnection : IDisposable
     {
+        string ConnectionString { get; set; }
+
+        int ConnectionTimeout { get; }
+
+        string Database { get; }
+
+        ConnectionState State { get; }
         IDbTransaction BeginTransaction();
 
         IDbTransaction BeginTransaction(IsolationLevel il);
@@ -50,14 +55,5 @@ namespace System.Data
         IDbCommand CreateCommand();
 
         void Open();
-
-
-        string ConnectionString { get; set; }
-
-        int ConnectionTimeout { get; }
-
-        string Database { get; }
-
-        ConnectionState State { get; }
     }
 }

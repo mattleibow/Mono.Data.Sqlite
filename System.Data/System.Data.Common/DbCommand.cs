@@ -30,17 +30,36 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+
+
 #if NET_2_0 || TARGET_JVM
 
 namespace System.Data.Common
 {
     public abstract class DbCommand : IDbCommand, IDisposable
     {
-        protected DbCommand()
+        #region Properties
+
+        public DbConnection Connection
         {
+            get { return this.DbConnection; }
+            set { this.DbConnection = value; }
         }
 
-        #region Properties
+        protected abstract DbConnection DbConnection { get; set; }
+        protected abstract DbParameterCollection DbParameterCollection { get; }
+        protected abstract DbTransaction DbTransaction { get; set; }
+
+        public DbParameterCollection Parameters
+        {
+            get { return this.DbParameterCollection; }
+        }
+
+        public DbTransaction Transaction
+        {
+            get { return this.DbTransaction; }
+            set { this.DbTransaction = value; }
+        }
 
         public abstract string CommandText { get; set; }
 
@@ -48,42 +67,21 @@ namespace System.Data.Common
 
         public abstract CommandType CommandType { get; set; }
 
-        public DbConnection Connection
-        {
-            get { return DbConnection; }
-            set { DbConnection = value; }
-        }
-
-        protected abstract DbConnection DbConnection { get; set; }
-        protected abstract DbParameterCollection DbParameterCollection { get; }
-        protected abstract DbTransaction DbTransaction { get; set; }
-
         IDbConnection IDbCommand.Connection
         {
-            get { return Connection; }
-            set { Connection = (DbConnection) value; }
+            get { return this.Connection; }
+            set { this.Connection = (DbConnection) value; }
         }
 
         IDataParameterCollection IDbCommand.Parameters
         {
-            get { return Parameters; }
+            get { return this.Parameters; }
         }
 
         IDbTransaction IDbCommand.Transaction
         {
-            get { return Transaction; }
-            set { Transaction = (DbTransaction) value; }
-        }
-
-        public DbParameterCollection Parameters
-        {
-            get { return DbParameterCollection; }
-        }
-
-        public DbTransaction Transaction
-        {
-            get { return DbTransaction; }
-            set { DbTransaction = value; }
+            get { return this.Transaction; }
+            set { this.Transaction = (DbTransaction) value; }
         }
 
         public abstract UpdateRowSource UpdatedRowSource { get; set; }
@@ -93,51 +91,54 @@ namespace System.Data.Common
         #region Methods
 
         public abstract void Cancel();
-        protected abstract DbParameter CreateDbParameter();
-
-        public DbParameter CreateParameter()
-        {
-            return CreateDbParameter();
-        }
-
-        protected abstract DbDataReader ExecuteDbDataReader(CommandBehavior behavior);
         public abstract int ExecuteNonQuery();
-
-        public DbDataReader ExecuteReader()
-        {
-            return ExecuteDbDataReader(CommandBehavior.Default);
-        }
-
-        public DbDataReader ExecuteReader(CommandBehavior behavior)
-        {
-            return ExecuteDbDataReader(behavior);
-        }
 
         public abstract object ExecuteScalar();
 
         IDbDataParameter IDbCommand.CreateParameter()
         {
-            return CreateParameter();
+            return this.CreateParameter();
         }
 
         IDataReader IDbCommand.ExecuteReader()
         {
-            return ExecuteReader();
+            return this.ExecuteReader();
         }
 
         IDataReader IDbCommand.ExecuteReader(CommandBehavior behavior)
         {
-            return ExecuteReader(behavior);
+            return this.ExecuteReader(behavior);
         }
 
         public abstract void Prepare();
+        protected abstract DbParameter CreateDbParameter();
+
+        public DbParameter CreateParameter()
+        {
+            return this.CreateDbParameter();
+        }
+
+        protected abstract DbDataReader ExecuteDbDataReader(CommandBehavior behavior);
+
+        public DbDataReader ExecuteReader()
+        {
+            return this.ExecuteDbDataReader(CommandBehavior.Default);
+        }
+
+        public DbDataReader ExecuteReader(CommandBehavior behavior)
+        {
+            return this.ExecuteDbDataReader(behavior);
+        }
 
         #endregion // Methods
 
+        #region IDbCommand Members
+
         public virtual void Dispose()
         {
-            
         }
+
+        #endregion
     }
 }
 

@@ -29,23 +29,22 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#if NET_2_0
 
-using System.Collections;
-using System.Collections.Generic;
-using System.Security;
-using System.Text;
+#if NET_2_0
 
 namespace System.Data.Common
 {
+    using System.Collections;
+    using System.Collections.Generic;
     using System.Linq;
+    using System.Text;
 
     internal class DbConnectionOptions
     {
         #region Fields
 
-        internal Dictionary<string, string> options;
         internal string normalizedConnectionString;
+        internal Dictionary<string, string> options;
 
         #endregion // Fields
 
@@ -57,13 +56,13 @@ namespace System.Data.Common
 
         protected internal DbConnectionOptions(DbConnectionOptions connectionOptions)
         {
-            options = connectionOptions.options;
+            this.options = connectionOptions.options;
         }
 
         public DbConnectionOptions(string connectionString)
         {
-            options = new Dictionary<string, string>();
-            ParseConnectionString(connectionString);
+            this.options = new Dictionary<string, string>();
+            this.ParseConnectionString(connectionString);
         }
 
         [MonoTODO]
@@ -84,12 +83,12 @@ namespace System.Data.Common
 
         public string this[string keyword]
         {
-            get { return options[keyword]; }
+            get { return this.options[keyword]; }
         }
 
         public ICollection Keys
         {
-            get { return options.Keys; }
+            get { return this.options.Keys; }
         }
 
         #endregion // Properties
@@ -104,20 +103,24 @@ namespace System.Data.Common
 
         public bool ContainsKey(string keyword)
         {
-            return (options[keyword] != null);
+            return (this.options[keyword] != null);
         }
 
         public bool ConvertValueToBoolean(string keyname, bool defaultvalue)
         {
-            if (ContainsKey(keyname))
+            if (this.ContainsKey(keyname))
+            {
                 return Boolean.Parse(this[keyname].Trim());
+            }
             return defaultvalue;
         }
 
         public int ConvertValueToInt32(string keyname, int defaultvalue)
         {
-            if (ContainsKey(keyname))
+            if (this.ContainsKey(keyname))
+            {
                 return Int32.Parse(this[keyname].Trim());
+            }
             return defaultvalue;
         }
 
@@ -129,8 +132,10 @@ namespace System.Data.Common
 
         public string ConvertValueToString(string keyname, string defaultValue)
         {
-            if (ContainsKey(keyname))
+            if (this.ContainsKey(keyname))
+            {
                 return this[keyname];
+            }
             return defaultValue;
         }
 
@@ -155,7 +160,9 @@ namespace System.Data.Common
         internal void ParseConnectionString(string connectionString)
         {
             if (connectionString.Length == 0)
+            {
                 return;
+            }
 
             connectionString += ";";
 
@@ -165,44 +172,58 @@ namespace System.Data.Common
 
             string name = String.Empty;
             string value = String.Empty;
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
             for (int i = 0; i < connectionString.Length; i += 1)
             {
                 char c = connectionString[i];
                 char peek;
                 if (i == connectionString.Length - 1)
+                {
                     peek = '\0';
+                }
                 else
+                {
                     peek = connectionString[i + 1];
+                }
 
                 switch (c)
                 {
                     case '\'':
                         if (inDQuote)
+                        {
                             sb.Append(c);
+                        }
                         else if (peek.Equals(c))
                         {
                             sb.Append(c);
                             i += 1;
                         }
                         else
+                        {
                             inQuote = !inQuote;
+                        }
                         break;
                     case '"':
                         if (inQuote)
+                        {
                             sb.Append(c);
+                        }
                         else if (peek.Equals(c))
                         {
                             sb.Append(c);
                             i += 1;
                         }
                         else
+                        {
                             inDQuote = !inDQuote;
+                        }
                         break;
                     case ';':
                         if (inDQuote || inQuote)
+                        {
                             sb.Append(c);
+                        }
                         else
                         {
                             if (name != String.Empty && name != null)
@@ -210,7 +231,7 @@ namespace System.Data.Common
                                 value = sb.ToString();
                                 // FIXME - KeywordLookup is an NOP
                                 // options [KeywordLookup (name.Trim ())] = value;
-                                options[name.Trim()] = value;
+                                this.options[name.Trim()] = value;
                             }
                             inName = true;
                             name = String.Empty;
@@ -220,7 +241,9 @@ namespace System.Data.Common
                         break;
                     case '=':
                         if (inDQuote || inQuote || !inName)
+                        {
                             sb.Append(c);
+                        }
                         else if (peek.Equals(c))
                         {
                             sb.Append(c);
@@ -235,9 +258,13 @@ namespace System.Data.Common
                         break;
                     case ' ':
                         if (inQuote || inDQuote)
+                        {
                             sb.Append(c);
+                        }
                         else if (sb.Length > 0 && !peek.Equals(';'))
+                        {
                             sb.Append(c);
+                        }
                         break;
                     default:
                         sb.Append(c);
@@ -245,16 +272,16 @@ namespace System.Data.Common
                 }
             }
 
-            StringBuilder normalized = new StringBuilder();
-            List<object> keys = new List<object>();
-            keys.AddRange(options.Keys.ToArray());
+            var normalized = new StringBuilder();
+            var keys = new List<object>();
+            keys.AddRange(this.options.Keys.ToArray());
             keys.Sort();
             foreach (string key in keys)
             {
                 string entry = String.Format("{0}=\"{1}\";", key, this[key].Replace("\"", "\"\""));
                 normalized.Append(entry);
             }
-            normalizedConnectionString = normalized.ToString();
+            this.normalizedConnectionString = normalized.ToString();
         }
 
         #endregion // Methods

@@ -33,9 +33,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Globalization;
-
 namespace System.Data.SqlTypes
 {
     /// <summary>
@@ -49,8 +46,8 @@ namespace System.Data.SqlTypes
     {
         #region Fields
 
-        private byte[] value;
-        private bool notNull;
+        private readonly byte[] value;
+        private readonly bool notNull;
 
         public static readonly SqlBinary Null;
 
@@ -61,7 +58,7 @@ namespace System.Data.SqlTypes
         public SqlBinary(byte[] value)
         {
             this.value = value;
-            notNull = true;
+            this.notNull = true;
         }
 
         #endregion
@@ -70,7 +67,7 @@ namespace System.Data.SqlTypes
 
         public bool IsNull
         {
-            get { return !notNull; }
+            get { return !this.notNull; }
         }
 
         public byte this[int index]
@@ -78,12 +75,18 @@ namespace System.Data.SqlTypes
             get
             {
                 if (this.IsNull)
+                {
                     throw new SqlNullValueException("The property contains Null.");
+                }
                 else if (index >= this.Length)
+                {
                     throw new IndexOutOfRangeException(
                         "The index parameter indicates a position beyond the length of the byte array.");
+                }
                 else
-                    return value[index];
+                {
+                    return this.value[index];
+                }
             }
         }
 
@@ -92,9 +95,13 @@ namespace System.Data.SqlTypes
             get
             {
                 if (this.IsNull)
+                {
                     throw new SqlNullValueException("The property contains Null.");
+                }
                 else
-                    return value.Length;
+                {
+                    return this.value.Length;
+                }
             }
         }
 
@@ -103,9 +110,13 @@ namespace System.Data.SqlTypes
             get
             {
                 if (this.IsNull)
+                {
                     throw new SqlNullValueException("The property contains Null.");
+                }
                 else
-                    return value;
+                {
+                    return this.value;
+                }
             }
         }
 
@@ -123,11 +134,15 @@ namespace System.Data.SqlTypes
         public int CompareTo(object value)
         {
             if (value == null)
+            {
                 return 1;
+            }
             if (!(value is SqlBinary))
+            {
                 throw new ArgumentException(Locale.GetText("Value is not a System.Data.SqlTypes.SqlBinary"));
+            }
 
-            return CompareTo((SqlBinary) value);
+            return this.CompareTo((SqlBinary) value);
         }
 
 #if NET_2_0
@@ -136,9 +151,13 @@ namespace System.Data.SqlTypes
             int CompareTo(SqlBinary value)
         {
             if (value.IsNull)
+            {
                 return 1;
+            }
             else
+            {
                 return Compare(this, value);
+            }
         }
 
         public static SqlBinary Concat(SqlBinary x, SqlBinary y)
@@ -149,13 +168,21 @@ namespace System.Data.SqlTypes
         public override bool Equals(object value)
         {
             if (!(value is SqlBinary))
+            {
                 return false;
+            }
             else if (this.IsNull)
+            {
                 return ((SqlBinary) value).IsNull;
+            }
             else if (((SqlBinary) value).IsNull)
+            {
                 return false;
+            }
             else
+            {
                 return (bool) (this == (SqlBinary) value);
+            }
         }
 
         public static SqlBoolean Equals(SqlBinary x, SqlBinary y)
@@ -167,9 +194,9 @@ namespace System.Data.SqlTypes
         {
             // FIXME: I'm not sure is this a right way
             int result = 10;
-            for (int i = 0; i < value.Length; i++)
+            for (int i = 0; i < this.value.Length; i++)
             {
-                result = 91*result + (int) value[i];
+                result = 91*result + this.value[i];
             }
 
             return result;
@@ -211,9 +238,11 @@ namespace System.Data.SqlTypes
 
         public override string ToString()
         {
-            if (!notNull)
+            if (!this.notNull)
+            {
                 return "Null";
-            return "SqlBinary(" + value.Length + ")";
+            }
+            return "SqlBinary(" + this.value.Length + ")";
         }
 
         #endregion
@@ -222,12 +251,14 @@ namespace System.Data.SqlTypes
 
         public static SqlBinary operator +(SqlBinary x, SqlBinary y)
         {
-            byte[] b = new byte[x.Value.Length + y.Value.Length];
+            var b = new byte[x.Value.Length + y.Value.Length];
             int j = 0;
             int i;
 
             for (i = 0; i < x.Value.Length; i++)
+            {
                 b[i] = x.Value[i];
+            }
 
 
             for (; i < (x.Value.Length + y.Value.Length); i++)
@@ -242,15 +273,21 @@ namespace System.Data.SqlTypes
         public static SqlBoolean operator ==(SqlBinary x, SqlBinary y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             else
+            {
                 return new SqlBoolean(Compare(x, y) == 0);
+            }
         }
 
         public static SqlBoolean operator >(SqlBinary x, SqlBinary y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
 
             return new SqlBoolean(Compare(x, y) > 0);
         }
@@ -258,7 +295,9 @@ namespace System.Data.SqlTypes
         public static SqlBoolean operator >=(SqlBinary x, SqlBinary y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
 
             return new SqlBoolean(Compare(x, y) >= 0);
         }
@@ -266,15 +305,21 @@ namespace System.Data.SqlTypes
         public static SqlBoolean operator !=(SqlBinary x, SqlBinary y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             else
+            {
                 return new SqlBoolean(Compare(x, y) != 0);
+            }
         }
 
         public static SqlBoolean operator <(SqlBinary x, SqlBinary y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
 
             return new SqlBoolean(Compare(x, y) < 0);
         }
@@ -282,7 +327,9 @@ namespace System.Data.SqlTypes
         public static SqlBoolean operator <=(SqlBinary x, SqlBinary y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
 
             return new SqlBoolean(Compare(x, y) <= 0);
         }
@@ -323,8 +370,10 @@ namespace System.Data.SqlTypes
                     for (int i = x.Value.Length - 1; i > x.Value.Length - LengthDiff; i--)
                     {
                         // If byte is more than zero the x is bigger
-                        if (x.Value[i] != (byte) 0)
+                        if (x.Value[i] != 0)
+                        {
                             return 1;
+                        }
                     }
                 }
                 else
@@ -332,8 +381,10 @@ namespace System.Data.SqlTypes
                     for (int i = y.Value.Length - 1; i > y.Value.Length - LengthDiff; i--)
                     {
                         // If byte is more than zero then y is bigger
-                        if (y.Value[i] != (byte) 0)
+                        if (y.Value[i] != 0)
+                        {
                             return -1;
+                        }
                     }
                 }
             }
@@ -347,9 +398,13 @@ namespace System.Data.SqlTypes
                 byte Y = y.Value[i];
 
                 if (X > Y)
+                {
                     return 1;
+                }
                 else if (X < Y)
+                {
                     return -1;
+                }
             }
 
             // If we are here, x and y were same size

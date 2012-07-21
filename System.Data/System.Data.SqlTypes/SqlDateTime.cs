@@ -31,11 +31,10 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Globalization;
-
 namespace System.Data.SqlTypes
 {
+    using System.Globalization;
+
     public struct SqlDateTime : INullable, IComparable
     {
         #region Fields
@@ -58,8 +57,8 @@ namespace System.Data.SqlTypes
 
         static SqlDateTime()
         {
-            DateTime t = new DateTime(9999, 12, 31, 23, 59, 59);
-            long ticks = (long) (t.Ticks + (997*10000));
+            var t = new DateTime(9999, 12, 31, 23, 59, 59);
+            long ticks = (t.Ticks + (997*10000));
             MaxValue.value = new DateTime(ticks);
             MaxValue.notNull = true;
 
@@ -70,7 +69,7 @@ namespace System.Data.SqlTypes
         public SqlDateTime(DateTime value)
         {
             this.value = value;
-            notNull = true;
+            this.notNull = true;
             CheckRange(this);
         }
 
@@ -85,7 +84,7 @@ namespace System.Data.SqlTypes
             {
                 throw new SqlTypeException(ex.Message);
             }
-            notNull = true;
+            this.notNull = true;
             CheckRange(this);
         }
 
@@ -99,7 +98,7 @@ namespace System.Data.SqlTypes
             {
                 throw new SqlTypeException(ex.Message);
             }
-            notNull = true;
+            this.notNull = true;
             CheckRange(this);
         }
 
@@ -113,7 +112,7 @@ namespace System.Data.SqlTypes
             {
                 throw new SqlTypeException(ex.Message);
             }
-            notNull = true;
+            this.notNull = true;
             CheckRange(this);
         }
 
@@ -131,7 +130,7 @@ namespace System.Data.SqlTypes
         {
             try
             {
-                long ticks = (long) (millisecond*TimeSpan.TicksPerMillisecond);
+                var ticks = (long) (millisecond*TimeSpan.TicksPerMillisecond);
                 long ms = SQLTicksToMilliseconds(TimeSpanTicksToSQLTicks(ticks));
                 this.value = new DateTime(year, month, day, hour, minute, second).AddMilliseconds(ms);
             }
@@ -139,7 +138,7 @@ namespace System.Data.SqlTypes
             {
                 throw new SqlTypeException(ex.Message);
             }
-            notNull = true;
+            this.notNull = true;
             CheckRange(this);
         }
 
@@ -160,7 +159,7 @@ namespace System.Data.SqlTypes
             {
                 throw new SqlTypeException(ex.Message);
             }
-            notNull = true;
+            this.notNull = true;
             CheckRange(this);
         }
 
@@ -170,17 +169,17 @@ namespace System.Data.SqlTypes
 
         public int DayTicks
         {
-            get { return (Value - zero_day).Days; }
+            get { return (this.Value - zero_day).Days; }
         }
 
         public bool IsNull
         {
-            get { return !notNull; }
+            get { return !this.notNull; }
         }
 
         public int TimeTicks
         {
-            get { return TimeSpanTicksToSQLTicks(Value.TimeOfDay.Ticks); }
+            get { return TimeSpanTicksToSQLTicks(this.Value.TimeOfDay.Ticks); }
         }
 
         public DateTime Value
@@ -188,8 +187,10 @@ namespace System.Data.SqlTypes
             get
             {
                 if (this.IsNull)
+                {
                     throw new SqlNullValueException("The property contains Null.");
-                return value;
+                }
+                return this.value;
             }
         }
 
@@ -200,21 +201,29 @@ namespace System.Data.SqlTypes
         private static void CheckRange(SqlDateTime target)
         {
             if (target.IsNull)
+            {
                 return;
+            }
             if (target.value > MaxValue.value || target.value < MinValue.value)
+            {
                 throw new SqlTypeException(
                     String.Format("SqlDateTime overflow. Must be between {0} and {1}. Value was {2}", MinValue.Value,
                                   MaxValue.Value, target.value));
+            }
         }
 
         public int CompareTo(object value)
         {
             if (value == null)
+            {
                 return 1;
+            }
             if (!(value is SqlDateTime))
+            {
                 throw new ArgumentException(Locale.GetText("Value is not a System.Data.SqlTypes.SqlDateTime"));
+            }
 
-            return CompareTo((SqlDateTime) value);
+            return this.CompareTo((SqlDateTime) value);
         }
 
 #if NET_2_0
@@ -223,21 +232,33 @@ namespace System.Data.SqlTypes
             int CompareTo(SqlDateTime value)
         {
             if (value.IsNull)
+            {
                 return 1;
+            }
             else
+            {
                 return this.value.CompareTo(value.Value);
+            }
         }
 
         public override bool Equals(object value)
         {
             if (!(value is SqlDateTime))
+            {
                 return false;
+            }
             else if (this.IsNull)
+            {
                 return ((SqlDateTime) value).IsNull;
+            }
             else if (((SqlDateTime) value).IsNull)
+            {
                 return false;
+            }
             else
+            {
                 return (bool) (this == (SqlDateTime) value);
+            }
         }
 
         public static SqlBoolean Equals(SqlDateTime x, SqlDateTime y)
@@ -247,7 +268,7 @@ namespace System.Data.SqlTypes
 
         public override int GetHashCode()
         {
-            return value.GetHashCode();
+            return this.value.GetHashCode();
         }
 
 #if NET_2_0
@@ -290,7 +311,9 @@ namespace System.Data.SqlTypes
         public static SqlDateTime Parse(string s)
         {
             if (s == null)
+            {
                 throw new ArgumentNullException("Argument cannot be null");
+            }
 
             // try parsing in local culture
             DateTimeFormatInfo fmtInfo = DateTimeFormatInfo.CurrentInfo;
@@ -323,64 +346,84 @@ namespace System.Data.SqlTypes
         public override string ToString()
         {
             if (this.IsNull)
+            {
                 return "Null";
+            }
             else
-                return value.ToString(CultureInfo.InvariantCulture);
+            {
+                return this.value.ToString(CultureInfo.InvariantCulture);
+            }
         }
 
         public static SqlDateTime operator +(SqlDateTime x, TimeSpan t)
         {
             if (x.IsNull)
-                return SqlDateTime.Null;
+            {
+                return Null;
+            }
             return new SqlDateTime(x.Value + t);
         }
 
         public static SqlBoolean operator ==(SqlDateTime x, SqlDateTime y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             return new SqlBoolean(x.Value == y.Value);
         }
 
         public static SqlBoolean operator >(SqlDateTime x, SqlDateTime y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             return new SqlBoolean(x.Value > y.Value);
         }
 
         public static SqlBoolean operator >=(SqlDateTime x, SqlDateTime y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             return new SqlBoolean(x.Value >= y.Value);
         }
 
         public static SqlBoolean operator !=(SqlDateTime x, SqlDateTime y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             return new SqlBoolean(!(x.Value == y.Value));
         }
 
         public static SqlBoolean operator <(SqlDateTime x, SqlDateTime y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             return new SqlBoolean(x.Value < y.Value);
         }
 
         public static SqlBoolean operator <=(SqlDateTime x, SqlDateTime y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
             return new SqlBoolean(x.Value <= y.Value);
         }
 
         public static SqlDateTime operator -(SqlDateTime x, TimeSpan t)
         {
             if (x.IsNull)
+            {
                 return x;
+            }
             return new SqlDateTime(x.Value - t);
         }
 
@@ -391,7 +434,7 @@ namespace System.Data.SqlTypes
 
         public static explicit operator SqlDateTime(SqlString x)
         {
-            return SqlDateTime.Parse(x.Value);
+            return Parse(x.Value);
         }
 
         public static implicit operator SqlDateTime(DateTime value)

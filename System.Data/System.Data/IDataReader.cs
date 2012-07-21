@@ -37,16 +37,15 @@ namespace System.Data
     /// </summary>
     public interface IDataReader : IDisposable, IDataRecord
     {
-        void Close();
-
-        bool NextResult();
-
-        bool Read();
-
         int Depth { get; }
 
         bool IsClosed { get; }
 
         int RecordsAffected { get; }
+        void Close();
+
+        bool NextResult();
+
+        bool Read();
     }
 }

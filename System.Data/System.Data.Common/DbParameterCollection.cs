@@ -30,43 +30,20 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#if NET_2_0 || TARGET_JVM
 
-using System.Collections;
+#if NET_2_0 || TARGET_JVM
 
 namespace System.Data.Common
 {
+    using System.Collections;
+
     public abstract class DbParameterCollection : IDataParameterCollection, IList, ICollection, IEnumerable
     {
         #region Constructors
 
-        protected DbParameterCollection()
-        {
-        }
-
         #endregion // Constructors
 
         #region Properties
-
-        public abstract int Count { get; }
-
-        object IDataParameterCollection.this[string parameterName]
-        {
-            get { return this[parameterName]; }
-            set { this[parameterName] = (DbParameter) value; }
-        }
-
-        object IList.this[int index]
-        {
-            get { return this[index]; }
-            set { this[index] = (DbParameter) value; }
-        }
-
-        public abstract bool IsFixedSize { get; }
-
-        public abstract bool IsReadOnly { get; }
-
-        public abstract bool IsSynchronized { get; }
 
         public DbParameter this[string parameterName]
         {
@@ -88,6 +65,26 @@ namespace System.Data.Common
             set { SetParameter(index, value); }
         }
 
+        public abstract int Count { get; }
+
+        object IDataParameterCollection.this[string parameterName]
+        {
+            get { return this[parameterName]; }
+            set { this[parameterName] = (DbParameter) value; }
+        }
+
+        object IList.this[int index]
+        {
+            get { return this[index]; }
+            set { this[index] = (DbParameter) value; }
+        }
+
+        public abstract bool IsFixedSize { get; }
+
+        public abstract bool IsReadOnly { get; }
+
+        public abstract bool IsSynchronized { get; }
+
         public abstract object SyncRoot { get; }
 
         #endregion // Properties
@@ -96,12 +93,6 @@ namespace System.Data.Common
 
         public abstract int Add(object value);
 
-        public abstract void AddRange(Array values);
-        protected abstract DbParameter GetParameter(String parameterName);
-
-        protected abstract void SetParameter(String parameterName,
-                                             DbParameter value);
-
         public abstract void Clear();
         public abstract bool Contains(object value);
         public abstract bool Contains(string value);
@@ -109,13 +100,20 @@ namespace System.Data.Common
 
         public abstract IEnumerator GetEnumerator();
 
-        protected abstract DbParameter GetParameter(int index);
         public abstract int IndexOf(object value);
         public abstract int IndexOf(string parameterName);
         public abstract void Insert(int index, object value);
         public abstract void Remove(object value);
         public abstract void RemoveAt(int index);
         public abstract void RemoveAt(string parameterName);
+        public abstract void AddRange(Array values);
+        protected abstract DbParameter GetParameter(String parameterName);
+
+        protected abstract void SetParameter(String parameterName,
+                                             DbParameter value);
+
+        protected abstract DbParameter GetParameter(int index);
+
         protected abstract void SetParameter(int index, DbParameter value);
 
         #endregion // Methods

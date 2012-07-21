@@ -30,28 +30,25 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System.Transactions;
-
 namespace System.Data.Common
 {
+    using System.Transactions;
+    using IsolationLevel = System.Data.IsolationLevel;
+
     public abstract class DbConnection : IDbConnection, IDisposable
     {
         #region Constructors
-
-        protected DbConnection()
-        {
-        }
 
         #endregion // Constructors
 
         #region Properties
 
-        public abstract string ConnectionString { get; set; }
-
-        public abstract string Database { get; }
         public abstract string DataSource { get; }
 
         public abstract string ServerVersion { get; }
+        public abstract string ConnectionString { get; set; }
+
+        public abstract string Database { get; }
 
         public abstract ConnectionState State { get; }
 
@@ -64,24 +61,40 @@ namespace System.Data.Common
 
         #region Methods
 
+        public abstract void ChangeDatabase(string databaseName);
+        public abstract void Close();
+
+        IDbTransaction IDbConnection.BeginTransaction()
+        {
+            return this.BeginTransaction();
+        }
+
+        IDbTransaction IDbConnection.BeginTransaction(IsolationLevel il)
+        {
+            return this.BeginTransaction(il);
+        }
+
+        IDbCommand IDbConnection.CreateCommand()
+        {
+            return this.CreateCommand();
+        }
+
+        public abstract void Open();
         protected abstract DbTransaction BeginDbTransaction(IsolationLevel isolationLevel);
 
         public DbTransaction BeginTransaction()
         {
-            return BeginDbTransaction(IsolationLevel.Unspecified);
+            return this.BeginDbTransaction(IsolationLevel.Unspecified);
         }
 
         public DbTransaction BeginTransaction(IsolationLevel isolationLevel)
         {
-            return BeginDbTransaction(isolationLevel);
+            return this.BeginDbTransaction(isolationLevel);
         }
-
-        public abstract void ChangeDatabase(string databaseName);
-        public abstract void Close();
 
         public DbCommand CreateCommand()
         {
-            return CreateDbCommand();
+            return this.CreateDbCommand();
         }
 
         protected abstract DbCommand CreateDbCommand();
@@ -91,26 +104,9 @@ namespace System.Data.Common
             throw new NotSupportedException();
         }
 
-        IDbTransaction IDbConnection.BeginTransaction()
-        {
-            return BeginTransaction();
-        }
-
-        IDbTransaction IDbConnection.BeginTransaction(IsolationLevel il)
-        {
-            return BeginTransaction(il);
-        }
-
-        IDbCommand IDbConnection.CreateCommand()
-        {
-            return CreateCommand();
-        }
-
-        public abstract void Open();
-
         protected virtual void OnStateChange(StateChangeEventArgs stateChange)
         {
-            var handler = StateChange;
+            StateChangeEventHandler handler = this.StateChange;
 
             if (handler != null)
             {
@@ -120,9 +116,13 @@ namespace System.Data.Common
 
         #endregion // Methods
 
+        #region IDbConnection Members
+
         public virtual void Dispose()
         {
         }
+
+        #endregion
 
         public virtual event StateChangeEventHandler StateChange;
     }

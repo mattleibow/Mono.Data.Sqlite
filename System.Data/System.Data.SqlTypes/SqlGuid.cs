@@ -31,9 +31,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System;
-using System.Globalization;
-
 namespace System.Data.SqlTypes
 {
     public struct SqlGuid : INullable, IComparable
@@ -42,7 +39,7 @@ namespace System.Data.SqlTypes
 
         private Guid value;
 
-        private bool notNull;
+        private readonly bool notNull;
 
         public static readonly SqlGuid Null;
 
@@ -53,25 +50,25 @@ namespace System.Data.SqlTypes
         public SqlGuid(byte[] value)
         {
             this.value = new Guid(value);
-            notNull = true;
+            this.notNull = true;
         }
 
         public SqlGuid(Guid g)
         {
             this.value = g;
-            notNull = true;
+            this.notNull = true;
         }
 
         public SqlGuid(string s)
         {
             this.value = new Guid(s);
-            notNull = true;
+            this.notNull = true;
         }
 
         public SqlGuid(int a, short b, short c, byte d, byte e, byte f, byte g, byte h, byte i, byte j, byte k)
         {
             this.value = new Guid(a, b, c, d, e, f, g, h, i, j, k);
-            notNull = true;
+            this.notNull = true;
         }
 
         #endregion
@@ -80,7 +77,7 @@ namespace System.Data.SqlTypes
 
         public bool IsNull
         {
-            get { return !notNull; }
+            get { return !this.notNull; }
         }
 
         public Guid Value
@@ -88,9 +85,13 @@ namespace System.Data.SqlTypes
             get
             {
                 if (this.IsNull)
+                {
                     throw new SqlNullValueException("The property contains Null.");
+                }
                 else
-                    return value;
+                {
+                    return this.value;
+                }
             }
         }
 
@@ -101,11 +102,15 @@ namespace System.Data.SqlTypes
         public int CompareTo(object value)
         {
             if (value == null)
+            {
                 return 1;
+            }
             if (!(value is SqlGuid))
+            {
                 throw new ArgumentException(Locale.GetText("Value is not a System.Data.SqlTypes.SqlGuid"));
+            }
 
-            return CompareTo((SqlGuid) value);
+            return this.CompareTo((SqlGuid) value);
         }
 
 #if NET_2_0
@@ -114,8 +119,11 @@ namespace System.Data.SqlTypes
             int CompareTo(SqlGuid value)
         {
             if (value.IsNull)
+            {
                 return 1;
+            }
             else
+            {
                 // LAMESPEC : ms.net implementation actually compares all the 16 bytes.
                 // This code is kept for future changes, if required.
                 /*
@@ -135,18 +143,27 @@ namespace System.Data.SqlTypes
 				}
                                 */
                 return this.value.CompareTo(value.Value);
+            }
         }
 
         public override bool Equals(object value)
         {
             if (!(value is SqlGuid))
+            {
                 return false;
+            }
             else if (this.IsNull)
+            {
                 return ((SqlGuid) value).IsNull;
+            }
             else if (((SqlGuid) value).IsNull)
+            {
                 return false;
+            }
             else
+            {
                 return (bool) (this == (SqlGuid) value);
+            }
         }
 
         public static SqlBoolean Equals(SqlGuid x, SqlGuid y)
@@ -199,7 +216,7 @@ namespace System.Data.SqlTypes
 
         public byte[] ToByteArray()
         {
-            return value.ToByteArray();
+            return this.value.ToByteArray();
         }
 
         public SqlBinary ToSqlBinary()
@@ -214,66 +231,100 @@ namespace System.Data.SqlTypes
 
         public override string ToString()
         {
-            if (!notNull)
+            if (!this.notNull)
+            {
                 return "Null";
+            }
             else
-                return value.ToString();
+            {
+                return this.value.ToString();
+            }
         }
 
         public static SqlBoolean operator ==(SqlGuid x, SqlGuid y)
         {
-            if (x.IsNull || y.IsNull) return SqlBoolean.Null;
+            if (x.IsNull || y.IsNull)
+            {
+                return SqlBoolean.Null;
+            }
             return new SqlBoolean(x.Value == y.Value);
         }
 
         public static SqlBoolean operator >(SqlGuid x, SqlGuid y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
 
             if (x.Value.CompareTo(y.Value) > 0)
+            {
                 return new SqlBoolean(true);
+            }
             else
+            {
                 return new SqlBoolean(false);
+            }
         }
 
         public static SqlBoolean operator >=(SqlGuid x, SqlGuid y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
 
             if (x.Value.CompareTo(y.Value) >= 0)
+            {
                 return new SqlBoolean(true);
+            }
             else
+            {
                 return new SqlBoolean(false);
+            }
         }
 
         public static SqlBoolean operator !=(SqlGuid x, SqlGuid y)
         {
-            if (x.IsNull || y.IsNull) return SqlBoolean.Null;
+            if (x.IsNull || y.IsNull)
+            {
+                return SqlBoolean.Null;
+            }
             return new SqlBoolean(!(x.Value == y.Value));
         }
 
         public static SqlBoolean operator <(SqlGuid x, SqlGuid y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
 
             if (x.Value.CompareTo(y.Value) < 0)
+            {
                 return new SqlBoolean(true);
+            }
             else
+            {
                 return new SqlBoolean(false);
+            }
         }
 
         public static SqlBoolean operator <=(SqlGuid x, SqlGuid y)
         {
             if (x.IsNull || y.IsNull)
+            {
                 return SqlBoolean.Null;
+            }
 
             if (x.Value.CompareTo(y.Value) <= 0)
+            {
                 return new SqlBoolean(true);
+            }
             else
+            {
                 return new SqlBoolean(false);
+            }
         }
 
         public static explicit operator SqlGuid(SqlBinary x)

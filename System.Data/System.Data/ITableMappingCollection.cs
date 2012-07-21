@@ -30,15 +30,16 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-using System.Collections;
-
 namespace System.Data
 {
+    using System.Collections;
+
     /// <summary>
     /// Contains a collection of TableMapping objects, and is implemented by the DataTableMappingCollection, which is used in common by .NET data providers.
     /// </summary>
     public interface ITableMappingCollection : IList, ICollection, IEnumerable
     {
+        object this[string index] { get; set; }
         ITableMapping Add(string sourceTableName, string dataSetTableName);
 
         bool Contains(string sourceTableName);
@@ -48,7 +49,5 @@ namespace System.Data
         int IndexOf(string sourceTableName);
 
         void RemoveAt(string sourceTableName);
-
-        object this[string index] { get; set; }
     }
 }
