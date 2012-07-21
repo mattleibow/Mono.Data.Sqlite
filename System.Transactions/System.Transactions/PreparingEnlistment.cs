@@ -9,13 +9,14 @@
 // (C)2006 Novell Inc,
 //
 
+
 #if NET_2_0
 
 namespace System.Transactions
 {
     using System.Threading;
 
-    public class PreparingEnlistment : Enlistment
+    public class PreparingEnlistment : Enlistment, IDisposable
     {
         private readonly IEnlistmentNotification enlisted;
         private readonly Transaction tx;
@@ -44,6 +45,15 @@ namespace System.Transactions
             get { return this.enlisted; }
         }
 
+        #region IDisposable Members
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+        }
+
+        #endregion
+
         public void ForceRollback()
         {
             this.ForceRollback(null);
@@ -69,6 +79,14 @@ namespace System.Transactions
         public byte[] RecoveryInformation()
         {
             throw new NotImplementedException();
+        }
+
+        protected virtual void Dispose(bool includeManaged)
+        {
+            if (includeManaged)
+            {
+                this.waitHandle.Dispose();
+            }
         }
     }
 }

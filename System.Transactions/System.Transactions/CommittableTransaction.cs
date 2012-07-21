@@ -9,13 +9,14 @@
 // (C)2006 Novell Inc,
 //
 
+
 #if NET_2_0
+
 namespace System.Transactions
 {
     using System.Threading;
 
-    public sealed class CommittableTransaction : Transaction,
-                                                 IDisposable, IAsyncResult
+    public sealed class CommittableTransaction : Transaction, IAsyncResult
     {
         private readonly TransactionOptions options;
         private IAsyncResult asyncResult;

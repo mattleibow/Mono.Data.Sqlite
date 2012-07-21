@@ -9,7 +9,9 @@
 // (C)2006 Novell Inc,
 //
 
+
 #if NET_2_0
+
 namespace System.Transactions
 {
     using System.Collections.Generic;
@@ -162,13 +164,21 @@ namespace System.Transactions
 
         public void Dispose()
         {
-            if (this.TransactionInformation.Status == TransactionStatus.Active)
-            {
-                this.Rollback();
-            }
+            this.Dispose(true);
         }
 
         #endregion
+
+        protected virtual void Dispose(bool includeManaged)
+        {
+            if (includeManaged)
+            {
+                if (this.TransactionInformation.Status == TransactionStatus.Active)
+                {
+                    this.Rollback();
+                }
+            }
+        }
 
         public event TransactionCompletedEventHandler TransactionCompleted;
 
@@ -178,11 +188,9 @@ namespace System.Transactions
         }
 
         [MonoTODO]
-        public DependentTransaction DependentClone(
-            DependentCloneOption option)
+        public DependentTransaction DependentClone(DependentCloneOption option)
         {
-            var d =
-                new DependentTransaction(this, option);
+            var d = new DependentTransaction(this, option);
             this.dependents.Add(d);
             return d;
         }
@@ -523,9 +531,11 @@ namespace System.Transactions
 
         private void FireCompleted()
         {
-            if (this.TransactionCompleted != null)
+            TransactionCompletedEventHandler handler = this.TransactionCompleted;
+
+            if (handler != null)
             {
-                this.TransactionCompleted(this, new TransactionEventArgs(this));
+                handler(this, new TransactionEventArgs(this));
             }
         }
 
