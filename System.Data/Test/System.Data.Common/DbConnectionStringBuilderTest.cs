@@ -115,7 +115,9 @@ namespace MonoTests.System.Data.Common
 					Assert.IsNull (ex.InnerException, "#3:" + i);
 					Assert.IsNotNull (ex.Message, "#4:" + i);
 					Assert.IsTrue (ex.Message.IndexOf ("'" + keyword + "'") == -1, "#5:" + i);
+#if !SILVERLIGHT
 					Assert.AreEqual (keyword, ex.ParamName, "#6:" + i);
+#endif
 				}
 			}
 		}
@@ -130,7 +132,9 @@ namespace MonoTests.System.Data.Common
 				Assert.AreEqual (typeof (ArgumentNullException), ex.GetType (), "#2");
 				Assert.IsNull (ex.InnerException, "#3");
 				Assert.IsNotNull (ex.Message, "#4");
+#if !SILVERLIGHT
 				Assert.AreEqual ("keyword", ex.ParamName, "#5");
+#endif
 			}
 		}
 
@@ -310,7 +314,9 @@ namespace MonoTests.System.Data.Common
 					Assert.IsNull (ex.InnerException, "#A3:" + i);
 					Assert.IsNotNull (ex.Message, "#A4:" + i);
 					Assert.IsTrue (ex.Message.IndexOf ("'" + keyword + "'") == -1, "#A5:" + i);
+#if !SILVERLIGHT
 					Assert.AreEqual (keyword, ex.ParamName, "#A6:" + i);
+#endif
 				}
 
 				builder [keyword] = null;
@@ -325,7 +331,9 @@ namespace MonoTests.System.Data.Common
 					Assert.IsNull (ex.InnerException, "#C3:" + i);
 					Assert.IsNotNull (ex.Message, "#C4:" + i);
 					Assert.IsTrue (ex.Message.IndexOf ("'" + keyword + "'") != -1, "#C5:" + i);
+#if !SILVERLIGHT
 					Assert.IsNull (ex.ParamName, "#C6:" + i);
+#endif
 				}
 			}
 		}
@@ -342,7 +350,9 @@ namespace MonoTests.System.Data.Common
 				Assert.IsNull (ex.InnerException, "#3");
 				Assert.IsNotNull (ex.Message, "#4");
 				Assert.IsTrue (ex.Message.IndexOf ("'abc'") != -1, "#5");
+#if !SILVERLIGHT
 				Assert.IsNull (ex.ParamName, "#6");
+#endif
 			}
 		}
 
@@ -356,7 +366,9 @@ namespace MonoTests.System.Data.Common
 				Assert.AreEqual (typeof (ArgumentNullException), ex.GetType (), "#A2");
 				Assert.IsNull (ex.InnerException, "#A3");
 				Assert.IsNotNull (ex.Message, "#A4");
+#if !SILVERLIGHT
 				Assert.AreEqual ("keyword", ex.ParamName, "#A5");
+#endif
 			}
 
 			try {
@@ -366,7 +378,9 @@ namespace MonoTests.System.Data.Common
 				Assert.AreEqual (typeof (ArgumentNullException), ex.GetType (), "#B2");
 				Assert.IsNull (ex.InnerException, "#B3");
 				Assert.IsNotNull (ex.Message, "#B4");
+#if !SILVERLIGHT
 				Assert.AreEqual ("keyword", ex.ParamName, "#B5");
+#endif
 			}
 
 			try {
@@ -376,7 +390,9 @@ namespace MonoTests.System.Data.Common
 				Assert.AreEqual (typeof (ArgumentNullException), ex.GetType (), "#C2");
 				Assert.IsNull (ex.InnerException, "#C3");
 				Assert.IsNotNull (ex.Message, "#C4");
+#if !SILVERLIGHT
 				Assert.AreEqual ("keyword", ex.ParamName, "#C5");
+#endif
 			}
 		}
 
@@ -394,7 +410,9 @@ namespace MonoTests.System.Data.Common
 				Assert.IsNull (ex.InnerException, "#A4");
 				Assert.IsNotNull (ex.Message, "#A5");
 				Assert.IsTrue (ex.Message.IndexOf ("'DriverID'") != -1, "#A6:" + ex.Message);
+#if !SILVERLIGHT
 				Assert.IsNull (ex.ParamName, "#A7");
+#endif
 			}
 			Assert.IsFalse (builder.ContainsKey ("DriverID"), "#A8");
 			Assert.AreEqual (string.Empty, builder.ConnectionString, "#A9");
@@ -494,7 +512,9 @@ namespace MonoTests.System.Data.Common
 				Assert.AreEqual (typeof (ArgumentNullException), ex.GetType (), "#2");
 				Assert.IsNull (ex.InnerException, "#3");
 				Assert.IsNotNull (ex.Message, "#4");
+#if !SILVERLIGHT
 				Assert.AreEqual ("keyword", ex.ParamName, "#5");
+#endif
 			}
 		}
 
@@ -560,7 +580,9 @@ namespace MonoTests.System.Data.Common
 				Assert.AreEqual (typeof (ArgumentNullException), ex.GetType (), "#2");
 				Assert.IsNull (ex.InnerException, "#3");
 				Assert.IsNotNull (ex.Message, "#4");
+#if !SILVERLIGHT
 				Assert.AreEqual ("keyword", ex.ParamName, "#5");
+#endif
 			}
 		}
 
@@ -707,7 +729,9 @@ namespace MonoTests.System.Data.Common
 				Assert.AreEqual (typeof (ArgumentNullException), ex.GetType (), "#2");
 				Assert.IsNull (ex.InnerException, "#3");
 				Assert.IsNotNull (ex.Message, "#4");
+#if !SILVERLIGHT
 				Assert.AreEqual ("builder", ex.ParamName, "#5");
+#endif
 			}
 		}
 
@@ -725,8 +749,11 @@ namespace MonoTests.System.Data.Common
 				Assert.AreEqual (typeof (ArgumentException), ex.GetType (), "#2");
 				Assert.IsNull (ex.InnerException, "#3");
 				Assert.IsNotNull (ex.Message, "#4");
-				Assert.IsNull (ex.ParamName, "#5");
-			}
+#if !SILVERLIGHT
+                Assert.IsNull (ex.ParamName, "#5");
+#endif
+
+            }
 		}
 
 		[TestMethod] // AppendKeyValuePair (StringBuilder, String, String)
@@ -741,8 +768,11 @@ namespace MonoTests.System.Data.Common
 				Assert.AreEqual (typeof (ArgumentNullException), ex.GetType (), "#2");
 				Assert.IsNull (ex.InnerException, "#3");
 				Assert.IsNotNull (ex.Message, "#4");
+#if !SILVERLIGHT
 				Assert.AreEqual ("keyword", ex.ParamName, "#5");
-			}
+#endif
+
+            }
 		}
 
 		[TestMethod] // AppendKeyValuePair (StringBuilder, String, String, Boolean)
@@ -1587,8 +1617,11 @@ namespace MonoTests.System.Data.Common
 				Assert.AreEqual (typeof (ArgumentNullException), ex.GetType (), "#A2");
 				Assert.IsNull (ex.InnerException, "#A3");
 				Assert.IsNotNull (ex.Message, "#A4");
+#if !SILVERLIGHT
 				Assert.AreEqual ("builder", ex.ParamName, "#A5");
-			}
+#endif
+
+            }
 
 			try {
 				DbConnectionStringBuilder.AppendKeyValuePair (
@@ -1599,8 +1632,11 @@ namespace MonoTests.System.Data.Common
 				Assert.AreEqual (typeof (ArgumentNullException), ex.GetType (), "#B2");
 				Assert.IsNull (ex.InnerException, "#B3");
 				Assert.IsNotNull (ex.Message, "#B4");
+#if !SILVERLIGHT
 				Assert.AreEqual ("builder", ex.ParamName, "#B5");
-			}
+#endif
+
+            }
 		}
 
 		[TestMethod] // AppendKeyValuePair (StringBuilder, String, String, Boolean)
@@ -1617,8 +1653,11 @@ namespace MonoTests.System.Data.Common
 				Assert.AreEqual (typeof (ArgumentException), ex.GetType (), "#A2");
 				Assert.IsNull (ex.InnerException, "#A3");
 				Assert.IsNotNull (ex.Message, "#A4");
+#if !SILVERLIGHT
 				Assert.IsNull (ex.ParamName, "#A5");
-			}
+#endif
+
+            }
 
 			try {
 				DbConnectionStringBuilder.AppendKeyValuePair (
@@ -1630,8 +1669,11 @@ namespace MonoTests.System.Data.Common
 				Assert.AreEqual (typeof (ArgumentException), ex.GetType (), "#B2");
 				Assert.IsNull (ex.InnerException, "#B3");
 				Assert.IsNotNull (ex.Message, "#B4");
+#if !SILVERLIGHT
 				Assert.IsNull (ex.ParamName, "#B5");
-			}
+#endif
+
+            }
 		}
 
 		[TestMethod] // AppendKeyValuePair (StringBuilder, String, String, Boolean)
@@ -1646,8 +1688,11 @@ namespace MonoTests.System.Data.Common
 				Assert.AreEqual (typeof (ArgumentNullException), ex.GetType (), "#A2");
 				Assert.IsNull (ex.InnerException, "#A3");
 				Assert.IsNotNull (ex.Message, "#A4");
+#if !SILVERLIGHT
 				Assert.AreEqual ("keyword", ex.ParamName, "#A5");
-			}
+#endif
+
+            }
 
 			try {
 				DbConnectionStringBuilder.AppendKeyValuePair (
@@ -1657,8 +1702,11 @@ namespace MonoTests.System.Data.Common
 				Assert.AreEqual (typeof (ArgumentNullException), ex.GetType (), "#B2");
 				Assert.IsNull (ex.InnerException, "#B3");
 				Assert.IsNotNull (ex.Message, "#B4");
+#if !SILVERLIGHT
 				Assert.AreEqual ("keyword", ex.ParamName, "#B5");
-			}
+#endif
+
+            }
 		}
 
                 [TestMethod]
@@ -1792,8 +1840,11 @@ namespace MonoTests.System.Data.Common
 				Assert.AreEqual (typeof (ArgumentNullException), ex.GetType (), "#2");
 				Assert.IsNull (ex.InnerException, "#3");
 				Assert.IsNotNull (ex.Message, "#4");
+#if !SILVERLIGHT
 				Assert.AreEqual ("keyword", ex.ParamName, "#5");
-			}
+#endif
+
+            }
 		}
 
 		[TestMethod]
@@ -2322,8 +2373,11 @@ namespace MonoTests.System.Data.Common
 						Assert.AreEqual (typeof (ArgumentException), ex.GetType (), "#2:"+ i + " (" + j + ")");
 						Assert.IsNull (ex.InnerException, "#3:" + i + " (" + j + ")");
 						Assert.IsNotNull (ex.Message, "#4:" + i + " (" + j + ")");
+#if !SILVERLIGHT
 						Assert.IsNull (ex.ParamName, "#5:" + i + " (" + j + ")");
-					}
+#endif
+
+                    }
 				}
 			}
 		}
@@ -2365,8 +2419,11 @@ namespace MonoTests.System.Data.Common
 					Assert.AreEqual (typeof (ArgumentException), ex.GetType (), prefix + "2 (" + i + ")");
 					Assert.IsNull (ex.InnerException, prefix + "3 (" + i + ")");
 					Assert.IsNotNull (ex.Message, prefix + "4 (" + i + ")");
+#if !SILVERLIGHT
 					Assert.IsNull (ex.ParamName, prefix + "5 (" + i + ")");
-				}
+#endif
+
+                }
 			}
 
 			// check uniqueness of tests

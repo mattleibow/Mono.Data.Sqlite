@@ -138,7 +138,7 @@ namespace MonoTests.System.Data.SqlTypes
 
 		// Test properties
 		[TestMethod]
-		public void Properties()
+		public void GlobalizationProperties()
 		{
 			// CompareInfo
 			Assert.AreEqual ("en-AU", Test1.CompareInfo.Name, "#C01");
@@ -148,7 +148,12 @@ namespace MonoTests.System.Data.SqlTypes
 
 			// Name
 			Assert.AreEqual ("en-AU", Test1.Name, "#C05");
+		}
 
+		// Test properties
+		[TestMethod]
+		public void Properties()
+		{
 			// IsNull
 			Assert.IsTrue (!Test1.IsNull, "#C03");
 			Assert.IsTrue (SqlString.Null.IsNull, "#C04");

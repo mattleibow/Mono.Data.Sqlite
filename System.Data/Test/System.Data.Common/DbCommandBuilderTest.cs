@@ -66,7 +66,9 @@ namespace MonoTests.System.Data.Common
 				Assert.IsNotNull (ex.Message, "#4");
 				Assert.IsTrue (ex.Message.IndexOf ("CatalogLocation") != -1, "#5:" + ex.Message);
 				Assert.IsTrue (ex.Message.IndexOf ("666") != -1, "#6:" + ex.Message);
+#if !SILVERLIGHT
 				Assert.AreEqual ("CatalogLocation", ex.ParamName, "#7");
+#endif
 			}
 			Assert.AreEqual (CatalogLocation.End, cb.CatalogLocation, "#8");
 		}
@@ -112,7 +114,9 @@ namespace MonoTests.System.Data.Common
 				Assert.IsNotNull (ex.Message, "#4");
 				Assert.IsTrue (ex.Message.IndexOf ("ConflictOption") != -1, "#5:" + ex.Message);
 				Assert.IsTrue (ex.Message.IndexOf ("666") != -1, "#6:" + ex.Message);
+#if !SILVERLIGHT
 				Assert.AreEqual ("ConflictOption", ex.ParamName, "#7");
+#endif
 			}
 			Assert.AreEqual (ConflictOption.CompareRowVersion, cb.ConflictOption, "#8");
 		}

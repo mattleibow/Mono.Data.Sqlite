@@ -29,6 +29,8 @@ using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 
 namespace Test.Mono.Data.Sqlite
 {
+    using System.IO;
+
     [TestClass]
     public class SqliteTest
     {
@@ -64,7 +66,9 @@ namespace Test.Mono.Data.Sqlite
             // file is created.
 
             // "URI=file:some/path"
-            string connectionString = "URI=file://SqliteTest" + Environment.TickCount + ".db";
+            var path = Path.Combine(Windows.Storage.ApplicationData.Current.LocalFolder.Path,
+                                    "SqliteTest" + Environment.TickCount + ".db");
+            string connectionString = "URI=file://" + path;
             if (v3)
                 connectionString += ",Version=3";
             if (encoding != null)
