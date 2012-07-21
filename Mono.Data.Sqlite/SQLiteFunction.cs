@@ -198,11 +198,7 @@ namespace Mono.Data.Sqlite
 #endif
     {
       object[] parms = new object[nArgs];
-#if !PLATFORM_COMPACTFRAMEWORK
       Sqlite3MemPtr[] argint = new Sqlite3MemPtr[nArgs];
-#else
-      int[] argint = new int[nArgs];
-#endif
 #if SILVERLIGHT
       Array.Copy(argsptr, argint, nArgs);
 #else
@@ -441,74 +437,6 @@ namespace Mono.Data.Sqlite
     }
 
     /// <summary>
-    /// Using reflection, enumerate all assemblies in the current appdomain looking for classes that
-    /// have a SqliteFunctionAttribute attribute, and registering them accordingly.
-    /// </summary>
-    static SqliteFunction()
-    {
-      try
-      {
-          // TODO : Scan for attributes in assemblies...
-//#if !PLATFORM_COMPACTFRAMEWORK
-//        SqliteFunctionAttribute at;
-//        System.Reflection.Assembly[] arAssemblies = System.AppDomain.CurrentDomain.GetAssemblies();
-//        int w = arAssemblies.Length;
-//        System.Reflection.AssemblyName sqlite = System.Reflection.Assembly.GetCallingAssembly().GetName();
-
-//        for (int n = 0; n < w; n++)
-//        {
-//          Type[] arTypes;
-//          bool found = false;
-//          System.Reflection.AssemblyName[] references;
-//          try
-//          {
-//            // Inspect only assemblies that reference SQLite
-//            references = arAssemblies[n].GetReferencedAssemblies();
-//            int t = references.Length;
-//            for (int z = 0; z < t; z++)
-//            {
-//              if (references[z].Name == sqlite.Name)
-//              {
-//                found = true;
-//                break;
-//              }
-//            }
-
-//            if (found == false)
-//              continue;
-
-//            arTypes = arAssemblies[n].GetTypes();
-//          }
-//          catch (global::System.Reflection.ReflectionTypeLoadException e)
-//          {
-//            arTypes = e.Types;
-//          }
-
-//          int v = arTypes.Length;
-//          for (int x = 0; x < v; x++)
-//          {
-//            if (arTypes[x] == null) continue;
-
-//            object[] arAtt = arTypes[x].GetCustomAttributes(typeof(SqliteFunctionAttribute), false);
-//            int u = arAtt.Length;
-//            for (int y = 0; y < u; y++)
-//            {
-//              at = arAtt[y] as SqliteFunctionAttribute;
-//              if (at != null)
-//              {
-//                at._instanceType = arTypes[x];
-//                _registeredFunctions.Add(at);
-//              }
-//            }
-//          }
-//        }
-//#endif
-      }
-      catch // SQLite provider can continue without being able to find built-in functions
-      {
-      }
-    }
-    /// <summary>
     /// Manual method of registering a function.  The type must still have the SqliteFunctionAttributes in order to work
     /// properly, but this is a workaround for the Compact Framework where enumerating assemblies is not currently supported.
     /// </summary>
@@ -619,17 +547,13 @@ namespace Mono.Data.Sqlite
   /// <param name="context">Raw context pointer for the user function</param>
   /// <param name="nArgs">Count of arguments to the function</param>
   /// <param name="argsptr">A pointer to the array of argument pointers</param>
-#if !PLATFORM_COMPACTFRAMEWORK
   [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-#endif
   internal delegate void SQLiteCallback(IntPtr context, int nArgs, IntPtr argsptr);
   /// <summary>
   /// An internal final callback delegate declaration.
   /// </summary>
   /// <param name="context">Raw context pointer for the user function</param>
-#if !PLATFORM_COMPACTFRAMEWORK
   [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-#endif
   internal delegate void SQLiteFinalCallback(IntPtr context);
   /// <summary>
   /// Internal callback delegate for implementing collation sequences
@@ -641,9 +565,7 @@ namespace Mono.Data.Sqlite
   /// <param name="pv2">Pointer to the second string to compare</param>
   /// <returns>Returns -1 if the first string is less than the second.  0 if they are equal, or 1 if the first string is greater
   /// than the second.</returns>
-#if !PLATFORM_COMPACTFRAMEWORK
   [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-#endif
   internal delegate int SQLiteCollation(IntPtr puser, int len1, IntPtr pv1, int len2, IntPtr pv2);
 #endif
 

@@ -17,8 +17,6 @@ namespace Mono.Data.Sqlite
   using System.Linq;
   using System.Reflection;
 
-#if !PLATFORM_COMPACTFRAMEWORK
-
   /// <summary>
   /// SQLite implementation of DbConnectionStringBuilder.
   /// </summary>
@@ -480,5 +478,4 @@ namespace Mono.Data.Sqlite
       }
     }
   }
-#endif
 }

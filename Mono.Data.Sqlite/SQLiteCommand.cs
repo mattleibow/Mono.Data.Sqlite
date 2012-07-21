@@ -282,9 +282,7 @@ namespace Mono.Data.Sqlite
     /// <summary>
     /// The SQL command text associated with the command
     /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
     [DefaultValue("")]
-#endif
     public override string CommandText
     {
       get
@@ -310,9 +308,7 @@ namespace Mono.Data.Sqlite
     /// <summary>
     /// The amount of time to wait for the connection to become available before erroring out
     /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
     [DefaultValue((int)30)]
-#endif
     public override int CommandTimeout
     {
       get
@@ -328,9 +324,7 @@ namespace Mono.Data.Sqlite
     /// <summary>
     /// The type of the command.  SQLite only supports CommandType.Text
     /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
     [DefaultValue(CommandType.Text)]
-#endif
     public override CommandType CommandType
     {
       get
@@ -367,9 +361,7 @@ namespace Mono.Data.Sqlite
     /// <summary>
     /// The connection associated with this command
     /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
     [DefaultValue((string)null)]
-#endif
     public new SqliteConnection Connection
     {
       get { return _cnn; }

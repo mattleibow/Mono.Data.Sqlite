@@ -160,9 +160,7 @@ namespace Mono.Data.Sqlite
     /// </summary>
     /// <param name="value">The parameter to add</param>
     /// <returns>A zero-based index of where the parameter is located in the array</returns>
-#if !PLATFORM_COMPACTFRAMEWORK
     [EditorBrowsable(EditorBrowsableState.Never)]
-#endif
     public override int Add(object value)
     {
       return Add((SqliteParameter)value);

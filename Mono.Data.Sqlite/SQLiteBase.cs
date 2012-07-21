@@ -210,23 +210,14 @@ namespace Mono.Data.Sqlite
 
     internal static string SQLiteLastError(SqliteConnectionHandle db)
     {
-#if !SQLITE_STANDARD
-      int len;
-      return UTF8ToString(UnsafeNativeMethods.sqlite3_errmsg_interop(db, out len), len);
-#else
       return UTF8ToString(UnsafeNativeMethods.sqlite3_errmsg(db), -1);
-#endif
     }
 
     internal static void FinalizeStatement(SqliteStatementHandle stmt)
     {
       lock (_lock)
       {
-#if !SQLITE_STANDARD
-        int n = UnsafeNativeMethods.sqlite3_finalize_interop(stmt);
-#else
       int n = UnsafeNativeMethods.sqlite3_finalize(stmt);
-#endif
         if (n > 0) throw new SqliteException(n, null);
       }
     }
@@ -246,16 +237,12 @@ namespace Mono.Data.Sqlite
       lock (hdl)
       {
 #endif
-#if !SQLITE_STANDARD
-        int n = UnsafeNativeMethods.sqlite3_close_interop(db);
-#else
 #if SILVERLIGHT
       ResetConnection(db);
 #else
       ResetConnection(hdl, db);
 #endif
       int n = UnsafeNativeMethods.sqlite3_close(db);
-#endif
         if (n > 0) throw new SqliteException(n, SQLiteLastError(db));
       }
     }
@@ -284,11 +271,7 @@ namespace Mono.Data.Sqlite
           stmt = UnsafeNativeMethods.sqlite3_next_stmt(db, stmt);
           if (stmt != nullVal)
           {
-#if !SQLITE_STANDARD
-            UnsafeNativeMethods.sqlite3_reset_interop(stmt);
-#else
           UnsafeNativeMethods.sqlite3_reset(stmt);
-#endif
           }
         } while (stmt != nullVal);
 

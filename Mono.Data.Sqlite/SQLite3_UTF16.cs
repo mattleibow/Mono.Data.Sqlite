@@ -94,9 +94,6 @@ namespace Mono.Data.Sqlite
       {
         Sqlite3Database db;
 
-#if !SQLITE_STANDARD
-        int n = UnsafeNativeMethods.sqlite3_open16_interop(ToUTF8(strFilename), (int)flags, out db);
-#else
         if ((flags & SQLiteOpenFlagsEnum.Create) == 0 && FileExists(strFilename) == false)
           throw new SqliteException((int)SQLiteErrorCode.CantOpen, strFilename);
 
@@ -104,7 +101,6 @@ namespace Mono.Data.Sqlite
         int n = UnsafeNativeMethods.sqlite3_open(strFilename, out db);
 #else
         int n = UnsafeNativeMethods.sqlite3_open16(strFilename, out db);
-#endif
 #endif
         if (n > 0) throw new SqliteException(n, null);
 
@@ -141,85 +137,55 @@ namespace Mono.Data.Sqlite
 
     internal override string ColumnName(SqliteStatement stmt, int index)
     {
-#if !SQLITE_STANDARD
-      int len;
-      return UTF16ToString(UnsafeNativeMethods.sqlite3_column_name16_interop(stmt._sqlite_stmt, index, out len), len);
-#else
 #if SILVERLIGHT
       return UTF16ToString(UnsafeNativeMethods.sqlite3_column_name(stmt._sqlite_stmt, index), -1);
 #else
       return UTF16ToString(UnsafeNativeMethods.sqlite3_column_name16(stmt._sqlite_stmt, index), -1);
 #endif
-#endif
     }
 
     internal override string GetText(SqliteStatement stmt, int index)
     {
-#if !SQLITE_STANDARD
-      int len;
-      return UTF16ToString(UnsafeNativeMethods.sqlite3_column_text16_interop(stmt._sqlite_stmt, index, out len), len);
-#else
 #if SILVERLIGHT
       return UTF16ToString(UnsafeNativeMethods.sqlite3_column_text(stmt._sqlite_stmt, index), -1);
 #else
       return UTF16ToString(UnsafeNativeMethods.sqlite3_column_text16(stmt._sqlite_stmt, index), -1);
 #endif
-#endif
     }
 
     internal override string ColumnOriginalName(SqliteStatement stmt, int index)
     {
-#if !SQLITE_STANDARD
-      int len;
-      return UTF16ToString(UnsafeNativeMethods.sqlite3_column_origin_name16_interop(stmt._sqlite_stmt, index, out len), len);
-#else
 #if SILVERLIGHT
       return UTF16ToString(UnsafeNativeMethods.sqlite3_column_origin_name(stmt._sqlite_stmt, index), -1);
 #else
       return UTF16ToString(UnsafeNativeMethods.sqlite3_column_origin_name16(stmt._sqlite_stmt, index), -1);
 #endif
-#endif
     }
 
     internal override string ColumnDatabaseName(SqliteStatement stmt, int index)
     {
-#if !SQLITE_STANDARD
-      int len;
-      return UTF16ToString(UnsafeNativeMethods.sqlite3_column_database_name16_interop(stmt._sqlite_stmt, index, out len), len);
-#else
 #if SILVERLIGHT
       return UTF16ToString(UnsafeNativeMethods.sqlite3_column_database_name(stmt._sqlite_stmt, index), -1);
 #else
       return UTF16ToString(UnsafeNativeMethods.sqlite3_column_database_name16(stmt._sqlite_stmt, index), -1);
 #endif
-#endif
     }
 
     internal override string ColumnTableName(SqliteStatement stmt, int index)
     {
-#if !SQLITE_STANDARD
-      int len;
-      return UTF16ToString(UnsafeNativeMethods.sqlite3_column_table_name16_interop(stmt._sqlite_stmt, index, out len), len);
-#else
 #if SILVERLIGHT
       return UTF16ToString(UnsafeNativeMethods.sqlite3_column_table_name(stmt._sqlite_stmt, index), -1);
 #else
       return UTF16ToString(UnsafeNativeMethods.sqlite3_column_table_name16(stmt._sqlite_stmt, index), -1);
 #endif
-#endif
     }
 
     internal override string GetParamValueText(Sqlite3MemPtr ptr)
     {
-#if !SQLITE_STANDARD
-      int len;
-      return UTF16ToString(UnsafeNativeMethods.sqlite3_value_text16_interop(ptr, out len), len);
-#else
 #if SILVERLIGHT
       return UTF16ToString(UnsafeNativeMethods.sqlite3_value_text(ptr), -1);
 #else
       return UTF16ToString(UnsafeNativeMethods.sqlite3_value_text16(ptr), -1);
-#endif
 #endif
     }
 

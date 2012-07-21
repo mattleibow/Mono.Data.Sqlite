@@ -41,7 +41,6 @@
     <Compile Include="Assembly\AssemblyInfo.cs" />
     <Compile Include="ICloneable.cs" />
     <Compile Include="Locale.cs" />
-    <Compile Include="MonoPInvokeCallbackAttribute.cs" />
     <Compile Include="SQLite3.cs" />
     <Compile Include="SQLite3_UTF16.cs" />
     <Compile Include="SQLiteBase.cs" />

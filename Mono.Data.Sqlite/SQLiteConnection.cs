@@ -158,10 +158,6 @@ namespace Mono.Data.Sqlite
   /// </remarks>
   public sealed partial class SqliteConnection : DbConnection, ICloneable
   {
-    private const string _dataDirectory = "|DataDirectory|";
-    private const string _masterdb = "sqlite_master";
-    private const string _tempmasterdb = "sqlite_temp_master";
-
     /// <summary>
     /// State of the current connection
     /// </summary>
@@ -180,12 +176,11 @@ namespace Mono.Data.Sqlite
     /// </summary>
     private IsolationLevel _defaultIsolation;
 
-#if !PLATFORM_COMPACTFRAMEWORK
     /// <summary>
     /// Whether or not the connection is enlisted in a distrubuted transaction
     /// </summary>
     internal SQLiteEnlistment _enlistment;
-#endif
+
     /// <summary>
     /// The base SQLite object to interop with
     /// </summary>
@@ -268,19 +263,6 @@ namespace Mono.Data.Sqlite
       }
     }
 
-#if PLATFORM_COMPACTFRAMEWORK
-    /// <summary>
-    /// Obsolete
-    /// </summary>
-    public override int ConnectionTimeout
-    {
-      get
-      {
-        return 30;
-      }
-    }
-#endif
-
     /// <summary>
     /// Creates a clone of the connection.  All attached databases and user-defined functions are cloned.  If the existing connection is open, the cloned connection 
     /// will also be opened.
@@ -300,32 +282,6 @@ namespace Mono.Data.Sqlite
 
         Close();
     }
-
-#if !SQLITE_STANDARD
-    /// <summary>
-    /// On NTFS volumes, this function turns on the compression attribute for the given file.
-    /// It must not be open or referenced at the time of the function call.
-    /// </summary>
-    /// <param name="databaseFileName">The file to compress</param>
-    [Obsolete("This functionality is being removed from a future version of the SQLite provider")]
-    static public void CompressFile(string databaseFileName)
-    {
-      UnsafeNativeMethods.sqlite3_compressfile(databaseFileName);
-    }
-#endif
-
-#if !SQLITE_STANDARD
-    /// <summary>
-    /// On NTFS volumes, this function removes the compression attribute for the given file.
-    /// It must not be open or referenced at the time of the function call.
-    /// </summary>
-    /// <param name="databaseFileName">The file to decompress</param>
-    [Obsolete("This functionality is being removed from a future version of the SQLite provider")]
-    static public void DecompressFile(string databaseFileName)
-    {
-      UnsafeNativeMethods.sqlite3_decompressfile(databaseFileName);
-    }
-#endif
 
     /// <summary>
     /// Raises the state change event when the state of the connection changes
@@ -432,7 +388,6 @@ namespace Mono.Data.Sqlite
     {
       if (_sql != null)
       {
-#if !PLATFORM_COMPACTFRAMEWORK
         if (_enlistment != null)
         {
           // If the connection is enlisted in a transaction scope and the scope is still active,
@@ -450,7 +405,6 @@ namespace Mono.Data.Sqlite
           _sql = null;
           _enlistment = null;
         }
-#endif
         if (_sql != null)
         {
           _sql.Close();
@@ -607,9 +561,7 @@ namespace Mono.Data.Sqlite
     /// </item>
     /// </list>
     /// </remarks>
-#if !PLATFORM_COMPACTFRAMEWORK
     [DefaultValue("")]
-#endif
     public override string ConnectionString
     {
       get
@@ -746,7 +698,6 @@ namespace Mono.Data.Sqlite
       return ls;
     }
 
-#if !PLATFORM_COMPACTFRAMEWORK
     /// <summary>
     /// Manual distributed transaction enlistment support
     /// </summary>
@@ -761,7 +712,6 @@ namespace Mono.Data.Sqlite
 
       _enlistment = new SQLiteEnlistment(this, transaction);
     }
-#endif
 
     /// <summary>
     /// Looks for a key in the array of key/values of the parameter string.  If not found, return the specified default value
@@ -810,10 +760,6 @@ namespace Mono.Data.Sqlite
         fileName = ":memory:";
       else
       {
-#if PLATFORM_COMPACTFRAMEWORK
-       if (fileName.StartsWith(".\\"))
-         fileName = Path.GetDirectoryName(System.Reflection.Assembly.GetCallingAssembly().GetName().CodeBase) + fileName.Substring(1);
-#endif
        fileName = ExpandFileName(fileName);
       }
       try
@@ -935,10 +881,8 @@ namespace Mono.Data.Sqlite
         if (_rollbackHandler != null)
           _sql.SetRollbackHook(_rollbackCallback);
 
-#if !PLATFORM_COMPACTFRAMEWORK
         if (global::System.Transactions.Transaction.Current != null && SqliteConvert.ToBoolean(FindKey(opts, "Enlist", Boolean.TrueString)) == true)
 		EnlistTransaction(global::System.Transactions.Transaction.Current);
-#endif
       }
       catch (SqliteException)
       {
@@ -1212,17 +1156,11 @@ namespace Mono.Data.Sqlite
   }
 
 #if !SILVERLIGHT
-#if !PLATFORM_COMPACTFRAMEWORK
   [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-#endif
   internal delegate void SQLiteUpdateCallback(IntPtr puser, int type, IntPtr database, IntPtr table, Int64 rowid);
-#if !PLATFORM_COMPACTFRAMEWORK
   [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-#endif
   internal delegate int SQLiteCommitCallback(IntPtr puser);
-#if !PLATFORM_COMPACTFRAMEWORK
   [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-#endif
   internal delegate void SQLiteRollbackCallback(IntPtr puser);
 #endif
 

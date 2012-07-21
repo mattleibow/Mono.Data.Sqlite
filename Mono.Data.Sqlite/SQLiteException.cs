@@ -12,18 +12,10 @@ namespace Mono.Data.Sqlite
   using System.Text;
   using System.Data.Common;
 
-#if !PLATFORM_COMPACTFRAMEWORK
-  using System.Runtime.Serialization;
-#endif
-
   /// <summary>
   /// SQLite exception class.
   /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
   public sealed class SqliteException : DbException
-#else
-  public sealed class SqliteException : Exception
-#endif
   {
     private SQLiteErrorCode _errorCode;
 
@@ -67,11 +59,7 @@ namespace Mono.Data.Sqlite
     /// <summary>
     /// Retrieves the underlying SQLite error code for this exception
     /// </summary>
-#if !PLATFORM_COMPACTFRAMEWORK
     public new SQLiteErrorCode ErrorCode
-#else
-    public SQLiteErrorCode ErrorCode
-#endif
     {
       get { return _errorCode; }
     }
