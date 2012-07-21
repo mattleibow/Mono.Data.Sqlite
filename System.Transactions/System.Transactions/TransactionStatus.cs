@@ -7,10 +7,6 @@
 // (C)2005 Novell Inc,
 //
 
-
-
-#if NET_2_0
-
 namespace System.Transactions
 {
     public enum TransactionStatus
@@ -21,5 +17,3 @@ namespace System.Transactions
         InDoubt
     }
 }
-
-#endif

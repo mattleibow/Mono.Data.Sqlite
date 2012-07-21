@@ -9,9 +9,6 @@
 // (C)2006 Novell Inc,
 //
 
-
-#if NET_2_0
-
 namespace System.Transactions
 {
     using System.Collections.Generic;
@@ -558,5 +555,3 @@ namespace System.Transactions
         #endregion
     }
 }
-
-#endif

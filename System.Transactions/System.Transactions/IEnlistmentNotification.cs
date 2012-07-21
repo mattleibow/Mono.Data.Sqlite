@@ -7,10 +7,6 @@
 // (C)2005 Novell Inc,
 //
 
-
-
-#if NET_2_0
-
 namespace System.Transactions
 {
     public interface IEnlistmentNotification
@@ -24,5 +20,3 @@ namespace System.Transactions
         void Rollback(Enlistment enlistment);
     }
 }
-
-#endif

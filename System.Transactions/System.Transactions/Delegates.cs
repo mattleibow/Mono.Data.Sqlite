@@ -7,10 +7,6 @@
 // (C)2005 Novell Inc,
 //
 
-
-
-#if NET_2_0
-
 namespace System.Transactions
 {
     public delegate Transaction HostCurrentTransactionCallback();
@@ -19,5 +15,3 @@ namespace System.Transactions
 
     public delegate void TransactionStartedEventHandler(object sender, TransactionEventArgs e);
 }
-
-#endif

@@ -7,10 +7,6 @@
 // (C)2005 Novell Inc,
 //
 
-
-
-#if NET_2_0
-
 namespace System.Transactions
 {
     public class TransactionPromotionException : TransactionException
@@ -30,5 +26,3 @@ namespace System.Transactions
         }
     }
 }
-
-#endif

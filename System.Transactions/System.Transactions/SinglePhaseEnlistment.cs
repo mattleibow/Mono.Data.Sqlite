@@ -9,10 +9,6 @@
 // (C)2006 Novell Inc,
 //
 
-
-
-#if NET_2_0
-
 namespace System.Transactions
 {
     public class SinglePhaseEnlistment : Enlistment
@@ -57,5 +53,3 @@ namespace System.Transactions
         }
     }
 }
-
-#endif

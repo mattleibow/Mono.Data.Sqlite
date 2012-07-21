@@ -9,10 +9,6 @@
 // (C)2006 Novell Inc,
 //
 
-
-
-#if NET_2_0
-
 namespace System.Transactions
 {
     public static class TransactionManager
@@ -67,5 +63,3 @@ namespace System.Transactions
             DistributedTransactionStarted;
     }
 }
-
-#endif
