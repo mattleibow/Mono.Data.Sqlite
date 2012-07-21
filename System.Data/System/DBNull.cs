@@ -36,15 +36,11 @@ namespace System
 {
     public sealed class DBNull : IConvertible
     {
-        // Fields
         public static readonly DBNull Value = new DBNull();
 
-        // Private constructor
         private DBNull()
         {
         }
-
-        // Methods
 
         #region IConvertible Members
 

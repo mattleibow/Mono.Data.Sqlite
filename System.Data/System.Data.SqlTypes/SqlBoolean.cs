@@ -160,10 +160,7 @@ namespace System.Data.SqlTypes
             return this.CompareTo((SqlBoolean) value);
         }
 
-#if NET_2_0
-        public
-#endif
-            int CompareTo(SqlBoolean value)
+        public int CompareTo(SqlBoolean value)
         {
             if (value.IsNull)
             {
@@ -200,7 +197,6 @@ namespace System.Data.SqlTypes
             return (x == y);
         }
 
-#if NET_2_0
         public static SqlBoolean GreaterThan(SqlBoolean x, SqlBoolean y)
         {
             return (x > y);
@@ -220,7 +216,6 @@ namespace System.Data.SqlTypes
         {
             return (x <= y);
         }
-#endif
 
         public override int GetHashCode()
         {
@@ -429,7 +424,6 @@ namespace System.Data.SqlTypes
             return b;
         }
 
-#if NET_2_0
         public static SqlBoolean operator >(SqlBoolean x, SqlBoolean y)
         {
             if (x.IsNull || y.IsNull)
@@ -469,7 +463,7 @@ namespace System.Data.SqlTypes
 
             return new SqlBoolean(Compare(x, y) <= 0);
         }
-#endif
+
         // test to see if value is true
         public static bool operator true(SqlBoolean x)
         {
@@ -635,7 +629,6 @@ namespace System.Data.SqlTypes
             return new SqlBoolean(x);
         }
 
-#if NET_2_0
         // Helper method to Compare methods and operators.
         // Returns 0 if x == y
         //         1 if x > y
@@ -656,6 +649,5 @@ namespace System.Data.SqlTypes
             }
             return 0;
         }
-#endif
     }
 }

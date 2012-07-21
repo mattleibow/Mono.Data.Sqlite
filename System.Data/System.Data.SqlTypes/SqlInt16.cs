@@ -112,12 +112,10 @@ namespace System.Data.SqlTypes
             return this.CompareSqlInt16((SqlInt16) value);
         }
 
-#if NET_2_0
         public int CompareTo(SqlInt16 value)
         {
             return this.CompareSqlInt16(value);
         }
-#endif
 
         private int CompareSqlInt16(SqlInt16 value)
         {
@@ -191,12 +189,10 @@ namespace System.Data.SqlTypes
             return (x%y);
         }
 
-#if NET_2_0
         public static SqlInt16 Modulus(SqlInt16 x, SqlInt16 y)
         {
             return (x%y);
         }
-#endif
 
         public static SqlInt16 Multiply(SqlInt16 x, SqlInt16 y)
         {

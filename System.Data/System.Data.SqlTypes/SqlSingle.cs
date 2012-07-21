@@ -108,12 +108,10 @@ namespace System.Data.SqlTypes
             return this.CompareSqlSingle((SqlSingle) value);
         }
 
-#if NET_2_0
         public int CompareTo(SqlSingle value)
         {
             return this.CompareSqlSingle(value);
         }
-#endif
 
         private int CompareSqlSingle(SqlSingle value)
         {

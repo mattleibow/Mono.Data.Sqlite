@@ -30,19 +30,12 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-
-#if NET_2_0 || TARGET_JVM
-
 namespace System.Data.Common
 {
     using System.Collections;
 
     public abstract class DbDataReader : IDataReader, IDataRecord, IDisposable, IEnumerable
     {
-        #region Constructors
-
-        #endregion // Constructors
-
         #region Properties
 
         public abstract int Depth { get; }
@@ -53,12 +46,10 @@ namespace System.Data.Common
         public abstract object this[string name] { get; }
         public abstract int RecordsAffected { get; }
 
-#if NET_2_0
         public virtual int VisibleFieldCount
         {
             get { return this.FieldCount; }
         }
-#endif
 
         #endregion // Properties
 
@@ -141,5 +132,3 @@ namespace System.Data.Common
         #endregion // Methods
     }
 }
-
-#endif

@@ -30,20 +30,13 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-
-#if NET_2_0 || TARGET_JVM
-
 namespace System.Data.Common
 {
     using System.Collections.Generic;
 
     public abstract class DbParameter : IDbDataParameter, IDataParameter
     {
-        #region Constructors
-
         internal static Dictionary<DbType, Type> dbTypeMapping;
-
-        #endregion // Constructors
 
         #region Properties
 
@@ -101,5 +94,3 @@ namespace System.Data.Common
         #endregion // Methods
     }
 }
-
-#endif

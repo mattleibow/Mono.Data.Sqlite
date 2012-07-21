@@ -33,7 +33,8 @@
 namespace System.Data
 {
     /// <summary>
-    /// Provides a means of reading one or more forward-only streams of result sets obtained by executing a command at a data source, and is implemented by .NET data providers that access relational databases.
+    /// Provides a means of reading one or more forward-only streams of result sets obtained by executing a command at 
+    /// a data source, and is implemented by .NET data providers that access relational databases.
     /// </summary>
     public interface IDataReader : IDisposable, IDataRecord
     {

@@ -33,7 +33,8 @@
 namespace System.Data
 {
     /// <summary>
-    /// Used by the Visual Basic .NET Data Designers to represent a parameter to a Command object, and optionally, its mapping to DataSet columns.
+    /// Used by the Visual Basic .NET Data Designers to represent a parameter to a Command object, and optionally, its 
+    /// mapping to DataSet columns.
     /// </summary>
     public interface IDbDataParameter : IDataParameter
     {

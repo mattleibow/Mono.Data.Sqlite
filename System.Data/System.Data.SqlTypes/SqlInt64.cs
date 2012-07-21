@@ -112,12 +112,10 @@ namespace System.Data.SqlTypes
             return this.CompareSqlInt64((SqlInt64) value);
         }
 
-#if NET_2_0
         public int CompareTo(SqlInt64 value)
         {
             return this.CompareSqlInt64(value);
         }
-#endif
 
         private int CompareSqlInt64(SqlInt64 value)
         {
@@ -191,12 +189,10 @@ namespace System.Data.SqlTypes
             return (x%y);
         }
 
-#if NET_2_0
         public static SqlInt64 Modulus(SqlInt64 x, SqlInt64 y)
         {
             return (x%y);
         }
-#endif
 
         public static SqlInt64 Multiply(SqlInt64 x, SqlInt64 y)
         {

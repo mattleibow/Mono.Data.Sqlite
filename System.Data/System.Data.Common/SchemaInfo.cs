@@ -34,14 +34,6 @@ namespace System.Data.Common
 {
     internal class SchemaInfo
     {
-        #region Fields
-
-        #endregion // Fields
-
-        #region Constructors
-
-        #endregion // Constructors
-
         #region Properties
 
         public bool AllowDBNull { get; set; }

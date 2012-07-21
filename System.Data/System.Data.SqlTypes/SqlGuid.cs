@@ -113,10 +113,7 @@ namespace System.Data.SqlTypes
             return this.CompareTo((SqlGuid) value);
         }
 
-#if NET_2_0
-        public
-#endif
-            int CompareTo(SqlGuid value)
+        public int CompareTo(SqlGuid value)
         {
             if (value.IsNull)
             {

@@ -31,8 +31,6 @@
 //
 
 
-#if NET_2_0
-
 namespace System.Data.SqlTypes
 {
     using System.IO;
@@ -338,5 +336,3 @@ namespace System.Data.SqlTypes
         #endregion
     }
 }
-
-#endif

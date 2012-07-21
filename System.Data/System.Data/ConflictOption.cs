@@ -27,10 +27,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-
-
-#if NET_2_0 || TARGET_JVM
-
 namespace System.Data
 {
     public enum ConflictOption
@@ -40,6 +36,3 @@ namespace System.Data
         OverwriteChanges = 3
     }
 }
-
-#endif
-// NET_2_0

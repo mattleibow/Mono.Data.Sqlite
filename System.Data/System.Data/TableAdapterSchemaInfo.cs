@@ -28,9 +28,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-
-#if NET_2_0
-
 namespace System.Data
 {
     using System.Data.Common;
@@ -65,5 +62,3 @@ namespace System.Data
         public DbSourceMethodInfo[] Methods;
     }
 }
-
-#endif

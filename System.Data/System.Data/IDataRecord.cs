@@ -48,13 +48,11 @@ namespace System.Data
 
         byte GetByte(int i);
 
-        long GetBytes(int i, long fieldOffset, byte[] buffer,
-                      int bufferoffset, int length);
+        long GetBytes(int i, long fieldOffset, byte[] buffer, int bufferoffset, int length);                           
 
         char GetChar(int i);
 
-        long GetChars(int i, long fieldoffset, char[] buffer,
-                      int bufferoffset, int length);
+        long GetChars(int i, long fieldoffset, char[] buffer, int bufferoffset, int length);
 
         IDataReader GetData(int i);
 

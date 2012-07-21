@@ -26,9 +26,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-
-#if NET_2_0
-
 namespace System.Data.Common
 {
     using System.Globalization;
@@ -46,8 +43,7 @@ namespace System.Data.Common
         {
             if (value == null)
             {
-                throw new ArgumentNullException("null value cannot be converted" +
-                                                " to boolean");
+                throw new ArgumentNullException("value", "null value cannot be converted to boolean");
             }
             string upper = value.ToString().ToUpper().Trim();
             if (upper == "YES" || upper == "TRUE")
@@ -58,13 +54,9 @@ namespace System.Data.Common
             {
                 return false;
             }
-            throw new ArgumentException(String.Format("Invalid boolean value: {0}",
-                                                      value));
+            throw new ArgumentException(String.Format("Invalid boolean value: {0}", value));
         }
 
         #endregion // Methods
     }
 }
-
-#endif
-// NET_2_0

@@ -27,9 +27,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-
-#if NET_2_0
-
 namespace System.Data.Common
 {
     using System.Collections;
@@ -934,6 +931,3 @@ namespace System.Data.Common
         #endregion // Public Methods
     }
 }
-
-#endif
-// NET_2_0 using

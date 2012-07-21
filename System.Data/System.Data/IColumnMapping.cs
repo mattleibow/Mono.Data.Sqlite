@@ -33,7 +33,8 @@
 namespace System.Data
 {
     /// <summary>
-    /// Associates a data source column with a DataSet column, and is implemented by the DataColumnMapping class, which is used in common by .NET data providers.
+    /// Associates a data source column with a DataSet column, and is implemented by the DataColumnMapping class,
+    /// which is used in common by .NET data providers.
     /// </summary>
     public interface IColumnMapping
     {
@@ -43,7 +44,8 @@ namespace System.Data
         string DataSetColumn { get; set; }
 
         /// <summary>
-        /// Gets or sets the name of the column within the data source to map from. The name is case-sensitive.
+        /// Gets or sets the name of the column within the data source to map from. 
+        /// The name is case-sensitive.
         /// </summary>
         string SourceColumn { get; set; }
     }

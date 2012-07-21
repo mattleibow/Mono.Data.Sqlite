@@ -226,10 +226,7 @@ namespace System.Data.SqlTypes
             return this.CompareTo((SqlDateTime) value);
         }
 
-#if NET_2_0
-        public
-#endif
-            int CompareTo(SqlDateTime value)
+        public int CompareTo(SqlDateTime value)
         {
             if (value.IsNull)
             {
@@ -271,7 +268,6 @@ namespace System.Data.SqlTypes
             return this.value.GetHashCode();
         }
 
-#if NET_2_0
         public static SqlDateTime Add(SqlDateTime x, TimeSpan t)
         {
             return (x + t);
@@ -281,7 +277,6 @@ namespace System.Data.SqlTypes
         {
             return (x - t);
         }
-#endif
 
         public static SqlBoolean GreaterThan(SqlDateTime x, SqlDateTime y)
         {

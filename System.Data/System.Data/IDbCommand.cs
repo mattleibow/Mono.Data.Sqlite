@@ -33,7 +33,8 @@
 namespace System.Data
 {
     /// <summary>
-    /// Represents a SQL statement that is executed while connected to a data source, and is implemented by .NET data providers that access relational databases.
+    /// Represents a SQL statement that is executed while connected to a data source, and is implemented by .NET data 
+    /// providers that access relational databases.
     /// </summary>
     public interface IDbCommand : IDisposable
     {

@@ -31,10 +31,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-
-
-#if NET_2_0
-
 namespace System.Data
 {
     public enum LoadOption
@@ -44,6 +40,3 @@ namespace System.Data
         Upsert = 3
     }
 }
-
-#endif
-// NET_2_0

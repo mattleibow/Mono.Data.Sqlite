@@ -339,10 +339,7 @@ namespace System.Data.SqlTypes
             return this.CompareTo((SqlDecimal) value);
         }
 
-#if NET_2_0
-        public
-#endif
-            int CompareTo(SqlDecimal value)
+        public int CompareTo(SqlDecimal value)
         {
             if (value.IsNull)
             {
@@ -1687,7 +1684,6 @@ namespace System.Data.SqlTypes
             }
         }
 
-#if NET_2_0
         public static explicit operator SqlDecimal(double x)
         {
             return new SqlDecimal(x);
@@ -1697,7 +1693,6 @@ namespace System.Data.SqlTypes
         {
             return new SqlDecimal(x);
         }
-#endif
 
         public static implicit operator SqlDecimal(decimal x)
         {

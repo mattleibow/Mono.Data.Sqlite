@@ -37,10 +37,6 @@ namespace System.Data.Common
 
     public abstract class DbConnection : IDbConnection, IDisposable
     {
-        #region Constructors
-
-        #endregion // Constructors
-
         #region Properties
 
         public abstract string DataSource { get; }

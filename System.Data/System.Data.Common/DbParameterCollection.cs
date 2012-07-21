@@ -30,19 +30,12 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-
-#if NET_2_0 || TARGET_JVM
-
 namespace System.Data.Common
 {
     using System.Collections;
 
     public abstract class DbParameterCollection : IDataParameterCollection, IList, ICollection, IEnumerable
     {
-        #region Constructors
-
-        #endregion // Constructors
-
         #region Properties
 
         public DbParameter this[string parameterName]
@@ -109,8 +102,7 @@ namespace System.Data.Common
         public abstract void AddRange(Array values);
         protected abstract DbParameter GetParameter(String parameterName);
 
-        protected abstract void SetParameter(String parameterName,
-                                             DbParameter value);
+        protected abstract void SetParameter(String parameterName, DbParameter value);
 
         protected abstract DbParameter GetParameter(int index);
 
@@ -119,5 +111,3 @@ namespace System.Data.Common
         #endregion // Methods
     }
 }
-
-#endif

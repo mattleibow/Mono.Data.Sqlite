@@ -44,9 +44,7 @@ namespace System.Data.Common
         public abstract char GetChar(int i);
         public abstract long GetChars(int i, long dataIndex, char[] buffer, int bufferIndex, int length);
         public abstract string GetDataTypeName(int i);
-#if NET_2_0
         protected abstract DbDataReader GetDbDataReader(int i);
-#endif
         public abstract DateTime GetDateTime(int i);
         public abstract decimal GetDecimal(int i);
         public abstract double GetDouble(int i);
@@ -191,13 +189,11 @@ namespace System.Data.Common
             return (DateTime) this.GetValue(i);
         }
 
-#if NET_2_0
         [MonoTODO]
         protected override DbDataReader GetDbDataReader(int ordinal)
         {
             throw new NotImplementedException();
         }
-#endif
 
         public override decimal GetDecimal(int i)
         {

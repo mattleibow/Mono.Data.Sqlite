@@ -695,7 +695,6 @@ namespace System.Data.SqlTypes
             return new SqlString(x);
         }
 
-#if NET_2_0
         public static SqlString Add(SqlString x, SqlString y)
         {
             return (x + y);
@@ -705,7 +704,6 @@ namespace System.Data.SqlTypes
         {
             return this.CompareSqlString(value);
         }
-#endif
 
         #endregion // Public Methods
     }

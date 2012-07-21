@@ -102,10 +102,7 @@ namespace System.Data.SqlTypes
             return this.CompareTo((SqlDouble) value);
         }
 
-#if NET_2_0
-        public
-#endif
-            int CompareTo(SqlDouble value)
+        public int CompareTo(SqlDouble value)
         {
             if (value.IsNull)
             {

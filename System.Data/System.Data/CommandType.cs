@@ -35,9 +35,6 @@ namespace System.Data
     /// <summary>
     /// Specifies how a command string is interpreted.
     /// </summary>
-#if !NET_2_0
-	[Serializable]
-#endif
     public enum CommandType
     {
         Text = 1,

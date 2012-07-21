@@ -38,11 +38,7 @@ namespace System.Data.SqlTypes
     /// <summary>
     /// Represents a variable-length stream of binary data to be stored in or retrieved from a database.
     /// </summary>
-#if NET_2_0
-#endif
     public struct SqlBinary : INullable, IComparable
-#if NET_2_0
-#endif
     {
         #region Fields
 
@@ -124,12 +120,10 @@ namespace System.Data.SqlTypes
 
         #region Methods
 
-#if NET_2_0
         public static SqlBinary Add(SqlBinary x, SqlBinary y)
         {
             return (x + y);
         }
-#endif
 
         public int CompareTo(object value)
         {
@@ -145,10 +139,7 @@ namespace System.Data.SqlTypes
             return this.CompareTo((SqlBinary) value);
         }
 
-#if NET_2_0
-        public
-#endif
-            int CompareTo(SqlBinary value)
+        public int CompareTo(SqlBinary value)
         {
             if (value.IsNull)
             {

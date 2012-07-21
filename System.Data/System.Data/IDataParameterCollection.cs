@@ -35,7 +35,8 @@ namespace System.Data
     using System.Collections;
 
     /// <summary>
-    /// Collects all parameters relevant to a Command object and their mappings to DataSet columns, and is implemented by .NET data providers that access data sources.
+    /// Collects all parameters relevant to a Command object and their mappings to DataSet columns, and is implemented 
+    /// by .NET data providers that access data sources.
     /// </summary>
     public interface IDataParameterCollection : IList, ICollection, IEnumerable
     {

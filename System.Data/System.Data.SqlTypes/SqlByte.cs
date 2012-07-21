@@ -113,10 +113,7 @@ namespace System.Data.SqlTypes
             return this.CompareTo((SqlByte) value);
         }
 
-#if NET_2_0
-        public
-#endif
-            int CompareTo(SqlByte value)
+        public int CompareTo(SqlByte value)
         {
             if (value.IsNull)
             {
@@ -188,14 +185,12 @@ namespace System.Data.SqlTypes
             return (x%y);
         }
 
-#if NET_2_0
         // Why did Microsoft add this method in 2.0???  What's 
         // the difference????
         public static SqlByte Modulus(SqlByte x, SqlByte y)
         {
             return (x%y);
         }
-#endif
 
         public static SqlByte Multiply(SqlByte x, SqlByte y)
         {

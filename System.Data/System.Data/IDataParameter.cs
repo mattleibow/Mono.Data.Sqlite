@@ -33,7 +33,8 @@
 namespace System.Data
 {
     /// <summary>
-    /// Represents a parameter to a Command object, and optionally, its mapping to DataSet columns; and is implemented by .NET data providers that access data sources.
+    /// Represents a parameter to a Command object, and optionally, its mapping to DataSet columns; and is implemented 
+    /// by .NET data providers that access data sources.
     /// </summary>
     public interface IDataParameter
     {

@@ -27,18 +27,10 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-
-
-#if NET_2_0 || TARGET_JVM
-
 namespace System.Data.Common
 {
     public abstract class DbTransaction : IDbTransaction, IDisposable
     {
-        #region Constructors
-
-        #endregion // Constructors
-
         #region Properties
 
         public DbConnection Connection
@@ -75,5 +67,3 @@ namespace System.Data.Common
         #endregion // Methods
     }
 }
-
-#endif

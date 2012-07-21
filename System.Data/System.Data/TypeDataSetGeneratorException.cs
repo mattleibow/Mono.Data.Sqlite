@@ -49,7 +49,6 @@ namespace System.Data
             this.errorList = list;
         }
 
-#if NET_2_0
         public TypedDataSetGeneratorException(String message) : base(message)
         {
         }
@@ -58,7 +57,6 @@ namespace System.Data
             : base(message, innerException)
         {
         }
-#endif
 
         #endregion //Constructors
 
@@ -66,9 +64,5 @@ namespace System.Data
         {
             get { return this.errorList; }
         }
-
-        #region Methods
-
-        #endregion // Methods
     }
 }

@@ -140,12 +140,10 @@ namespace System.Data.SqlTypes
             }
         }
 
-#if NET_2_0
         public int CompareTo(SqlMoney value)
         {
             return this.CompareSqlMoney(value);
         }
-#endif
 
         public static SqlMoney Divide(SqlMoney x, SqlMoney y)
         {
@@ -485,7 +483,6 @@ namespace System.Data.SqlTypes
             }
         }
 
-#if NET_2_0
         public static explicit operator SqlMoney(double x)
         {
             return new SqlMoney(x);
@@ -495,7 +492,6 @@ namespace System.Data.SqlTypes
         {
             return new SqlMoney(x);
         }
-#endif
 
         public static implicit operator SqlMoney(decimal x)
         {

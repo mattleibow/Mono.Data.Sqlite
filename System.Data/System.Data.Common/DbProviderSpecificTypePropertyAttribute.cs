@@ -27,9 +27,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-
-#if NET_2_0
-
 namespace System.Data.Common
 {
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
@@ -60,5 +57,3 @@ namespace System.Data.Common
         #endregion // Properties
     }
 }
-
-#endif

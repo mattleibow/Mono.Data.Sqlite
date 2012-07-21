@@ -30,9 +30,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-
-#if NET_2_0
-
 namespace System.Data.SqlTypes
 {
     public sealed class SqlChars : INullable
@@ -328,5 +325,3 @@ namespace System.Data.SqlTypes
         #endregion
     }
 }
-
-#endif

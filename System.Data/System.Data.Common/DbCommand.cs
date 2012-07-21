@@ -30,10 +30,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-
-
-#if NET_2_0 || TARGET_JVM
-
 namespace System.Data.Common
 {
     public abstract class DbCommand : IDbCommand, IDisposable
@@ -141,5 +137,3 @@ namespace System.Data.Common
         #endregion
     }
 }
-
-#endif

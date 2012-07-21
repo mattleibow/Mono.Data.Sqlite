@@ -35,7 +35,8 @@ namespace System.Data
     using System.Collections;
 
     /// <summary>
-    /// Contains a collection of TableMapping objects, and is implemented by the DataTableMappingCollection, which is used in common by .NET data providers.
+    /// Contains a collection of TableMapping objects, and is implemented by the DataTableMappingCollection, which is 
+    /// used in common by .NET data providers.
     /// </summary>
     public interface ITableMappingCollection : IList, ICollection, IEnumerable
     {

@@ -27,10 +27,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-
-
-#if NET_2_0
-
 namespace System.Data.SqlTypes
 {
     public enum StorageState
@@ -40,5 +36,3 @@ namespace System.Data.SqlTypes
         UnmanagedBuffer = 2
     }
 }
-
-#endif

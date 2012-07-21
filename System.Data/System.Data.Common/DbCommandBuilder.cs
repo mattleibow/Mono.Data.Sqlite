@@ -30,9 +30,6 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-
-#if NET_2_0 || TARGET_JVM
-
 namespace System.Data.Common
 {
     using System.ComponentModel;
@@ -212,5 +209,3 @@ namespace System.Data.Common
         }
     }
 }
-
-#endif
