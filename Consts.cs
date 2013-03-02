@@ -79,7 +79,7 @@ internal static class Consts
 #elif NET_1_0
 	#error Profile NET_1_0 is not supported.
 #else
-#error No profile symbols defined.
+    #error No profile symbols defined.
 #endif
 
     //

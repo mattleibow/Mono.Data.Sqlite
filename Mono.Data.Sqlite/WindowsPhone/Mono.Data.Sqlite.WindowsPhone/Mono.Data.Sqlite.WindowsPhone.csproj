@@ -1,0 +1,152 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>10.0.20506</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{A4AEB66C-BADB-4581-BC0F-C2408C225256}</ProjectGuid>
+    <ProjectTypeGuids>{C089C8C0-30E0-4E22-80C0-CE093F111A43};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mono.Data.Sqlite</RootNamespace>
+    <AssemblyName>Mono.Data.Sqlite</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
+    <TargetFrameworkProfile>WindowsPhone71</TargetFrameworkProfile>
+    <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
+    <SilverlightApplication>false</SilverlightApplication>
+    <ValidateXaml>true</ValidateXaml>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;NET_1_1;NET_2_0;NET_3_0;NET_3_5;NET_4_0;SQLITE_STANDARD</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE;NET_1_1;NET_2_0;NET_3_0;NET_3_5;NET_4_0;SQLITE_STANDARD</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Community.CsharpSqlite.WinPhone">
+      <HintPath>..\..\..\Libraries\WindowsPhone7\Community.CsharpSqlite.WinPhone.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Phone.Interop" />
+    <Reference Include="System.Windows" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Net" />
+    <Reference Include="mscorlib.extensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\Consts.cs">
+      <Link>Consts.cs</Link>
+    </Compile>
+    <Compile Include="..\..\store\assembly\AssemblyInfo.cs">
+      <Link>Assembly\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Store\ICloneable.cs">
+      <Link>ICloneable.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Store\Locale.cs">
+      <Link>Locale.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Store\MonoTODOAttribute.cs">
+      <Link>MonoTODOAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Store\SQLite3.cs">
+      <Link>SQLite3.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Store\SQLite3_UTF16.cs">
+      <Link>SQLite3_UTF16.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Store\SQLiteBase.cs">
+      <Link>SQLiteBase.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Store\SQLiteCommand.cs">
+      <Link>SQLiteCommand.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Store\SQLiteCommandBuilder.cs">
+      <Link>SQLiteCommandBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Store\SQLiteConnection.cs">
+      <Link>SQLiteConnection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Store\SQLiteConnectionPool.cs">
+      <Link>SQLiteConnectionPool.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Store\SQLiteConnectionStringBuilder.cs">
+      <Link>SQLiteConnectionStringBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Store\SQLiteConvert.cs">
+      <Link>SQLiteConvert.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Store\SQLiteDataReader.cs">
+      <Link>SQLiteDataReader.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Store\SQLiteEnlistment.cs">
+      <Link>SQLiteEnlistment.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Store\SQLiteException.cs">
+      <Link>SQLiteException.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Store\SQLiteFunction.cs">
+      <Link>SQLiteFunction.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Store\SQLiteFunctionAttribute.cs">
+      <Link>SQLiteFunctionAttribute.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Store\SQLiteMetaDataCollectionNames.cs">
+      <Link>SQLiteMetaDataCollectionNames.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Store\SQLiteParameter.cs">
+      <Link>SQLiteParameter.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Store\SQLiteParameterCollection.cs">
+      <Link>SQLiteParameterCollection.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Store\SQLiteStatement.cs">
+      <Link>SQLiteStatement.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Store\SQLiteTransaction.cs">
+      <Link>SQLiteTransaction.cs</Link>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\System.Data\Silverlight\System.Data.Silverlight.csproj">
+      <Project>{152D9FAB-D1FE-4175-9A58-542F2806932D}</Project>
+      <Name>System.Data.Silverlight</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\System.Transactions\System.Transactions.csproj">
+      <Project>{E706726A-A6B2-42F1-8502-C0F3AC04B0D5}</Project>
+      <Name>System.Transactions %28System.Transactions\System.Transactions%29</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.$(TargetFrameworkProfile).Overrides.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight for Phone\$(TargetFrameworkVersion)\Microsoft.Silverlight.CSharp.targets" />
+  <ProjectExtensions />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
