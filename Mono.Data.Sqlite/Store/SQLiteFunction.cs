@@ -12,7 +12,7 @@ namespace Mono.Data.Sqlite
   using System.Collections.Generic;
   using System.Runtime.InteropServices;
   using System.Globalization;
-
+    using MonoDataSqliteWrapper;
 #if SILVERLIGHT
     using Sqlite3Mem = Community.CsharpSqlite.Sqlite3.Mem;
     using Sqlite3MemPtr = Community.CsharpSqlite.Sqlite3.Mem;
@@ -29,9 +29,9 @@ namespace Mono.Data.Sqlite
 
     using SqliteContext = Community.CsharpSqlite.Sqlite3.sqlite3_context;
 #else
-    using Sqlite3Mem = System.Int64;
-    using Sqlite3MemPtr = System.IntPtr;
-    using SqliteContext = System.IntPtr;
+    using Sqlite3Mem = MonoDataSqliteWrapper.SqliteValueHandle;
+    using Sqlite3MemPtr = MonoDataSqliteWrapper.SqliteValueHandle;
+    using SqliteContext = MonoDataSqliteWrapper.SqliteContextHandle;
     using SQLiteStepCallback = SQLiteCallback;
 #endif
 
@@ -191,20 +191,11 @@ namespace Mono.Data.Sqlite
     /// <param name="nArgs">The number of arguments</param>
     /// <param name="argsptr">A pointer to the array of arguments</param>
     /// <returns>An object array of the arguments once they've been converted to .NET values</returns>
-#if SILVERLIGHT
     internal object[] ConvertParams(int nArgs, Sqlite3MemPtr[] argsptr)
-#else
-    internal object[] ConvertParams(int nArgs, IntPtr argsptr)
-#endif
     {
       object[] parms = new object[nArgs];
-#if SILVERLIGHT
       Sqlite3MemPtr[] argint = new Sqlite3MemPtr[nArgs];
       Array.Copy(argsptr, argint, nArgs);
-#else
-      dynamic argint = new Sqlite3MemPtr[nArgs];
-      Marshal.Copy(argsptr, argint, 0, nArgs);
-#endif
 
       for (int n = 0; n < nArgs; n++)
       {
@@ -297,11 +288,7 @@ namespace Mono.Data.Sqlite
     /// <param name="context">A raw context pointer</param>
     /// <param name="nArgs">Number of arguments passed in</param>
     /// <param name="argsptr">A pointer to the array of arguments</param>
-#if SILVERLIGHT
     internal void ScalarCallback(SqliteContext context, int nArgs, Sqlite3Mem[] argsptr)
-#else
-    internal void ScalarCallback(SqliteContext context, int nArgs, IntPtr argsptr)
-#endif
     {
       _context = context;
       SetReturnValue(context, Invoke(ConvertParams(nArgs, argsptr)));
@@ -317,29 +304,15 @@ namespace Mono.Data.Sqlite
     /// <param name="ptr2">Pointer to the second string to compare</param>
     /// <returns>Returns -1 if the first string is less than the second.  0 if they are equal, or 1 if the first string is greater
     /// than the second.</returns>
-#if SILVERLIGHT
     internal int CompareCallback(object ptr, int len1, string ptr1, int len2, string ptr2)
     {
         return Compare(ptr1, ptr2);
     }
-#else
-    internal int CompareCallback(IntPtr ptr, int len1, IntPtr ptr1, int len2, IntPtr ptr2)
-    {
-      return Compare(SqliteConvert.UTF8ToString(ptr1, len1), SqliteConvert.UTF8ToString(ptr2, len2));
-    }
-#endif
 
-#if SILVERLIGHT
      internal int CompareCallback16(object ptr, int len1, string ptr1, int len2, string ptr2)
     {
         return Compare(ptr1, ptr2);
     }
-#else
-    internal int CompareCallback16(IntPtr ptr, int len1, IntPtr ptr1, int len2, IntPtr ptr2)
-    {
-      return Compare(SQLite3_UTF16.UTF16ToString(ptr1, len1), SQLite3_UTF16.UTF16ToString(ptr2, len2));
-    }
-#endif
 
     /// <summary>
     /// The internal aggregate Step function callback, which wraps the raw context pointer and calls the virtual Step() method.
@@ -352,11 +325,7 @@ namespace Mono.Data.Sqlite
     /// <param name="context">A raw context pointer</param>
     /// <param name="nArgs">Number of arguments passed in</param>
     /// <param name="argsptr">A pointer to the array of arguments</param>
-#if SILVERLIGHT
     internal void StepCallback(SqliteContext context, int nArgs, Sqlite3Mem[] argsptr)
-#else
-    internal void StepCallback(SqliteContext context, int nArgs, IntPtr argsptr)
-#endif
     {
       Sqlite3Mem nAux;
       AggregateData data;
@@ -548,14 +517,12 @@ namespace Mono.Data.Sqlite
   /// <param name="context">Raw context pointer for the user function</param>
   /// <param name="nArgs">Count of arguments to the function</param>
   /// <param name="argsptr">A pointer to the array of argument pointers</param>
-  [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-  internal delegate void SQLiteCallback(IntPtr context, int nArgs, IntPtr argsptr);
+  internal delegate void SQLiteCallback(SqliteContextHandle context, int nArgs, Sqlite3Mem[] argsptr);
   /// <summary>
   /// An internal final callback delegate declaration.
   /// </summary>
   /// <param name="context">Raw context pointer for the user function</param>
-  [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-  internal delegate void SQLiteFinalCallback(IntPtr context);
+  internal delegate void SQLiteFinalCallback(SqliteContextHandle context);
   /// <summary>
   /// Internal callback delegate for implementing collation sequences
   /// </summary>
@@ -566,8 +533,7 @@ namespace Mono.Data.Sqlite
   /// <param name="pv2">Pointer to the second string to compare</param>
   /// <returns>Returns -1 if the first string is less than the second.  0 if they are equal, or 1 if the first string is greater
   /// than the second.</returns>
-  [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
-  internal delegate int SQLiteCollation(IntPtr puser, int len1, IntPtr pv1, int len2, IntPtr pv2);
+  internal delegate int SQLiteCollation(object puser, int len1, string pv1, int len2, string pv2);
 #endif
 
   /// <summary>

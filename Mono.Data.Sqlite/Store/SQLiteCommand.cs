@@ -256,7 +256,7 @@ namespace Mono.Data.Sqlite
       // If we're at the last built statement and want the next unbuilt statement, then build it
       if (index == _statementList.Count)
       {
-        if (String.IsNullOrEmpty(_remainingText) == false) return BuildNextCommand();
+        if (String.IsNullOrWhiteSpace(_remainingText) == false) return BuildNextCommand();
         else return null; // No more commands
       }
 

@@ -52,7 +52,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Bin\x86\Debug</OutputPath>
-    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;NET_1_1;NET_2_0;NET_3_0;NET_3_5;NET_4_0;SQLITE_STANDARD</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -62,7 +62,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>Bin\x86\Release</OutputPath>
-    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE;NET_1_1;NET_2_0;NET_3_0;NET_3_5;NET_4_0;SQLITE_STANDARD</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -91,22 +91,22 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\Store\SqliteCommandUnitTests.cs">
-      <Link>SqliteCommandUnitTests.cs</Link>
+      <Link>Tests\SqliteCommandUnitTests.cs</Link>
     </Compile>
     <Compile Include="..\Store\SqliteConnectionTest.cs">
-      <Link>SqliteConnectionTest.cs</Link>
+      <Link>Tests\SqliteConnectionTest.cs</Link>
     </Compile>
     <Compile Include="..\Store\SqliteDataReaderTest.cs">
-      <Link>SqliteDataReaderTest.cs</Link>
+      <Link>Tests\SqliteDataReaderTest.cs</Link>
     </Compile>
     <Compile Include="..\Store\SqliteExceptionUnitTests.cs">
-      <Link>SqliteExceptionUnitTests.cs</Link>
+      <Link>Tests\SqliteExceptionUnitTests.cs</Link>
     </Compile>
     <Compile Include="..\Store\SqliteParameterUnitTests.cs">
-      <Link>SqliteParameterUnitTests.cs</Link>
+      <Link>Tests\SqliteParameterUnitTests.cs</Link>
     </Compile>
     <Compile Include="..\Store\SqliteTest.cs">
-      <Link>SqliteTest.cs</Link>
+      <Link>Tests\SqliteTest.cs</Link>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -179,6 +179,10 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Helpers\Mono.Data.Sqlite.Wrapper\Mono.Data.Sqlite.Wrapper.vcxproj">
+      <Project>{30A5E000-7B99-4F74-83E6-1DDF42753A4F}</Project>
+      <Name>MonoDataSqliteWrapper</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\Mono.Data.Sqlite\WindowsPhone8\Mono.Data.Sqlite.WindowsPhone8.csproj">
       <Project>{056276DD-823C-4249-901C-378D47CEE599}</Project>
       <Name>Mono.Data.Sqlite.WindowsPhone8</Name>

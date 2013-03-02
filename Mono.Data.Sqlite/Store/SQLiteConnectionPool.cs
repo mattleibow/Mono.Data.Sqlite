@@ -9,6 +9,7 @@ namespace Mono.Data.Sqlite
 {
   using System;
   using System.Collections.Generic;
+    using MonoDataSqliteWrapper;
   
 #if SILVERLIGHT
   using SqliteConnectionHandle = Community.CsharpSqlite.Sqlite3.sqlite3;

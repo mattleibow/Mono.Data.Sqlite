@@ -12,6 +12,8 @@ namespace Mono.Data.Sqlite
   using System.Collections.Generic;
   using System.Globalization;
 
+  using MonoDataSqliteWrapper;
+
 #if SILVERLIGHT
     using SqliteStatementHandle = Community.CsharpSqlite.Sqlite3.Vdbe;
 #endif

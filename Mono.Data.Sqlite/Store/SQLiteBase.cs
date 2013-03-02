@@ -8,6 +8,7 @@
 namespace Mono.Data.Sqlite
 {
     using System;
+    using MonoDataSqliteWrapper;
 #if SILVERLIGHT
     using SqliteConnectionHandle = Community.CsharpSqlite.Sqlite3.sqlite3;
     using UnsafeNativeMethods = Community.CsharpSqlite.Sqlite3;
@@ -24,10 +25,10 @@ namespace Mono.Data.Sqlite
     using SQLiteCollation = Community.CsharpSqlite.Sqlite3.dxCompare;
     using SqliteContext = Community.CsharpSqlite.Sqlite3.sqlite3_context;
 #else
-    using Sqlite3Mem = System.Int64;
-    using Sqlite3MemPtr = System.IntPtr;
-    using Sqlite3Database = System.IntPtr;
-    using SqliteContext = System.IntPtr;
+    using Sqlite3Mem = MonoDataSqliteWrapper.SqliteValueHandle;
+    using Sqlite3MemPtr = MonoDataSqliteWrapper.SqliteValueHandle;
+    using Sqlite3Database = MonoDataSqliteWrapper.SqliteConnectionHandle;
+    using SqliteContext = MonoDataSqliteWrapper.SqliteContextHandle;
     using SQLiteStepCallback = SQLiteCallback;
 #endif
 
@@ -180,7 +181,6 @@ namespace Mono.Data.Sqlite
         internal abstract int ContextCollateCompare(CollationEncodingEnum enc, SqliteContext context, char[] c1,
                                                     char[] c2);
 
-        internal abstract int AggregateCount(SqliteContext context);
         internal abstract Sqlite3MemPtr AggregateContext(SqliteContext context);
 
         internal abstract long GetParamValueBytes(Sqlite3MemPtr ptr, int nDataOffset, byte[] bDest, int nStart,
@@ -200,17 +200,12 @@ namespace Mono.Data.Sqlite
         internal abstract void ReturnNull(SqliteContext context);
         internal abstract void ReturnText(SqliteContext context, string value);
 
-#if SILVERLIGHT
         internal abstract void SetPassword(string passwordBytes);
         internal abstract void ChangePassword(string newPasswordBytes);
-#else
-        internal abstract void SetPassword(byte[] passwordBytes);
-        internal abstract void ChangePassword(byte[] newPasswordBytes);
-#endif
 
-        internal abstract void SetUpdateHook(SQLiteUpdateCallback func);
-        internal abstract void SetCommitHook(SQLiteCommitCallback func);
-        internal abstract void SetRollbackHook(SQLiteRollbackCallback func);
+        internal abstract void SetUpdateHook(SqliteUpdateHookDelegate func);
+        internal abstract void SetCommitHook(SqliteCommitHookDelegate func);
+        internal abstract void SetRollbackHook(SqliteRollbackHookDelegate func);
 
         internal abstract int GetCursorForTable(SqliteStatement stmt, int database, int rootPage);
         internal abstract long GetRowIdForCursor(SqliteStatement stmt, int cursor);
@@ -245,48 +240,21 @@ namespace Mono.Data.Sqlite
             }
         }
 
-#if SILVERLIGHT
         internal static void CloseConnection(SqliteConnectionHandle db)
-#else
-        internal static void CloseConnection(SqliteConnectionHandle hdl, IntPtr db)
-#endif
         {
-#if SILVERLIGHT
             lock (_lock)
-#else
-            var nullConn = IntPtr.Zero;
-            if ((hdl == null) || (db == nullConn)) return;
-            lock (hdl)
-#endif
             {
-#if SILVERLIGHT
                 ResetConnection(db);
-#else
-                ResetConnection(hdl, db);
-#endif
                 int n = UnsafeNativeMethods.sqlite3_close(db);
                 if (n > 0) throw new SqliteException(n, SQLiteLastError(db));
             }
         }
 
-#if SILVERLIGHT
         internal static void ResetConnection(SqliteConnectionHandle db)
         {
             lock (_lock)
-#else
-        internal static void ResetConnection(SqliteConnectionHandle hdl, IntPtr db)
-        {
-            var nullConn = IntPtr.Zero;
-            if ((hdl == null) || (db == nullConn)) return;
-            if (hdl.IsClosed || hdl.IsInvalid) return;
-            lock (hdl)
-#endif
             {
-#if SILVERLIGHT
                 SqliteStatementHandle nullVal = null;
-#else
-                var nullVal = IntPtr.Zero;
-#endif
                 var stmt = nullVal;
                 do
                 {
@@ -298,19 +266,13 @@ namespace Mono.Data.Sqlite
                 } while (stmt != nullVal);
 
                 // Not overly concerned with the return value from a rollback.
-#if SILVERLIGHT
                 string msg = null;
+#if SILVERLIGHT
                 UnsafeNativeMethods.sqlite3_exec(db, "ROLLBACK", null, null, ref msg);
 #else
-                var msg = IntPtr.Zero;
-                UnsafeNativeMethods.sqlite3_exec(db, ToUTF8("ROLLBACK"), IntPtr.Zero, IntPtr.Zero, out msg);
-                // but free the error message if any!
-                if (msg != IntPtr.Zero) UnsafeNativeMethods.sqlite3_free(msg);
+                UnsafeNativeMethods.sqlite3_exec(db, "ROLLBACK", out msg);
 #endif
             }
-#if !SILVERLIGHT
-            GC.KeepAlive(hdl);
-#endif
         }
 
         protected static bool FileExists(string strFilename)
@@ -350,7 +312,6 @@ namespace Mono.Data.Sqlite
         Serialized = 3,
     }
 
-#if SILVERLIGHT
     internal static class Disposers
     {
         internal static void Dispose(this SqliteStatementHandle statement)
@@ -380,5 +341,4 @@ namespace Mono.Data.Sqlite
             connection.Dispose();
         }
     }
-#endif
 }

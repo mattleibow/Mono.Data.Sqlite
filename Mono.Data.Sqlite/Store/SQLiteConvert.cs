@@ -71,24 +71,10 @@ namespace Mono.Data.Sqlite
     /// </summary>
     /// <param name="sourceText">The string to convert to UTF-8</param>
     /// <returns>A byte array containing the converted string plus an extra 0 terminating byte at the end of the array.</returns>
-#if SILVERLIGHT
     public static string ToUTF8(string sourceText)
     {
       return sourceText;
     }
-#else
-    public static byte[] ToUTF8(string sourceText)
-    {
-      Byte[] byteArray;
-      int nlen = _utf8.GetByteCount(sourceText) + 1;
-
-      byteArray = new byte[nlen];
-      nlen = _utf8.GetBytes(sourceText, 0, sourceText.Length, byteArray, 0);
-      byteArray[nlen] = 0;
-
-      return byteArray;
-    }
-#endif
 
     /// <summary>
     /// Convert a DateTime to a UTF-8 encoded, zero-terminated byte array.
@@ -99,17 +85,10 @@ namespace Mono.Data.Sqlite
     /// </remarks>
     /// <param name="dateTimeValue">The DateTime to convert.</param>
     /// <returns>The UTF-8 encoded string, including a 0 terminating byte at the end of the array.</returns>
-#if SILVERLIGHT
     public string ToUTF8(DateTime dateTimeValue)
     {
       return ToUTF8(ToString(dateTimeValue));
     }
-#else
-    public byte[] ToUTF8(DateTime dateTimeValue)
-    {
-      return ToUTF8(ToString(dateTimeValue));
-    }
-#endif
 
     /// <summary>
     /// Converts a UTF-8 encoded IntPtr of the specified length into a .NET string
@@ -117,17 +96,10 @@ namespace Mono.Data.Sqlite
     /// <param name="nativestring">The pointer to the memory where the UTF-8 string is encoded</param>
     /// <param name="nativestringlen">The number of bytes to decode</param>
     /// <returns>A string containing the translated character(s)</returns>
-#if SILVERLIGHT
     public virtual string ToString(string nativestring, int nativestringlen)
     {
         return UTF8ToString(nativestring, nativestringlen);
     }
-#else
-    public virtual string ToString(IntPtr nativestring, int nativestringlen)
-    {
-      return UTF8ToString(nativestring, nativestringlen);
-    }
-#endif
 
     /// <summary>
     /// Converts a UTF-8 encoded IntPtr of the specified length into a .NET string
@@ -135,13 +107,11 @@ namespace Mono.Data.Sqlite
     /// <param name="nativestring">The pointer to the memory where the UTF-8 string is encoded</param>
     /// <param name="nativestringlen">The number of bytes to decode</param>
     /// <returns>A string containing the translated character(s)</returns>
-#if SILVERLIGHT
     public static string UTF8ToString(string nativestring, int nativestringlen)
     {
         if (nativestringlen == -1) return nativestring;
         else return nativestring.Substring(0, nativestringlen);
     }
-#else
     public static string UTF8ToString(IntPtr nativestring, int nativestringlen)
     {
       if (nativestringlen == 0 || nativestring == IntPtr.Zero) return "";
@@ -159,7 +129,6 @@ namespace Mono.Data.Sqlite
 
       return _utf8.GetString(byteArray, 0, nativestringlen);
     }
-#endif
 
 
     #endregion
@@ -287,17 +256,10 @@ namespace Mono.Data.Sqlite
     /// <param name="ptr">A pointer to the UTF-8 encoded string</param>
     /// <param name="len">The length in bytes of the string</param>
     /// <returns>The parsed DateTime value</returns>
-#if SILVERLIGHT
     internal DateTime ToDateTime(string ptr, int len)
     {
       return ToDateTime(ToString(ptr, len));
     }
-#else
-    internal DateTime ToDateTime(IntPtr ptr, int len)
-    {
-      return ToDateTime(ToString(ptr, len));
-    }
-#endif
 
     #endregion
 

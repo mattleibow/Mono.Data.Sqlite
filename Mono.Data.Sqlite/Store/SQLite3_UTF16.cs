@@ -8,6 +8,7 @@
 namespace Mono.Data.Sqlite
 {
     using System;
+    using MonoDataSqliteWrapper;
 #if SILVERLIGHT
     using SqliteConnectionHandle = Community.CsharpSqlite.Sqlite3.sqlite3;
     using UnsafeNativeMethods = Community.CsharpSqlite.Sqlite3;
@@ -25,10 +26,10 @@ namespace Mono.Data.Sqlite
     using SqliteContext = Community.CsharpSqlite.Sqlite3.sqlite3_context;
 #else
     using System.Runtime.InteropServices;
-    using Sqlite3Mem = System.Int64;
-    using Sqlite3MemPtr = System.IntPtr;
-    using Sqlite3Database = System.IntPtr;
-    using SqliteContext = System.IntPtr;
+    using Sqlite3Mem = MonoDataSqliteWrapper.SqliteValueHandle;
+    using Sqlite3MemPtr = MonoDataSqliteWrapper.SqliteValueHandle;
+    using Sqlite3Database = MonoDataSqliteWrapper.SqliteConnectionHandle;
+    using SqliteContext = MonoDataSqliteWrapper.SqliteContextHandle;
     using SQLiteStepCallback = SQLiteCallback;
 #endif
 
@@ -47,21 +48,9 @@ namespace Mono.Data.Sqlite
         /// </summary>
         /// <param name="b">A pointer to a UTF-16 string</param>
         /// <param name="nbytelen">The length (IN BYTES) of the string</param>
-#if SILVERLIGHT
-        public override string ToString(string b, int nbytelen)
+        public static string UTF16ToString(string p, int nbytelen)
         {
-            return UTF16ToString(b, nbytelen);
-        }
-
-        /// <returns>A .NET string</returns>
-        public static string UTF16ToString(string b, int nbytelen)
-        {
-            return b;
-        }
-#else
-        public override string ToString(IntPtr b, int nbytelen)
-        {
-            return UTF16ToString(b, nbytelen);
+            return p;
         }
 
         public static string UTF16ToString(IntPtr b, int nbytelen)
@@ -72,7 +61,6 @@ namespace Mono.Data.Sqlite
                        ? Marshal.PtrToStringUni(b)
                        : Marshal.PtrToStringUni(b, nbytelen/2);
         }
-#endif
 
         internal override void Open(string strFilename, SQLiteOpenFlagsEnum flags, int maxPoolSize, bool usePool)
         {
@@ -117,7 +105,7 @@ namespace Mono.Data.Sqlite
 #if SILVERLIGHT
             int n = UnsafeNativeMethods.sqlite3_bind_text(stmt._sqlite_stmt, index, value, value.Length*2, NullPointer);
 #else
-            int n = UnsafeNativeMethods.sqlite3_bind_text16(stmt._sqlite_stmt, index, value, value.Length*2, NullPointer);
+            int n = UnsafeNativeMethods.sqlite3_bind_text16(stmt._sqlite_stmt, index, value, value.Length*2);
 #endif
             if (n > 0) throw new SqliteException(n, SQLiteLastError());
         }
@@ -195,7 +183,7 @@ namespace Mono.Data.Sqlite
 #if SILVERLIGHT
             UnsafeNativeMethods.sqlite3_result_text(context, value, value.Length*2, NullPointer);
 #else
-            UnsafeNativeMethods.sqlite3_result_text16(context, value, value.Length*2, (IntPtr) (-1));
+            UnsafeNativeMethods.sqlite3_result_text16(context, value, value.Length*2);
 #endif
         }
     }
