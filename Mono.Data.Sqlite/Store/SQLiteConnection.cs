@@ -13,14 +13,14 @@ namespace Mono.Data.Sqlite
     using System.Collections.Generic;
     using System.Globalization;
     using System.ComponentModel;
-    using MonoDataSqliteWrapper;
 
 #if SILVERLIGHT
-    using SQLiteUpdateCallback = Community.CsharpSqlite.Sqlite3.dxUpdateCallback;
-    using SQLiteCommitCallback = Community.CsharpSqlite.Sqlite3.dxCommitCallback;
-    using SQLiteRollbackCallback = Community.CsharpSqlite.Sqlite3.dxRollbackCallback;
+    using SqliteUpdateHookDelegate = Community.CsharpSqlite.Sqlite3.dxUpdateCallback;
+    using SqliteCommitHookDelegate = Community.CsharpSqlite.Sqlite3.dxCommitCallback;
+    using SqliteRollbackHookDelegate = Community.CsharpSqlite.Sqlite3.dxRollbackCallback;
     using UnsafeNativeMethods = Community.CsharpSqlite.Sqlite3;
 #else
+    using MonoDataSqliteWrapper;
     using System.Runtime.InteropServices;
 #endif
 

@@ -12,13 +12,14 @@ namespace Mono.Data.Sqlite
   using System.Collections.Generic;
   using System.Globalization;
 
-  using MonoDataSqliteWrapper;
 
 #if SILVERLIGHT
     using SqliteStatementHandle = Community.CsharpSqlite.Sqlite3.Vdbe;
+#else
+    using MonoDataSqliteWrapper;
 #endif
 
-  /// <summary>
+    /// <summary>
   /// Represents a single SQL statement in SQLite.
   /// </summary>
   internal sealed class SqliteStatement : IDisposable

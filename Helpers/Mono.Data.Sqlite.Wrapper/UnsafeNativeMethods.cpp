@@ -67,6 +67,12 @@ String^ convert_to_string(char const* str)
 	return ref new String(buffer.data());
 }
 
+String^ convert_to_string(unsigned char const* str)
+{
+	char const* newStr = reinterpret_cast<char const*>(str);
+	return convert_to_string(newStr);
+}
+
 // Convert wchar_t* to a char*
 char* to_cstr(wchar_t *orig)
 {
@@ -234,7 +240,7 @@ int UnsafeNativeMethods::sqlite3_bind_double(SqliteStatementHandle^ statement, i
 	return ::sqlite3_bind_double(statement ? statement->Handle : nullptr, index, value);
 }
 
-int UnsafeNativeMethods::sqlite3_bind_text(SqliteStatementHandle^ statement, int index, String^ value, int length)
+int UnsafeNativeMethods::sqlite3_bind_text(SqliteStatementHandle^ statement, int index, String^ value, int length, Object^ dummy)
 {
 	return ::sqlite3_bind_text(
 		statement ? statement->Handle : nullptr, 
@@ -255,7 +261,7 @@ int UnsafeNativeMethods::sqlite3_bind_text16(SqliteStatementHandle^ statement, i
 		SQLITE_TRANSIENT);
 }
 
-int UnsafeNativeMethods::sqlite3_bind_blob(SqliteStatementHandle^ statement, int index, const Array<uint8>^ value, int length)
+int UnsafeNativeMethods::sqlite3_bind_blob(SqliteStatementHandle^ statement, int index, const Array<uint8>^ value, int length, Object^ dummy)
 {
 	// Use transient here so that the data gets copied by sqlite
 	return ::sqlite3_bind_blob(
@@ -301,6 +307,11 @@ String^ UnsafeNativeMethods::sqlite3_column_text16(SqliteStatementHandle^ statem
 	return ref new String(reinterpret_cast<wchar_t const*>(::sqlite3_column_text16(statement ? statement->Handle : nullptr, index)));
 }
 
+String^ UnsafeNativeMethods::sqlite3_column_text(SqliteStatementHandle^ statement, int index)
+{
+	return convert_to_string(::sqlite3_column_text(statement ? statement->Handle : nullptr, index));
+}
+
 Array<uint8>^ UnsafeNativeMethods::sqlite3_column_blob(SqliteStatementHandle^ statement, int index)
 {
 	int count = UnsafeNativeMethods::sqlite3_column_bytes(statement, index);
@@ -339,6 +350,12 @@ Platform::String^ UnsafeNativeMethods::sqlite3_value_text16(SqliteValueHandle^ v
 {
 	const void* result = ::sqlite3_value_text16(value ? value->Handle : nullptr);
 	return ref new String(reinterpret_cast<wchar_t const*>(result));
+}
+
+Platform::String^ UnsafeNativeMethods::sqlite3_value_text(SqliteValueHandle^ value)
+{
+	const unsigned char* result = ::sqlite3_value_text(value ? value->Handle : nullptr);
+	return convert_to_string(result);
 }
 
 Platform::String^ UnsafeNativeMethods::sqlite3_libversion()
@@ -384,6 +401,23 @@ void UnsafeNativeMethods::sqlite3_result_text16(SqliteContextHandle^ statement, 
 	::sqlite3_result_text16(
 		statement ? statement->Handle : nullptr, 
 		value->IsEmpty() ? L"" : value->Data(),
+		index,
+		SQLITE_TRANSIENT);
+}
+
+void UnsafeNativeMethods::sqlite3_result_error(SqliteContextHandle^ statement, String^ value, int index)
+{
+	::sqlite3_result_error(
+		statement ? statement->Handle : nullptr, 
+		to_cstr(value->IsEmpty() ? L"" : value->Data()),
+		index);
+}
+
+void UnsafeNativeMethods::sqlite3_result_text(SqliteContextHandle^ statement, String^ value, int index, Object^ dummy)
+{
+	::sqlite3_result_text(
+		statement ? statement->Handle : nullptr, 
+		to_cstr(value->IsEmpty() ? L"" : value->Data()),
 		index,
 		SQLITE_TRANSIENT);
 }
@@ -517,7 +551,7 @@ int UnsafeNativeMethods::sqlite3_rekey(SqliteConnectionHandle^ db, Platform::Str
 //		length);
 }
 
-void UnsafeNativeMethods::sqlite3_result_blob(SqliteContextHandle^ context, const Array<uint8>^ value, int length)
+void UnsafeNativeMethods::sqlite3_result_blob(SqliteContextHandle^ context, const Array<uint8>^ value, int length, Object^ dummy)
 {
 	::sqlite3_result_blob(
 		context ? context->Handle : nullptr, 

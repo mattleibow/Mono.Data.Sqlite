@@ -8,7 +8,6 @@
 namespace Mono.Data.Sqlite
 {
     using System;
-    using MonoDataSqliteWrapper;
 #if SILVERLIGHT
     using SqliteConnectionHandle = Community.CsharpSqlite.Sqlite3.sqlite3;
     using UnsafeNativeMethods = Community.CsharpSqlite.Sqlite3;
@@ -16,15 +15,16 @@ namespace Mono.Data.Sqlite
     using Sqlite3Mem = Community.CsharpSqlite.Sqlite3.Mem;
     using Sqlite3MemPtr = Community.CsharpSqlite.Sqlite3.Mem;
     using SqliteStatementHandle = Community.CsharpSqlite.Sqlite3.Vdbe;
-    using SQLiteUpdateCallback = Community.CsharpSqlite.Sqlite3.dxUpdateCallback;
-    using SQLiteCommitCallback = Community.CsharpSqlite.Sqlite3.dxCommitCallback;
-    using SQLiteRollbackCallback = Community.CsharpSqlite.Sqlite3.dxRollbackCallback;
+    using SqliteUpdateHookDelegate = Community.CsharpSqlite.Sqlite3.dxUpdateCallback;
+    using SqliteCommitHookDelegate = Community.CsharpSqlite.Sqlite3.dxCommitCallback;
+    using SqliteRollbackHookDelegate = Community.CsharpSqlite.Sqlite3.dxRollbackCallback;
     using SQLiteFinalCallback = Community.CsharpSqlite.Sqlite3.dxFinal;
     using SQLiteCallback = Community.CsharpSqlite.Sqlite3.dxFunc;
     using SQLiteStepCallback = Community.CsharpSqlite.Sqlite3.dxStep;
     using SQLiteCollation = Community.CsharpSqlite.Sqlite3.dxCompare;
     using SqliteContext = Community.CsharpSqlite.Sqlite3.sqlite3_context;
 #else
+    using MonoDataSqliteWrapper;
     using Sqlite3Mem = MonoDataSqliteWrapper.SqliteValueHandle;
     using Sqlite3MemPtr = MonoDataSqliteWrapper.SqliteValueHandle;
     using Sqlite3Database = MonoDataSqliteWrapper.SqliteConnectionHandle;

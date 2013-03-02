@@ -12,7 +12,6 @@ namespace Mono.Data.Sqlite
   using System.Collections.Generic;
   using System.Runtime.InteropServices;
   using System.Globalization;
-    using MonoDataSqliteWrapper;
 #if SILVERLIGHT
     using Sqlite3Mem = Community.CsharpSqlite.Sqlite3.Mem;
     using Sqlite3MemPtr = Community.CsharpSqlite.Sqlite3.Mem;
@@ -29,13 +28,14 @@ namespace Mono.Data.Sqlite
 
     using SqliteContext = Community.CsharpSqlite.Sqlite3.sqlite3_context;
 #else
+    using MonoDataSqliteWrapper;
     using Sqlite3Mem = MonoDataSqliteWrapper.SqliteValueHandle;
     using Sqlite3MemPtr = MonoDataSqliteWrapper.SqliteValueHandle;
     using SqliteContext = MonoDataSqliteWrapper.SqliteContextHandle;
     using SQLiteStepCallback = SQLiteCallback;
 #endif
 
-  /// <summary>
+    /// <summary>
   /// This abstract class is designed to handle user-defined functions easily.  An instance of the derived class is made for each
   /// connection to the database.
   /// </summary>

@@ -130,9 +130,9 @@ namespace MonoDataSqliteWrapper
 					static int sqlite3_bind_int(SqliteStatementHandle^ statement, int index, int value);
 					static int sqlite3_bind_int64(SqliteStatementHandle^ statement, int index, int64 value);
 					static int sqlite3_bind_double(SqliteStatementHandle^ statement, int index, double value);
-					static int sqlite3_bind_text(SqliteStatementHandle^ statement, int index, Platform::String^ value, int length);
+					static int sqlite3_bind_text(SqliteStatementHandle^ statement, int index, Platform::String^ value, int length, Platform::Object^ dummy);
 					static int sqlite3_bind_text16(SqliteStatementHandle^ statement, int index, Platform::String^ value, int length);
-					static int sqlite3_bind_blob(SqliteStatementHandle^ statement, int index, const Platform::Array<uint8>^ value, int length);	
+					static int sqlite3_bind_blob(SqliteStatementHandle^ statement, int index, const Platform::Array<uint8>^ value, int length, Platform::Object^ dummy);	
 					static int sqlite3_column_count(SqliteStatementHandle^rstatement);
 					static Platform::String^ sqlite3_column_name(SqliteStatementHandle^ statement, int index);
 					static int sqlite3_column_type(SqliteStatementHandle^ statement, int index);
@@ -140,11 +140,13 @@ namespace MonoDataSqliteWrapper
 					static int64 sqlite3_column_int64(SqliteStatementHandle^ statement, int index);
 					static double sqlite3_column_double(SqliteStatementHandle^ statement, int index);
 					static Platform::String^ sqlite3_column_text16(SqliteStatementHandle^ statement, int index);
+					static Platform::String^ sqlite3_column_text(SqliteStatementHandle^ statement, int index);
 					static Platform::Array<uint8>^ sqlite3_column_blob(SqliteStatementHandle^, int index);
 					static int sqlite3_column_bytes(SqliteStatementHandle^ statement, int index);
 					static void sqlite3_interrupt(SqliteConnectionHandle^ db);
 					static SqliteStatementHandle^ sqlite3_next_stmt(SqliteConnectionHandle^ db, SqliteStatementHandle^ statement);
 					static Platform::String^ sqlite3_value_text16(SqliteValueHandle^ value);
+					static Platform::String^ sqlite3_value_text(SqliteValueHandle^ value);
 					static Platform::String^ sqlite3_libversion();
 					static Platform::String^ sqlite3_column_database_name16(SqliteStatementHandle^ statement, int index);
 					static Platform::String^ sqlite3_column_origin_name16(SqliteStatementHandle^ statement, int index);
@@ -152,6 +154,8 @@ namespace MonoDataSqliteWrapper
 					static Platform::String^ sqlite3_column_table_name16(SqliteStatementHandle^ statement, int index);
 					static void sqlite3_result_error16(SqliteContextHandle^ statement, Platform::String^ value, int index);
 					static void sqlite3_result_text16(SqliteContextHandle^ statement, Platform::String^ value, int index);
+					static void sqlite3_result_error(SqliteContextHandle^ statement, Platform::String^ value, int index);
+					static void sqlite3_result_text(SqliteContextHandle^ statement, Platform::String^ value, int index, Platform::Object^ dummy);
 					static int sqlite3_exec(SqliteConnectionHandle^ db, Platform::String^ query, Platform::String^* errmsg);
 					static int sqlite3_bind_parameter_count(SqliteStatementHandle^ statement);
 					static Platform::String^ sqlite3_bind_parameter_name(SqliteStatementHandle^ statement, int index);
@@ -169,7 +173,7 @@ namespace MonoDataSqliteWrapper
 					static void sqlite3_result_int(SqliteContextHandle^ statement, int value);
 					static void sqlite3_result_int64(SqliteContextHandle^ statement, int64 value);
 					static void sqlite3_result_null(SqliteContextHandle^ statement);
-					static void sqlite3_result_blob(SqliteContextHandle^ context, const Platform::Array<uint8>^ value, int length);
+					static void sqlite3_result_blob(SqliteContextHandle^ context, const Platform::Array<uint8>^ value, int length, Platform::Object^ dummy);
 					static int sqlite3_table_column_metadata(SqliteConnectionHandle^ db,
 						Platform::String^ dbName, Platform::String^ tableName, Platform::String^ columnName, 
 						Platform::String^* dataType, Platform::String^* collSeq, 

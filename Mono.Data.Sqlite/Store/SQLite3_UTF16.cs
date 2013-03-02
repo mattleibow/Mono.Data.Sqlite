@@ -8,7 +8,6 @@
 namespace Mono.Data.Sqlite
 {
     using System;
-    using MonoDataSqliteWrapper;
 #if SILVERLIGHT
     using SqliteConnectionHandle = Community.CsharpSqlite.Sqlite3.sqlite3;
     using UnsafeNativeMethods = Community.CsharpSqlite.Sqlite3;
@@ -25,6 +24,7 @@ namespace Mono.Data.Sqlite
     using SQLiteCollation = Community.CsharpSqlite.Sqlite3.dxCompare;
     using SqliteContext = Community.CsharpSqlite.Sqlite3.sqlite3_context;
 #else
+    using MonoDataSqliteWrapper;
     using System.Runtime.InteropServices;
     using Sqlite3Mem = MonoDataSqliteWrapper.SqliteValueHandle;
     using Sqlite3MemPtr = MonoDataSqliteWrapper.SqliteValueHandle;
@@ -51,15 +51,6 @@ namespace Mono.Data.Sqlite
         public static string UTF16ToString(string p, int nbytelen)
         {
             return p;
-        }
-
-        public static string UTF16ToString(IntPtr b, int nbytelen)
-        {
-            if (nbytelen == 0 || b == IntPtr.Zero) return "";
-
-            return nbytelen == -1
-                       ? Marshal.PtrToStringUni(b)
-                       : Marshal.PtrToStringUni(b, nbytelen/2);
         }
 
         internal override void Open(string strFilename, SQLiteOpenFlagsEnum flags, int maxPoolSize, bool usePool)
