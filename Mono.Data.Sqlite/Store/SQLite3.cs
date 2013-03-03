@@ -4,7 +4,7 @@
  * 
  * Released to the public domain, use at your own risk!
  ********************************************************/
-
+ 
 namespace Mono.Data.Sqlite
 {
     using System;
