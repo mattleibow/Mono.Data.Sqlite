@@ -21,8 +21,8 @@ namespace MonoTests.Mono.Data.Sqlite
     public class SqliteParameterUnitTests
     {
         readonly static string dbRootPath = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
-        readonly static string _uri = Path.Combine(dbRootPath, "test.db");
-        readonly static string _connectionString = "URI=file://" + _uri + ", version=3";
+        readonly static string _uri = Path.Combine(dbRootPath, "test123.db");
+        readonly static string _connectionString = "URI=file://" + _uri + ", version=3,UseUTF16Encoding=True";
         static SqliteConnection _conn = new SqliteConnection(_connectionString);
 
         public SqliteParameterUnitTests()
@@ -52,12 +52,12 @@ namespace MonoTests.Mono.Data.Sqlite
 
             Random random = new Random();
             StringBuilder builder = new StringBuilder();
-            for (int k = 0; k < random.Next(0, 100); k++)
+            for (int k = 0; k < random.Next(7, 100); k++)
             {
                 builder.Append((char)random.Next(65536));
             }
 
-            SqliteCommand createCommand = new SqliteCommand("CREATE TABLE t1(t  TEXT,  f FLOAT, i INTEGER, b TEXT);", _conn);
+            SqliteCommand createCommand = new SqliteCommand("CREATE TABLE t1(t  TEXT,  f FLOAT, i INTEGER, b BLOB);", _conn);
             SqliteCommand insertCmd = new SqliteCommand("DELETE FROM t1; INSERT INTO t1  (t, f, i, b ) VALUES(:textP,:floatP,:integerP,:blobP)", _conn);
 
             insertCmd.Parameters.Add(textP);
@@ -91,14 +91,10 @@ namespace MonoTests.Mono.Data.Sqlite
                     Assert.AreEqual(reader["f"], doubleValue);
                     Assert.AreEqual(reader["i"], intValue);
 
-                    object compareValue;
-#if NET_2_0
-					if (blobP.Value is byte[])
-                        compareValue = System.Text.Encoding.UTF8.GetString(blobValue, 0, (blobValue.Length));
-					else
-#endif
-                        compareValue = blobValue;
-                    Assert.AreEqual(reader["b"], compareValue);
+                    var compareValue = System.Text.Encoding.UTF8.GetString(blobValue, 0, blobValue.Length);
+                    var loadedBytes = ((byte[])reader["b"]);
+                    var fromReader = System.Text.Encoding.UTF8.GetString(loadedBytes, 0, loadedBytes.Length);
+                    Assert.AreEqual(fromReader, compareValue);
                     Assert.AreEqual(reader.Read(), false);
                 }
             }

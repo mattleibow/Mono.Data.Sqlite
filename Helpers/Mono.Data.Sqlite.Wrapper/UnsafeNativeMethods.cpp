@@ -101,10 +101,8 @@ int UnsafeNativeMethods::sqlite3_open(String^ filename, SqliteConnectionHandle^*
 
 int UnsafeNativeMethods::sqlite3_open16(String^ filename, SqliteConnectionHandle^* db)
 {
-	auto filename_buffer = convert_to_utf8_buffer(filename);
-
 	sqlite3* actual_db = nullptr;
-	int result = ::sqlite3_open16(filename_buffer.data(), &actual_db);
+	int result = ::sqlite3_open16(filename->Data(), &actual_db);
 	if (db)
 	{
 		// If they didn't give us a pointer, the caller has leaked
