@@ -11,8 +11,6 @@ namespace Mono.Data.Sqlite
 #if SILVERLIGHT
     using SqliteConnectionHandle = Community.CsharpSqlite.Sqlite3.sqlite3;
     using UnsafeNativeMethods = Community.CsharpSqlite.Sqlite3;
-    using SqliteConnectionHandle = Community.CsharpSqlite.Sqlite3.sqlite3;
-    using SqliteValueHandle = Community.CsharpSqlite.Sqlite3.Mem;
     using SqliteValueHandle = Community.CsharpSqlite.Sqlite3.Mem;
     using SqliteStatementHandle = Community.CsharpSqlite.Sqlite3.Vdbe;
     using SQLiteUpdateCallback = Community.CsharpSqlite.Sqlite3.dxUpdateCallback;

@@ -11,8 +11,6 @@ namespace Mono.Data.Sqlite
 #if SILVERLIGHT
     using SqliteConnectionHandle = Community.CsharpSqlite.Sqlite3.sqlite3;
     using UnsafeNativeMethods = Community.CsharpSqlite.Sqlite3;
-    using SqliteConnectionHandle = Community.CsharpSqlite.Sqlite3.sqlite3;
-    using SqliteValueHandle = Community.CsharpSqlite.Sqlite3.Mem;
     using SqliteValueHandle = Community.CsharpSqlite.Sqlite3.Mem;
     using SqliteStatementHandle = Community.CsharpSqlite.Sqlite3.Vdbe;
     using SqliteUpdateHookDelegate = Community.CsharpSqlite.Sqlite3.dxUpdateCallback;
@@ -20,7 +18,6 @@ namespace Mono.Data.Sqlite
     using SqliteRollbackHookDelegate = Community.CsharpSqlite.Sqlite3.dxRollbackCallback;
     using SQLiteFinalCallback = Community.CsharpSqlite.Sqlite3.dxFinal;
     using SQLiteCallback = Community.CsharpSqlite.Sqlite3.dxFunc;
-    using SQLiteCallback = Community.CsharpSqlite.Sqlite3.dxStep;
     using SQLiteCollation = Community.CsharpSqlite.Sqlite3.dxCompare;
     using SqliteContextHandle = Community.CsharpSqlite.Sqlite3.sqlite3_context;
 #else

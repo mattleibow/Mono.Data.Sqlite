@@ -13,14 +13,12 @@ namespace Mono.Data.Sqlite
     using SqliteConnectionHandle = Community.CsharpSqlite.Sqlite3.sqlite3;
     using UnsafeNativeMethods = Community.CsharpSqlite.Sqlite3;
     using SqliteValueHandle = Community.CsharpSqlite.Sqlite3.Mem;
-    using SqliteValueHandle = Community.CsharpSqlite.Sqlite3.Mem;
     using SqliteStatementHandle = Community.CsharpSqlite.Sqlite3.Vdbe;
     using SqliteUpdateHookDelegate = Community.CsharpSqlite.Sqlite3.dxUpdateCallback;
     using SqliteCommitHookDelegate = Community.CsharpSqlite.Sqlite3.dxCommitCallback;
     using SqliteRollbackHookDelegate = Community.CsharpSqlite.Sqlite3.dxRollbackCallback;
     using SQLiteFinalCallback = Community.CsharpSqlite.Sqlite3.dxFinal;
     using SQLiteCallback = Community.CsharpSqlite.Sqlite3.dxFunc;
-    using SQLiteCallback = Community.CsharpSqlite.Sqlite3.dxStep;
     using SQLiteCollation = Community.CsharpSqlite.Sqlite3.dxCompare;
     using SqliteContextHandle = Community.CsharpSqlite.Sqlite3.sqlite3_context;
 #else
@@ -33,11 +31,6 @@ namespace Mono.Data.Sqlite
     /// </summary>
     internal class SQLite3 : SQLiteBase
     {
-#if SILVERLIGHT
-        protected const UnsafeNativeMethods.dxDel NullPointer = null;
-        protected const string NullString = null;
-#endif
-
         /// <summary>
         /// The opaque pointer returned to us by the sqlite provider
         /// </summary>
