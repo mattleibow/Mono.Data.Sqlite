@@ -11,25 +11,20 @@ namespace Mono.Data.Sqlite
 #if SILVERLIGHT
     using SqliteConnectionHandle = Community.CsharpSqlite.Sqlite3.sqlite3;
     using UnsafeNativeMethods = Community.CsharpSqlite.Sqlite3;
-    using Sqlite3Database = Community.CsharpSqlite.Sqlite3.sqlite3;
-    using Sqlite3Mem = Community.CsharpSqlite.Sqlite3.Mem;
-    using Sqlite3MemPtr = Community.CsharpSqlite.Sqlite3.Mem;
+    using SqliteConnectionHandle = Community.CsharpSqlite.Sqlite3.sqlite3;
+    using SqliteValueHandle = Community.CsharpSqlite.Sqlite3.Mem;
+    using SqliteValueHandle = Community.CsharpSqlite.Sqlite3.Mem;
     using SqliteStatementHandle = Community.CsharpSqlite.Sqlite3.Vdbe;
     using SqliteUpdateHookDelegate = Community.CsharpSqlite.Sqlite3.dxUpdateCallback;
     using SqliteCommitHookDelegate = Community.CsharpSqlite.Sqlite3.dxCommitCallback;
     using SqliteRollbackHookDelegate = Community.CsharpSqlite.Sqlite3.dxRollbackCallback;
     using SQLiteFinalCallback = Community.CsharpSqlite.Sqlite3.dxFinal;
     using SQLiteCallback = Community.CsharpSqlite.Sqlite3.dxFunc;
-    using SQLiteStepCallback = Community.CsharpSqlite.Sqlite3.dxStep;
+    using SQLiteCallback = Community.CsharpSqlite.Sqlite3.dxStep;
     using SQLiteCollation = Community.CsharpSqlite.Sqlite3.dxCompare;
-    using SqliteContext = Community.CsharpSqlite.Sqlite3.sqlite3_context;
+    using SqliteContextHandle = Community.CsharpSqlite.Sqlite3.sqlite3_context;
 #else
     using MonoDataSqliteWrapper;
-    using Sqlite3Mem = MonoDataSqliteWrapper.SqliteValueHandle;
-    using Sqlite3MemPtr = MonoDataSqliteWrapper.SqliteValueHandle;
-    using Sqlite3Database = MonoDataSqliteWrapper.SqliteConnectionHandle;
-    using SqliteContext = MonoDataSqliteWrapper.SqliteContextHandle;
-    using SQLiteStepCallback = SQLiteCallback;
 #endif
 
     /// <summary>
@@ -171,34 +166,34 @@ namespace Mono.Data.Sqlite
         internal abstract void CreateCollation(string strCollation, SQLiteCollation func, SQLiteCollation func16);
 
         internal abstract void CreateFunction(string strFunction, int nArgs, bool needCollSeq, SQLiteCallback func,
-                                              SQLiteStepCallback funcstep, SQLiteFinalCallback funcfinal);
+                                              SQLiteCallback funcstep, SQLiteFinalCallback funcfinal);
 
-        internal abstract CollationSequence GetCollationSequence(SqliteFunction func, SqliteContext context);
+        internal abstract CollationSequence GetCollationSequence(SqliteFunction func, SqliteContextHandle context);
 
-        internal abstract int ContextCollateCompare(CollationEncodingEnum enc, SqliteContext context, string s1,
+        internal abstract int ContextCollateCompare(CollationEncodingEnum enc, SqliteContextHandle context, string s1,
                                                     string s2);
 
-        internal abstract int ContextCollateCompare(CollationEncodingEnum enc, SqliteContext context, char[] c1,
+        internal abstract int ContextCollateCompare(CollationEncodingEnum enc, SqliteContextHandle context, char[] c1,
                                                     char[] c2);
 
-        internal abstract Sqlite3MemPtr AggregateContext(SqliteContext context);
+        internal abstract SqliteValueHandle AggregateContext(SqliteContextHandle context);
 
-        internal abstract long GetParamValueBytes(Sqlite3MemPtr ptr, int nDataOffset, byte[] bDest, int nStart,
+        internal abstract long GetParamValueBytes(SqliteValueHandle ptr, int nDataOffset, byte[] bDest, int nStart,
                                                   int nLength);
 
-        internal abstract double GetParamValueDouble(Sqlite3MemPtr ptr);
-        internal abstract int GetParamValueInt32(Sqlite3MemPtr ptr);
-        internal abstract Int64 GetParamValueInt64(Sqlite3MemPtr ptr);
-        internal abstract string GetParamValueText(Sqlite3MemPtr ptr);
-        internal abstract TypeAffinity GetParamValueType(Sqlite3MemPtr ptr);
+        internal abstract double GetParamValueDouble(SqliteValueHandle ptr);
+        internal abstract int GetParamValueInt32(SqliteValueHandle ptr);
+        internal abstract Int64 GetParamValueInt64(SqliteValueHandle ptr);
+        internal abstract string GetParamValueText(SqliteValueHandle ptr);
+        internal abstract TypeAffinity GetParamValueType(SqliteValueHandle ptr);
 
-        internal abstract void ReturnBlob(SqliteContext context, byte[] value);
-        internal abstract void ReturnDouble(SqliteContext context, double value);
-        internal abstract void ReturnError(SqliteContext context, string value);
-        internal abstract void ReturnInt32(SqliteContext context, Int32 value);
-        internal abstract void ReturnInt64(SqliteContext context, Int64 value);
-        internal abstract void ReturnNull(SqliteContext context);
-        internal abstract void ReturnText(SqliteContext context, string value);
+        internal abstract void ReturnBlob(SqliteContextHandle context, byte[] value);
+        internal abstract void ReturnDouble(SqliteContextHandle context, double value);
+        internal abstract void ReturnError(SqliteContextHandle context, string value);
+        internal abstract void ReturnInt32(SqliteContextHandle context, Int32 value);
+        internal abstract void ReturnInt64(SqliteContextHandle context, Int64 value);
+        internal abstract void ReturnNull(SqliteContextHandle context);
+        internal abstract void ReturnText(SqliteContextHandle context, string value);
 
         internal abstract void SetPassword(string passwordBytes);
         internal abstract void ChangePassword(string newPasswordBytes);
@@ -325,7 +320,7 @@ namespace Mono.Data.Sqlite
             }
         }
 
-        internal static void Dispose(this Sqlite3Database connection)
+        internal static void Dispose(this SqliteConnectionHandle connection)
         {
             try
             {
@@ -336,7 +331,7 @@ namespace Mono.Data.Sqlite
             }
         }
 
-        internal static void Close(this Sqlite3Database connection)
+        internal static void Close(this SqliteConnectionHandle connection)
         {
             connection.Dispose();
         }

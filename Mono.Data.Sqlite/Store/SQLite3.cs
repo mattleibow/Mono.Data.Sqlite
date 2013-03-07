@@ -12,26 +12,20 @@ namespace Mono.Data.Sqlite
 #if SILVERLIGHT
     using SqliteConnectionHandle = Community.CsharpSqlite.Sqlite3.sqlite3;
     using UnsafeNativeMethods = Community.CsharpSqlite.Sqlite3;
-    using Sqlite3Database = Community.CsharpSqlite.Sqlite3.sqlite3;
-    using Sqlite3Mem = Community.CsharpSqlite.Sqlite3.Mem;
-    using Sqlite3MemPtr = Community.CsharpSqlite.Sqlite3.Mem;
+    using SqliteValueHandle = Community.CsharpSqlite.Sqlite3.Mem;
+    using SqliteValueHandle = Community.CsharpSqlite.Sqlite3.Mem;
     using SqliteStatementHandle = Community.CsharpSqlite.Sqlite3.Vdbe;
     using SqliteUpdateHookDelegate = Community.CsharpSqlite.Sqlite3.dxUpdateCallback;
     using SqliteCommitHookDelegate = Community.CsharpSqlite.Sqlite3.dxCommitCallback;
     using SqliteRollbackHookDelegate = Community.CsharpSqlite.Sqlite3.dxRollbackCallback;
     using SQLiteFinalCallback = Community.CsharpSqlite.Sqlite3.dxFinal;
     using SQLiteCallback = Community.CsharpSqlite.Sqlite3.dxFunc;
-    using SQLiteStepCallback = Community.CsharpSqlite.Sqlite3.dxStep;
+    using SQLiteCallback = Community.CsharpSqlite.Sqlite3.dxStep;
     using SQLiteCollation = Community.CsharpSqlite.Sqlite3.dxCompare;
-    using SqliteContext = Community.CsharpSqlite.Sqlite3.sqlite3_context;
+    using SqliteContextHandle = Community.CsharpSqlite.Sqlite3.sqlite3_context;
 #else
     using MonoDataSqliteWrapper;
     using System.Runtime.InteropServices;
-    using Sqlite3Mem = MonoDataSqliteWrapper.SqliteValueHandle;
-    using Sqlite3MemPtr = MonoDataSqliteWrapper.SqliteValueHandle;
-    using Sqlite3Database = MonoDataSqliteWrapper.SqliteConnectionHandle;
-    using SqliteContext = MonoDataSqliteWrapper.SqliteContextHandle;
-    using SQLiteStepCallback = SQLiteCallback;
 #endif
 
     /// <summary>
@@ -42,8 +36,6 @@ namespace Mono.Data.Sqlite
 #if SILVERLIGHT
         protected const UnsafeNativeMethods.dxDel NullPointer = null;
         protected const string NullString = null;
-#else
-        protected static readonly string NullString = "";
 #endif
 
         /// <summary>
@@ -131,26 +123,13 @@ namespace Mono.Data.Sqlite
 
             if (_sql == null)
             {
-                Sqlite3Database db;
-
                 if ((flags & SQLiteOpenFlagsEnum.Create) == 0 && FileExists(strFilename) == false)
                 {
                     throw new SqliteException((int)SQLiteErrorCode.CantOpen, strFilename);
                 }
 
-                // Compatibility with versions < 3.5.0
-                int n;
-
-                try
-                {
-                    n = UnsafeNativeMethods.sqlite3_open_v2(ToUTF8(strFilename), out db, (int) flags, NullString);
-                }
-                catch (Exception)
-                {
-                    System.Diagnostics.Debug.WriteLine("Your sqlite3 version is old - please upgrade to at least v3.5.0!");
-                    n = UnsafeNativeMethods.sqlite3_open(ToUTF8(strFilename), out db);
-                }
-
+                SqliteConnectionHandle db;
+                int n = UnsafeNativeMethods.sqlite3_open_v2(ToUTF8(strFilename), out db, (int)flags, string.Empty);
                 if (n > 0)
                 {
                     throw new SqliteException(n, null);
@@ -448,7 +427,7 @@ namespace Mono.Data.Sqlite
             var p = UnsafeNativeMethods.sqlite3_column_decltype(stmt._sqlite_stmt, index);
             nAffinity = ColumnAffinity(stmt, index);
 
-            if (p != NullString)
+            if (!string.IsNullOrEmpty(p))
             {
                 return UTF8ToString(p, -1);
             }
@@ -497,8 +476,8 @@ namespace Mono.Data.Sqlite
                                               out string collateSequence, out bool notNull, out bool primaryKey,
                                               out bool autoIncrement)
         {
-            var dataTypePtr = NullString;
-            var collSeqPtr = NullString;
+            string dataTypePtr = string.Empty;
+            string collSeqPtr = string.Empty;
             int nnotNull = 0;
             int nprimaryKey = 0;
             int nautoInc = 0;
@@ -620,7 +599,7 @@ namespace Mono.Data.Sqlite
         }
 
         internal override void CreateFunction(string strFunction, int nArgs, bool needCollSeq, SQLiteCallback func,
-                                              SQLiteStepCallback funcstep, SQLiteFinalCallback funcfinal)
+                                              SQLiteCallback funcstep, SQLiteFinalCallback funcfinal)
         {
             //int n = UnsafeNativeMethods.sqlite3_create_function(_sql, ToUTF8(strFunction), nArgs, 4, IntPtr.Zero, func,
             //                                                    funcstep, funcfinal);
@@ -654,24 +633,24 @@ namespace Mono.Data.Sqlite
             throw new NotImplementedException();
         }
 
-        internal override int ContextCollateCompare(CollationEncodingEnum enc, SqliteContext context, string s1,
+        internal override int ContextCollateCompare(CollationEncodingEnum enc, SqliteContextHandle context, string s1,
                                                     string s2)
         {
             throw new NotImplementedException();
         }
 
-        internal override int ContextCollateCompare(CollationEncodingEnum enc, SqliteContext context, char[] c1,
+        internal override int ContextCollateCompare(CollationEncodingEnum enc, SqliteContextHandle context, char[] c1,
                                                     char[] c2)
         {
             throw new NotImplementedException();
         }
 
-        internal override CollationSequence GetCollationSequence(SqliteFunction func, SqliteContext context)
+        internal override CollationSequence GetCollationSequence(SqliteFunction func, SqliteContextHandle context)
         {
             throw new NotImplementedException();
         }
 
-        internal override long GetParamValueBytes(Sqlite3MemPtr p, int nDataOffset, byte[] bDest, int nStart,
+        internal override long GetParamValueBytes(SqliteValueHandle p, int nDataOffset, byte[] bDest, int nStart,
                                                   int nLength)
         {
             int nCopied = nLength;
@@ -702,32 +681,32 @@ namespace Mono.Data.Sqlite
             return nCopied;
         }
 
-        internal override double GetParamValueDouble(Sqlite3MemPtr ptr)
+        internal override double GetParamValueDouble(SqliteValueHandle ptr)
         {
             return UnsafeNativeMethods.sqlite3_value_double(ptr);
         }
 
-        internal override int GetParamValueInt32(Sqlite3MemPtr ptr)
+        internal override int GetParamValueInt32(SqliteValueHandle ptr)
         {
             return UnsafeNativeMethods.sqlite3_value_int(ptr);
         }
 
-        internal override long GetParamValueInt64(Sqlite3MemPtr ptr)
+        internal override long GetParamValueInt64(SqliteValueHandle ptr)
         {
             return UnsafeNativeMethods.sqlite3_value_int64(ptr);
         }
 
-        internal override string GetParamValueText(Sqlite3MemPtr ptr)
+        internal override string GetParamValueText(SqliteValueHandle ptr)
         {
             return UTF8ToString(UnsafeNativeMethods.sqlite3_value_text(ptr), -1);
         }
 
-        internal override TypeAffinity GetParamValueType(Sqlite3MemPtr ptr)
+        internal override TypeAffinity GetParamValueType(SqliteValueHandle ptr)
         {
             return (TypeAffinity) UnsafeNativeMethods.sqlite3_value_type(ptr);
         }
 
-        internal override void ReturnBlob(SqliteContext context, byte[] value)
+        internal override void ReturnBlob(SqliteContextHandle context, byte[] value)
         {
 #if SILVERLIGHT
             var v = new System.Text.UnicodeEncoding().GetString(value, 0, value.Length);
@@ -737,37 +716,37 @@ namespace Mono.Data.Sqlite
             UnsafeNativeMethods.sqlite3_result_blob(context, v, v.Length, null);
         }
 
-        internal override void ReturnDouble(SqliteContext context, double value)
+        internal override void ReturnDouble(SqliteContextHandle context, double value)
         {
             UnsafeNativeMethods.sqlite3_result_double(context, value);
         }
 
-        internal override void ReturnError(SqliteContext context, string value)
+        internal override void ReturnError(SqliteContextHandle context, string value)
         {
             UnsafeNativeMethods.sqlite3_result_error(context, ToUTF8(value), value.Length);
         }
 
-        internal override void ReturnInt32(SqliteContext context, int value)
+        internal override void ReturnInt32(SqliteContextHandle context, int value)
         {
             UnsafeNativeMethods.sqlite3_result_int(context, value);
         }
 
-        internal override void ReturnInt64(SqliteContext context, long value)
+        internal override void ReturnInt64(SqliteContextHandle context, long value)
         {
             UnsafeNativeMethods.sqlite3_result_int64(context, value);
         }
 
-        internal override void ReturnNull(SqliteContext context)
+        internal override void ReturnNull(SqliteContextHandle context)
         {
             UnsafeNativeMethods.sqlite3_result_null(context);
         }
 
-        internal override void ReturnText(SqliteContext context, string value)
+        internal override void ReturnText(SqliteContextHandle context, string value)
         {
             UnsafeNativeMethods.sqlite3_result_text(context, value, value.Length, null);
         }
 
-        internal override Sqlite3MemPtr AggregateContext(SqliteContext context)
+        internal override SqliteValueHandle AggregateContext(SqliteContextHandle context)
         {
             return UnsafeNativeMethods.sqlite3_aggregate_context(context, 1);
         }

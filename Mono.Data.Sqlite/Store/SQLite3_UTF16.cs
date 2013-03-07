@@ -11,9 +11,9 @@ namespace Mono.Data.Sqlite
 #if SILVERLIGHT
     using SqliteConnectionHandle = Community.CsharpSqlite.Sqlite3.sqlite3;
     using UnsafeNativeMethods = Community.CsharpSqlite.Sqlite3;
-    using Sqlite3Database = Community.CsharpSqlite.Sqlite3.sqlite3;
-    using Sqlite3Mem = Community.CsharpSqlite.Sqlite3.Mem;
-    using Sqlite3MemPtr = Community.CsharpSqlite.Sqlite3.Mem;
+    using SqliteConnectionHandle = Community.CsharpSqlite.Sqlite3.sqlite3;
+    using SqliteValueHandle = Community.CsharpSqlite.Sqlite3.Mem;
+    using SqliteValueHandle = Community.CsharpSqlite.Sqlite3.Mem;
     using SqliteStatementHandle = Community.CsharpSqlite.Sqlite3.Vdbe;
     using SQLiteUpdateCallback = Community.CsharpSqlite.Sqlite3.dxUpdateCallback;
     using SQLiteCommitCallback = Community.CsharpSqlite.Sqlite3.dxCommitCallback;
@@ -22,15 +22,10 @@ namespace Mono.Data.Sqlite
     using SQLiteCallback = Community.CsharpSqlite.Sqlite3.dxFunc;
     using SQLiteStepCallback = Community.CsharpSqlite.Sqlite3.dxStep;
     using SQLiteCollation = Community.CsharpSqlite.Sqlite3.dxCompare;
-    using SqliteContext = Community.CsharpSqlite.Sqlite3.sqlite3_context;
+    using SqliteContextHandle = Community.CsharpSqlite.Sqlite3.sqlite3_context;
 #else
     using MonoDataSqliteWrapper;
     using System.Runtime.InteropServices;
-    using Sqlite3Mem = MonoDataSqliteWrapper.SqliteValueHandle;
-    using Sqlite3MemPtr = MonoDataSqliteWrapper.SqliteValueHandle;
-    using Sqlite3Database = MonoDataSqliteWrapper.SqliteConnectionHandle;
-    using SqliteContext = MonoDataSqliteWrapper.SqliteContextHandle;
-    using SQLiteStepCallback = SQLiteCallback;
 #endif
 
     /// <summary>
@@ -66,7 +61,7 @@ namespace Mono.Data.Sqlite
 
             if (_sql == null)
             {
-                Sqlite3Database db;
+                SqliteConnectionHandle db;
 
                 if ((flags & SQLiteOpenFlagsEnum.Create) == 0 && FileExists(strFilename) == false)
                 {
@@ -151,7 +146,7 @@ namespace Mono.Data.Sqlite
 #endif
         }
 
-        internal override string GetParamValueText(Sqlite3MemPtr ptr)
+        internal override string GetParamValueText(SqliteValueHandle ptr)
         {
 #if SILVERLIGHT
             return UTF16ToString(UnsafeNativeMethods.sqlite3_value_text(ptr), -1);
@@ -160,7 +155,7 @@ namespace Mono.Data.Sqlite
 #endif
         }
 
-        internal override void ReturnError(SqliteContext context, string value)
+        internal override void ReturnError(SqliteContextHandle context, string value)
         {
 #if SILVERLIGHT
             UnsafeNativeMethods.sqlite3_result_error(context, value, value.Length*2);
@@ -169,7 +164,7 @@ namespace Mono.Data.Sqlite
 #endif
         }
 
-        internal override void ReturnText(SqliteContext context, string value)
+        internal override void ReturnText(SqliteContextHandle context, string value)
         {
 #if SILVERLIGHT
             UnsafeNativeMethods.sqlite3_result_text(context, value, value.Length*2, NullPointer);
