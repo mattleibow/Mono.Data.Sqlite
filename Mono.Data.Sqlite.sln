@@ -57,7 +57,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Helpers", "Helpers", "{0E57
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MonoDataSqliteWrapper", "Helpers\Mono.Data.Sqlite.Wrapper\Mono.Data.Sqlite.Wrapper.vcxproj", "{30A5E000-7B99-4F74-83E6-1DDF42753A4F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoDataSqliteWrapper.WindowsPhone", "Helpers\MonoDataSqliteWrapper.Silverlight\MonoDataSqliteWrapper.WindowsPhone.csproj", "{6D26183C-C191-415C-948D-DF4D1F7C5019}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoDataSqliteWrapper.Silverlight", "Helpers\MonoDataSqliteWrapper.Silverlight\MonoDataSqliteWrapper.Silverlight.csproj", "{2E76817B-7229-4D44-9E5E-F19195ACA69D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MonoDataSqliteWrapper.WindowsPhone", "Helpers\MonoDataSqliteWrapper.WindowsPhone\MonoDataSqliteWrapper.WindowsPhone.csproj", "{6D26183C-C191-415C-948D-DF4D1F7C5019}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -547,6 +549,22 @@ Global
 		{30A5E000-7B99-4F74-83E6-1DDF42753A4F}.Release|x64.ActiveCfg = Release|Win32
 		{30A5E000-7B99-4F74-83E6-1DDF42753A4F}.Release|x86.ActiveCfg = Release|Win32
 		{30A5E000-7B99-4F74-83E6-1DDF42753A4F}.Release|x86.Build.0 = Release|Win32
+		{2E76817B-7229-4D44-9E5E-F19195ACA69D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E76817B-7229-4D44-9E5E-F19195ACA69D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E76817B-7229-4D44-9E5E-F19195ACA69D}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{2E76817B-7229-4D44-9E5E-F19195ACA69D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2E76817B-7229-4D44-9E5E-F19195ACA69D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2E76817B-7229-4D44-9E5E-F19195ACA69D}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{2E76817B-7229-4D44-9E5E-F19195ACA69D}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{2E76817B-7229-4D44-9E5E-F19195ACA69D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2E76817B-7229-4D44-9E5E-F19195ACA69D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E76817B-7229-4D44-9E5E-F19195ACA69D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E76817B-7229-4D44-9E5E-F19195ACA69D}.Release|ARM.ActiveCfg = Release|Any CPU
+		{2E76817B-7229-4D44-9E5E-F19195ACA69D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2E76817B-7229-4D44-9E5E-F19195ACA69D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2E76817B-7229-4D44-9E5E-F19195ACA69D}.Release|Win32.ActiveCfg = Release|Any CPU
+		{2E76817B-7229-4D44-9E5E-F19195ACA69D}.Release|x64.ActiveCfg = Release|Any CPU
+		{2E76817B-7229-4D44-9E5E-F19195ACA69D}.Release|x86.ActiveCfg = Release|Any CPU
 		{6D26183C-C191-415C-948D-DF4D1F7C5019}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{6D26183C-C191-415C-948D-DF4D1F7C5019}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D26183C-C191-415C-948D-DF4D1F7C5019}.Debug|ARM.ActiveCfg = Debug|Any CPU
@@ -589,6 +607,7 @@ Global
 		{A4AEB66C-BADB-4581-BC0F-C2408C225256} = {405ED5A8-1D7A-42AA-902D-1E5EC9DEA497}
 		{056276DD-823C-4249-901C-378D47CEE599} = {405ED5A8-1D7A-42AA-902D-1E5EC9DEA497}
 		{30A5E000-7B99-4F74-83E6-1DDF42753A4F} = {0E57A18A-3E24-417B-9E22-1F7DAB9B2496}
+		{2E76817B-7229-4D44-9E5E-F19195ACA69D} = {0E57A18A-3E24-417B-9E22-1F7DAB9B2496}
 		{6D26183C-C191-415C-948D-DF4D1F7C5019} = {0E57A18A-3E24-417B-9E22-1F7DAB9B2496}
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
