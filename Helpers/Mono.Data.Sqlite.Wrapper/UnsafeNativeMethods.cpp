@@ -394,7 +394,7 @@ void UnsafeNativeMethods::sqlite3_result_error16(SqliteContextHandle^ statement,
 		index);
 }
 
-void UnsafeNativeMethods::sqlite3_result_text16(SqliteContextHandle^ statement, String^ value, int index)
+void UnsafeNativeMethods::sqlite3_result_text16(SqliteContextHandle^ statement, String^ value, int index, Object^ dummy)
 {
 	::sqlite3_result_text16(
 		statement ? statement->Handle : nullptr, 
@@ -582,11 +582,10 @@ int UnsafeNativeMethods::sqlite3_table_column_metadata(SqliteConnectionHandle^ d
 	return result;
 }
 
-//int UnsafeNativeMethods::sqlite3_config(int option, ...)
-//{
-//	va_list args;
-//	::sqlite3_config(option, args);
-//}
+int UnsafeNativeMethods::sqlite3_config(int option, const Platform::Array<Platform::Object^>^ arguments)
+{
+	return ::sqlite3_config(option, arguments->Data);
+}
 
 void UnsafeNativeMethods::sqlite3_update_hook(SqliteConnectionHandle^ db, SqliteUpdateHookDelegate^ callback, Object^ userState)
 {

@@ -179,7 +179,7 @@ namespace MonoDataSqliteWrapper
 					static Platform::String^ sqlite3_column_name16(SqliteStatementHandle^ statement, int index);
 					static Platform::String^ sqlite3_column_table_name16(SqliteStatementHandle^ statement, int index);
 					static void sqlite3_result_error16(SqliteContextHandle^ statement, Platform::String^ value, int index);
-					static void sqlite3_result_text16(SqliteContextHandle^ statement, Platform::String^ value, int index);
+					static void sqlite3_result_text16(SqliteContextHandle^ statement, Platform::String^ value, int index, Platform::Object^ dummy);
 					static void sqlite3_result_error(SqliteContextHandle^ statement, Platform::String^ value, int index);
 					static void sqlite3_result_text(SqliteContextHandle^ statement, Platform::String^ value, int index, Platform::Object^ dummy);
 					static int sqlite3_exec(SqliteConnectionHandle^ db, Platform::String^ query, Platform::String^* errmsg);
@@ -206,7 +206,7 @@ namespace MonoDataSqliteWrapper
 						int* notNull, int* primaryKey, int* autoInc);
 					static int sqlite3_key(SqliteConnectionHandle^ db, Platform::String^ key, int length);
 					static int sqlite3_rekey(SqliteConnectionHandle^ db, Platform::String^ key, int length);
-					//static int sqlite3_config(int option, ...);
+					static int sqlite3_config(int option, const Platform::Array<Platform::Object^>^ arguments);
 					static void sqlite3_update_hook(SqliteConnectionHandle^ db, SqliteUpdateHookDelegate^ callback, Platform::Object^ userState);
 					static void sqlite3_commit_hook(SqliteConnectionHandle^ db, SqliteCommitHookDelegate^ callback, Platform::Object^ userState);
 					static void sqlite3_rollback_hook(SqliteConnectionHandle^ db, SqliteRollbackHookDelegate^ callback, Platform::Object^ userState);
