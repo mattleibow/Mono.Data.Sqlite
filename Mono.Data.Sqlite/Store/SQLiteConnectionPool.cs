@@ -9,14 +9,9 @@ namespace Mono.Data.Sqlite
 {
   using System;
   using System.Collections.Generic;
-  
-#if SILVERLIGHT
-  using SqliteConnectionHandle = Community.CsharpSqlite.Sqlite3.sqlite3;
-#else
   using MonoDataSqliteWrapper;
-#endif
 
-    internal static class SqliteConnectionPool
+  internal static class SqliteConnectionPool
   {
     /// <summary>
     /// Keeps track of connections made on a specified file.  The PoolVersion dictates whether old objects get

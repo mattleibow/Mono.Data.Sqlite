@@ -13,14 +13,10 @@ namespace Mono.Data.Sqlite
     using System.Collections.Generic;
     using System.Globalization;
     using System.ComponentModel;
+    using MonoDataSqliteWrapper;
 
 #if SILVERLIGHT
-    using SqliteUpdateHookDelegate = Community.CsharpSqlite.Sqlite3.dxUpdateCallback;
-    using SqliteCommitHookDelegate = Community.CsharpSqlite.Sqlite3.dxCommitCallback;
-    using SqliteRollbackHookDelegate = Community.CsharpSqlite.Sqlite3.dxRollbackCallback;
-    using UnsafeNativeMethods = Community.CsharpSqlite.Sqlite3;
 #else
-    using MonoDataSqliteWrapper;
     using System.Runtime.InteropServices;
 #endif
 
@@ -1100,17 +1096,10 @@ namespace Mono.Data.Sqlite
             _rollbackHandler(this, EventArgs.Empty);
         }
 
-        // http://www.sqlite.org/c3ref/config.html
-        public static void SetConfig(SQLiteConfig config)
+        public static void SetConfig(SQLiteConfig config, params object[] args)
         {
-            throw new NotImplementedException();
-//#if SILVERLIGHT
-//            var op = (int) config;
-//#else
-//            var op = config;
-//#endif
-//            int n = UnsafeNativeMethods.sqlite3_config(op);
-//            if (n > 0) throw new SqliteException(n, null);
+            int n = UnsafeNativeMethods.sqlite3_config((int)config, args);
+            if (n > 0) throw new SqliteException(n, null);
         }
     }
 

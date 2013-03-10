@@ -9,20 +9,9 @@ namespace Mono.Data.Sqlite
 {
     using System;
     using System.Data;
-#if SILVERLIGHT
-    using SqliteConnectionHandle = Community.CsharpSqlite.Sqlite3.sqlite3;
-    using UnsafeNativeMethods = Community.CsharpSqlite.Sqlite3;
-    using SqliteValueHandle = Community.CsharpSqlite.Sqlite3.Mem;
-    using SqliteStatementHandle = Community.CsharpSqlite.Sqlite3.Vdbe;
-    using SqliteUpdateHookDelegate = Community.CsharpSqlite.Sqlite3.dxUpdateCallback;
-    using SqliteCommitHookDelegate = Community.CsharpSqlite.Sqlite3.dxCommitCallback;
-    using SqliteRollbackHookDelegate = Community.CsharpSqlite.Sqlite3.dxRollbackCallback;
-    using SQLiteFinalCallback = Community.CsharpSqlite.Sqlite3.dxFinal;
-    using SQLiteCallback = Community.CsharpSqlite.Sqlite3.dxFunc;
-    using SQLiteCollation = Community.CsharpSqlite.Sqlite3.dxCompare;
-    using SqliteContextHandle = Community.CsharpSqlite.Sqlite3.sqlite3_context;
-#else
     using MonoDataSqliteWrapper;
+#if SILVERLIGHT
+#else
     using System.Runtime.InteropServices;
 #endif
 
@@ -252,11 +241,7 @@ namespace Mono.Data.Sqlite
 
                 while ((n == 17 || n == 6 || n == 5) && retries < 3)
                 {
-#if SILVERLIGHT
-                    n = UnsafeNativeMethods.sqlite3_prepare(_sql, strSql, strSql.Length, ref stmt, ref ptr);
-#else
                     n = UnsafeNativeMethods.sqlite3_prepare16(_sql, strSql, strSql.Length, out stmt, out ptr);
-#endif
                     len = -1;
 
                     if (n == 17)
@@ -475,15 +460,9 @@ namespace Mono.Data.Sqlite
             int nprimaryKey = 0;
             int nautoInc = 0;
 
-#if SILVERLIGHT
-            int n = UnsafeNativeMethods.sqlite3_table_column_metadata(_sql, ToUTF8(dataBase), ToUTF8(table),
-                                                                      ToUTF8(column), ref dataTypePtr, ref collSeqPtr,
-                                                                      ref nnotNull, ref nprimaryKey, ref nautoInc);
-#else
             int n = UnsafeNativeMethods.sqlite3_table_column_metadata(_sql, ToUTF8(dataBase), ToUTF8(table), 
                                                                       ToUTF8(column), out dataTypePtr, out collSeqPtr, 
                                                                       out nnotNull, out nprimaryKey, out nautoInc);
-#endif
             if (n > 0) throw new SqliteException(n, SQLiteLastError());
 
             dataType = UTF8ToString(dataTypePtr, -1);
@@ -701,12 +680,7 @@ namespace Mono.Data.Sqlite
 
         internal override void ReturnBlob(SqliteContextHandle context, byte[] value)
         {
-#if SILVERLIGHT
-            var v = new System.Text.UnicodeEncoding().GetString(value, 0, value.Length);
-#else
-            var v = value;
-#endif
-            UnsafeNativeMethods.sqlite3_result_blob(context, v, v.Length, null);
+            UnsafeNativeMethods.sqlite3_result_blob(context, value, value.Length, null);
         }
 
         internal override void ReturnDouble(SqliteContextHandle context, double value)
@@ -851,15 +825,11 @@ namespace Mono.Data.Sqlite
 
         private static void Sleep(int ms)
         {
-#if SILVERLIGHT
-            System.Threading.Thread.CurrentThread.Join(ms);
-#else
             var end = Environment.TickCount + ms;
             while (Environment.TickCount < end)
             {
                 // just no nothing....
             }
-#endif
         }
     }
 }

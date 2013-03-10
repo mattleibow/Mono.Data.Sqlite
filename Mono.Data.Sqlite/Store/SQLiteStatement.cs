@@ -11,13 +11,7 @@ namespace Mono.Data.Sqlite
   using System.Data;
   using System.Collections.Generic;
   using System.Globalization;
-
-
-#if SILVERLIGHT
-    using SqliteStatementHandle = Community.CsharpSqlite.Sqlite3.Vdbe;
-#else
-    using MonoDataSqliteWrapper;
-#endif
+  using MonoDataSqliteWrapper;
 
     /// <summary>
   /// Represents a single SQL statement in SQLite.

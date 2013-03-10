@@ -130,6 +130,10 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Helpers\MonoDataSqliteWrapper.Silverlight\MonoDataSqliteWrapper.WindowsPhone.csproj">
+      <Project>{6D26183C-C191-415C-948D-DF4D1F7C5019}</Project>
+      <Name>MonoDataSqliteWrapper.WindowsPhone</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\System.Data\Silverlight\System.Data.Silverlight.csproj">
       <Project>{152D9FAB-D1FE-4175-9A58-542F2806932D}</Project>
       <Name>System.Data.Silverlight</Name>

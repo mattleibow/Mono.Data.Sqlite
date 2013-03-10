@@ -12,24 +12,9 @@ namespace Mono.Data.Sqlite
   using System.Collections.Generic;
   using System.Runtime.InteropServices;
   using System.Globalization;
-#if SILVERLIGHT
-    using SqliteValueHandle = Community.CsharpSqlite.Sqlite3.Mem;
-    using SqliteStatementHandle = Community.CsharpSqlite.Sqlite3.Vdbe;
-    
-    using SQLiteUpdateCallback = Community.CsharpSqlite.Sqlite3.dxUpdateCallback;
-    using SQLiteCommitCallback = Community.CsharpSqlite.Sqlite3.dxCommitCallback;
-    using SQLiteRollbackCallback = Community.CsharpSqlite.Sqlite3.dxRollbackCallback;
+  using MonoDataSqliteWrapper;
 
-    using SQLiteFinalCallback = Community.CsharpSqlite.Sqlite3.dxFinal;
-    using SQLiteCallback = Community.CsharpSqlite.Sqlite3.dxFunc;
-    using SQLiteCollation = Community.CsharpSqlite.Sqlite3.dxCompare;
-
-    using SqliteContextHandle = Community.CsharpSqlite.Sqlite3.sqlite3_context;
-#else
-    using MonoDataSqliteWrapper;
-#endif
-
-    /// <summary>
+  /// <summary>
   /// This abstract class is designed to handle user-defined functions easily.  An instance of the derived class is made for each
   /// connection to the database.
   /// </summary>
@@ -503,32 +488,6 @@ namespace Mono.Data.Sqlite
     /// </summary>
     Collation = 2,
   }
-
-#if !SILVERLIGHT
-  /// <summary>
-  /// An internal callback delegate declaration.
-  /// </summary>
-  /// <param name="context">Raw context pointer for the user function</param>
-  /// <param name="nArgs">Count of arguments to the function</param>
-  /// <param name="argsptr">A pointer to the array of argument pointers</param>
-  internal delegate void SQLiteCallback(SqliteContextHandle context, int nArgs, SqliteValueHandle[] argsptr);
-  /// <summary>
-  /// An internal final callback delegate declaration.
-  /// </summary>
-  /// <param name="context">Raw context pointer for the user function</param>
-  internal delegate void SQLiteFinalCallback(SqliteContextHandle context);
-  /// <summary>
-  /// Internal callback delegate for implementing collation sequences
-  /// </summary>
-  /// <param name="puser">Not used</param>
-  /// <param name="len1">Length of the string pv1</param>
-  /// <param name="pv1">Pointer to the first string to compare</param>
-  /// <param name="len2">Length of the string pv2</param>
-  /// <param name="pv2">Pointer to the second string to compare</param>
-  /// <returns>Returns -1 if the first string is less than the second.  0 if they are equal, or 1 if the first string is greater
-  /// than the second.</returns>
-  internal delegate int SQLiteCollation(object puser, int len1, string pv1, int len2, string pv2);
-#endif
 
   /// <summary>
   /// The type of collating sequence

@@ -8,20 +8,8 @@
 namespace Mono.Data.Sqlite
 {
     using System;
-#if SILVERLIGHT
-    using SqliteConnectionHandle = Community.CsharpSqlite.Sqlite3.sqlite3;
-    using UnsafeNativeMethods = Community.CsharpSqlite.Sqlite3;
-    using SqliteValueHandle = Community.CsharpSqlite.Sqlite3.Mem;
-    using SqliteStatementHandle = Community.CsharpSqlite.Sqlite3.Vdbe;
-    using SqliteUpdateHookDelegate = Community.CsharpSqlite.Sqlite3.dxUpdateCallback;
-    using SqliteCommitHookDelegate = Community.CsharpSqlite.Sqlite3.dxCommitCallback;
-    using SqliteRollbackHookDelegate = Community.CsharpSqlite.Sqlite3.dxRollbackCallback;
-    using SQLiteFinalCallback = Community.CsharpSqlite.Sqlite3.dxFinal;
-    using SQLiteCallback = Community.CsharpSqlite.Sqlite3.dxFunc;
-    using SQLiteCollation = Community.CsharpSqlite.Sqlite3.dxCompare;
-    using SqliteContextHandle = Community.CsharpSqlite.Sqlite3.sqlite3_context;
-#else
     using MonoDataSqliteWrapper;
+#if SILVERLIGHT
 #endif
 
     /// <summary>
@@ -246,24 +234,19 @@ namespace Mono.Data.Sqlite
         {
             lock (_lock)
             {
-                SqliteStatementHandle nullVal = null;
-                var stmt = nullVal;
+                SqliteStatementHandle stmt = null;
                 do
                 {
                     stmt = UnsafeNativeMethods.sqlite3_next_stmt(db, stmt);
-                    if (stmt != nullVal)
+                    if (stmt != null)
                     {
                         UnsafeNativeMethods.sqlite3_reset(stmt);
                     }
-                } while (stmt != nullVal);
+                } while (stmt != null);
 
                 // Not overly concerned with the return value from a rollback.
                 string msg = null;
-#if SILVERLIGHT
-                UnsafeNativeMethods.sqlite3_exec(db, "ROLLBACK", null, null, ref msg);
-#else
                 UnsafeNativeMethods.sqlite3_exec(db, "ROLLBACK", out msg);
-#endif
             }
         }
 

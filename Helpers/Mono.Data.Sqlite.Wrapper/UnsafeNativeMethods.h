@@ -105,6 +105,32 @@ namespace MonoDataSqliteWrapper
 
 				public delegate void SqliteRollbackHookDelegate(Platform::Object^ userState);
 
+				/// <summary>
+				/// An internal callback delegate declaration.
+				/// </summary>
+				/// <param name="context">Raw context pointer for the user function</param>
+				/// <param name="nArgs">Count of arguments to the function</param>
+				/// <param name="argsptr">A pointer to the array of argument pointers</param>
+				public delegate void SQLiteCallback(SqliteContextHandle^ context, int nArgs, const Platform::Array<SqliteValueHandle^>^ argsptr);
+				
+				/// <summary>
+				/// An internal final callback delegate declaration.
+				/// </summary>
+				/// <param name="context">Raw context pointer for the user function</param>
+				public delegate void SQLiteFinalCallback(SqliteContextHandle^ context);
+
+				/// <summary>
+				/// Internal callback delegate for implementing collation sequences
+				/// </summary>
+				/// <param name="puser">Not used</param>
+				/// <param name="len1">Length of the string pv1</param>
+				/// <param name="pv1">Pointer to the first string to compare</param>
+				/// <param name="len2">Length of the string pv2</param>
+				/// <param name="pv2">Pointer to the second string to compare</param>
+				/// <returns>Returns -1 if the first string is less than the second.  0 if they are equal, or 1 if the first string is greater
+				/// than the second.</returns>
+				public delegate int SQLiteCollation(Platform::Object^ puser, int len1, Platform::String^ pv1, int len2, Platform::String^ pv2);
+
 				/*
 				This class is simply a C++/CX wrapper around sqlite3 exports that sqlite.net depends on.
 				Consult the sqlite documentation on what they do.

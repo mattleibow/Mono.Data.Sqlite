@@ -8,21 +8,10 @@
 namespace Mono.Data.Sqlite
 {
     using System;
-#if SILVERLIGHT
-    using SqliteConnectionHandle = Community.CsharpSqlite.Sqlite3.sqlite3;
-    using UnsafeNativeMethods = Community.CsharpSqlite.Sqlite3;
-    using SqliteValueHandle = Community.CsharpSqlite.Sqlite3.Mem;
-    using SqliteStatementHandle = Community.CsharpSqlite.Sqlite3.Vdbe;
-    using SQLiteUpdateCallback = Community.CsharpSqlite.Sqlite3.dxUpdateCallback;
-    using SQLiteCommitCallback = Community.CsharpSqlite.Sqlite3.dxCommitCallback;
-    using SQLiteRollbackCallback = Community.CsharpSqlite.Sqlite3.dxRollbackCallback;
-    using SQLiteFinalCallback = Community.CsharpSqlite.Sqlite3.dxFinal;
-    using SQLiteCallback = Community.CsharpSqlite.Sqlite3.dxFunc;
-    using SQLiteStepCallback = Community.CsharpSqlite.Sqlite3.dxStep;
-    using SQLiteCollation = Community.CsharpSqlite.Sqlite3.dxCompare;
-    using SqliteContextHandle = Community.CsharpSqlite.Sqlite3.sqlite3_context;
-#else
     using MonoDataSqliteWrapper;
+#if SILVERLIGHT
+
+#else
     using System.Runtime.InteropServices;
 #endif
 
@@ -66,11 +55,7 @@ namespace Mono.Data.Sqlite
                     throw new SqliteException((int) SQLiteErrorCode.CantOpen, strFilename);
                 }
 
-#if SILVERLIGHT
-                int n = UnsafeNativeMethods.sqlite3_open(strFilename, out db);
-#else
                 int n = UnsafeNativeMethods.sqlite3_open16(strFilename, out db);
-#endif
                 if (n > 0) throw new SqliteException(n, null);
 
                 _sql = db;
@@ -86,11 +71,7 @@ namespace Mono.Data.Sqlite
 
         internal override void Bind_Text(SqliteStatement stmt, int index, string value)
         {
-#if SILVERLIGHT
-            int n = UnsafeNativeMethods.sqlite3_bind_text(stmt._sqlite_stmt, index, value, value.Length*2, NullPointer);
-#else
             int n = UnsafeNativeMethods.sqlite3_bind_text16(stmt._sqlite_stmt, index, value, value.Length*2);
-#endif
             if (n > 0) throw new SqliteException(n, SQLiteLastError());
         }
 
@@ -101,74 +82,42 @@ namespace Mono.Data.Sqlite
 
         internal override string ColumnName(SqliteStatement stmt, int index)
         {
-#if SILVERLIGHT
-            return UTF16ToString(UnsafeNativeMethods.sqlite3_column_name(stmt._sqlite_stmt, index), -1);
-#else
             return UTF16ToString(UnsafeNativeMethods.sqlite3_column_name16(stmt._sqlite_stmt, index), -1);
-#endif
         }
 
         internal override string GetText(SqliteStatement stmt, int index)
         {
-#if SILVERLIGHT
-            return UTF16ToString(UnsafeNativeMethods.sqlite3_column_text(stmt._sqlite_stmt, index), -1);
-#else
             return UTF16ToString(UnsafeNativeMethods.sqlite3_column_text16(stmt._sqlite_stmt, index), -1);
-#endif
         }
 
         internal override string ColumnOriginalName(SqliteStatement stmt, int index)
         {
-#if SILVERLIGHT
-            return UTF16ToString(UnsafeNativeMethods.sqlite3_column_origin_name(stmt._sqlite_stmt, index), -1);
-#else
             return UTF16ToString(UnsafeNativeMethods.sqlite3_column_origin_name16(stmt._sqlite_stmt, index), -1);
-#endif
         }
 
         internal override string ColumnDatabaseName(SqliteStatement stmt, int index)
         {
-#if SILVERLIGHT
-            return UTF16ToString(UnsafeNativeMethods.sqlite3_column_database_name(stmt._sqlite_stmt, index), -1);
-#else
             return UTF16ToString(UnsafeNativeMethods.sqlite3_column_database_name16(stmt._sqlite_stmt, index), -1);
-#endif
         }
 
         internal override string ColumnTableName(SqliteStatement stmt, int index)
         {
-#if SILVERLIGHT
-            return UTF16ToString(UnsafeNativeMethods.sqlite3_column_table_name(stmt._sqlite_stmt, index), -1);
-#else
             return UTF16ToString(UnsafeNativeMethods.sqlite3_column_table_name16(stmt._sqlite_stmt, index), -1);
-#endif
         }
 
         internal override string GetParamValueText(SqliteValueHandle ptr)
         {
-#if SILVERLIGHT
-            return UTF16ToString(UnsafeNativeMethods.sqlite3_value_text(ptr), -1);
-#else
             return UTF16ToString(UnsafeNativeMethods.sqlite3_value_text16(ptr), -1);
-#endif
         }
 
         internal override void ReturnError(SqliteContextHandle context, string value)
         {
-#if SILVERLIGHT
-            UnsafeNativeMethods.sqlite3_result_error(context, value, value.Length*2);
-#else
             UnsafeNativeMethods.sqlite3_result_error16(context, value, value.Length*2);
-#endif
         }
 
         internal override void ReturnText(SqliteContextHandle context, string value)
         {
-#if SILVERLIGHT
-            UnsafeNativeMethods.sqlite3_result_text(context, value, value.Length*2, NullPointer);
-#else
-            UnsafeNativeMethods.sqlite3_result_text16(context, value, value.Length*2);
-#endif
+            UnsafeNativeMethods.sqlite3_result_text16(context, value, value.Length*2, null);
         }
     }
 }
