@@ -32,6 +32,4 @@ using System.Security;
 // by using the '*' as shown below:
 [assembly: AssemblyVersion("2.0.0.0")]
 
-#if !SILVERLIGHT
-[assembly: AssemblyKeyFile ("../../mono.snk")]
-#endif
+//[assembly: AssemblyKeyFile ("../../mono.snk")]
