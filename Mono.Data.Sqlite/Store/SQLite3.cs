@@ -241,7 +241,7 @@ namespace Mono.Data.Sqlite
 
                 while ((n == 17 || n == 6 || n == 5) && retries < 3)
                 {
-                    n = UnsafeNativeMethods.sqlite3_prepare(_sql, strSql, strSql.Length, out stmt, out ptr);
+                    n = UnsafeNativeMethods.sqlite3_prepare16(_sql, strSql, strSql.Length, out stmt, out ptr);
                     len = -1;
 
                     if (n == 17)

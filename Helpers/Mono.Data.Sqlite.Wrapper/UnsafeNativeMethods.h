@@ -144,8 +144,8 @@ namespace MonoDataSqliteWrapper
 					static int sqlite3_close(SqliteConnectionHandle^ db);
 					static int sqlite3_busy_timeout(SqliteConnectionHandle^ db, int miliseconds);
 					static int sqlite3_changes(SqliteConnectionHandle^ db);
-					static int sqlite3_prepare(SqliteConnectionHandle^ db, Platform::String^ query, int length, SqliteStatementHandle^* statement, Platform::String^* strRemain);
-					static int sqlite3_prepare_v2(SqliteConnectionHandle^ db, Platform::String^ query, SqliteStatementHandle^* statement, Platform::String^* strRemain);
+					static int sqlite3_prepare16(SqliteConnectionHandle^ db, Platform::String^ query, int length, SqliteStatementHandle^* statement, Platform::String^* strRemain);
+					static int sqlite3_prepare_v2(SqliteConnectionHandle^ db, Platform::String^ query, SqliteStatementHandle^* statement);
 					static int sqlite3_step(SqliteStatementHandle^ statement);
 					static int sqlite3_reset(SqliteStatementHandle^ statement);
 					static int sqlite3_finalize(SqliteStatementHandle^ statement);

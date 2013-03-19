@@ -73,6 +73,17 @@ String^ convert_to_string(unsigned char const* str)
 	return convert_to_string(newStr);
 }
 
+// Convert wchar_t* to a char*
+char* to_cstr(wchar_t *orig)
+{
+    size_t origsize = wcslen(orig) + 1;
+    size_t convertedChars = 0;
+    char* nstring = new char[origsize];
+    wcstombs_s(&convertedChars, nstring, origsize, orig, _TRUNCATE);
+    
+	return nstring;
+}
+
 int UnsafeNativeMethods::sqlite3_open(String^ filename, SqliteConnectionHandle^* db)
 {
 	auto filename_buffer = convert_to_utf8_buffer(filename);
@@ -134,13 +145,13 @@ int UnsafeNativeMethods::sqlite3_changes(SqliteConnectionHandle^ db)
 	return ::sqlite3_changes(db ? db->Handle : nullptr);
 }
 
-int UnsafeNativeMethods::sqlite3_prepare(SqliteConnectionHandle^ db, String^ query, int length, SqliteStatementHandle^* statement, Platform::String^* strRemain)
+int UnsafeNativeMethods::sqlite3_prepare16(SqliteConnectionHandle^ db, String^ query, int length, SqliteStatementHandle^* statement, Platform::String^* strRemain)
 {
 	sqlite3_stmt* actual_statement = nullptr;
-	const char* actual_tail = nullptr;
-	int result = ::sqlite3_prepare(
+	const void* actual_tail = nullptr;
+	int result = ::sqlite3_prepare16(
 		db ? db->Handle : nullptr, 
-		convert_to_utf8_buffer(query).data(), 
+		query->IsEmpty() ? L"" : query->Data(), 
 		-1, 
 		&actual_statement, 
 		&actual_tail);
@@ -152,30 +163,24 @@ int UnsafeNativeMethods::sqlite3_prepare(SqliteConnectionHandle^ db, String^ que
 	if (strRemain)
 	{
 		// If they didn't give us a pointer, the caller has leaked
-		*strRemain = convert_to_string(actual_tail);
+		*strRemain = ref new String(reinterpret_cast<wchar_t const*>(actual_tail));
 	}
 	return result;
 }
 
-int UnsafeNativeMethods::sqlite3_prepare_v2(SqliteConnectionHandle^ db, String^ query, SqliteStatementHandle^* statement, Platform::String^* strRemain)
+int UnsafeNativeMethods::sqlite3_prepare_v2(SqliteConnectionHandle^ db, String^ query, SqliteStatementHandle^* statement)
 {
 	sqlite3_stmt* actual_statement = nullptr;
-	const char* actual_tail = nullptr;
-	int result = ::sqlite3_prepare_v2(
+	int result = ::sqlite3_prepare16_v2(
 		db ? db->Handle : nullptr, 
-		convert_to_utf8_buffer(query).data(), 
+		query->IsEmpty() ? L"" : query->Data(), 
 		-1, 
 		&actual_statement, 
-		&actual_tail);
+		nullptr);
 	if (statement)
 	{
 		// If they didn't give us a pointer, the caller has leaked
 		*statement = ref new SqliteStatementHandle(actual_statement);
-	}
-	if (strRemain)
-	{
-		// If they didn't give us a pointer, the caller has leaked
-		*strRemain = convert_to_string(actual_tail);
 	}
 	return result;
 }
@@ -238,8 +243,8 @@ int UnsafeNativeMethods::sqlite3_bind_text(SqliteStatementHandle^ statement, int
 	return ::sqlite3_bind_text(
 		statement ? statement->Handle : nullptr, 
 		index, 
-		convert_to_utf8_buffer(value).data(),
-		(length < 0 ? value->Length() : length) * sizeof(char),
+		to_cstr(value->IsEmpty() ? L"" : value->Data()),
+		length < 0 ? value->Length() * sizeof(char) : length,
 		SQLITE_TRANSIENT);
 }
 
@@ -402,7 +407,7 @@ void UnsafeNativeMethods::sqlite3_result_error(SqliteContextHandle^ statement, S
 {
 	::sqlite3_result_error(
 		statement ? statement->Handle : nullptr, 
-		convert_to_utf8_buffer(value).data(),
+		to_cstr(value->IsEmpty() ? L"" : value->Data()),
 		index);
 }
 
@@ -410,7 +415,7 @@ void UnsafeNativeMethods::sqlite3_result_text(SqliteContextHandle^ statement, St
 {
 	::sqlite3_result_text(
 		statement ? statement->Handle : nullptr, 
-		convert_to_utf8_buffer(value).data(),
+		to_cstr(value->IsEmpty() ? L"" : value->Data()),
 		index,
 		SQLITE_TRANSIENT);
 }
@@ -420,7 +425,7 @@ int UnsafeNativeMethods::sqlite3_exec(SqliteConnectionHandle^ db, String^ query,
 	char* actual_error = nullptr;
 	int result = ::sqlite3_exec(
 		db ? db->Handle : nullptr, 
-		convert_to_utf8_buffer(query).data(), 
+		to_cstr(query->IsEmpty() ? L"" : query->Data()), 
 		nullptr, 
 		nullptr, 
 		&actual_error);
@@ -562,9 +567,9 @@ int UnsafeNativeMethods::sqlite3_table_column_metadata(SqliteConnectionHandle^ d
 	const char* actual_collSeq;
 	int result = ::sqlite3_table_column_metadata(
 		db ? db->Handle : nullptr, 
-		convert_to_utf8_buffer(dbName).data(),
-		convert_to_utf8_buffer(tableName).data(),
-		convert_to_utf8_buffer(columnName).data(),
+		to_cstr(dbName->IsEmpty() ? L"" : dbName->Data()),
+		to_cstr(tableName->IsEmpty() ? L"" : tableName->Data()),
+		to_cstr(columnName->IsEmpty() ? L"" : columnName->Data()),
 		&actual_dataType,
 		&actual_collSeq,
 		notNull,
