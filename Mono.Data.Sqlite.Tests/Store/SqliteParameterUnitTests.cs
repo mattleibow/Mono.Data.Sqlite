@@ -21,7 +21,7 @@ namespace MonoTests.Mono.Data.Sqlite
     public class SqliteParameterUnitTests
     {
         readonly static string dbRootPath = Windows.Storage.ApplicationData.Current.LocalFolder.Path;
-        readonly static string _uri = Path.Combine(dbRootPath, "test.db");
+        private static readonly string _uri = Path.Combine(dbRootPath, "test" + Guid.NewGuid().ToString("D") + ".db");
         readonly static string _connectionString = "URI=file://" + _uri + ", version=3";
         static SqliteConnection _conn = new SqliteConnection(_connectionString);
 
@@ -54,7 +54,7 @@ namespace MonoTests.Mono.Data.Sqlite
             StringBuilder builder = new StringBuilder();
             for (int k = 0; k < random.Next(7, 100); k++)
             {
-                builder.Append((char)random.Next(127));
+                builder.Append((char)random.Next(65535));
             }
 
             SqliteCommand createCommand = new SqliteCommand("CREATE TABLE t1(t  TEXT,  f FLOAT, i INTEGER, b BLOB);", _conn);
@@ -65,7 +65,7 @@ namespace MonoTests.Mono.Data.Sqlite
             insertCmd.Parameters.Add(blobP);
             insertCmd.Parameters.Add(integerP);
 
-            string stringValue = builder.ToString();
+            string stringValue = "A - \u2329\u221E\u232A" + builder.ToString();
             double doubleValue = Convert.ToDouble(random.Next(999));
             long intValue = random.Next(999);
             byte[] blobValue = System.Text.Encoding.UTF8.GetBytes("\u05D0\u05D1\u05D2" + builder.ToString());
