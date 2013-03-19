@@ -42,7 +42,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Community.CsharpSqlite.WinPhone">
-      <HintPath>..\..\..\Libraries\WindowsPhone7\Community.CsharpSqlite.WinPhone.dll</HintPath>
+      <HintPath>..\..\..\Libraries\Community.CsharpSqlite.WinPhone.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Phone.Interop" />
     <Reference Include="System.Windows" />
@@ -58,6 +58,9 @@
     </Compile>
     <Compile Include="..\..\store\assembly\AssemblyInfo.cs">
       <Link>Assembly\AssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\..\Store\HelperMethods.cs">
+      <Link>HelperMethods.cs</Link>
     </Compile>
     <Compile Include="..\..\Store\ICloneable.cs">
       <Link>ICloneable.cs</Link>

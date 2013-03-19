@@ -92,6 +92,9 @@
     <Compile Include="..\store\assembly\AssemblyInfo.cs">
       <Link>Assembly\AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Store\HelperMethods.cs">
+      <Link>HelperMethods.cs</Link>
+    </Compile>
     <Compile Include="..\Store\ICloneable.cs">
       <Link>ICloneable.cs</Link>
     </Compile>

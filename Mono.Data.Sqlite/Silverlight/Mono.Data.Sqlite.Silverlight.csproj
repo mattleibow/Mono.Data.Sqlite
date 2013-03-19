@@ -66,6 +66,9 @@
     <Compile Include="..\Store\Assembly\AssemblyInfo.cs">
       <Link>Assembly\AssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="..\Store\HelperMethods.cs">
+      <Link>HelperMethods.cs</Link>
+    </Compile>
     <Compile Include="..\Store\ICloneable.cs">
       <Link>ICloneable.cs</Link>
     </Compile>
@@ -156,7 +159,7 @@
       <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
         <SilverlightProjectProperties />
       </FlavorProperties>
-      <UserProperties ProjectLinkReference="e0644c82-1c4f-4c7d-80c3-69439d7a7799" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="e0644c82-1c4f-4c7d-80c3-69439d7a7799" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

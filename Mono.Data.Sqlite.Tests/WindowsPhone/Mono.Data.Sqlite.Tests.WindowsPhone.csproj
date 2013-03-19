@@ -49,7 +49,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Community.CsharpSqlite.WinPhone">
-      <HintPath>..\..\Libraries\WindowsPhone7\Community.CsharpSqlite.WinPhone.dll</HintPath>
+      <HintPath>..\..\Libraries\Community.CsharpSqlite.WinPhone.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Phone" />
     <Reference Include="Microsoft.Phone.Controls.Toolkit">

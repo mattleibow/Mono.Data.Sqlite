@@ -422,8 +422,8 @@ namespace Mono.Data.Sqlite
     /// <returns>The corresponding (closest match) DbType</returns>
     internal static DbType TypeToDbType(Type typ)
     {
-      TypeCode tc = Type.GetTypeCode(typ);
-      if (tc == TypeCode.Object)
+      var tc = NetTypes.GetNetType(typ);
+      if (tc == NetType.Object)
       {
         if (typ == typeof(byte[])) return DbType.Binary;
         if (typ == typeof(Guid)) return DbType.Guid;
@@ -633,8 +633,8 @@ namespace Mono.Data.Sqlite
     /// <returns>The SQLite type affinity for that type.</returns>
     internal static TypeAffinity TypeToAffinity(Type typ)
     {
-      TypeCode tc = Type.GetTypeCode(typ);
-      if (tc == TypeCode.Object)
+      var tc = NetTypes.GetNetType(typ);
+      if (tc == NetType.Object)
       {
         if (typ == typeof(byte[]) || typ == typeof(Guid))
           return TypeAffinity.Blob;
@@ -863,5 +863,69 @@ namespace Mono.Data.Sqlite
 
     internal string typeName;
     internal DbType dataType;
+  }
+  public enum NetType
+  {
+    Empty = 0,
+    Object = 1,
+    DBNull = 2,
+    Boolean = 3,
+    Char = 4,
+    SByte = 5,
+    Byte = 6,
+    Int16 = 7,
+    UInt16 = 8,
+    Int32 = 9,
+    UInt32 = 10,
+    Int64 = 11,
+    UInt64 = 12,
+    Single = 13,
+    Double = 14,
+    Decimal = 15,
+    DateTime = 16,
+    String = 18,
+  }
+  internal static class NetTypes
+  {
+    private static Dictionary<Type, NetType> types = new Dictionary<Type, NetType> {
+      {typeof(bool), NetType.Boolean},
+      {typeof(char), NetType.Char},
+      {typeof(sbyte), NetType.SByte},
+      {typeof(byte), NetType.Byte},
+      {typeof(short), NetType.Int16},
+      {typeof(ushort), NetType.UInt16},
+      {typeof(int), NetType.Int32},
+      {typeof(uint), NetType.UInt32},
+      {typeof(long), NetType.Int64},
+      {typeof(ulong), NetType.UInt64},
+      {typeof(float), NetType.Single},
+      {typeof(double), NetType.Double},
+      {typeof(decimal), NetType.Decimal},
+      {typeof(DateTime), NetType.DateTime},
+      {typeof(string), NetType.String}
+    };
+    public static NetType GetNetType(Type type)
+    {
+      if (type == (Type)null)
+        return NetType.Empty;
+      else if (type != type.GetUnderlyingSystemType() && type.GetUnderlyingSystemType() != (Type)null)
+          return GetNetType(type.GetUnderlyingSystemType());
+      else
+        return GetNetTypeImpl(type);
+    }
+    private static NetType GetNetTypeImpl(Type type)
+    {
+      if (types.ContainsKey(type))
+      {
+        return types[type];
+      }
+
+      if (type.IsEnum())
+      {
+        return types[Enum.GetUnderlyingType(type)];
+      }
+
+      return NetType.Object;
+    }
   }
 }
