@@ -29,7 +29,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{091a63fa-9ecd-4f2d-a66c-a2784c214743}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <ProjectName>MonoDataSqliteWrapper.Store</ProjectName>
+    <ProjectName>MonoDataSqliteWrapper</ProjectName>
     <RootNamespace>MonoDataSqliteWrapper</RootNamespace>
     <DefaultLanguage>en-US</DefaultLanguage>
     <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>

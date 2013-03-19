@@ -28,7 +28,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\Metro\</OutputPath>
-    <DefineConstants>TRACE;NET_1_1;NET_2_0;NET_3_0;NET_3_5;NET_4_0;SQLITE_STANDARD</DefineConstants>
+    <DefineConstants>TRACE;NETFX_CORE;NET_1_1;NET_2_0;NET_3_0;NET_3_5;NET_4_0;SQLITE_STANDARD</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -89,7 +89,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
     <OutputPath>bin\x86\Release\</OutputPath>
-    <DefineConstants>TRACE;NETFX_CORE</DefineConstants>
+    <DefineConstants>TRACE;NETFX_CORE;NET_1_1;NET_2_0;NET_3_0;NET_3_5;NET_4_0;SQLITE_STANDARD</DefineConstants>
     <Optimize>true</Optimize>
     <NoWarn>;2008</NoWarn>
     <DebugType>pdbonly</DebugType>
@@ -134,7 +134,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Helpers\Mono.Data.Sqlite.Wrapper.Store\Mono.Data.Sqlite.Wrapper.Store.vcxproj">
       <Project>{091a63fa-9ecd-4f2d-a66c-a2784c214743}</Project>
-      <Name>MonoDataSqliteWrapper.Store</Name>
+      <Name>MonoDataSqliteWrapper</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\System.Data\Store\System.Data.Store.csproj">
       <Project>{3d8ba561-fea8-402f-9ca0-ab753b58ed1e}</Project>
