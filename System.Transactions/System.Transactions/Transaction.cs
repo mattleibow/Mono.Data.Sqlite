@@ -32,6 +32,8 @@ namespace System.Transactions
         private bool committed;
         private bool committing;
         private List<ISinglePhaseNotification> durables;
+        
+        private IPromotableSinglePhaseNotification pspe = null;
 
         private Exception innerException;
         private Guid tag = Guid.NewGuid();
@@ -50,6 +52,7 @@ namespace System.Transactions
             this.dependents = other.dependents;
             this.volatiles = other.Volatiles;
             this.durables = other.Durables;
+            this.pspe = other.Pspe;
         }
 
         private static Transaction ambient
@@ -80,7 +83,7 @@ namespace System.Transactions
             }
         }
 
-        private List<IEnlistmentNotification> Volatiles
+        internal List<IEnlistmentNotification> Volatiles
         {
             get
             {
@@ -92,7 +95,7 @@ namespace System.Transactions
             }
         }
 
-        private List<ISinglePhaseNotification> Durables
+        internal List<ISinglePhaseNotification> Durables
         {
             get
             {
@@ -103,6 +106,8 @@ namespace System.Transactions
                 return this.durables;
             }
         }
+
+        internal IPromotableSinglePhaseNotification Pspe { get { return this.pspe; } }
 
         public static Transaction Current
         {
@@ -197,7 +202,7 @@ namespace System.Transactions
                                         IEnlistmentNotification notification,
                                         EnlistmentOptions options)
         {
-            throw new NotImplementedException("Only SinglePhase commit supported for durable resource managers.");
+            throw new NotImplementedException("DTC unsupported, only SinglePhase commit supported for durable resource managers.");
         }
 
         [MonoTODO(
@@ -207,31 +212,39 @@ namespace System.Transactions
                                         ISinglePhaseNotification notification,
                                         EnlistmentOptions options)
         {
-            List<ISinglePhaseNotification> durables = this.Durables;
-            if (durables.Count == 1)
-            {
-                throw new NotImplementedException(
-                    "Only LTM supported. Cannot have more than 1 durable resource per transaction.");
-            }
-
             EnsureIncompleteCurrentScope();
+
+            if (this.pspe != null || this.Durables.Count > 0)
+            {
+                throw new NotImplementedException("DTC unsupported, multiple durable resource managers aren't supported.");
+            }
 
             if (options != EnlistmentOptions.None)
             {
-                throw new NotImplementedException("Implement me");
+                throw new NotImplementedException("EnlistmentOptions other than None aren't supported");
             }
 
-            durables.Add(notification);
+            this.Durables.Add(notification);
 
             /* FIXME: Enlistment ?? */
             return new Enlistment();
         }
 
-        [MonoTODO]
-        public bool EnlistPromotableSinglePhase(
-            IPromotableSinglePhaseNotification notification)
+        public bool EnlistPromotableSinglePhase(IPromotableSinglePhaseNotification notification)
         {
-            throw new NotImplementedException();
+            EnsureIncompleteCurrentScope();
+
+            // The specs aren't entirely clear on whether we can have volatile RMs along with a PSPE, but
+            // I'm assuming that yes based on: http://social.msdn.microsoft.com/Forums/br/windowstransactionsprogramming/thread/3df6d4d3-0d82-47c4-951a-cd31140950b3
+            if (this.pspe != null || this.Durables.Count > 0)
+            {
+                return false;
+            }
+
+            this.pspe = notification;
+            this.pspe.Initialize();
+
+            return true;
         }
 
         [MonoTODO("EnlistmentOptions being ignored")]
@@ -313,7 +326,7 @@ namespace System.Transactions
             this.Rollback(ex, null);
         }
 
-        internal void Rollback(Exception ex, IEnlistmentNotification enlisted)
+        internal void Rollback(Exception ex, object abortingEnlisted)
         {
             if (this.aborted)
             {
@@ -328,19 +341,24 @@ namespace System.Transactions
             }
 
             this.innerException = ex;
-            var e = new Enlistment();
+            var e = new SinglePhaseEnlistment();
             foreach (IEnlistmentNotification prep in this.Volatiles)
             {
-                if (prep != enlisted)
+                if (prep != abortingEnlisted)
                 {
                     prep.Rollback(e);
                 }
             }
 
             List<ISinglePhaseNotification> durables = this.Durables;
-            if (durables.Count > 0 && durables[0] != enlisted)
+            if (durables.Count > 0 && durables[0] != abortingEnlisted)
             {
                 durables[0].Rollback(e);
+            }
+            
+            if (this.pspe != null && this.pspe != abortingEnlisted)
+            {
+                this.pspe.Rollback (e);
             }
 
             this.Aborted = true;
@@ -421,6 +439,11 @@ namespace System.Transactions
             if (durables.Count > 0)
             {
                 this.DoSingleCommit(durables[0]);
+            }
+
+            if (this.pspe != null)
+            {
+                this.DoSingleCommit(this.pspe);
             }
 
             if (volatiles.Count > 0)
@@ -513,8 +536,18 @@ namespace System.Transactions
                 return;
             }
 
-            var enlistment = new SinglePhaseEnlistment(this, single);
-            single.SinglePhaseCommit(enlistment);
+            single.SinglePhaseCommit(new SinglePhaseEnlistment(this, single));
+            this.CheckAborted();
+        }
+
+        private void DoSingleCommit(IPromotableSinglePhaseNotification single)
+        {
+            if (single == null)
+            {
+                return;
+            }
+
+            single.SinglePhaseCommit(new SinglePhaseEnlistment(this, single));
             this.CheckAborted();
         }
 
