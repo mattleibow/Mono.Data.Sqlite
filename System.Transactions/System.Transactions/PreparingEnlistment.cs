@@ -18,6 +18,7 @@ namespace System.Transactions
         private readonly IEnlistmentNotification enlisted;
         private readonly Transaction tx;
         private readonly WaitHandle waitHandle;
+        private Exception ex;
         private bool prepared;
 
         internal PreparingEnlistment(Transaction tx, IEnlistmentNotification enlisted)
@@ -41,6 +42,15 @@ namespace System.Transactions
         {
             get { return this.enlisted; }
         }
+        
+        // Uncatched exceptions thrown during prepare will
+        // be saved here so they can be retrieved by TM.
+        internal Exception Exception
+        {
+          get { return this.ex; }
+          set { this.ex = value; }
+        }
+ 
 
         #region IDisposable Members
 

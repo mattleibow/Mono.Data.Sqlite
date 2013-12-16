@@ -340,7 +340,9 @@ namespace System.Transactions
                 throw new TransactionException("Transaction has already been committed. Cannot accept any new work.");
             }
 
+            // Save thrown exception as 'reason' of transaction's abort.
             this.innerException = ex;
+
             var e = new SinglePhaseEnlistment();
             foreach (IEnlistmentNotification prep in this.Volatiles)
             {
@@ -484,7 +486,28 @@ namespace System.Transactions
         private static void PrepareCallbackWrapper(object state)
         {
             var enlist = state as PreparingEnlistment;
-            enlist.EnlistmentNotification.Prepare(enlist);
+
+            try
+            {
+                enlist.EnlistmentNotification.Prepare(enlist);
+            }
+            catch (Exception ex)
+            {
+                // Oops! Unhandled exception.. we should notify
+                // to our caller thread that preparing has failed.
+                // This usually happends when an exception is
+                // thrown by code enlistment.Rollback() methods
+                // executed inside prepare.ForceRollback(ex).
+                enlist.Exception = ex;
+
+                // Just in case enlistment did not call Prepared()
+                // we need to manually set WH to avoid transaction
+                // from failing due to transaction timeout.
+                if (!enlist.IsPrepared)
+                {
+                    ((ManualResetEvent) enlist.WaitHandle).Set();
+                }
+            }
         }
 
         private void DoPreparePhase()
@@ -503,6 +526,13 @@ namespace System.Transactions
                 {
                     this.Aborted = true;
                     throw new TimeoutException("Transaction timedout");
+                }
+
+                if (pe.Exception != null)
+                {
+                    this.innerException = pe.Exception;
+                    this.Aborted = true;
+                    break;
                 }
 
                 if (!pe.IsPrepared)
