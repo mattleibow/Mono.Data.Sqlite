@@ -1,7 +1,7 @@
-﻿using System.Transactions.Tests.WindowsPhone8.Resources;
-
-namespace System.Transactions.Tests.WindowsPhone8
+﻿namespace System.Transactions
 {
+    using System.Transactions.Resources;
+
     /// <summary>
     /// Provides access to string resources.
     /// </summary>
