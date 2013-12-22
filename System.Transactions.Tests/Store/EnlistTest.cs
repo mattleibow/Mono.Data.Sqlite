@@ -16,7 +16,7 @@
 using System;
 using System.Transactions;
 
-#if SILVERLIGHT
+#if SILVERLIGHT && !WINDOWS_PHONE
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 #else
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;

@@ -10,7 +10,7 @@
 using System;
 using System.Transactions;
 
-#if SILVERLIGHT
+#if SILVERLIGHT && !WINDOWS_PHONE
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 #else
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
@@ -67,8 +67,9 @@ namespace MonoTests.System.Transactions
                     return;
                 }
                 /* FIXME: Do what in this case? */
-                if (transaction != null)
-                    Console.WriteLine ("WARNING: Setting value more than once");
+                if (transaction != null) { 
+                    // TODO: Console.WriteLine ("WARNING: Setting value more than once");
+                }
 
                 if (transaction != Transaction.Current) {
                     transaction = Transaction.Current;

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -12,7 +12,7 @@
     <RootNamespace>System.Transactions.Tests.Silverlight</RootNamespace>
     <AssemblyName>System.Transactions.Tests.Silverlight</AssemblyName>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
     <SilverlightApplication>true</SilverlightApplication>
     <SupportedCultures>
@@ -31,6 +31,11 @@
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
     <LinkedServerProject>
     </LinkedServerProject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
   </PropertyGroup>
   <!-- This property group is only here to support building this project using the 
        MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
@@ -78,19 +83,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Store\AsyncTest.cs">
-      <Link>AsyncTest.cs</Link>
+      <Link>Tests\AsyncTest.cs</Link>
     </Compile>
     <Compile Include="..\Store\EnlistTest.cs">
-      <Link>EnlistTest.cs</Link>
+      <Link>Tests\EnlistTest.cs</Link>
     </Compile>
     <Compile Include="..\Store\ExceptionAssert.cs">
-      <Link>ExceptionAssert.cs</Link>
+      <Link>Tests\ExceptionAssert.cs</Link>
     </Compile>
     <Compile Include="..\Store\IntResourceManager.cs">
-      <Link>IntResourceManager.cs</Link>
+      <Link>Tests\IntResourceManager.cs</Link>
     </Compile>
     <Compile Include="..\Store\TransactionScopeTest.cs">
-      <Link>TransactionScopeTest.cs</Link>
+      <Link>Tests\TransactionScopeTest.cs</Link>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -104,10 +109,14 @@
     <ApplicationDefinition Include="App.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
   <ItemGroup>
@@ -132,7 +141,7 @@
       <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
         <SilverlightProjectProperties />
       </FlavorProperties>
-      <UserProperties ProjectLinkReference="cbcac39a-6019-4b91-a8f8-8e3b6dd10f1e" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="cbcac39a-6019-4b91-a8f8-8e3b6dd10f1e" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

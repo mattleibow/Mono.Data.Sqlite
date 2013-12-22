@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
   
-  <Identity Name="93ca0f28-f6c7-40c3-ba67-d784b62786a7"
+  <Identity Name="6afc34ee-a75d-4208-958d-5727e74dc48c"
             Publisher="CN=Matthew"
             Version="1.0.0.0" />
   
   <Properties>
-    <DisplayName>System.Transactions.Tests.Store</DisplayName>
+    <DisplayName>System.Transactions.Tests.WindowsStore</DisplayName>
     <PublisherDisplayName>Matthew</PublisherDisplayName>
     <Logo>Images\UnitTestStoreLogo.png</Logo>
-    <Description>System.Transactions.Tests.Store</Description>
+    <Description>System.Transactions.Tests.WindowsStore</Description>
   </Properties>
   
   <Prerequisites>
-    <OSMinVersion>6.2.1</OSMinVersion>
-    <OSMaxVersionTested>6.2.1</OSMaxVersionTested>
+    <OSMinVersion>6.3.0</OSMinVersion>
+    <OSMaxVersionTested>6.3.0</OSMaxVersionTested>
   </Prerequisites>
   
   <Resources>

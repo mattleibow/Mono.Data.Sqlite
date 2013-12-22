@@ -1,4 +1,4 @@
-#if SILVERLIGHT
+#if SILVERLIGHT && !WINDOWS_PHONE
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 #else
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
@@ -29,7 +29,7 @@ namespace System
         }
     }
 
-#if SILVERLIGHT
+#if SILVERLIGHT && !WINDOWS_PHONE
     internal class TestCategoryAttribute : Attribute
     {
         public string Name { get; set; }
