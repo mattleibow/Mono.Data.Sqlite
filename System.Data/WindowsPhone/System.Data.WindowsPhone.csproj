@@ -353,6 +353,9 @@
     <Compile Include="..\WindowsStore\system.data\VersionNotFoundException.cs">
       <Link>System.Data\VersionNotFoundException.cs</Link>
     </Compile>
+    <Compile Include="..\WindowsStore\System\DBNull.cs">
+      <Link>System\DBNull.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\mono.snk">
@@ -367,7 +370,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
-    <Folder Include="System\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />

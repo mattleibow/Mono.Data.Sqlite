@@ -32,6 +32,8 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+#if NETFX_CORE
+
 namespace System
 {
     public sealed class DBNull : IConvertible
@@ -145,3 +147,5 @@ namespace System
         }
     }
 }
+
+#endif

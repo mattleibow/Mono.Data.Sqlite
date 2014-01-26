@@ -5,7 +5,7 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>10.0.20506</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{32A52E75-CE11-472A-BDBD-3BA3CADD7E90}</ProjectGuid>
+    <ProjectGuid>{1622AA75-1502-4487-8FE3-81174C8C44DB}</ProjectGuid>
     <ProjectTypeGuids>{C089C8C0-30E0-4E22-80C0-CE093F111A43};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
@@ -32,7 +32,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Bin\x86\Debug</OutputPath>
-    <DefineConstants>TRACE;DEBUG;;NET_1_1;NET_2_0;NET_3_0;NET_3_5;NET_4_0</DefineConstants>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -42,7 +42,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>Bin\x86\Release</OutputPath>
-    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE;NET_1_1;NET_2_0;NET_3_0;NET_3_5;NET_4_0</DefineConstants>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -75,12 +75,15 @@
     </Compile>
     <Compile Include="..\store\system.data.common\DbCommandBuilderTest.cs">
       <Link>Tests\System.Data.Common\DbCommandBuilderTest.cs</Link>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\store\system.data.common\DbConnectionStringBuilderTest.cs">
       <Link>Tests\System.Data.Common\DbConnectionStringBuilderTest.cs</Link>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\store\system.data.common\DbTransactionTest.cs">
       <Link>Tests\System.Data.Common\DbTransactionTest.cs</Link>
+      <SubType>Code</SubType>
     </Compile>
     <Compile Include="..\store\system.data.sqltypes\SqlBinaryTest.cs">
       <Link>Tests\System.Data.SqlTypes\SqlBinaryTest.cs</Link>
@@ -176,7 +179,6 @@
     <Content Include="Assets\Tiles\FlipCycleTileSmall.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Background.png" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\AppResources.resx">

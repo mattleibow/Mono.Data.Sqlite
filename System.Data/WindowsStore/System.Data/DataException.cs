@@ -28,6 +28,8 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
+#if !WINDOWS_PHONE
+
 namespace System.Data
 {
     public class DataException : Exception
@@ -47,3 +49,5 @@ namespace System.Data
         }
     }
 }
+
+#endif
