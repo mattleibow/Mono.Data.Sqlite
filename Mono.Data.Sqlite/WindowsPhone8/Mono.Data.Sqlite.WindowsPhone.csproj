@@ -19,27 +19,6 @@
     <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>Bin\Debug</OutputPath>
-    <DefineConstants>TRACE;DEBUG;WINDOWS_PHONE;;NET_1_1;NET_2_0;NET_3_0;NET_3_5;NET_4_0;SQLITE_STANDARD</DefineConstants>
-    <NoStdLib>true</NoStdLib>
-    <NoConfig>true</NoConfig>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>Bin\Release</OutputPath>
-    <DefineConstants>TRACE;WINDOWS_PHONE;;NET_1_1;NET_2_0;NET_3_0;NET_3_5;NET_4_0;SQLITE_STANDARD</DefineConstants>
-    <NoStdLib>true</NoStdLib>
-    <NoConfig>true</NoConfig>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -66,7 +45,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>Bin\ARM\Debug</OutputPath>
-    <DefineConstants>DEBUG;TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;SILVERLIGHT;WINDOWS_PHONE;NET_1_1;NET_2_0;NET_3_0;NET_3_5;NET_4_0</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -76,7 +55,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>Bin\ARM\Release</OutputPath>
-    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE</DefineConstants>
+    <DefineConstants>TRACE;SILVERLIGHT;WINDOWS_PHONE;NET_1_1;NET_2_0;NET_3_0;NET_3_5;NET_4_0</DefineConstants>
     <NoStdLib>true</NoStdLib>
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
@@ -167,13 +146,13 @@
       <Project>{30A5E000-7B99-4F74-83E6-1DDF42753A4F}</Project>
       <Name>MonoDataSqliteWrapper</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\System.Data\System.Data.WindowsPhone8\System.Data.WindowsPhone8.csproj">
+    <ProjectReference Include="..\..\System.Data\WindowsPhone\System.Data.WindowsPhone.csproj">
       <Project>{3ABDF182-B92E-4192-8F53-785668689CE2}</Project>
-      <Name>System.Data.WindowsPhone8</Name>
+      <Name>System.Data.WindowsPhone</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\System.Transactions\System.Transactions.csproj">
       <Project>{E706726A-A6B2-42F1-8502-C0F3AC04B0D5}</Project>
-      <Name>System.Transactions %28System.Transactions\System.Transactions%29</Name>
+      <Name>System.Transactions</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />

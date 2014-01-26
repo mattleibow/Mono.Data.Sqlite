@@ -4,13 +4,15 @@ using System.Linq;
 using System.Net;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Animation;
-using System.Windows.Shapes;
+using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
-using Microsoft.Phone.Testing;
+using Microsoft.Phone.Shell;
+using Mono.Data.Sqlite.Resources;
+using System.Threading;
+using Microsoft.VisualStudio.TestPlatform.Core;
+using vstest_executionengine_platformbridge;
+using Microsoft.VisualStudio.TestPlatform.TestExecutor;
+using System.Reflection;
 
 namespace Mono.Data.Sqlite.Tests.WindowsPhone
 {
@@ -21,7 +23,9 @@ namespace Mono.Data.Sqlite.Tests.WindowsPhone
         {
             InitializeComponent();
 
-            this.Content = UnitTestSystem.CreateTestPage();
+            var wrapper = new TestExecutorServiceWrapper();
+            new Thread(new ServiceMain((param0, param1) => wrapper.SendMessage((ContractName)param0, param1)).Run).Start();
+
         }
     }
 }

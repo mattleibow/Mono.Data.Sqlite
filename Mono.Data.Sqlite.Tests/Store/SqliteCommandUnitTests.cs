@@ -10,7 +10,7 @@ using System.Text;
 using System.Linq;
 using Mono.Data.Sqlite;
 
-#if SILVERLIGHT
+#if SILVERLIGHT && !WINDOWS_PHONE
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 #else
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;

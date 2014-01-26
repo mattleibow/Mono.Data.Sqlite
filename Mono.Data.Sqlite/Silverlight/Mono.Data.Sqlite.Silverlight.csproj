@@ -12,11 +12,16 @@
     <RootNamespace>Mono.Data.Sqlite</RootNamespace>
     <AssemblyName>Mono.Data.Sqlite</AssemblyName>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
     <SilverlightApplication>false</SilverlightApplication>
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
   </PropertyGroup>
   <!-- This property group is only here to support building this project using the 
        MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
@@ -147,7 +152,7 @@
     </ProjectReference>
     <ProjectReference Include="..\..\System.Transactions\System.Transactions.csproj">
       <Project>{e706726a-a6b2-42f1-8502-c0f3ac04b0d5}</Project>
-      <Name>System.Transactions %28System.Transactions\System.Transactions%29</Name>
+      <Name>System.Transactions</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -159,7 +164,7 @@
       <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
         <SilverlightProjectProperties />
       </FlavorProperties>
-      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="e0644c82-1c4f-4c7d-80c3-69439d7a7799" />
+      <UserProperties ProjectLinkReference="e0644c82-1c4f-4c7d-80c3-69439d7a7799" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

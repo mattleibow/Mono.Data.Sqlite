@@ -1,20 +1,20 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest">
   
-  <Identity Name="a24201f2-325e-43fd-bac8-d950aa157291"
+  <Identity Name="a0830702-f611-4c9d-a19b-3bebeb74e77c"
             Publisher="CN=Matthew"
             Version="1.0.0.0" />
   
   <Properties>
-    <DisplayName>Mono.Data.Sqlite.Test.Metro</DisplayName>
+    <DisplayName>Mono.Data.Sqlite.Tests.WindowsStore</DisplayName>
     <PublisherDisplayName>Matthew</PublisherDisplayName>
     <Logo>Images\UnitTestStoreLogo.png</Logo>
-    <Description>Mono.Data.Sqlite.Test.Metro</Description>
+    <Description>Mono.Data.Sqlite.Tests.WindowsStore</Description>
   </Properties>
   
   <Prerequisites>
-    <OSMinVersion>6.2.1</OSMinVersion>
-    <OSMaxVersionTested>6.2.1</OSMaxVersionTested>
+    <OSMinVersion>6.3.0</OSMinVersion>
+    <OSMaxVersionTested>6.3.0</OSMaxVersionTested>
   </Prerequisites>
   
   <Resources>

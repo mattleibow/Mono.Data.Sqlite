@@ -33,7 +33,7 @@ using System.Data;
 using System.IO;
 using Mono.Data.Sqlite;
 
-#if SILVERLIGHT
+#if SILVERLIGHT && !WINDOWS_PHONE
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 #else
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
@@ -50,7 +50,7 @@ namespace MonoTests.Mono.Data.Sqlite
         static SqliteConnection _conn = new SqliteConnection();
 
         [ClassInitialize]
-#if !SILVERLIGHT
+#if !SILVERLIGHT || WINDOWS_PHONE
         static public void FixtureSetUp(TestContext context)
 #else
         public void FixtureSetUp()

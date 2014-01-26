@@ -1,6 +1,6 @@
-﻿using Mono.Data.Sqlite.Tests.WindowsPhone8.Resources;
+﻿using Mono.Data.Sqlite.Resources;
 
-namespace Mono.Data.Sqlite.Tests.WindowsPhone8
+namespace Mono.Data.Sqlite.Tests.WindowsPhone
 {
     /// <summary>
     /// Provides access to string resources.
