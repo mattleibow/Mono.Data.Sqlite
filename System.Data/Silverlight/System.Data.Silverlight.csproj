@@ -12,11 +12,16 @@
     <RootNamespace>System.Data</RootNamespace>
     <AssemblyName>System.Data</AssemblyName>
     <TargetFrameworkIdentifier>Silverlight</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v5.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
     <SilverlightApplication>false</SilverlightApplication>
     <ValidateXaml>true</ValidateXaml>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>4.0</OldToolsVersion>
   </PropertyGroup>
   <!-- This property group is only here to support building this project using the 
        MSBuild 3.5 toolset. In order to work correctly with this older toolset, it needs 
@@ -60,274 +65,274 @@
     <Compile Include="..\..\Consts.cs">
       <Link>Consts.cs</Link>
     </Compile>
-    <Compile Include="..\Store\Assembly\AssemblyInfo.cs">
+    <Compile Include="..\WindowsStore\Assembly\AssemblyInfo.cs">
       <Link>Assembly\AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Store\Locale.cs">
+    <Compile Include="..\WindowsStore\Locale.cs">
       <Link>Locale.cs</Link>
     </Compile>
-    <Compile Include="..\Store\MonoTODOAttribute.cs">
+    <Compile Include="..\WindowsStore\MonoTODOAttribute.cs">
       <Link>MonoTODOAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.Common\CatalogLocation.cs">
+    <Compile Include="..\WindowsStore\System.Data.Common\CatalogLocation.cs">
       <Link>System.Data.Common\CatalogLocation.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.Common\DbCommand.cs">
+    <Compile Include="..\WindowsStore\System.Data.Common\DbCommand.cs">
       <Link>System.Data.Common\DbCommand.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.Common\DbCommandBuilder.cs">
+    <Compile Include="..\WindowsStore\System.Data.Common\DbCommandBuilder.cs">
       <Link>System.Data.Common\DbCommandBuilder.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.Common\DbConnection.cs">
+    <Compile Include="..\WindowsStore\System.Data.Common\DbConnection.cs">
       <Link>System.Data.Common\DbConnection.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.Common\DbConnectionOptions.cs">
+    <Compile Include="..\WindowsStore\System.Data.Common\DbConnectionOptions.cs">
       <Link>System.Data.Common\DbConnectionOptions.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.Common\DbConnectionStringBuilder.cs">
+    <Compile Include="..\WindowsStore\System.Data.Common\DbConnectionStringBuilder.cs">
       <Link>System.Data.Common\DbConnectionStringBuilder.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.Common\DbConnectionStringBuilderHelper.cs">
+    <Compile Include="..\WindowsStore\System.Data.Common\DbConnectionStringBuilderHelper.cs">
       <Link>System.Data.Common\DbConnectionStringBuilderHelper.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.Common\DbDataReader.cs">
+    <Compile Include="..\WindowsStore\System.Data.Common\DbDataReader.cs">
       <Link>System.Data.Common\DbDataReader.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.Common\DbDataRecord.cs">
+    <Compile Include="..\WindowsStore\System.Data.Common\DbDataRecord.cs">
       <Link>System.Data.Common\DbDataRecord.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.Common\DbEnumerator.cs">
+    <Compile Include="..\WindowsStore\System.Data.Common\DbEnumerator.cs">
       <Link>System.Data.Common\DbEnumerator.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.Common\DbException.cs">
+    <Compile Include="..\WindowsStore\System.Data.Common\DbException.cs">
       <Link>System.Data.Common\DbException.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.Common\DbParameter.cs">
+    <Compile Include="..\WindowsStore\System.Data.Common\DbParameter.cs">
       <Link>System.Data.Common\DbParameter.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.Common\DbParameterCollection.cs">
+    <Compile Include="..\WindowsStore\System.Data.Common\DbParameterCollection.cs">
       <Link>System.Data.Common\DbParameterCollection.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.Common\DbProviderSpecificTypePropertyAttribute.cs">
+    <Compile Include="..\WindowsStore\System.Data.Common\DbProviderSpecificTypePropertyAttribute.cs">
       <Link>System.Data.Common\DbProviderSpecificTypePropertyAttribute.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.Common\DbTransaction.cs">
+    <Compile Include="..\WindowsStore\System.Data.Common\DbTransaction.cs">
       <Link>System.Data.Common\DbTransaction.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.Common\ExceptionHelper.cs">
+    <Compile Include="..\WindowsStore\System.Data.Common\ExceptionHelper.cs">
       <Link>System.Data.Common\ExceptionHelper.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.Common\SchemaInfo.cs">
+    <Compile Include="..\WindowsStore\System.Data.Common\SchemaInfo.cs">
       <Link>System.Data.Common\SchemaInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.SqlTypes\INullable.cs">
+    <Compile Include="..\WindowsStore\System.Data.SqlTypes\INullable.cs">
       <Link>System.Data.SqlTypes\INullable.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.SqlTypes\SqlBinary.cs">
+    <Compile Include="..\WindowsStore\System.Data.SqlTypes\SqlBinary.cs">
       <Link>System.Data.SqlTypes\SqlBinary.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.SqlTypes\SqlBoolean.cs">
+    <Compile Include="..\WindowsStore\System.Data.SqlTypes\SqlBoolean.cs">
       <Link>System.Data.SqlTypes\SqlBoolean.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.SqlTypes\SqlByte.cs">
+    <Compile Include="..\WindowsStore\System.Data.SqlTypes\SqlByte.cs">
       <Link>System.Data.SqlTypes\SqlByte.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.SqlTypes\SqlBytes.cs">
+    <Compile Include="..\WindowsStore\System.Data.SqlTypes\SqlBytes.cs">
       <Link>System.Data.SqlTypes\SqlBytes.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.SqlTypes\SqlChars.cs">
+    <Compile Include="..\WindowsStore\System.Data.SqlTypes\SqlChars.cs">
       <Link>System.Data.SqlTypes\SqlChars.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.SqlTypes\SqlCompareOptions.cs">
+    <Compile Include="..\WindowsStore\System.Data.SqlTypes\SqlCompareOptions.cs">
       <Link>System.Data.SqlTypes\SqlCompareOptions.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.SqlTypes\SqlDateTime.cs">
+    <Compile Include="..\WindowsStore\System.Data.SqlTypes\SqlDateTime.cs">
       <Link>System.Data.SqlTypes\SqlDateTime.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.SqlTypes\SqlDecimal.cs">
+    <Compile Include="..\WindowsStore\System.Data.SqlTypes\SqlDecimal.cs">
       <Link>System.Data.SqlTypes\SqlDecimal.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.SqlTypes\SqlDouble.cs">
+    <Compile Include="..\WindowsStore\System.Data.SqlTypes\SqlDouble.cs">
       <Link>System.Data.SqlTypes\SqlDouble.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.SqlTypes\SqlGuid.cs">
+    <Compile Include="..\WindowsStore\System.Data.SqlTypes\SqlGuid.cs">
       <Link>System.Data.SqlTypes\SqlGuid.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.SqlTypes\SqlInt16.cs">
+    <Compile Include="..\WindowsStore\System.Data.SqlTypes\SqlInt16.cs">
       <Link>System.Data.SqlTypes\SqlInt16.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.SqlTypes\SqlInt32.cs">
+    <Compile Include="..\WindowsStore\System.Data.SqlTypes\SqlInt32.cs">
       <Link>System.Data.SqlTypes\SqlInt32.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.SqlTypes\SqlInt64.cs">
+    <Compile Include="..\WindowsStore\System.Data.SqlTypes\SqlInt64.cs">
       <Link>System.Data.SqlTypes\SqlInt64.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.SqlTypes\SqlMoney.cs">
+    <Compile Include="..\WindowsStore\System.Data.SqlTypes\SqlMoney.cs">
       <Link>System.Data.SqlTypes\SqlMoney.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.SqlTypes\SqlNullValueException.cs">
+    <Compile Include="..\WindowsStore\System.Data.SqlTypes\SqlNullValueException.cs">
       <Link>System.Data.SqlTypes\SqlNullValueException.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.SqlTypes\SqlSingle.cs">
+    <Compile Include="..\WindowsStore\System.Data.SqlTypes\SqlSingle.cs">
       <Link>System.Data.SqlTypes\SqlSingle.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.SqlTypes\SqlString.cs">
+    <Compile Include="..\WindowsStore\System.Data.SqlTypes\SqlString.cs">
       <Link>System.Data.SqlTypes\SqlString.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.SqlTypes\SqlTruncateException.cs">
+    <Compile Include="..\WindowsStore\System.Data.SqlTypes\SqlTruncateException.cs">
       <Link>System.Data.SqlTypes\SqlTruncateException.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.SqlTypes\SqlTypeException.cs">
+    <Compile Include="..\WindowsStore\System.Data.SqlTypes\SqlTypeException.cs">
       <Link>System.Data.SqlTypes\SqlTypeException.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data.SqlTypes\StorageState.cs">
+    <Compile Include="..\WindowsStore\System.Data.SqlTypes\StorageState.cs">
       <Link>System.Data.SqlTypes\StorageState.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\AcceptRejectRule.cs">
+    <Compile Include="..\WindowsStore\System.Data\AcceptRejectRule.cs">
       <Link>System.Data\AcceptRejectRule.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\CommandBehavior.cs">
+    <Compile Include="..\WindowsStore\System.Data\CommandBehavior.cs">
       <Link>System.Data\CommandBehavior.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\CommandType.cs">
+    <Compile Include="..\WindowsStore\System.Data\CommandType.cs">
       <Link>System.Data\CommandType.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\ConflictOption.cs">
+    <Compile Include="..\WindowsStore\System.Data\ConflictOption.cs">
       <Link>System.Data\ConflictOption.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\ConnectionState.cs">
+    <Compile Include="..\WindowsStore\System.Data\ConnectionState.cs">
       <Link>System.Data\ConnectionState.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\ConstraintException.cs">
+    <Compile Include="..\WindowsStore\System.Data\ConstraintException.cs">
       <Link>System.Data\ConstraintException.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\DataException.cs">
+    <Compile Include="..\WindowsStore\System.Data\DataException.cs">
       <Link>System.Data\DataException.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\DbType.cs">
+    <Compile Include="..\WindowsStore\System.Data\DbType.cs">
       <Link>System.Data\DbType.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\DeletedRowInaccessibleException.cs">
+    <Compile Include="..\WindowsStore\System.Data\DeletedRowInaccessibleException.cs">
       <Link>System.Data\DeletedRowInaccessibleException.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\DuplicateNameException.cs">
+    <Compile Include="..\WindowsStore\System.Data\DuplicateNameException.cs">
       <Link>System.Data\DuplicateNameException.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\EvaluateException.cs">
+    <Compile Include="..\WindowsStore\System.Data\EvaluateException.cs">
       <Link>System.Data\EvaluateException.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\IColumnMapping.cs">
+    <Compile Include="..\WindowsStore\System.Data\IColumnMapping.cs">
       <Link>System.Data\IColumnMapping.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\IColumnMappingCollection.cs">
+    <Compile Include="..\WindowsStore\System.Data\IColumnMappingCollection.cs">
       <Link>System.Data\IColumnMappingCollection.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\IDataParameter.cs">
+    <Compile Include="..\WindowsStore\System.Data\IDataParameter.cs">
       <Link>System.Data\IDataParameter.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\IDataParameterCollection.cs">
+    <Compile Include="..\WindowsStore\System.Data\IDataParameterCollection.cs">
       <Link>System.Data\IDataParameterCollection.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\IDataReader.cs">
+    <Compile Include="..\WindowsStore\System.Data\IDataReader.cs">
       <Link>System.Data\IDataReader.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\IDataRecord.cs">
+    <Compile Include="..\WindowsStore\System.Data\IDataRecord.cs">
       <Link>System.Data\IDataRecord.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\IDbCommand.cs">
+    <Compile Include="..\WindowsStore\System.Data\IDbCommand.cs">
       <Link>System.Data\IDbCommand.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\IDbConnection.cs">
+    <Compile Include="..\WindowsStore\System.Data\IDbConnection.cs">
       <Link>System.Data\IDbConnection.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\IDbDataParameter.cs">
+    <Compile Include="..\WindowsStore\System.Data\IDbDataParameter.cs">
       <Link>System.Data\IDbDataParameter.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\IDbTransaction.cs">
+    <Compile Include="..\WindowsStore\System.Data\IDbTransaction.cs">
       <Link>System.Data\IDbTransaction.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\InRowChangingEventException.cs">
+    <Compile Include="..\WindowsStore\System.Data\InRowChangingEventException.cs">
       <Link>System.Data\InRowChangingEventException.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\InvalidConstraintException.cs">
+    <Compile Include="..\WindowsStore\System.Data\InvalidConstraintException.cs">
       <Link>System.Data\InvalidConstraintException.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\InvalidExpressionException.cs">
+    <Compile Include="..\WindowsStore\System.Data\InvalidExpressionException.cs">
       <Link>System.Data\InvalidExpressionException.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\ISafeDataRecord.cs">
+    <Compile Include="..\WindowsStore\System.Data\ISafeDataRecord.cs">
       <Link>System.Data\ISafeDataRecord.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\IsolationLevel.cs">
+    <Compile Include="..\WindowsStore\System.Data\IsolationLevel.cs">
       <Link>System.Data\IsolationLevel.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\ITableMapping.cs">
+    <Compile Include="..\WindowsStore\System.Data\ITableMapping.cs">
       <Link>System.Data\ITableMapping.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\ITableMappingCollection.cs">
+    <Compile Include="..\WindowsStore\System.Data\ITableMappingCollection.cs">
       <Link>System.Data\ITableMappingCollection.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\KeyRestrictionBehavior.cs">
+    <Compile Include="..\WindowsStore\System.Data\KeyRestrictionBehavior.cs">
       <Link>System.Data\KeyRestrictionBehavior.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\LoadOption.cs">
+    <Compile Include="..\WindowsStore\System.Data\LoadOption.cs">
       <Link>System.Data\LoadOption.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\NoNullAllowedException.cs">
+    <Compile Include="..\WindowsStore\System.Data\NoNullAllowedException.cs">
       <Link>System.Data\NoNullAllowedException.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\OperationAbortedException.cs">
+    <Compile Include="..\WindowsStore\System.Data\OperationAbortedException.cs">
       <Link>System.Data\OperationAbortedException.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\ParameterDirection.cs">
+    <Compile Include="..\WindowsStore\System.Data\ParameterDirection.cs">
       <Link>System.Data\ParameterDirection.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\ReadOnlyException.cs">
+    <Compile Include="..\WindowsStore\System.Data\ReadOnlyException.cs">
       <Link>System.Data\ReadOnlyException.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\RowNotInTableException.cs">
+    <Compile Include="..\WindowsStore\System.Data\RowNotInTableException.cs">
       <Link>System.Data\RowNotInTableException.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\Rule.cs">
+    <Compile Include="..\WindowsStore\System.Data\Rule.cs">
       <Link>System.Data\Rule.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\SqlDbType.cs">
+    <Compile Include="..\WindowsStore\System.Data\SqlDbType.cs">
       <Link>System.Data\SqlDbType.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\StateChangeEventArgs.cs">
+    <Compile Include="..\WindowsStore\System.Data\StateChangeEventArgs.cs">
       <Link>System.Data\StateChangeEventArgs.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\StateChangeEventHandler.cs">
+    <Compile Include="..\WindowsStore\System.Data\StateChangeEventHandler.cs">
       <Link>System.Data\StateChangeEventHandler.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\StatementCompletedEventArgs.cs">
+    <Compile Include="..\WindowsStore\System.Data\StatementCompletedEventArgs.cs">
       <Link>System.Data\StatementCompletedEventArgs.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\StatementCompletedEventHandler.cs">
+    <Compile Include="..\WindowsStore\System.Data\StatementCompletedEventHandler.cs">
       <Link>System.Data\StatementCompletedEventHandler.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\StatementType.cs">
+    <Compile Include="..\WindowsStore\System.Data\StatementType.cs">
       <Link>System.Data\StatementType.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\StrongTypingException.cs">
+    <Compile Include="..\WindowsStore\System.Data\StrongTypingException.cs">
       <Link>System.Data\StrongTypingException.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\SyntaxErrorException.cs">
+    <Compile Include="..\WindowsStore\System.Data\SyntaxErrorException.cs">
       <Link>System.Data\SyntaxErrorException.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\TableAdapterSchemaInfo.cs">
+    <Compile Include="..\WindowsStore\System.Data\TableAdapterSchemaInfo.cs">
       <Link>System.Data\TableAdapterSchemaInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\TypeDataSetGeneratorException.cs">
+    <Compile Include="..\WindowsStore\System.Data\TypeDataSetGeneratorException.cs">
       <Link>System.Data\TypeDataSetGeneratorException.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\UpdateRowSource.cs">
+    <Compile Include="..\WindowsStore\System.Data\UpdateRowSource.cs">
       <Link>System.Data\UpdateRowSource.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\UpdateStatus.cs">
+    <Compile Include="..\WindowsStore\System.Data\UpdateStatus.cs">
       <Link>System.Data\UpdateStatus.cs</Link>
     </Compile>
-    <Compile Include="..\Store\System.Data\VersionNotFoundException.cs">
+    <Compile Include="..\WindowsStore\System.Data\VersionNotFoundException.cs">
       <Link>System.Data\VersionNotFoundException.cs</Link>
     </Compile>
   </ItemGroup>
@@ -343,7 +348,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\System.Transactions\System.Transactions.csproj">
       <Project>{e706726a-a6b2-42f1-8502-c0f3ac04b0d5}</Project>
-      <Name>System.Transactions %28System.Transactions\System.Transactions%29</Name>
+      <Name>System.Transactions</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />
@@ -352,7 +357,7 @@
       <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
         <SilverlightProjectProperties />
       </FlavorProperties>
-      <UserProperties ProjectLinkReference="3d8ba561-fea8-402f-9ca0-ab753b58ed1e" ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" />
+      <UserProperties ProjectLinkerExcludeFilter="\\?desktop(\\.*)?$;\\?silverlight(\\.*)?$;\.desktop;\.silverlight;\.xaml;^service references(\\.*)?$;\.clientconfig;^web references(\\.*)?$" ProjectLinkReference="3d8ba561-fea8-402f-9ca0-ab753b58ed1e" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

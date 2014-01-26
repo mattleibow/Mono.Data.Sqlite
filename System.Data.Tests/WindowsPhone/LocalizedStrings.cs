@@ -1,6 +1,6 @@
-﻿using System.Data.Tests.WindowsPhone8.Resources;
+﻿using System.Data.Resources;
 
-namespace System.Data.Tests.WindowsPhone8
+namespace System.Data.Tests.WindowsPhone
 {
     /// <summary>
     /// Provides access to string resources.

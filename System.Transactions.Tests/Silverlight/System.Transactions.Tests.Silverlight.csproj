@@ -125,7 +125,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\System.Transactions\System.Transactions.csproj">
       <Project>{e706726a-a6b2-42f1-8502-c0f3ac04b0d5}</Project>
-      <Name>System.Transactions %28System.Transactions\System.Transactions%29</Name>
+      <Name>System.Transactions</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\$(SilverlightVersion)\Microsoft.Silverlight.CSharp.targets" />

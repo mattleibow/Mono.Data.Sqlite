@@ -40,7 +40,7 @@ using System.Globalization;
 using DivideByZeroException = System.ArithmeticException;
 #endif
 
-#if SILVERLIGHT
+#if SILVERLIGHT && !WINDOWS_PHONE
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 #else
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;

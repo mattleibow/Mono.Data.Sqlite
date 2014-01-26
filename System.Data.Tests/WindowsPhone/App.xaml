@@ -1,4 +1,4 @@
-﻿<Application 
+﻿<Application
     x:Class="System.Data.Tests.WindowsPhone.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"       
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -7,6 +7,7 @@
 
     <!--Application Resources-->
     <Application.Resources>
+        <local:LocalizedStrings xmlns:local="clr-namespace:System.Data.Tests.WindowsPhone" x:Key="LocalizedStrings"/>
     </Application.Resources>
 
     <Application.ApplicationLifetimeObjects>

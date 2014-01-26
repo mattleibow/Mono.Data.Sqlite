@@ -37,7 +37,7 @@ using System.Data.SqlTypes;
 using System.Threading;
 using System.Globalization;
 
-#if SILVERLIGHT
+#if SILVERLIGHT && !WINDOWS_PHONE
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 #else
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
