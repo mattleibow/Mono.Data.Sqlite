@@ -50,4 +50,8 @@ namespace System.Data
     }
 }
 
+#else
+
+[assembly: System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.Data.DataException))]
+
 #endif

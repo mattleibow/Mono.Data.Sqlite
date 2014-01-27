@@ -32,7 +32,7 @@
 // WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 
-#if NETFX_CORE
+#if NETFX_CORE || PORTABLE
 
 namespace System
 {
@@ -147,5 +147,9 @@ namespace System
         }
     }
 }
+
+#else
+
+[assembly: System.Runtime.CompilerServices.TypeForwardedTo(typeof(System.DBNull))]
 
 #endif

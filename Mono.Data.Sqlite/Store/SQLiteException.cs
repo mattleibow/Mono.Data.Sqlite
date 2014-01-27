@@ -12,6 +12,16 @@ namespace Mono.Data.Sqlite
   using System.Text;
   using System.Data.Common;
 
+#if PORTABLE
+    public abstract class DbException : Exception
+    {
+        protected DbException() { }
+        protected DbException(string message) { }
+        protected DbException(string message, Exception innerException) { }
+        protected DbException(string message, int errorCode) { }
+    }
+#endif
+
   /// <summary>
   /// SQLite exception class.
   /// </summary>

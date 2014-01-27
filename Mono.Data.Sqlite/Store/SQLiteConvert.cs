@@ -929,3 +929,23 @@ namespace Mono.Data.Sqlite
     }
   }
 }
+
+#if PORTABLE
+
+namespace System.Runtime.InteropServices
+{
+    public static class Marshal
+    {
+        public static int ReadByte(IntPtr nativestring, int nativestringlen)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public static void Copy(IntPtr nativestring, byte[] byteArray, int p, int nativestringlen)
+        {
+            throw new System.NotImplementedException();
+        }
+    }
+}
+
+#endif

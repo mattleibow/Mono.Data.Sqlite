@@ -475,7 +475,7 @@ namespace System.Data.SqlTypes
             }
 
             decimal d = n.Value;
-            d = Decimal.Round(d, position);
+            d = Math.Round(d, position);
             return new SqlDecimal(d);
         }
 

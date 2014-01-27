@@ -66,7 +66,7 @@ namespace System.Data.SqlTypes
             {
                 throw new OverflowException();
             }
-            this.value = Decimal.Round(value, 4);
+            this.value = Math.Round(value, 4);
             this.notNull = true;
         }
 
