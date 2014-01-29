@@ -1,6 +1,14 @@
 ﻿using System;
 
+#if WINDOWS_PHONE
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
+#elif __ANDROID__
+using TestClassAttribute = NUnit.Framework.TestFixtureAttribute;
+using TestMethodAttribute = NUnit.Framework.TestAttribute;
+using NUnit.Framework;
+#else
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+#endif
 
 using PortableDataAccess;
 
@@ -9,7 +17,18 @@ namespace WindowsPhoneApp
     [TestClass]
     public class TaskItemRepositoryUnitTest
     {
-        private const string connectionString = "Data Source=tasks.db;FailIfMissing=false;";
+        private static string connectionString
+        {
+            get
+            {
+#if __ANDROID__
+                var dbPath = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "tasks.db");
+#else
+                var dbPath = "tasks.db";
+#endif
+                return "Data Source=" + dbPath + ";FailIfMissing=false;";
+            }
+        }
 
         [TestMethod]
         public void EnsureRepositoryCanBeCreated()
