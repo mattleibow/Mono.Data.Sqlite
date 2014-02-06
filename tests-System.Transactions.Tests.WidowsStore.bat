@@ -1,0 +1,2 @@
+"C:\Program Files\Microsoft Visual Studio 12.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" "System.Transactions.Tests\WindowsStore\AppPackages\System.Transactions.Tests.WindowsStore_1.0.0.0_ARM_Debug_Test\System.Transactions.Tests.WindowsStore_1.0.0.0_ARM_Debug.appx" /logger:trx
+pause

@@ -1,0 +1,2 @@
+"C:\Program Files\Microsoft Visual Studio 12.0\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe" "Mono.Data.Sqlite.Tests\WindowsStore\AppPackages\Mono.Data.Sqlite.Tests.WindowsStore_1.0.0.0_ARM_Debug_Test\Mono.Data.Sqlite.Tests.WindowsStore_1.0.0.0_ARM_Debug.appx" /logger:trx
+pause
