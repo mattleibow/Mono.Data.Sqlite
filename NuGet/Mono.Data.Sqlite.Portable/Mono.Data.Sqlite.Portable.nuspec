@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+    <metadata>
+        <id>Mono.Data.Sqlite.Portable</id>
+        <version>1.0.0-alpha1</version>
+        <title>Mono.Data.Sqlite.Portable</title>
+        <authors>.NET Dev Addict</authors>
+        <licenseUrl>http://www.dotnetdevaddict.co.za/projects/mono.data.sqlite.portable#license</licenseUrl>
+        <projectUrl>http://www.dotnetdevaddict.co.za/projects/mono.data.sqlite.portable</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Adds Mono.Data.Sqlite to your application</description>
+        <dependencies>
+            <dependency id="System.Data.Portable" />
+        </dependencies>
+        <frameworkAssemblies>
+            <frameworkAssembly assemblyName="Mono.Data.Sqlite" targetFramework="MonoAndroid0.0" />
+            <frameworkAssembly assemblyName="Mono.Data.Sqlite" targetFramework="MonoTouch0.0" />
+            <frameworkAssembly assemblyName="Mono.Data.Sqlite" targetFramework="MonoMac0.0" />
+        </frameworkAssemblies>
+    </metadata>
+    <files>
+        <file src="build\lib\netcore-arm\Mono.Data.Sqlite.dll" target="build\lib\netcore-arm\Mono.Data.Sqlite.dll" />
+        <file src="build\lib\netcore-arm\MonoDataSqliteWrapper.dll" target="build\lib\netcore-arm\MonoDataSqliteWrapper.dll" />
+        <file src="build\lib\netcore-arm\MonoDataSqliteWrapper.lib" target="build\lib\netcore-arm\MonoDataSqliteWrapper.lib" />
+        <file src="build\lib\netcore-arm\MonoDataSqliteWrapper.winmd" target="build\lib\netcore-arm\MonoDataSqliteWrapper.winmd" />
+        <file src="build\lib\netcore-x86\Mono.Data.Sqlite.dll" target="build\lib\netcore-x86\Mono.Data.Sqlite.dll" />
+        <file src="build\lib\netcore-x86\MonoDataSqliteWrapper.dll" target="build\lib\netcore-x86\MonoDataSqliteWrapper.dll" />
+        <file src="build\lib\netcore-x86\MonoDataSqliteWrapper.lib" target="build\lib\netcore-x86\MonoDataSqliteWrapper.lib" />
+        <file src="build\lib\netcore-x86\MonoDataSqliteWrapper.winmd" target="build\lib\netcore-x86\MonoDataSqliteWrapper.winmd" />
+        <file src="build\lib\wp8-arm\Mono.Data.Sqlite.dll" target="build\lib\wp8-arm\Mono.Data.Sqlite.dll" />
+        <file src="build\lib\wp8-arm\MonoDataSqliteWrapper.dll" target="build\lib\wp8-arm\MonoDataSqliteWrapper.dll" />
+        <file src="build\lib\wp8-arm\MonoDataSqliteWrapper.lib" target="build\lib\wp8-arm\MonoDataSqliteWrapper.lib" />
+        <file src="build\lib\wp8-arm\MonoDataSqliteWrapper.winmd" target="build\lib\wp8-arm\MonoDataSqliteWrapper.winmd" />
+        <file src="build\lib\wp8-x86\Mono.Data.Sqlite.dll" target="build\lib\wp8-x86\Mono.Data.Sqlite.dll" />
+        <file src="build\lib\wp8-x86\MonoDataSqliteWrapper.dll" target="build\lib\wp8-x86\MonoDataSqliteWrapper.dll" />
+        <file src="build\lib\wp8-x86\MonoDataSqliteWrapper.lib" target="build\lib\wp8-x86\MonoDataSqliteWrapper.lib" />
+        <file src="build\lib\wp8-x86\MonoDataSqliteWrapper.winmd" target="build\lib\wp8-x86\MonoDataSqliteWrapper.winmd" />
+        <file src="build\netcore\Mono.Data.Sqlite.Portable.props" target="build\netcore\Mono.Data.Sqlite.Portable.props" />
+        <file src="build\wp8\Mono.Data.Sqlite.Portable.props" target="build\wp8\Mono.Data.Sqlite.Portable.props" />
+        <file src="lib\MonoAndroid\_._" target="lib\MonoAndroid\_._" />
+        <file src="lib\MonoMac\_._" target="lib\MonoMac\_._" />
+        <file src="lib\MonoTouch\_._" target="lib\MonoTouch\_._" />
+        <file src="lib\net40\_._" target="lib\net40\_._" />
+        <file src="lib\netcore\_._" target="lib\netcore\_._" />
+        <file src="lib\portable-net4+sl5+wp8+win+MonoAndroid+MonoTouch\Mono.Data.Sqlite.dll" target="lib\portable-net4+sl5+wp8+win+MonoAndroid+MonoTouch\Mono.Data.Sqlite.dll" />
+        <file src="lib\sl50\Community.CsharpSqlite.Silverlight.dll" target="lib\sl50\Community.CsharpSqlite.Silverlight.dll" />
+        <file src="lib\sl50\Mono.Data.Sqlite.dll" target="lib\sl50\Mono.Data.Sqlite.dll" />
+        <file src="lib\sl50\MonoDataSqliteWrapper.dll" target="lib\sl50\MonoDataSqliteWrapper.dll" />
+        <file src="lib\wp8\_._" target="lib\wp8\_._" />
+        <file src="tools\install.ps1" target="tools\install.ps1" />
+        <file src="tools\Mono.Data.Sqlite.Portable.targets" target="tools\Mono.Data.Sqlite.Portable.targets" />
+        <file src="tools\uninstall.ps1" target="tools\uninstall.ps1" />
+    </files>
+</package>

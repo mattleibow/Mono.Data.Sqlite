@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
+    <metadata>
+        <id>System.Data.Portable</id>
+        <version>1.0.0-alpha1</version>
+        <title>System.Data.Portable</title>
+        <authors>.NET Dev Addict</authors>
+        <licenseUrl>http://www.dotnetdevaddict.co.za/projects/system.data.portable#license</licenseUrl>
+        <projectUrl>http://www.dotnetdevaddict.co.za/projects/system.data.portable</projectUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>Adds System.Data and System.Transactions to your application</description>
+        <frameworkAssemblies>
+            <frameworkAssembly assemblyName="System.Transactions" targetFramework=".NETFramework4.0" />
+            <frameworkAssembly assemblyName="System.Transactions" targetFramework="MonoAndroid0.0" />
+            <frameworkAssembly assemblyName="System.Transactions" targetFramework="MonoTouch0.0" />
+            <frameworkAssembly assemblyName="System.Transactions" targetFramework="MonoMac0.0" />
+            <frameworkAssembly assemblyName="System.Data" targetFramework=".NETFramework4.0" />
+            <frameworkAssembly assemblyName="System.Data" targetFramework="MonoAndroid0.0" />
+            <frameworkAssembly assemblyName="System.Data" targetFramework="MonoTouch0.0" />
+            <frameworkAssembly assemblyName="System.Data" targetFramework="MonoMac0.0" />
+        </frameworkAssemblies>
+    </metadata>
+    <files>
+        <file src="lib\MonoAndroid\_._" target="lib\MonoAndroid\_._" />
+        <file src="lib\MonoMac\_._" target="lib\MonoMac\_._" />
+        <file src="lib\MonoTouch\_._" target="lib\MonoTouch\_._" />
+        <file src="lib\net40\_._" target="lib\net40\_._" />
+        <file src="lib\netcore\System.Data.dll" target="lib\netcore\System.Data.dll" />
+        <file src="lib\netcore\System.Transactions.dll" target="lib\netcore\System.Transactions.dll" />
+        <file src="lib\portable-net4+sl5+wp8+win+MonoAndroid+MonoTouch\System.Data.dll" target="lib\portable-net4+sl5+wp8+win+MonoAndroid+MonoTouch\System.Data.dll" />
+        <file src="lib\portable-net4+sl5+wp8+win+MonoAndroid+MonoTouch\System.Transactions.dll" target="lib\portable-net4+sl5+wp8+win+MonoAndroid+MonoTouch\System.Transactions.dll" />
+        <file src="lib\sl50\System.Data.dll" target="lib\sl50\System.Data.dll" />
+        <file src="lib\sl50\System.Transactions.dll" target="lib\sl50\System.Transactions.dll" />
+        <file src="lib\wp8\System.Data.dll" target="lib\wp8\System.Data.dll" />
+        <file src="lib\wp8\System.Transactions.dll" target="lib\wp8\System.Transactions.dll" />
+    </files>
+</package>
