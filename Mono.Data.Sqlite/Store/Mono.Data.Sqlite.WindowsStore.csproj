@@ -82,9 +82,9 @@
       <Project>{3d8ba561-fea8-402f-9ca0-ab753b58ed1e}</Project>
       <Name>System.Data.WindowsStore</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\System.Transactions\System.Transactions.csproj">
+    <ProjectReference Include="..\..\System.Transactions\Portable\System.Transactions.Portable.csproj">
       <Project>{e706726a-a6b2-42f1-8502-c0f3ac04b0d5}</Project>
-      <Name>System.Transactions</Name>
+      <Name>System.Transactions.Portable</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">

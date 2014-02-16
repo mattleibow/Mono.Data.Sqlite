@@ -34,17 +34,17 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <ProjectReference Include="..\..\..\Mono.Data.Sqlite\Mono.Data.Sqlite.Portable\Mono.Data.Sqlite.Portable.csproj">
+    <ProjectReference Include="..\..\..\Mono.Data.Sqlite\Portable\Mono.Data.Sqlite.Portable.csproj">
       <Project>{f045bbd8-611c-4135-a423-69a9b19d14eb}</Project>
       <Name>Mono.Data.Sqlite.Portable</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\System.Data\System.Data.Portable\System.Data.Portable.csproj">
+    <ProjectReference Include="..\..\..\System.Data\Portable\System.Data.Portable.csproj">
       <Project>{90989608-6214-4d7d-8875-76eac15eba4b}</Project>
       <Name>System.Data.Portable</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\System.Transactions\System.Transactions.csproj">
+    <ProjectReference Include="..\..\..\System.Transactions\Portable\System.Transactions.Portable.csproj">
       <Project>{e706726a-a6b2-42f1-8502-c0f3ac04b0d5}</Project>
-      <Name>System.Transactions</Name>
+      <Name>System.Transactions.Portable</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

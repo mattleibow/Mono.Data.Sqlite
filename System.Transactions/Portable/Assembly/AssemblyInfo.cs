@@ -1,13 +1,11 @@
 //
 // AssemblyInfo.cs
 //
-// Author:
-//   Andreas Nahr (ClassDevelopment@A-SoftTech.com)
+// Authors:
+//	Andreas Nahr (ClassDevelopment@A-SoftTech.com)
+//	Sebastien Pouliot  <sebastien@ximian.com>
 //
 // (C) 2003 Ximian, Inc.  http://www.ximian.com
-//
-
-//
 // Copyright (C) 2004 Novell, Inc (http://www.novell.com)
 //
 // Permission is hereby granted, free of charge, to any person obtaining
@@ -33,25 +31,24 @@
 using System;
 using System.Reflection;
 using System.Resources;
-using System.Runtime.CompilerServices;
 
-// General Information about the System.Data assembly
+// General Information about the System.Transactions assembly
 
-[assembly: AssemblyTitle("System.Data.dll")]
-[assembly: AssemblyDescription("System.Data.dll")]
-[assembly: AssemblyDefaultAlias("System.Data.dll")]
+[assembly: AssemblyTitle("System.Transactions.dll")]
+[assembly: AssemblyDescription("System.Transactions.dll")]
+[assembly: AssemblyDefaultAlias("System.Transactions.dll")]
 [assembly: AssemblyCompany(Consts.MonoCompany)]
 [assembly: AssemblyProduct(Consts.MonoProduct)]
 [assembly: AssemblyCopyright(Consts.MonoCopyright)]
 [assembly: AssemblyVersion(Consts.FxVersion)]
 [assembly: SatelliteContractVersion(Consts.FxVersion)]
 [assembly: AssemblyInformationalVersion(Consts.FxFileVersion)]
-
-[assembly: CLSCompliant(true)]
 [assembly: NeutralResourcesLanguage("en-US")]
 
-//[assembly: AssemblyDelaySign(true)]
-//[assembly: AssemblyKeyFile("../../ecma.pub")]
+[assembly: CLSCompliant(true)]
+
+//[assembly: AssemblyDelaySign (true)]
+//[assembly: AssemblyKeyFile("../ecma.pub")]
 
 [assembly: AssemblyKeyFile("../../beta-mono.data.sqlite.snk")]
 

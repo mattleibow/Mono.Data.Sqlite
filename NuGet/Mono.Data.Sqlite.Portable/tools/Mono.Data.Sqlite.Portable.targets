@@ -20,7 +20,7 @@
   <ItemGroup Condition="'$(MonoDataSqlitePortablePath)' != ''">
     <Reference Include="Mono.Data.Sqlite">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>$(MSBuildThisFileDirectory)..\build\lib\$(MonoDataSqlitePortablePath)\Mono.Data.Sqlite.dll</HintPath>
+      <HintPath>$(MSBuildThisFileDirectory)lib\$(MonoDataSqlitePortablePath)\Mono.Data.Sqlite.dll</HintPath>
     </Reference>
   </ItemGroup>
 

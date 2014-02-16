@@ -7,6 +7,8 @@ using Mono.Data.Sqlite;
 
 namespace PortableDataAccess
 {
+    using System.Transactions;
+
     public class TaskItemRepository
     {
         private readonly string connectionString = null;
@@ -29,7 +31,12 @@ CREATE TABLE IF NOT EXISTS [Tasks] (
 )", conn))
             {
                 conn.Open();
-                cmd.ExecuteNonQuery();
+                using (var trans = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions { IsolationLevel = IsolationLevel.Serializable }))
+                {
+                    cmd.ExecuteNonQuery();
+                
+                    trans.Complete();
+                }
             }
         }
 
@@ -99,7 +106,12 @@ SELECT last_insert_rowid();", conn))
                 cmd.Parameters.AddWithValue("@complete", task.IsComplete);
                 conn.Open();
 
-                return Convert.ToInt32(cmd.ExecuteScalar());
+                using (var trans = new TransactionScope(TransactionScopeOption.Required, new TransactionOptions {IsolationLevel = IsolationLevel.Serializable}))
+                {
+                    var result = cmd.ExecuteScalar();
+                    trans.Complete();
+                    return Convert.ToInt32(result);
+                }
             }
         }
         

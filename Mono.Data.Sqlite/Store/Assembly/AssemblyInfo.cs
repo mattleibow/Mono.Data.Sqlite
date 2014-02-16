@@ -32,4 +32,5 @@ using System.Security;
 // by using the '*' as shown below:
 [assembly: AssemblyVersion("2.0.0.0")]
 
-//[assembly: AssemblyKeyFile ("../../mono.snk")]
+[assembly: AssemblyDelaySign(false)]
+[assembly: AssemblyKeyFile("../../mono.snk")]

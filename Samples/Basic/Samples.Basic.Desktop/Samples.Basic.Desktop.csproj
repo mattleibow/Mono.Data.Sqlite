@@ -35,6 +35,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Mono.Data.Sqlite, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>lib\Mono.Data.Sqlite.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Transactions" />
@@ -58,10 +62,23 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\System.Data\Desktop\System.Data.Desktop.csproj">
+      <Project>{c524615f-3cc0-4bf2-896c-afc76ca724de}</Project>
+      <Name>System.Data.Desktop</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\System.Transactions\Desktop\System.Transactions.Desktop.csproj">
+      <Project>{ca409dda-3535-4cda-93b1-fbfd6fb77f36}</Project>
+      <Name>System.Transactions.Desktop</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PortableDataAccess\Samples.Basic.PortableDataAccess.csproj">
       <Project>{826f6952-aa56-4350-b397-2588876fa100}</Project>
       <Name>Samples.Basic.PortableDataAccess</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="sqlite3.dll">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <Choose>
     <When Condition="'$(VisualStudioVersion)' == '10.0' And '$(IsCodedUITest)' == 'True'">

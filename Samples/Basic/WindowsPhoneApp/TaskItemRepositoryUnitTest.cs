@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Transactions;
 
 #if WINDOWS_PHONE
 using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
@@ -40,6 +41,7 @@ namespace WindowsPhoneApp
         public void EnsureRepositoryCanBeLoaded()
         {
             var repo = new TaskItemRepository(connectionString);
+            var transactionOptions = new TransactionOptions {IsolationLevel = IsolationLevel.Serializable};
             var tasks = repo.GetAllTasks();
         }
 

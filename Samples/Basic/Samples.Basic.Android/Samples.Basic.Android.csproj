@@ -11,8 +11,6 @@
     <RootNamespace>Samples.Basic.Android</RootNamespace>
     <MonoAndroidResourcePrefix>Resources</MonoAndroidResourcePrefix>
     <MonoAndroidAssetsPrefix>Assets</MonoAndroidAssetsPrefix>
-    <AndroidUseLatestPlatformSdk>
-    </AndroidUseLatestPlatformSdk>
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
@@ -74,7 +72,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PortableDataAccess\Samples.Basic.PortableDataAccess.csproj">
-      <Project>{826F6952-AA56-4350-B397-2588876FA100}</Project>
+      <Project>{826f6952-aa56-4350-b397-2588876fa100}</Project>
       <Name>Samples.Basic.PortableDataAccess</Name>
     </ProjectReference>
   </ItemGroup>

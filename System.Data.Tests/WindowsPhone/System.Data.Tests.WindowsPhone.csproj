@@ -194,9 +194,9 @@
       <Project>{3ABDF182-B92E-4192-8F53-785668689CE2}</Project>
       <Name>System.Data.WindowsPhone</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\System.Transactions\System.Transactions.csproj">
+    <ProjectReference Include="..\..\System.Transactions\Portable\System.Transactions.Portable.csproj">
       <Project>{E706726A-A6B2-42F1-8502-C0F3AC04B0D5}</Project>
-      <Name>System.Transactions</Name>
+      <Name>System.Transactions.Portable</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />

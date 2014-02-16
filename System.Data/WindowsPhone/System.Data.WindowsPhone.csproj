@@ -10,7 +10,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>System.Data</RootNamespace>
-    <AssemblyName>System.Data</AssemblyName>
+    <AssemblyName>System.Data.Portable</AssemblyName>
     <TargetFrameworkIdentifier>WindowsPhone</TargetFrameworkIdentifier>
     <TargetFrameworkVersion>v8.0</TargetFrameworkVersion>
     <SilverlightVersion>$(TargetFrameworkVersion)</SilverlightVersion>
@@ -315,14 +315,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\mono.snk">
-      <Link>mono.snk</Link>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\System.Transactions\System.Transactions.csproj">
+    <ProjectReference Include="..\..\System.Transactions\Portable\System.Transactions.Portable.csproj">
       <Project>{E706726A-A6B2-42F1-8502-C0F3AC04B0D5}</Project>
-      <Name>System.Transactions</Name>
+      <Name>System.Transactions.Portable</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
