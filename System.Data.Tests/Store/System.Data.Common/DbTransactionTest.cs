@@ -39,6 +39,9 @@ using Microsoft.VisualStudio.TestPlatform.UnitTestFramework;
 
 namespace MonoTests.System.Data.Common
 {
+// TODO: there is a duplicate reference of DbConnection inside the Silverlight unit test framework ???
+#if !SILVERLIGHT || WINDOWS_PHONE
+
 	[TestClass]
 	public class DbTransactionTest
 	{
@@ -103,5 +106,9 @@ namespace MonoTests.System.Data.Common
 			private bool _disposing;
 		}
 	}
+
+#endif
+
 }
+
 #endif
