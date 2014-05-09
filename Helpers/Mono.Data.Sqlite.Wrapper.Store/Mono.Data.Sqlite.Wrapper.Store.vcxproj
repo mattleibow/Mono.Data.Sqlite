@@ -53,21 +53,9 @@
     <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
+  <ImportGroup Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="$(ExtensionSDKDirectoryRoot)\Windows\v8.1\ExtensionSDKs\SQLite.WinRT81\3.8.2\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props" Condition="exists('$(ExtensionSDKDirectoryRoot)\Windows\v8.1\ExtensionSDKs\SQLite.WinRT81\3.8.2\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props')" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="$(ExtensionSDKDirectoryRoot)\Windows\v8.1\ExtensionSDKs\SQLite.WinRT81\3.8.2\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props" Condition="exists('$(ExtensionSDKDirectoryRoot)\Windows\v8.1\ExtensionSDKs\SQLite.WinRT81\3.8.2\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props')" />
-  </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="$(ExtensionSDKDirectoryRoot)\Windows\v8.1\ExtensionSDKs\SQLite.WinRT81\3.8.2\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props" Condition="exists('$(ExtensionSDKDirectoryRoot)\Windows\v8.1\ExtensionSDKs\SQLite.WinRT81\3.8.2\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props')" />
-  </ImportGroup>
-  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
-    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
-    <Import Project="$(ExtensionSDKDirectoryRoot)\Windows\v8.1\ExtensionSDKs\SQLite.WinRT81\3.8.2\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props" Condition="exists('$(ExtensionSDKDirectoryRoot)\Windows\v8.1\ExtensionSDKs\SQLite.WinRT81\3.8.2\DesignTime\CommonConfiguration\Neutral\SQLite.WinRT81.props')" />
+    <Import Project="$(ExtensionSDKDirectoryRoot)\Windows\v8.1\ExtensionSDKs\SQLite.WinRT81\3.8.4.3\DesignTime\CommonConfiguration\neutral\SQLite.WinRT81.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup />
@@ -166,7 +154,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="SQLite.WinRT81, Version=3.8.2" />
+    <SDKReference Include="SQLite.WinRT81, Version=3.8.4.3" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
         <id>Mono.Data.Sqlite.Portable</id>
-        <version>1.0.0-alpha5</version>
+        <version>1.0.0-beta7</version>
         <title>Mono.Data.Sqlite.Portable</title>
         <authors>.NET Dev Addict</authors>
         <licenseUrl>http://www.dotnetdevaddict.co.za/projects/mono.data.sqlite.portable#license</licenseUrl>
@@ -10,12 +10,20 @@
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Adds Mono.Data.Sqlite to your application</description>
         <dependencies>
-            <dependency id="System.Data.Portable" version="1.0.0-alpha5" />
+            <!--<dependency id="System.Data.Portable" version="1.0.0-beta7" />-->
         </dependencies>
         <frameworkAssemblies>
             <frameworkAssembly assemblyName="Mono.Data.Sqlite" targetFramework="MonoAndroid0.0" />
             <frameworkAssembly assemblyName="Mono.Data.Sqlite" targetFramework="MonoTouch0.0" />
             <frameworkAssembly assemblyName="Mono.Data.Sqlite" targetFramework="MonoMac0.0" />
+            <frameworkAssembly assemblyName="System.Transactions" targetFramework=".NETFramework4.0" />
+            <frameworkAssembly assemblyName="System.Transactions" targetFramework="MonoAndroid0.0" />
+            <frameworkAssembly assemblyName="System.Transactions" targetFramework="MonoTouch0.0" />
+            <frameworkAssembly assemblyName="System.Transactions" targetFramework="MonoMac0.0" />
+            <frameworkAssembly assemblyName="System.Data" targetFramework=".NETFramework4.0" />
+            <frameworkAssembly assemblyName="System.Data" targetFramework="MonoAndroid0.0" />
+            <frameworkAssembly assemblyName="System.Data" targetFramework="MonoTouch0.0" />
+            <frameworkAssembly assemblyName="System.Data" targetFramework="MonoMac0.0" />
         </frameworkAssemblies>
     </metadata>
 </package>
