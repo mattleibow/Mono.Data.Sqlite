@@ -60,25 +60,22 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Community.CsharpSqlite.Silverlight, Version=3.7.5.0, Culture=neutral, PublicKeyToken=49a172092c6fe015, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Mono.Data.Sqlite.Portable.1.0.0-beta7\lib\sl5\Community.CsharpSqlite.Silverlight.dll</HintPath>
+    <Reference Include="Community.CsharpSqlite.Silverlight">
+      <HintPath>..\packages\Mono.Data.Sqlite.Portable.1.0.0-beta10\lib\sl5\Community.CsharpSqlite.Silverlight.dll</HintPath>
     </Reference>
-    <Reference Include="Mono.Data.Sqlite, Version=2.0.5.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Mono.Data.Sqlite.Portable.1.0.0-beta7\lib\sl5\Mono.Data.Sqlite.dll</HintPath>
+    <Reference Include="Mono.Data.Sqlite">
+      <HintPath>..\packages\Mono.Data.Sqlite.Portable.1.0.0-beta10\lib\sl5\Mono.Data.Sqlite.dll</HintPath>
     </Reference>
     <Reference Include="MonoDataSqliteWrapper">
-      <HintPath>..\packages\Mono.Data.Sqlite.Portable.1.0.0-beta7\lib\sl5\MonoDataSqliteWrapper.dll</HintPath>
+      <HintPath>..\packages\Mono.Data.Sqlite.Portable.1.0.0-beta10\lib\sl5\MonoDataSqliteWrapper.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="mscorlib" />
-    <Reference Include="System.Data.Portable, Version=4.0.0.0, Culture=neutral, PublicKeyToken=59e704a76bc4613a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Mono.Data.Sqlite.Portable.1.0.0-beta7\lib\sl5\System.Data.Portable.dll</HintPath>
+    <Reference Include="System.Data.Portable">
+      <HintPath>..\packages\Mono.Data.Sqlite.Portable.1.0.0-beta10\lib\sl5\System.Data.Portable.dll</HintPath>
     </Reference>
-    <Reference Include="System.Transactions.Portable, Version=4.0.0.0, Culture=neutral, PublicKeyToken=59e704a76bc4613a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\Mono.Data.Sqlite.Portable.1.0.0-beta7\lib\sl5\System.Transactions.Portable.dll</HintPath>
+    <Reference Include="System.Transactions.Portable">
+      <HintPath>..\packages\Mono.Data.Sqlite.Portable.1.0.0-beta10\lib\sl5\System.Transactions.Portable.dll</HintPath>
     </Reference>
     <Reference Include="System.Windows" />
     <Reference Include="system" />
@@ -133,9 +130,9 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
-  <Import Project="..\packages\Mono.Data.Sqlite.Portable.1.0.0-beta7\tools\Mono.Data.Sqlite.Portable.targets" Condition="Exists('..\packages\Mono.Data.Sqlite.Portable.1.0.0-beta7\tools\Mono.Data.Sqlite.Portable.targets')" />
+  <Import Project="..\packages\Mono.Data.Sqlite.Portable.1.0.0-beta10\tools\Mono.Data.Sqlite.Portable.targets" Condition="Exists('..\packages\Mono.Data.Sqlite.Portable.1.0.0-beta10\tools\Mono.Data.Sqlite.Portable.targets')" />
   <Target Name="EnsureMonoDataSqlitePortableImported" BeforeTargets="BeforeBuild" Condition="'$(MonoDataSqlitePortableImported)' == ''">
-    <Error Condition="!Exists('..\packages\Mono.Data.Sqlite.Portable.1.0.0-beta7\tools\Mono.Data.Sqlite.Portable.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them." />
-    <Error Condition="Exists('..\packages\Mono.Data.Sqlite.Portable.1.0.0-beta7\tools\Mono.Data.Sqlite.Portable.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build." />
+    <Error Condition="!Exists('..\packages\Mono.Data.Sqlite.Portable.1.0.0-beta10\tools\Mono.Data.Sqlite.Portable.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them." />
+    <Error Condition="Exists('..\packages\Mono.Data.Sqlite.Portable.1.0.0-beta10\tools\Mono.Data.Sqlite.Portable.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build." />
   </Target>
 </Project>
