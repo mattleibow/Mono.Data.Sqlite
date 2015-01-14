@@ -1,6 +1,6 @@
 param($installPath, $toolsPath, $package, $project)
 
-    $sqliteReference = $project.Object.References.Find("SQLite.WP80, version=3.8.4.3")
+    $sqliteReference = $project.Object.References.Find("SQLite.WP80, version=3.8.7.4")
 
     if ($sqliteReference -eq $null) {
         Write-Host "Unable to find a reference to the extension SDK SQLite for Windows Phone."

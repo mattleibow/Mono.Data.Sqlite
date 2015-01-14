@@ -3,35 +3,43 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{60E4BC24-DF60-4CA4-B898-9F32EE83BADE}</ProjectGuid>
-    <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProjectGuid>{690FC18F-D1A6-4FA3-B8CA-B5F93142F4A0}</ProjectGuid>
+    <ProjectTypeGuids>{42C0BBD9-55CE-4FC1-8D90-A7348ABAFB23};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>System.Data</RootNamespace>
-    <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AssemblyName>System.Data.Portable</AssemblyName>
+    <RootNamespace>System.Transactions</RootNamespace>
+    <MonoMacResourcePrefix>Resources</MonoMacResourcePrefix>
+    <AssemblyName>System.Transactions.Portable</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\Output\Debug\iOS\AnyCPU\</OutputPath>
+    <OutputPath>..\..\Output\Debug\Mac\AnyCPU\</OutputPath>
     <DefineConstants>DEBUG;__IOS__;__MOBILE__;NET_1_1;NET_2_0;NET_3_0;NET_3_5;NET_4_0</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
     <MtouchDebug>true</MtouchDebug>
-    <CodesignKey>iPhone Developer</CodesignKey>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>none</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\Output\Release\iOS\AnyCPU\</OutputPath>
+    <OutputPath>..\..\Output\Release\Mac\AnyCPU\</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <ConsolePause>false</ConsolePause>
-    <CodesignKey>iPhone Developer</CodesignKey>
-    <DefineConstants>__IOS__;__MOBILE__;NET_1_1;NET_2_0;NET_3_0;NET_3_5;NET_4_0</DefineConstants>
+    <DefineConstants>__MAC__;__MOBILE__;NET_1_1;NET_2_0;NET_3_0;NET_3_5;NET_4_0</DefineConstants>
   </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="XamMac" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\Consts.cs">
       <Link>Consts.cs</Link>
@@ -39,25 +47,12 @@
     <Compile Include="..\Desktop\TypeForwarding.cs">
       <Link>TypeForwarding.cs</Link>
     </Compile>
-    <Compile Include="..\WindowsStore\Assembly\AssemblyInfo.cs">
+    <Compile Include="..\Portable\Assembly\AssemblyInfo.cs">
       <Link>Assembly\AssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\WindowsStore\Locale.cs">
-      <Link>Locale.cs</Link>
-    </Compile>
-    <Compile Include="..\WindowsStore\MonoTODOAttribute.cs">
+    <Compile Include="..\Portable\MonoTODOAttribute.cs">
       <Link>MonoTODOAttribute.cs</Link>
     </Compile>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Core" />
-    <Reference Include="monotouch" />
-  </ItemGroup>
-  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

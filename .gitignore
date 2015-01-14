@@ -64,7 +64,7 @@ local.properties
 *.dotCover
 
 ## TODO: If you have NuGet Package Restore enabled, uncomment this
-#packages/
+packages/
 
 # Visual C++ cache files
 ipch/
@@ -107,6 +107,7 @@ stylecop.*
 ~$*
 *.dbmdl
 Generated_Code #added for RIA/Silverlight projects
+AppPackages/
 
 # Backup & report files from converting an old project file to a newer
 # Visual Studio version. Backup files are not needed, because we have git ;-)

@@ -54,7 +54,7 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets">
-    <Import Project="$(MSBuildProgramFiles32)\Microsoft SDKs\Windows Phone\v8.0\ExtensionSDKs\SQLite.WP80\3.8.4.3\DesignTime\CommonConfiguration\neutral\SQLite.WP80.props" />
+    <Import Project="$(MSBuildProgramFiles32)\Microsoft SDKs\Windows Phone\v8.0\ExtensionSDKs\SQLite.WP80\3.8.7.4\DesignTime\CommonConfiguration\neutral\SQLite.WP80.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup>
@@ -154,7 +154,7 @@
     <ClCompile Include="UnsafeNativeMethods.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <SDKReference Include="SQLite.WP80, Version=3.8.4.3">
+    <SDKReference Include="SQLite.WP80, Version=3.8.7.4">
       <Private>false</Private>
       <ReferenceOutputAssembly>true</ReferenceOutputAssembly>
       <CopyLocalSatelliteAssemblies>true</CopyLocalSatelliteAssemblies>

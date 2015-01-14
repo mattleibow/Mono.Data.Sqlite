@@ -4,9 +4,9 @@ echo Copying assemblies into directories
 
 
 echo Copying System.Data PCL assemblies...
-mkdir "NuGet\Mono.Data.Sqlite.Portable\lib\portable-net4+sl5+wp8+win+MonoAndroid+MonoTouch"
-copy "Output\Release\Portable\AnyCPU\System.Transactions.Portable.dll"				"NuGet\Mono.Data.Sqlite.Portable\lib\portable-net4+sl5+wp8+win+MonoAndroid+MonoTouch\*.*"
-copy "Output\Release\Portable\AnyCPU\System.Data.Portable.dll"						"NuGet\Mono.Data.Sqlite.Portable\lib\portable-net4+sl5+wp8+win+MonoAndroid+MonoTouch\*.*"
+mkdir "NuGet\Mono.Data.Sqlite.Portable\lib\portable-net4+sl5+wp8+win+MonoAndroid+MonoTouch+MonoMac+XamariniOS+XamarinMac"
+copy "Output\Release\Portable\AnyCPU\System.Transactions.Portable.dll"				"NuGet\Mono.Data.Sqlite.Portable\lib\portable-net4+sl5+wp8+win+MonoAndroid+MonoTouch+MonoMac+XamariniOS+XamarinMac\*.*"
+copy "Output\Release\Portable\AnyCPU\System.Data.Portable.dll"						"NuGet\Mono.Data.Sqlite.Portable\lib\portable-net4+sl5+wp8+win+MonoAndroid+MonoTouch+MonoMac+XamariniOS+XamarinMac\*.*"
 
 echo Copying System.Data Windows Phone 8 assemblies...
 mkdir "NuGet\Mono.Data.Sqlite.Portable\lib\wp8"
@@ -33,6 +33,21 @@ mkdir "NuGet\Mono.Data.Sqlite.Portable\lib\MonoTouch"
 copy "Output\Release\iOS\AnyCPU\System.Transactions.Portable.dll"					"NuGet\Mono.Data.Sqlite.Portable\lib\MonoTouch\*.*"
 copy "Output\Release\iOS\AnyCPU\System.Data.Portable.dll"							"NuGet\Mono.Data.Sqlite.Portable\lib\MonoTouch\*.*"
 
+echo Copying System.Data iOS Unified assemblies...
+mkdir "NuGet\Mono.Data.Sqlite.Portable\lib\XamariniOS"
+copy "Output\Release\iOSUnified\AnyCPU\System.Transactions.Portable.dll"			"NuGet\Mono.Data.Sqlite.Portable\lib\XamariniOS\*.*"
+copy "Output\Release\iOSUnified\AnyCPU\System.Data.Portable.dll"					"NuGet\Mono.Data.Sqlite.Portable\lib\XamariniOS\*.*"
+
+echo Copying System.Data Mac assemblies...
+mkdir "NuGet\Mono.Data.Sqlite.Portable\lib\MonoMac"
+copy "Output\Release\Mac\AnyCPU\System.Transactions.Portable.dll"					"NuGet\Mono.Data.Sqlite.Portable\lib\MonoMac\*.*"
+copy "Output\Release\Mac\AnyCPU\System.Data.Portable.dll"							"NuGet\Mono.Data.Sqlite.Portable\lib\MonoMac\*.*"
+
+echo Copying System.Data Mac Unified assemblies...
+mkdir "NuGet\Mono.Data.Sqlite.Portable\lib\XamarinMac"
+copy "Output\Release\MacUnified\AnyCPU\System.Transactions.Portable.dll"			"NuGet\Mono.Data.Sqlite.Portable\lib\XamarinMac\*.*"
+copy "Output\Release\MacUnified\AnyCPU\System.Data.Portable.dll"					"NuGet\Mono.Data.Sqlite.Portable\lib\XamarinMac\*.*"
+
 echo Copying System.Data Desktop assemblies...
 mkdir "NuGet\Mono.Data.Sqlite.Portable\lib\net4"
 copy "Output\Release\Desktop\AnyCPU\System.Transactions.Portable.dll"				"NuGet\Mono.Data.Sqlite.Portable\lib\net4\*.*"
@@ -41,8 +56,8 @@ copy "Output\Release\Desktop\AnyCPU\System.Data.Portable.dll"						"NuGet\Mono.D
 
 
 echo Copying Mono.Data.Sqlite PCL assemblies...
-mkdir "NuGet\Mono.Data.Sqlite.Portable\lib\portable-net4+sl5+wp8+win+MonoAndroid+MonoTouch"
-copy "Output\Release\Portable\AnyCPU\Mono.Data.Sqlite.dll"							"NuGet\Mono.Data.Sqlite.Portable\lib\portable-net4+sl5+wp8+win+MonoAndroid+MonoTouch\*.*"
+mkdir "NuGet\Mono.Data.Sqlite.Portable\lib\portable-net4+sl5+wp8+win+MonoAndroid+MonoTouch+MonoMac+XamariniOS+XamarinMac"
+copy "Output\Release\Portable\AnyCPU\Mono.Data.Sqlite.dll"							"NuGet\Mono.Data.Sqlite.Portable\lib\portable-net4+sl5+wp8+win+MonoAndroid+MonoTouch+MonoMac+XamariniOS+XamarinMac\*.*"
 
 echo Copying Mono.Data.Sqlite Windows Phone 8 assemblies...
 mkdir "NuGet\Mono.Data.Sqlite.Portable\tools\lib\wp8-arm"
