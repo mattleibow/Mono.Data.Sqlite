@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\packages\Mono.Data.Sqlite.Portable.1.0.3.3\build\wp8\Mono.Data.Sqlite.Portable.props" Condition="Exists('..\packages\Mono.Data.Sqlite.Portable.1.0.3.3\build\wp8\Mono.Data.Sqlite.Portable.props')" />
+  <Import Project="..\packages\Mono.Data.Sqlite.Portable.1.0.3.5\build\wp8\Mono.Data.Sqlite.Portable.props" Condition="Exists('..\packages\Mono.Data.Sqlite.Portable.1.0.3.5\build\wp8\Mono.Data.Sqlite.Portable.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -24,7 +24,7 @@
     <ValidateXaml>true</ValidateXaml>
     <MinimumVisualStudioVersion>11.0</MinimumVisualStudioVersion>
     <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
-    <NuGetPackageImportStamp>7c2b7920</NuGetPackageImportStamp>
+    <NuGetPackageImportStamp>246e0d39</NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -155,12 +155,19 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System.Data.Portable">
-      <HintPath>..\packages\Mono.Data.Sqlite.Portable.1.0.3.3\lib\wp8\System.Data.Portable.dll</HintPath>
+    <Reference Include="System.Data.Portable, Version=4.0.0.0, Culture=neutral, PublicKeyToken=59e704a76bc4613a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Mono.Data.Sqlite.Portable.1.0.3.5\lib\wp8\System.Data.Portable.dll</HintPath>
     </Reference>
-    <Reference Include="System.Transactions.Portable">
-      <HintPath>..\packages\Mono.Data.Sqlite.Portable.1.0.3.3\lib\wp8\System.Transactions.Portable.dll</HintPath>
+    <Reference Include="System.Transactions.Portable, Version=4.0.0.0, Culture=neutral, PublicKeyToken=59e704a76bc4613a, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\Mono.Data.Sqlite.Portable.1.0.3.5\lib\wp8\System.Transactions.Portable.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="SQLite.WP80, version=3.8.7.4">
+      <Name>SQLite for Windows Phone</Name>
+    </SDKReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).$(TargetFrameworkVersion).Overrides.targets" />
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\$(TargetFrameworkIdentifier)\$(TargetFrameworkVersion)\Microsoft.$(TargetFrameworkIdentifier).CSharp.targets" />
@@ -176,11 +183,11 @@
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Mono.Data.Sqlite.Portable.1.0.3.3\build\wp8\Mono.Data.Sqlite.Portable.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Mono.Data.Sqlite.Portable.1.0.3.3\build\wp8\Mono.Data.Sqlite.Portable.props'))" />
+    <Error Condition="!Exists('..\packages\Mono.Data.Sqlite.Portable.1.0.3.5\build\wp8\Mono.Data.Sqlite.Portable.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Mono.Data.Sqlite.Portable.1.0.3.5\build\wp8\Mono.Data.Sqlite.Portable.props'))" />
   </Target>
-  <Import Project="..\packages\Mono.Data.Sqlite.Portable.1.0.3.3\tools\Mono.Data.Sqlite.Portable.targets" Condition="Exists('..\packages\Mono.Data.Sqlite.Portable.1.0.3.3\tools\Mono.Data.Sqlite.Portable.targets')" />
+  <Import Project="..\packages\Mono.Data.Sqlite.Portable.1.0.3.5\tools\Mono.Data.Sqlite.Portable.targets" Condition="Exists('..\packages\Mono.Data.Sqlite.Portable.1.0.3.5\tools\Mono.Data.Sqlite.Portable.targets')" />
   <Target Name="EnsureMonoDataSqlitePortableImported" BeforeTargets="BeforeBuild" Condition="'$(MonoDataSqlitePortableImported)' == ''">
-    <Error Condition="!Exists('..\packages\Mono.Data.Sqlite.Portable.1.0.3.3\tools\Mono.Data.Sqlite.Portable.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them." />
-    <Error Condition="Exists('..\packages\Mono.Data.Sqlite.Portable.1.0.3.3\tools\Mono.Data.Sqlite.Portable.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build." />
+    <Error Condition="!Exists('..\packages\Mono.Data.Sqlite.Portable.1.0.3.5\tools\Mono.Data.Sqlite.Portable.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them." />
+    <Error Condition="Exists('..\packages\Mono.Data.Sqlite.Portable.1.0.3.5\tools\Mono.Data.Sqlite.Portable.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build." />
   </Target>
 </Project>
