@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata>
         <id>Mono.Data.Sqlite.Portable</id>
-        <version>1.0.3.3</version>
+        <version>1.0.3.5</version>
         <title>Mono.Data.Sqlite Plugin for Xamarin and Windows</title>
         <authors>Matthew Leibowitz</authors>
         <copyright>.NET Development Addict</copyright>
@@ -10,27 +10,29 @@
         <projectUrl>http://www.dotnetdevaddict.co.za/projects/mono.data.sqlite.portable</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>Add Mono.Data.Sqlite to any Xamarin or Windows .NET app. 
-Supports Xamarin.Android, Xamarin.iOS, Xamarin.Mac, Windows 8, Windows Desktop and Windows Phone 8</description>
+Supports Xamarin.Android, Xamarin.iOS, Windows 8, Windows Desktop and Windows Phone 8</description>
         <dependencies>
         </dependencies>
         <frameworkAssemblies>
             <frameworkAssembly assemblyName="Mono.Data.Sqlite" targetFramework="MonoAndroid" />
             <frameworkAssembly assemblyName="Mono.Data.Sqlite" targetFramework="MonoTouch" />
             <frameworkAssembly assemblyName="Mono.Data.Sqlite" targetFramework="XamariniOS" />
-            <frameworkAssembly assemblyName="Mono.Data.Sqlite" targetFramework="MonoMac" />
-            <frameworkAssembly assemblyName="Mono.Data.Sqlite" targetFramework="XamarinMac" />
             <frameworkAssembly assemblyName="System.Transactions" targetFramework="net4" />
             <frameworkAssembly assemblyName="System.Transactions" targetFramework="MonoAndroid" />
             <frameworkAssembly assemblyName="System.Transactions" targetFramework="MonoTouch" />
             <frameworkAssembly assemblyName="System.Transactions" targetFramework="XamariniOS" />
-            <frameworkAssembly assemblyName="System.Transactions" targetFramework="MonoMac" />
-            <frameworkAssembly assemblyName="System.Transactions" targetFramework="XamarinMac" />
             <frameworkAssembly assemblyName="System.Data" targetFramework="net4" />
             <frameworkAssembly assemblyName="System.Data" targetFramework="MonoAndroid" />
             <frameworkAssembly assemblyName="System.Data" targetFramework="MonoTouch" />
             <frameworkAssembly assemblyName="System.Data" targetFramework="XamariniOS" />
+			<!--
+            <frameworkAssembly assemblyName="Mono.Data.Sqlite" targetFramework="MonoMac" />
+            <frameworkAssembly assemblyName="Mono.Data.Sqlite" targetFramework="XamarinMac" />
+            <frameworkAssembly assemblyName="System.Transactions" targetFramework="MonoMac" />
+            <frameworkAssembly assemblyName="System.Transactions" targetFramework="XamarinMac" />
             <frameworkAssembly assemblyName="System.Data" targetFramework="MonoMac" />
             <frameworkAssembly assemblyName="System.Data" targetFramework="XamarinMac" />
+			-->
         </frameworkAssemblies>
     </metadata>
 </package>
